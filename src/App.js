@@ -4,8 +4,6 @@ import { UseWalletProvider } from "use-wallet";
 import Error from "./features/error";
 import Loading from "./features/loading";
 import ErrorBoundary from "./components/errorBoundary";
-import { TokensProvider } from "./context/tokensProvider/tokensContext";
-import { UserTokensProvider } from "./context/userTokensProvider/userTokensContext";
 import useGoogleAnalytics from "./hooks/useGoogleAnalytics";
 import {
   UALProviderSwitch,
@@ -13,6 +11,7 @@ import {
 } from "./context/walletProvider/walletProviderFacade";
 
 const HomePage = lazy(() => import("./features/home"));
+const EthPage = lazy(() => import("./features/eth"));
 
 function App() {
   return (
@@ -23,19 +22,15 @@ function App() {
           connectors={{
             fortmatic: { apiKey: "" },
             portis: { dAppId: "" },
-            walletconnect: { rpcUrl: "https://mainnet.eth.aragon.network/" },
-            walletlink: { url: "https://mainnet.eth.aragon.network/" },
+            walletconnect: { rpcUrl: process.env.REACT_APP_ETH_URL },
+            walletlink: { url: process.env.REACT_APP_ETH_URL },
           }}
         >
           <UALProviderSwitch>
             <WalletProvider>
-              <TokensProvider>
-                <UserTokensProvider>
-                  <Router>
-                    <Routes />
-                  </Router>
-                </UserTokensProvider>
-              </TokensProvider>
+              <Router>
+                <Routes />
+              </Router>
             </WalletProvider>
           </UALProviderSwitch>
         </UseWalletProvider>
@@ -49,6 +44,7 @@ function Routes() {
   return (
     <Switch>
       <Route exact path="/" component={HomePage} />
+      <Route exact path="/eth" component={EthPage} />
     </Switch>
   );
 }

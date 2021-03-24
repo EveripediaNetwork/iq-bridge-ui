@@ -25,14 +25,14 @@ const IconWrapper = styled(Button)`
 
 const MainCard = styled(Card)``;
 
-const Home = () => {
+const Eth = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const authContext = useContext(UALContext);
   const [txDone, setTxDone] = useState(false);
   const [token1, setToken1] = React.useState({
     icon: "https://mindswap.finance/tokens/iq.png",
-    name: "IQ",
+    name: "pIQ",
     precision: 3,
   });
 
@@ -41,7 +41,6 @@ const Home = () => {
       authContext.showModal();
       return;
     }
-    console.log(data);
     await convertTokensTx(
       `${parseFloat(data.FromAmount).toFixed(3)} ${data.FromToken}`,
       data.address,
@@ -102,7 +101,6 @@ const Home = () => {
                         <ArrowDownShort />
                       </IconWrapper>
                     </div>
-                    <AddressContainer />
                     <br />
                     <Button
                       variant="primary"
@@ -111,7 +109,7 @@ const Home = () => {
                       size="lg"
                       block
                     >
-                      {t("swap")}
+                      {t("Swap to IQ ERC20")}
                     </Button>
                   </Form>
                 </Card.Body>
@@ -121,7 +119,7 @@ const Home = () => {
           {!authContext.activeUser && txDone && (
             <Row>
               <Col>
-                <InfoAlert text="Go to step 2" />
+                <InfoAlert text="Tx executed" />
               </Col>
             </Row>
           )}
@@ -138,4 +136,4 @@ const Home = () => {
   );
 };
 
-export default React.memo(Home);
+export default React.memo(Eth);

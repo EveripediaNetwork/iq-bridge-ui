@@ -40,7 +40,22 @@ const Layout = ({ children, update }) => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto" />
+          <Nav className="mr-auto">
+            <Nav.Link
+              active={location.pathname === "/"}
+              as={Link}
+              to={`/${LngUrl}`}
+            >
+              {t("EOS")}
+            </Nav.Link>
+            <Nav.Link
+              active={location.pathname === "/eth"}
+              as={Link}
+              to={`/eth${LngUrl}`}
+            >
+              {t("ETH")}
+            </Nav.Link>
+          </Nav>
           <LanguageSelector />
           <Form inline>
             {authContext.activeUser === null ? (

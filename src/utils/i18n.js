@@ -31,7 +31,7 @@ export const resources = {
       liquidity_fee: "Liquidity provider fee",
       min_received: "Minimum received",
       max_profit: "Maximum profit",
-      login_info: "Login in order to bridge your tokens",
+      login_info: "Login on EOS Wallet to bridge your tokens",
       // dialog tx
       confirming_tx: "Confirming transaction...",
       confirmed_tx: "Transaction confirmed!",
