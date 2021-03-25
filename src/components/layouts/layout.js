@@ -15,10 +15,9 @@ const isWalletConnected = () => {
   return val ? JSON.parse(val) : null;
 };
 
-const Layout = ({ children, update }) => {
+const Layout = ({ children }) => {
   const location = useLocation();
   const authContext = useContext(UALContext);
-  const user = authContext.activeUser;
   const { t, i18n } = useTranslation();
   const LngUrl = `?lng=${i18n.language}`;
   const [ethModalShow, setEthModalShow] = useState(false);
@@ -108,7 +107,6 @@ const Layout = ({ children, update }) => {
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
-  update: PropTypes.bool.isRequired,
 };
 
 export default Layout;

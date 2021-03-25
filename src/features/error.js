@@ -4,7 +4,7 @@ import Layout from "../components/layouts/layout";
 
 const Error = () => {
   return (
-    <Layout update={false}>
+    <Layout>
       <Container className="p-3 mt-5" fluid>
         <Row>
           <Col>Error!...</Col>

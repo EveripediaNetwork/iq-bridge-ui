@@ -46,7 +46,7 @@ const Eth = () => {
   };
 
   return (
-    <Layout update={false}>
+    <Layout>
       <Container className="p-2 mt-3" fluid>
         <FormProvider {...methods}>
           <Row>
