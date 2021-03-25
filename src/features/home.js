@@ -11,6 +11,7 @@ import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
 import AddressContainer from "../components/ui/addressContainer";
 import { convertTokensTx } from "../utils/EosDataProvider";
+import TxSuccessAlert from "../components/ui/txSuccessAlert";
 
 const IconWrapper = styled(Button)`
   margin: 15px;
@@ -29,7 +30,7 @@ const Home = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const authContext = useContext(UALContext);
-  const [txDone, setTxDone] = useState(false);
+  const [txData, setTxData] = useState("");
   const [token1, setToken1] = React.useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "IQ",
@@ -38,41 +39,14 @@ const Home = () => {
 
   const onSubmit = async (data) => {
     if (!authContext.activeUser) {
-      authContext.showModal();
       return;
     }
-    console.log(data);
-    await convertTokensTx(
+    const result = await convertTokensTx(
       `${parseFloat(data.FromAmount).toFixed(3)} ${data.FromToken}`,
       data.address,
       authContext
     );
-
-    setTxDone(true);
-  };
-
-  const onInputClick = (value, field, ref) => {
-    const initValue = parseFloat(value) ? parseFloat(value) : 0;
-    const handleClickout = (e) => {
-      const updatedValue = parseFloat(methods.getValues(field))
-        ? parseFloat(methods.getValues(field))
-        : 0;
-      if (ref.current && !ref.current.contains(e.target)) {
-        if (updatedValue === 0) {
-          methods.setValue(field, "0.000");
-        } else {
-          methods.setValue(field, methods.getValues(field));
-        }
-        document.removeEventListener("click", handleClickout);
-      }
-    };
-    if (initValue === 0) {
-      methods.setValue(field, " ");
-      document.addEventListener("click", handleClickout);
-    } else {
-      methods.setValue(field, value);
-      document.addEventListener("click", handleClickout);
-    }
+    setTxData(result.transactionId);
   };
 
   return (
@@ -95,7 +69,6 @@ const Home = () => {
                       token={token1}
                       setToken={setToken1}
                       header="From"
-                      onInputClick={onInputClick}
                     />
                     <div className="d-flex justify-content-center">
                       <IconWrapper bsPrefix="switch" onClick={() => {}}>
@@ -105,6 +78,7 @@ const Home = () => {
                     <AddressContainer />
                     <br />
                     <Button
+                      disabled={!authContext.activeUser}
                       variant="primary"
                       className="text-capitalize"
                       type="submit"
@@ -118,10 +92,10 @@ const Home = () => {
               </MainCard>
             </Col>
           </Row>
-          {!authContext.activeUser && txDone && (
+          {authContext.activeUser && txData !== "" && (
             <Row>
               <Col>
-                <InfoAlert text="Go to step 2" />
+                <TxSuccessAlert txId={txData} />
               </Col>
             </Row>
           )}

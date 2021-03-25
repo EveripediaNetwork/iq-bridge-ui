@@ -1,4 +1,5 @@
 import { asset } from "eos-common";
+import { everipediaIqContract } from "../config";
 
 const getUserTokenBalance = async (ual) => {
   if (!ual.activeUser) {
@@ -6,7 +7,7 @@ const getUserTokenBalance = async (ual) => {
   }
 
   const response = await ual.activeUser.rpc.get_currency_balance(
-    "everipediaiq",
+    everipediaIqContract,
     ual.activeUser.accountName,
     "IQ"
   );
@@ -15,27 +16,32 @@ const getUserTokenBalance = async (ual) => {
 };
 
 const convertTokensTx = async (quantity, ethAddress, ual) => {
-  const result = await ual.activeUser.signTransaction({
-    actions: [
-      {
-        account: "everipediaiq",
-        name: "transfer",
-        authorization: [
-          {
-            actor: ual.activeUser.accountName,
-            permission: "active",
+  return ual.activeUser.signTransaction(
+    {
+      actions: [
+        {
+          account: everipediaIqContract,
+          name: "transfer",
+          authorization: [
+            {
+              actor: ual.activeUser.accountName,
+              permission: "active",
+            },
+          ],
+          data: {
+            from: ual.activeUser.accountName,
+            to: "xeth.ptokens",
+            quantity,
+            memo: ethAddress,
           },
-        ],
-        data: {
-          from: ual.activeUser.accountName,
-          to: "xeth.ptokens",
-          quantity,
-          memo: ethAddress,
         },
-      },
-    ],
-  });
-  return result;
+      ],
+    },
+    {
+      broadcast: true,
+      expireSeconds: 300,
+    }
+  );
 };
 
 export { convertTokensTx, getUserTokenBalance };

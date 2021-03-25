@@ -5,7 +5,9 @@ import { useFormContext } from "react-hook-form";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { UALContext } from "ual-reactjs-renderer";
+import { useWallet } from "use-wallet";
 import { getUserTokenBalance } from "../../utils/EosDataProvider";
+import { getPTokensUserBalance } from "../../utils/EthDataProvider";
 
 const SwapContainerWrapper = styled.div`
   border-radius: 15px;
@@ -93,12 +95,17 @@ const SwapContainer = ({ token, header }) => {
   const { register } = useFormContext();
   const swapRef = useRef();
   const authContext = useContext(UALContext);
+  const wallet = useWallet();
   const [balToken, setBalance] = useState("0");
   useEffect(() => {
     (async () => {
-      setBalance(await getUserTokenBalance(authContext));
+      if (token.name === "IQ") {
+        setBalance(await getUserTokenBalance(authContext));
+      } else if (token.name === "pIQ") {
+        setBalance(await getPTokensUserBalance(wallet));
+      }
     })();
-  }, [authContext]);
+  }, [authContext, wallet, token]);
 
   return (
     <SwapContainerWrapper>

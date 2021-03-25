@@ -29,7 +29,7 @@ const SwapTokenInputContainer = styled.div``;
 const SwapTokenInput = styled(Form.Control)`
   border: 0px !important;
   padding: 5px !important;
-  font-size: 30px !important;
+  font-size: 16px !important;
 
   :focus {
     box-shadow: none !important;
