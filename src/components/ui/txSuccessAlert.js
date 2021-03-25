@@ -20,7 +20,7 @@ const TxSuccessAlert = ({ txId }) => {
     <StyledAlert className="mx-auto shadow-sm text-center" variant="success">
       <CheckSquare />
       <StyledSpan>
-        <a target="_blank" href={explorer}>
+        <a target="_blank" rel="noopener noreferrer" href={explorer}>
           Transaction Executed
         </a>
         ! Go to <Link to="/eth">Step 2</Link>

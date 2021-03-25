@@ -99,9 +99,9 @@ const SwapContainer = ({ token, header }) => {
   const [balToken, setBalance] = useState("0");
   useEffect(() => {
     (async () => {
-      if (token.name === "IQ") {
+      if (authContext.activeUser && token.name === "IQ") {
         setBalance(await getUserTokenBalance(authContext));
-      } else if (token.name === "pIQ") {
+      } else if (wallet.account && token.name === "pIQ") {
         setBalance(await getPTokensUserBalance(wallet));
       }
     })();

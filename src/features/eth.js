@@ -97,7 +97,7 @@ const Eth = () => {
           {!wallet.account && (
             <Row>
               <Col>
-                <InfoAlert text={t("login_info")} />
+                <InfoAlert text={t("login_info_eth")} />
               </Col>
             </Row>
           )}

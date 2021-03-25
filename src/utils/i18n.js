@@ -32,6 +32,7 @@ export const resources = {
       min_received: "Minimum received",
       max_profit: "Maximum profit",
       login_info: "Login on EOS Wallet to bridge your tokens",
+      login_info_eth: "Login on ETH Wallet to swap your tokens",
       // dialog tx
       confirming_tx: "Confirming transaction...",
       confirmed_tx: "Transaction confirmed!",
