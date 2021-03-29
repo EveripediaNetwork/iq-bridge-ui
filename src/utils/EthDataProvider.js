@@ -61,6 +61,8 @@ const erc20Abi = [
   },
 ];
 
+// const pIQAddress = "0xbff1365cf0a67431484c00c63bf14cfd9abbce5d"; // GOERLI
+// const pMinterAddress = "0x483488B7D897b429AE851FEef1fA02d96475cc23"; // GOERLI
 const pIQAddress = "0xa23d33d5e0a61ba81919bfd727c671bb03ab0fea";
 const pMinterAddress = "0xa23d33d5e0a61ba81919bfd727c671bb03ab0fea";
 
@@ -75,7 +77,7 @@ const getPTokensUserBalance = async (wallet) => {
 };
 
 const convertPTokensTx = async (amount, wallet) => {
-  console.log(amount); // TODO: get to right precision
+  const amountParsed = ethers.utils.parseEther(amount).toString();
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
     const erc20 = new ethers.Contract(
@@ -88,8 +90,8 @@ const convertPTokensTx = async (amount, wallet) => {
       minterAbi,
       provider.getSigner()
     );
-    await erc20.approve(pMinterAddress, amount); // TODO: make sure one its minted before launch second one
-    await pMinter.mint(amount);
+    await erc20.approve(pMinterAddress, amountParsed, { gasLimit: 100000 });
+    await pMinter.mint(amountParsed, { gasLimit: 200000 });
     return true;
   }
   return false;

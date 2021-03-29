@@ -18,7 +18,7 @@ function App() {
     <ErrorBoundary fallback={<Error />}>
       <Suspense fallback={<Loading />}>
         <UseWalletProvider
-          chainId={1}
+          chainId={1} // 5 GOERLI
           connectors={{
             fortmatic: { apiKey: "" },
             portis: { dAppId: "" },

@@ -28,7 +28,6 @@ const Eth = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
-  console.log(wallet);
   const [txDone, setTxDone] = useState(false);
   const [token1, setToken1] = React.useState({
     icon: "https://mindswap.finance/tokens/iq.png",
