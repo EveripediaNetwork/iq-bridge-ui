@@ -90,8 +90,8 @@ const convertPTokensTx = async (amount, wallet) => {
       minterAbi,
       provider.getSigner()
     );
-    await erc20.approve(pMinterAddress, amountParsed, { gasLimit: 100000 });
-    await pMinter.mint(amountParsed, { gasLimit: 200000 });
+    await erc20.approve(pMinterAddress, amountParsed, { gasLimit: 70000 });
+    await pMinter.mint(amountParsed, { gasLimit: 125000 });
     return true;
   }
   return false;
