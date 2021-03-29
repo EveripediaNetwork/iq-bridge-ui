@@ -64,7 +64,7 @@ const erc20Abi = [
 // const pIQAddress = "0xbff1365cf0a67431484c00c63bf14cfd9abbce5d"; // GOERLI
 // const pMinterAddress = "0x483488B7D897b429AE851FEef1fA02d96475cc23"; // GOERLI
 const pIQAddress = "0xa23d33d5e0a61ba81919bfd727c671bb03ab0fea";
-const pMinterAddress = "0xa23d33d5e0a61ba81919bfd727c671bb03ab0fea";
+const pMinterAddress = "0x30953aebf5e3f2c139e9e19bf246dd3a575ddaf7";
 
 const getPTokensUserBalance = async (wallet) => {
   if (wallet.status === "connected") {
