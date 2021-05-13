@@ -12,6 +12,7 @@ import {
 
 const HomePage = lazy(() => import("./features/home"));
 const EthPage = lazy(() => import("./features/eth"));
+const LockPage = lazy(() => import("./features/lock"));
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function Routes() {
     <Switch>
       <Route exact path="/" component={HomePage} />
       <Route exact path="/eth" component={EthPage} />
+      <Route exact path="/lock" component={LockPage} />
     </Switch>
   );
 }

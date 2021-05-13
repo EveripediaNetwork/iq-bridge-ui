@@ -63,6 +63,7 @@ const erc20Abi = [
 
 // const pIQAddress = "0xbff1365cf0a67431484c00c63bf14cfd9abbce5d"; // GOERLI
 // const pMinterAddress = "0x483488B7D897b429AE851FEef1fA02d96475cc23"; // GOERLI
+const maticIQAddress = "0xB9638272aD6998708de56BBC0A290a1dE534a578";
 const pIQAddress = "0xa23d33d5e0a61ba81919bfd727c671bb03ab0fea";
 const pMinterAddress = "0x30953aebf5e3f2c139e9e19bf246dd3a575ddaf7";
 
@@ -70,6 +71,16 @@ const getPTokensUserBalance = async (wallet) => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
     const erc20 = new ethers.Contract(pIQAddress, erc20Abi, provider);
+    const balanc = await erc20.balanceOf(wallet.account);
+    return ethers.utils.formatEther(balanc);
+  }
+  return 0;
+};
+
+const getTokensUserBalanceMatic = async (wallet) => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+    const erc20 = new ethers.Contract(maticIQAddress, erc20Abi, provider);
     const balanc = await erc20.balanceOf(wallet.account);
     return ethers.utils.formatEther(balanc);
   }
@@ -97,4 +108,4 @@ const convertPTokensTx = async (amount, wallet) => {
   return false;
 };
 
-export { convertPTokensTx, getPTokensUserBalance };
+export { convertPTokensTx, getPTokensUserBalance, getTokensUserBalanceMatic };

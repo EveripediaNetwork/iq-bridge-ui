@@ -54,6 +54,13 @@ const Layout = ({ children }) => {
             >
               {t("ETH")}
             </Nav.Link>
+            <Nav.Link
+              active={location.pathname === "/lock"}
+              as={Link}
+              to={`/lock${LngUrl}`}
+            >
+              {t("LOCK")}
+            </Nav.Link>
           </Nav>
           <LanguageSelector />
           <Form inline>

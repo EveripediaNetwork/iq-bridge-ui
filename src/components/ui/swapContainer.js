@@ -7,7 +7,10 @@ import { useTranslation } from "react-i18next";
 import { UALContext } from "ual-reactjs-renderer";
 import { useWallet } from "use-wallet";
 import { getUserTokenBalance } from "../../utils/EosDataProvider";
-import { getPTokensUserBalance } from "../../utils/EthDataProvider";
+import {
+  getPTokensUserBalance,
+  getTokensUserBalanceMatic,
+} from "../../utils/EthDataProvider";
 
 const SwapContainerWrapper = styled.div`
   border-radius: 15px;
@@ -103,6 +106,8 @@ const SwapContainer = ({ token, header }) => {
         setBalance(await getUserTokenBalance(authContext));
       } else if (wallet.account && token.name === "pIQ") {
         setBalance(await getPTokensUserBalance(wallet));
+      } else if (wallet.account && token.name === "IQ") {
+        setBalance(await getTokensUserBalanceMatic(wallet));
       }
     })();
   }, [authContext, wallet, token]);
