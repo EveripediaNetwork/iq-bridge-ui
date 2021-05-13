@@ -9,7 +9,7 @@ import Layout from "../components/layouts/layout";
 import SwapContainer from "../components/ui/swapContainer";
 import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
-import { convertPTokensTx } from "../utils/EthDataProvider";
+import { lockTokensTx } from "../utils/EthDataProvider";
 
 const IconWrapper = styled(Button)`
   margin: 15px;
@@ -39,8 +39,7 @@ const Lock = () => {
     if (!wallet.account) {
       return;
     }
-    // TODO: lock tokens
-    // await convertPTokensTx(data.FromAmount, wallet);
+    await lockTokensTx(data.FromAmount, data.Time, wallet);
 
     setTxDone(true);
   };

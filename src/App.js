@@ -19,7 +19,7 @@ function App() {
     <ErrorBoundary fallback={<Error />}>
       <Suspense fallback={<Loading />}>
         <UseWalletProvider
-          chainId={1} // 5 GOERLI
+          chainId={1} // 5 GOERLI // TODO: make it flexible (137 for Matic)
           connectors={{
             fortmatic: { apiKey: "" },
             portis: { dAppId: "" },
