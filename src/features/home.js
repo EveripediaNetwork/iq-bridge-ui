@@ -4,6 +4,9 @@ import styled from "styled-components";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { ArrowDownShort } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
+
 import { WallerProviderContext as UALContext } from "../context/walletProvider/walletProviderFacade";
 import Layout from "../components/layouts/layout";
 import SwapContainer from "../components/ui/swapContainer";
@@ -24,13 +27,29 @@ const IconWrapper = styled(Button)`
   background: none;
 `;
 
+const LockValueInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 0.4px dashed lightgray;
+  align-items: center;
+  margin: 20px
+`;
+
+const SelectedLockValueText = styled.span`
+  text-align: center;
+  font-size: 24px;
+  font-weight: normal
+`;
+
 const MainCard = styled(Card)``;
 
 const Home = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const authContext = useContext(UALContext);
-  const [txData, setTxData] = useState("");
+  const [txData, setTxData] = useState('');
+  const [lockValue, setLockValue] = useState(0)
   const [token1, setToken1] = React.useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "IQ",
@@ -77,6 +96,20 @@ const Home = () => {
                     </div>
                     <AddressContainer />
                     <br />
+                    <LockValueInfoContainer className="rounded shadow-sm p-5">
+                      <SelectedLockValueText>
+                        {lockValue === 0 ? (
+                          <>
+                            {t("select_lock_value")}
+                          </>
+                        ): (
+                          <>
+                            {t("selected_lock_value")}: {lockValue}
+                          </>
+                        )}
+                      </SelectedLockValueText>
+                      <Slider railStyle={{ backgroundColor: 'gray' }} onChange={setLockValue} min={1} max={30} step={1} />
+                    </LockValueInfoContainer>
                     <Button
                       disabled={!authContext.activeUser}
                       variant="primary"

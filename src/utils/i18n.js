@@ -31,6 +31,8 @@ export const resources = {
       liquidity_fee: "Liquidity provider fee",
       min_received: "Minimum received",
       max_profit: "Maximum profit",
+      selected_lock_value: "Lock value",
+      select_lock_value: "Select a lock value",
       login_info: "Login on EOS Wallet to bridge your tokens",
       login_info_eth: "Login on ETH Wallet to swap your tokens",
       // dialog tx
@@ -87,6 +89,8 @@ export const resources = {
       liquidity_fee: "유동성 공급 수수료",
       min_received: "최소 수령액",
       max_profit: "최대 수익",
+      selected_lock_value: "잠금 값",
+      select_lock_value: "잠금 값 선택",
       login_info: "로그인해서 스왑하기",
       // dialog tx
       confirming_tx: "트랜잭션 진행중...",
@@ -143,6 +147,8 @@ export const resources = {
       liquidity_fee: "流动性提供者费用",
       min_received: "最低可获得",
       max_profit: "最大收益",
+      selected_lock_value: "锁值",
+      select_lock_value: "选择一个锁定值",
       login_info: "登录交易",
       // dialog tx
       confirming_tx: "确认交易...",
