@@ -141,7 +141,7 @@ const Home = () => {
           <Row>
             <Col className="d-flex flex-column justify-content-center">
               <InputErrorText className="text-center">
-                Input value must be between 1 and 30
+                {t("value_restriction")}
               </InputErrorText>
             </Col>
           </Row>
@@ -179,6 +179,7 @@ const Home = () => {
                       </IconWrapper>
                     </div>
                     <AddressContainer />
+                    <br />
                     {LockValueJSX()}
                     <br />
                     <Button

@@ -2,6 +2,7 @@ import { Form } from "react-bootstrap";
 import React, { useRef } from "react";
 import styled from "styled-components";
 import { useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 const SwapContainerWrapper = styled.div`
   border-radius: 15px;
@@ -41,12 +42,13 @@ const SwapTokenInput = styled(Form.Control)`
 `;
 
 const AddressContainer = () => {
+  const { t } = useTranslation();
   const { register } = useFormContext();
   const swapRef = useRef();
   return (
     <SwapContainerWrapper>
       <SwapTokenHeader className="text-capitalize">
-        Your Ethereum Address
+        {t('your_eth_address')}
       </SwapTokenHeader>
       <SwapTokenContainer>
         <SwapTokenInputContainer>
