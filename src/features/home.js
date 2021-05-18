@@ -98,7 +98,6 @@ const Home = () => {
 
   const validnum =  (a) => ((a >= 0) && (a <= 30));
 
-
   const LockValueJSX = () => (
     <LockValueInfoContainer className="rounded shadow-sm pr-3 pl-3 pt-4 pb-4">
       <SelectedLockValueText>
@@ -150,7 +149,6 @@ const Home = () => {
       </Container>
     </LockValueInfoContainer>
   )
-
 
   return (
     <Layout>
