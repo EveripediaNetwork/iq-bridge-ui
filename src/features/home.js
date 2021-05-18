@@ -53,12 +53,19 @@ const InputLockValue = styled(Form.Control)`
   }
 `;
 
+const InputErrorText = styled(Form.Text)`
+  color: red;
+  font-style: italic;
+  font-weight: bold
+`;
+
 const Home = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const authContext = useContext(UALContext);
   const [txData, setTxData] = useState('');
-  const [lockValue, setLockValue] = useState(0)
+  const [lockValue, setLockValue] = useState(0);
+  const [validInput, setValidInput] = useState(true);
   const [token1, setToken1] = React.useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "IQ",
@@ -66,9 +73,8 @@ const Home = () => {
   });
 
   const onSubmit = async (data) => {
-    if (!authContext.activeUser) {
-      return;
-    }
+    if (!authContext.activeUser) return;
+
     const result = await convertTokensTx(
       `${parseFloat(data.FromAmount).toFixed(3)} ${data.FromToken}`,
       data.address,
@@ -76,6 +82,75 @@ const Home = () => {
     );
     setTxData(result.transactionId);
   };
+
+  const handleOnInputLockValue = (event) => {
+    const value = Number(event.target.value);
+
+    if(validnum(value)) {
+      setLockValue(value);
+      setValidInput(true);
+    }
+    else {
+      setLockValue(0)
+      setValidInput(false);
+    }
+  }
+
+  const validnum =  (a) => ((a >= 0) && (a <= 30));
+
+
+  const LockValueJSX = () => (
+    <LockValueInfoContainer className="rounded shadow-sm pr-3 pl-3 pt-4 pb-4">
+      <SelectedLockValueText>
+        {lockValue === 0 ? (
+          <>
+            {t("select_lock_value")}
+          </>
+        ): (
+          <>
+            {t("selected_lock_value")}: {lockValue}
+          </>
+        )}
+      </SelectedLockValueText>
+      <Container>
+        <Row>
+          <Col className="d-flex flex-column justify-content-center" xs={9}>
+            <Slider
+              railStyle={{ backgroundColor: 'lightgray', height: 11 }}
+              trackStyle={{ height: 14 }}
+              handleStyle={{
+                borderColor: 'black',
+                height: 22,
+                width: 22,
+              }}
+              onChange={setLockValue} 
+              value={lockValue}
+              min={1} 
+              max={30} 
+              step={1} 
+            />
+          </Col>
+          <Col className="p-0">
+            <InputLockValue 
+              type="number"
+              onChange={handleOnInputLockValue} 
+            />
+          </Col>
+        </Row>
+        {!validInput && (
+          <Row>
+            <Col className="d-flex flex-column justify-content-center">
+              <InputErrorText className="text-center">
+                Input value must be between 1 and 30
+              </InputErrorText>
+            </Col>
+          </Row>
+          )
+        }
+      </Container>
+    </LockValueInfoContainer>
+  )
+
 
   return (
     <Layout>
@@ -104,42 +179,8 @@ const Home = () => {
                       </IconWrapper>
                     </div>
                     <AddressContainer />
+                    {LockValueJSX()}
                     <br />
-                    <LockValueInfoContainer className="rounded shadow-sm pr-3 pl-3 pt-4 pb-4">
-                      <SelectedLockValueText>
-                        {lockValue === 0 ? (
-                          <>
-                            {t("select_lock_value")}
-                          </>
-                        ): (
-                          <>
-                            {t("selected_lock_value")}: {lockValue}
-                          </>
-                        )}
-                      </SelectedLockValueText>
-                      <Container>
-                        <Row>
-                          <Col className="d-flex flex-column justify-content-center" xs={9}>
-                            <Slider
-                              railStyle={{ backgroundColor: 'lightgray', height: 11 }}
-                              trackStyle={{ height: 14 }}
-                              handleStyle={{
-                                borderColor: 'black',
-                                height: 22,
-                                width: 22,
-                              }}
-                              onChange={setLockValue} 
-                              min={1} 
-                              max={30} 
-                              step={1} 
-                            />
-                          </Col>
-                          <Col className="p-0">
-                            <InputLockValue type="number"/>
-                          </Col>
-                        </Row>
-                      </Container>
-                    </LockValueInfoContainer>
                     <Button
                       disabled={!authContext.activeUser}
                       variant="primary"
