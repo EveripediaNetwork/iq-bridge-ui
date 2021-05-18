@@ -33,16 +33,25 @@ const LockValueInfoContainer = styled.div`
   justify-content: center;
   border: 0.4px dashed lightgray;
   align-items: center;
-  margin: 20px
+  margin-bottom: 15px;
 `;
 
 const SelectedLockValueText = styled.span`
   text-align: center;
   font-size: 24px;
-  font-weight: normal
+  font-weight: normal;
+  margin-bottom: 10px
 `;
 
 const MainCard = styled(Card)``;
+
+const InputLockValue = styled(Form.Control)`
+  /* border: 0px !important; */
+  
+  :focus {
+    box-shadow: none !important;
+  }
+`;
 
 const Home = () => {
   const { t } = useTranslation();
@@ -96,7 +105,7 @@ const Home = () => {
                     </div>
                     <AddressContainer />
                     <br />
-                    <LockValueInfoContainer className="rounded shadow-sm p-5">
+                    <LockValueInfoContainer className="rounded shadow-sm pr-3 pl-3 pt-4 pb-4">
                       <SelectedLockValueText>
                         {lockValue === 0 ? (
                           <>
@@ -108,7 +117,28 @@ const Home = () => {
                           </>
                         )}
                       </SelectedLockValueText>
-                      <Slider railStyle={{ backgroundColor: 'gray' }} onChange={setLockValue} min={1} max={30} step={1} />
+                      <Container>
+                        <Row>
+                          <Col className="d-flex flex-column justify-content-center" xs={9}>
+                            <Slider
+                              railStyle={{ backgroundColor: 'lightgray', height: 11 }}
+                              trackStyle={{ height: 14 }}
+                              handleStyle={{
+                                borderColor: 'black',
+                                height: 22,
+                                width: 22,
+                              }}
+                              onChange={setLockValue} 
+                              min={1} 
+                              max={30} 
+                              step={1} 
+                            />
+                          </Col>
+                          <Col className="p-0">
+                            <InputLockValue type="number"/>
+                          </Col>
+                        </Row>
+                      </Container>
                     </LockValueInfoContainer>
                     <Button
                       disabled={!authContext.activeUser}
