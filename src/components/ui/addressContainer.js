@@ -54,7 +54,7 @@ const AddressContainer = () => {
             autoComplete="off"
             name="address"
             placeholder="0x0"
-            ref={(e) => {
+            ref={e => {
               register(e, { required: true });
               swapRef.current = e;
             }}

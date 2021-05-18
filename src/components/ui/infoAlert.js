@@ -23,7 +23,7 @@ const InfoAlert = ({ text }) => {
 };
 
 InfoAlert.propTypes = {
-  text: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired
 };
 
 export default InfoAlert;

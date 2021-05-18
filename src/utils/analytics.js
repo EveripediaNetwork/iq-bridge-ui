@@ -11,12 +11,12 @@ function sendEvent(action, data) {
 function sendPageview(path, location) {
   window.gtag("send", "page_view", {
     page_location: location,
-    page_path: path,
+    page_path: path
   });
 }
 
 export default {
   init,
   sendEvent,
-  sendPageview,
+  sendPageview
 };

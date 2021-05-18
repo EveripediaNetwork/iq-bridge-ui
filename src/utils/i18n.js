@@ -57,8 +57,8 @@ export const resources = {
       done: "Done",
       en: "EN",
       ko: "한국어",
-      zh: "中文",
-    },
+      zh: "中文"
+    }
   },
   ko: {
     translation: {
@@ -112,8 +112,8 @@ export const resources = {
       done: "완료",
       en: "EN",
       ko: "한국어",
-      zh: "中文",
-    },
+      zh: "中文"
+    }
   },
 
   zh: {
@@ -168,15 +168,15 @@ export const resources = {
       done: "完成",
       en: "EN",
       ko: "한국어",
-      zh: "中文",
-    },
-  },
+      zh: "中文"
+    }
+  }
 };
 
 const languageDetector = new LanguageDetector(null, {
   order: ["querystring", "localStorage", "navigator"],
   lookupLocalStorage: "storeLang",
-  caches: ["localStorage"],
+  caches: ["localStorage"]
 });
 
 i18n
@@ -187,9 +187,9 @@ i18n
     fallbackLng: "en",
     keySeparator: false,
     interpolation: {
-      escapeValue: false,
+      escapeValue: false
     },
-    supportedLngs: ["en", "ko", "zh"],
+    supportedLngs: ["en", "ko", "zh"]
   });
 
 export default i18n;

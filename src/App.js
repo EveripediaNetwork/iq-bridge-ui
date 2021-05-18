@@ -7,7 +7,7 @@ import ErrorBoundary from "./components/errorBoundary";
 import useGoogleAnalytics from "./hooks/useGoogleAnalytics";
 import {
   UALProviderSwitch,
-  WalletProvider,
+  WalletProvider
 } from "./context/walletProvider/walletProviderFacade";
 
 const HomePage = lazy(() => import("./features/home"));
@@ -23,7 +23,7 @@ function App() {
             fortmatic: { apiKey: "" },
             portis: { dAppId: "" },
             walletconnect: { rpcUrl: process.env.REACT_APP_ETH_URL },
-            walletlink: { url: process.env.REACT_APP_ETH_URL },
+            walletlink: { url: process.env.REACT_APP_ETH_URL }
           }}
         >
           <UALProviderSwitch>
