@@ -8,7 +8,7 @@ import {
   ModalBody,
   Button,
   ToggleButtonGroup,
-  ToggleButton,
+  ToggleButton
 } from "react-bootstrap";
 import LanguageList from "./LanguageList";
 import { resources } from "../../../utils/i18n";
@@ -86,7 +86,7 @@ const LanguageSelector = () => {
     return LangQuery;
   };
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     if (e.target.innerText) {
       const LangFormatted = e.target.innerText.slice(1).toLowerCase();
       const NewUrlParameter = searchurl
@@ -147,7 +147,7 @@ const LanguageSelector = () => {
                 name="language-options"
                 defaultValue={language}
               >
-                {Object.keys(resources).map((lang) => (
+                {Object.keys(resources).map(lang => (
                   <ToggleButton
                     value={` ${lang}`}
                     onClick={handleChange}

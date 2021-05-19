@@ -15,11 +15,11 @@ const useAsync = (asyncFunction, immediate = true) => {
     setError(null);
 
     return asyncFunction()
-      .then((response) => {
+      .then(response => {
         setValue(response);
         setStatus("success");
       })
-      .catch((exceptionError) => {
+      .catch(exceptionError => {
         setError(exceptionError);
         setStatus("error");
       });

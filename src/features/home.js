@@ -68,10 +68,12 @@ const Home = () => {
   const [token1, setToken1] = React.useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "IQ",
-    precision: 3,
+    precision: 3
   });
 
-  const onSubmit = async (data) => {
+  const validnum = a => a >= 0 && a <= 1460;
+
+  const onSubmit = async data => {
     if (!authContext.activeUser) return;
 
     const result = await convertTokensTx(
@@ -82,7 +84,7 @@ const Home = () => {
     setTxData(result.transactionId);
   };
 
-  const handleOnInputLockValue = (event) => {
+  const handleOnInputLockValue = event => {
     const value = Number(event.target.value);
 
     if (validnum(value)) {
@@ -93,8 +95,6 @@ const Home = () => {
       setValidInput(false);
     }
   };
-
-  const validnum = (a) => a >= 0 && a <= 1460;
 
   const LockValueJSX = () => (
     <LockValueInfoContainer className="rounded pr-3 pl-3 pt-2 pb-3">
@@ -110,7 +110,7 @@ const Home = () => {
               handleStyle={{
                 borderColor: "black",
                 height: 22,
-                width: 22,
+                width: 22
               }}
               onChange={setLockValue}
               className="mb-3"

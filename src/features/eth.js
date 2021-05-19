@@ -32,10 +32,10 @@ const Eth = () => {
   const [token1, setToken1] = React.useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "pIQ",
-    precision: 3,
+    precision: 3
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     if (!wallet.account) {
       return;
     }

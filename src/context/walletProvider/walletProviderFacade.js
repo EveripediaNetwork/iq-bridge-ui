@@ -1,9 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { UALContext, UALProvider } from "ual-reactjs-renderer";
 import {
   appName,
   supportedAuthenticators,
-  supportedChains,
+  supportedChains
 } from "../../utils/UalProvider";
 
 export const WallerProviderContext = React.createContext(null);
@@ -15,8 +16,7 @@ export const WallerProviderContext = React.createContext(null);
  * @constructor
  */
 export const WalletProvider = ({ children }) => {
-
-  let authContext = useContext(UALContext);
+  const authContext = useContext(UALContext);
 
   const [walletState, setWalletState] = useState({
     // eslint-disable-next-line react/no-unused-state
@@ -27,7 +27,7 @@ export const WalletProvider = ({ children }) => {
     },
     // eslint-disable-next-line react/no-unused-state
     logout: () => authContext.logout(),
-    tweaker: 0,
+    tweaker: 0
   });
 
   /**
@@ -37,7 +37,7 @@ export const WalletProvider = ({ children }) => {
     setWalletState({
       ...walletState,
       activeUser: authContext.activeUser,
-      tweaker: walletState.tweaker + 1,
+      tweaker: walletState.tweaker + 1
     });
   }, [authContext.activeUser]);
 
@@ -56,12 +56,20 @@ export const WalletProvider = ({ children }) => {
  */
 export const UALProviderSwitch = ({ children }) => {
   return (
-      <UALProvider
-          chains={supportedChains}
-          authenticators={supportedAuthenticators}
-          appName={appName}
-      >
-        {children}
-      </UALProvider>
+    <UALProvider
+      chains={supportedChains}
+      authenticators={supportedAuthenticators}
+      appName={appName}
+    >
+      {children}
+    </UALProvider>
   );
+};
+
+WalletProvider.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
+UALProviderSwitch.propTypes = {
+  children: PropTypes.node.isRequired
 };

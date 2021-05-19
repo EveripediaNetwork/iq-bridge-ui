@@ -11,7 +11,6 @@ export default function useGoogleAnalytics() {
   }, []);
 
   React.useEffect(() => {
-    console.log(window.location.href);
     const currentPath = location.pathname + location.search;
     analytics.sendPageview(currentPath, window.location.href);
   }, [location]);

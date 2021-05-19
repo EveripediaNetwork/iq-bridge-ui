@@ -1,7 +1,6 @@
 {
   "name": "iq-bridge-ui",
   "version": "1.0.0",
-  "private": false,
   "license": "CC-BY-NC-SA-4.0",
   "dependencies": {
     "@everipedia/ual-mykey": "0.3.0",
@@ -36,6 +35,7 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
+    "lint": "eslint './**/*.{js,jsx}'",
     "eject": "craco eject"
   },
   "eslintConfig": {
@@ -53,8 +53,20 @@
       "last 1 safari version"
     ]
   },
+  "lint-staged": {
+    "./**/*.{js,jsx,json,css,scss,md}": [
+      "prettier --write",
+      "yarn lint"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "devDependencies": {
     "@craco/craco": "^5.7.0",
+    "eslint": "^7.26.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^6.12.0",
     "eslint-plugin-import": "^2.22.1",
@@ -62,6 +74,8 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.4",
     "eslint-plugin-react-hooks": "^4.1.2",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
     "prettier": "^2.1.2"
   }
 }

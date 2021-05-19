@@ -48,7 +48,7 @@ const AddressContainer = () => {
   return (
     <SwapContainerWrapper>
       <SwapTokenHeader className="text-capitalize">
-        {t('your_eth_address')}
+        {t("your_eth_address")}
       </SwapTokenHeader>
       <SwapTokenContainer>
         <SwapTokenInputContainer>
@@ -56,7 +56,7 @@ const AddressContainer = () => {
             autoComplete="off"
             name="address"
             placeholder="0x0"
-            ref={(e) => {
+            ref={e => {
               register(e, { required: true });
               swapRef.current = e;
             }}

@@ -9,7 +9,7 @@ import { useWallet } from "use-wallet";
 import { getUserTokenBalance } from "../../utils/EosDataProvider";
 import {
   getPTokensUserBalance,
-  getTokensUserBalanceMatic,
+  getTokensUserBalanceMatic
 } from "../../utils/EthDataProvider";
 
 const SwapContainerWrapper = styled.div`
@@ -124,7 +124,7 @@ const SwapContainer = ({ token, header }) => {
             autoComplete="off"
             name={`${header}Amount`}
             placeholder={token ? `0.${"0".repeat(token.precision)}` : "0.000"}
-            ref={(e) => {
+            ref={e => {
               register(e, { required: true });
               swapRef.current = e;
             }}
@@ -147,8 +147,8 @@ const SwapContainer = ({ token, header }) => {
 };
 
 SwapContainer.propTypes = {
-  token: PropTypes.any,
-  header: PropTypes.string.isRequired,
+  token: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  header: PropTypes.string.isRequired
 };
 
 export default SwapContainer;
