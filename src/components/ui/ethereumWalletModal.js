@@ -1,8 +1,7 @@
 import { ListGroup, ListGroupItem, Modal } from "react-bootstrap";
-import React, { useRef } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useWallet } from "use-wallet";
-import Web3 from "web3";
 
 const StyledModal = styled(Modal)`
   div {
@@ -39,8 +38,7 @@ const StyledListGroup = styled(ListGroup)`
 
 const EthereumWalletModal = ({ ...otherProps }) => {
   const wallet = useWallet();
-  const { current: web3 } = useRef(new Web3(window.ethereum));
-  const activate = connector => wallet.connect(connector);
+  const activate = (connector) => wallet.connect(connector);
   return (
     <StyledModal
       {...otherProps}

@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { UALContext, UALProvider } from "ual-reactjs-renderer";
 import {
   appName,
@@ -15,7 +16,7 @@ export const WallerProviderContext = React.createContext(null);
  * @constructor
  */
 export const WalletProvider = ({ children }) => {
-  let authContext = useContext(UALContext);
+  const authContext = useContext(UALContext);
 
   const [walletState, setWalletState] = useState({
     // eslint-disable-next-line react/no-unused-state
@@ -63,4 +64,12 @@ export const UALProviderSwitch = ({ children }) => {
       {children}
     </UALProvider>
   );
+};
+
+WalletProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+UALProviderSwitch.propTypes = {
+  children: PropTypes.node.isRequired,
 };
