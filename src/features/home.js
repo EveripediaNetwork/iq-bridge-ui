@@ -41,14 +41,12 @@ const SelectedLockValueText = styled.span`
   font-weight: normal;
   color: #aeabab;
   margin-bottom: 10px;
-  text-transform: uppercase;
+  text-transform: capitalize;
 `;
 
 const MainCard = styled(Card)``;
 
 const InputLockValue = styled(Form.Control)`
-  /* border: 0px !important; */
-
   :focus {
     box-shadow: none !important;
   }
