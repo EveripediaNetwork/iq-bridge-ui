@@ -1,7 +1,7 @@
 {
-  "name": "iq-bridge-ui",
   "version": "1.0.0",
   "license": "CC-BY-NC-SA-4.0",
+  "name": "iq-bridge-ui",
   "dependencies": {
     "@everipedia/ual-mykey": "0.3.0",
     "@everipedia/ual-scatter": "0.3.0",
@@ -54,7 +54,7 @@
     ]
   },
   "lint-staged": {
-    "./**/*.{js,jsx,json,css,scss,md}": [
+    "./**/*.{js,jsx,css,scss,md}": [
       "prettier --write",
       "yarn lint"
     ]
@@ -74,7 +74,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.4",
     "eslint-plugin-react-hooks": "^4.1.2",
-    "husky": "^6.0.0",
+    "husky": "4",
     "lint-staged": "^11.0.0",
     "prettier": "^2.1.2"
   }
