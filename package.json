@@ -53,15 +53,15 @@
       "last 1 safari version"
     ]
   },
+  "lint-staged": {
+    "./**/*.{js,jsx,json,css,scss,md}": [
+      "prettier --write",
+      "yarn lint"
+    ]
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
-    },
-    "lint-staged": {
-      "./**/*.{js,jsx,json,css,scss,md}": [
-        "prettier --write",
-        "yarn lint"
-      ]
     },
     "devDependencies": {
       "@craco/craco": "^5.7.0",
