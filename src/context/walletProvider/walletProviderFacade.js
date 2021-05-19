@@ -4,7 +4,7 @@ import { UALContext, UALProvider } from "ual-reactjs-renderer";
 import {
   appName,
   supportedAuthenticators,
-  supportedChains,
+  supportedChains
 } from "../../utils/UalProvider";
 
 export const WallerProviderContext = React.createContext(null);
@@ -27,7 +27,7 @@ export const WalletProvider = ({ children }) => {
     },
     // eslint-disable-next-line react/no-unused-state
     logout: () => authContext.logout(),
-    tweaker: 0,
+    tweaker: 0
   });
 
   /**
@@ -37,7 +37,7 @@ export const WalletProvider = ({ children }) => {
     setWalletState({
       ...walletState,
       activeUser: authContext.activeUser,
-      tweaker: walletState.tweaker + 1,
+      tweaker: walletState.tweaker + 1
     });
   }, [authContext.activeUser]);
 

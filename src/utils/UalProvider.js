@@ -10,9 +10,9 @@ const chain = {
     {
       protocol: rpcProtocol,
       host: rpcHost,
-      port: rpcPort,
-    },
-  ],
+      port: rpcPort
+    }
+  ]
 };
 
 const scatter = new Scatter([chain], { appName });
@@ -33,7 +33,7 @@ const anchor = new Anchor([chain], {
   appName,
   service: "https://cb.anchor.link",
   disableGreymassFuel: false,
-  requestStatus: false,
+  requestStatus: false
 });
 
 const supportedChains = [chain];
