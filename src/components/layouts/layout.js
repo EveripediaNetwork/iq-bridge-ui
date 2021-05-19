@@ -1,5 +1,5 @@
-import PropTypes from "prop-types";
 import React, { useContext, useState } from "react";
+import PropTypes from "prop-types";
 import { Button, Container, Form, Nav, Navbar } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -27,7 +27,6 @@ const Layout = ({ children }) => {
     wallet.connect(connectedId);
   }
 
-  console.log("refreshing layout");
   return (
     <Container className="container-sm">
       <GlobalStyle />

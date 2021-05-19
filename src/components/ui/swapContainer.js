@@ -142,7 +142,7 @@ const SwapContainer = ({ token, header }) => {
 };
 
 SwapContainer.propTypes = {
-  token: PropTypes.any,
+  token: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   header: PropTypes.string.isRequired,
 };
 
