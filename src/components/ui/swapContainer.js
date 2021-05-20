@@ -1,11 +1,12 @@
-import { Button, Form } from "react-bootstrap";
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { Button, Form } from "react-bootstrap";
 import styled from "styled-components";
 import { useFormContext } from "react-hook-form";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { UALContext } from "ual-reactjs-renderer";
 import { useWallet } from "use-wallet";
+
 import { getUserTokenBalance } from "../../utils/EosDataProvider";
 import { getPTokensUserBalance } from "../../utils/EthDataProvider";
 
@@ -31,8 +32,6 @@ const SwapTokenContainer = styled.div`
   grid-template-columns: 45% auto;
   justify-content: space-between;
 `;
-
-const SwapTokenInputContainer = styled.div``;
 
 const SwapTokenInput = styled(Form.Control)`
   border: 0px !important;
@@ -114,7 +113,7 @@ const SwapContainer = ({ token, header }) => {
         <SwapHeader>{t(header.toLowerCase())}</SwapHeader>
       </SwapTokenHeader>
       <SwapTokenContainer>
-        <SwapTokenInputContainer>
+        <div>
           <SwapTokenInput
             autoComplete="off"
             name={`${header}Amount`}
@@ -124,7 +123,7 @@ const SwapContainer = ({ token, header }) => {
               swapRef.current = e;
             }}
           />
-        </SwapTokenInputContainer>
+        </div>
 
         <Form.Control
           type="hidden"
@@ -143,7 +142,7 @@ const SwapContainer = ({ token, header }) => {
 
 SwapContainer.propTypes = {
   token: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  header: PropTypes.string.isRequired,
+  header: PropTypes.string.isRequired
 };
 
 export default SwapContainer;

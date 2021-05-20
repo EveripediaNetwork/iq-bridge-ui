@@ -4,6 +4,7 @@ import { Button, Container, Form, Nav, Navbar } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
+
 import { WallerProviderContext as UALContext } from "../../context/walletProvider/walletProviderFacade";
 import GlobalStyle from "../globalStyles";
 import LanguageSelector from "./LanguageMenu/LanguageSelector";
@@ -96,9 +97,7 @@ const Layout = ({ children }) => {
       {children}
       <EthereumWalletModal
         show={ethModalShow}
-        onHide={() => {
-          setEthModalShow(false);
-        }}
+        onHide={() => setEthModalShow(false)}
       />
     </Container>
   );

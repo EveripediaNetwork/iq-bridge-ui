@@ -1,9 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, memo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { ArrowDownShort } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
+
 import { WallerProviderContext as UALContext } from "../context/walletProvider/walletProviderFacade";
 import Layout from "../components/layouts/layout";
 import SwapContainer from "../components/ui/swapContainer";
@@ -31,7 +32,7 @@ const Home = () => {
   const methods = useForm({ mode: "onChange" });
   const authContext = useContext(UALContext);
   const [txData, setTxData] = useState("");
-  const [token1, setToken1] = React.useState({
+  const [token1, setToken1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "IQ",
     precision: 3
@@ -71,7 +72,7 @@ const Home = () => {
                       header="From"
                     />
                     <div className="d-flex justify-content-center">
-                      <IconWrapper bsPrefix="switch" onClick={() => {}}>
+                      <IconWrapper bsPrefix="switch">
                         <ArrowDownShort />
                       </IconWrapper>
                     </div>
@@ -112,4 +113,4 @@ const Home = () => {
   );
 };
 
-export default React.memo(Home);
+export default memo(Home);
