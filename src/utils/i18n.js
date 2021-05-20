@@ -6,7 +6,7 @@ export const resources = {
   en: {
     translation: {
       // layout
-      swap: "swap",
+      lock: "Lock",
       pool: "pool",
       convert: "convert",
       logout: "logout",
@@ -25,13 +25,16 @@ export const resources = {
       balance: "balance",
       from: "from",
       to: "to",
+      your_eth_address: "Your Ethereum Address",
       select_token: "Select a token",
       price: "Price",
       price_impact: "Price impact",
       liquidity_fee: "Liquidity provider fee",
       min_received: "Minimum received",
       max_profit: "Maximum profit",
-      login_info: "Login on EOS Wallet to bridge your tokens",
+      value_restriction: "Input value must be between 1 and 1460",
+      lock_period: "Lock period (days)",
+      login_info: "Login on Matic Wallet to stake your tokens",
       login_info_eth: "Login on ETH Wallet to swap your tokens",
       // dialog tx
       confirming_tx: "Confirming transaction...",
@@ -62,7 +65,7 @@ export const resources = {
   },
   ko: {
     translation: {
-      swap: "스왑",
+      lock: "자물쇠",
       pool: "풀",
       convert: "전환",
       logout: "로그아웃",
@@ -77,17 +80,20 @@ export const resources = {
       market: "시장",
       max_shares: "이용가능한 지분",
       amount_shares_convert: "전환할 지분",
-      // swap page
+      // lock page
       balance: "잔액",
       from: "보내는이",
       to: "받는이",
+      your_eth_address: "귀하의 이더 리움 주소",
       select_token: "토큰",
       price: "가격",
       price_impact: "가격 변화",
       liquidity_fee: "유동성 공급 수수료",
       min_received: "최소 수령액",
       max_profit: "최대 수익",
-      login_info: "로그인해서 스왑하기",
+      lock_period: "잠금 기간 (일)",
+      value_restriction: "입력 값은 1에서 1460 사이 여야합니다.",
+      login_info: "토큰을 스테이 킹하려면 Matic Wallet에 로그인하십시오.",
       // dialog tx
       confirming_tx: "트랜잭션 진행중...",
       confirmed_tx: "트랜잭션 완료!",
@@ -118,7 +124,7 @@ export const resources = {
 
   zh: {
     translation: {
-      swap: "兑换",
+      lock: "锁",
       pool: "池子",
       convert: "转换",
       logout: "登出",
@@ -133,17 +139,20 @@ export const resources = {
       market: "市场",
       max_shares: "最大可用的股份",
       amount_shares_convert: "要转换的股份数量",
-      // swap page
+      // lock page
       balance: "余额",
       from: "从",
       to: "到",
+      your_eth_address: "您的以太坊地址",
       select_token: "选择一种代币",
       price: "价格",
       price_impact: "价格影响",
       liquidity_fee: "流动性提供者费用",
       min_received: "最低可获得",
       max_profit: "最大收益",
-      login_info: "登录交易",
+      lock_period: "锁定期（天）",
+      value_restriction: "输入值必须在1到1460之间",
+      login_info: "在Matic Wallet上登录以抵押您的代币",
       // dialog tx
       confirming_tx: "确认交易...",
       confirmed_tx: "交易已确认!",

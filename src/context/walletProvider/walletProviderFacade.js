@@ -67,9 +67,9 @@ export const UALProviderSwitch = ({ children }) => {
 };
 
 WalletProvider.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 };
 
 UALProviderSwitch.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 };

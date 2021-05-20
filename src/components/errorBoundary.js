@@ -27,5 +27,5 @@ export default class ErrorBoundary extends Component {
 
 ErrorBoundary.propTypes = {
   children: PropTypes.node.isRequired,
-  fallback: PropTypes.node.isRequired,
+  fallback: PropTypes.node.isRequired
 };

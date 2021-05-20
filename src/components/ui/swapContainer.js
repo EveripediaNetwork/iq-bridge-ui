@@ -9,7 +9,7 @@ import { useWallet } from "use-wallet";
 import { getUserTokenBalance } from "../../utils/EosDataProvider";
 import {
   getPTokensUserBalance,
-  getTokensUserBalanceMatic,
+  getTokensUserBalanceMatic
 } from "../../utils/EthDataProvider";
 
 const SwapContainerWrapper = styled.div`
@@ -148,7 +148,7 @@ const SwapContainer = ({ token, header }) => {
 
 SwapContainer.propTypes = {
   token: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  header: PropTypes.string.isRequired,
+  header: PropTypes.string.isRequired
 };
 
 export default SwapContainer;
