@@ -1,5 +1,5 @@
-import { CheckSquare } from "react-bootstrap-icons";
 import React from "react";
+import { CheckSquare } from "react-bootstrap-icons";
 import styled from "styled-components";
 import { Alert } from "react-bootstrap";
 import PropTypes from "prop-types";

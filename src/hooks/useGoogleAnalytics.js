@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import analytics from "../utils/analytics";
@@ -6,11 +6,11 @@ import analytics from "../utils/analytics";
 export default function useGoogleAnalytics() {
   const location = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     analytics.init();
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const currentPath = location.pathname + location.search;
     analytics.sendPageview(currentPath, window.location.href);
   }, [location]);

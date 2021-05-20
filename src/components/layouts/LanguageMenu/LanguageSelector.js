@@ -10,6 +10,7 @@ import {
   ToggleButtonGroup,
   ToggleButton
 } from "react-bootstrap";
+
 import LanguageList from "./LanguageList";
 import { resources } from "../../../utils/i18n";
 import { isDesktop } from "../../../constants/index";
