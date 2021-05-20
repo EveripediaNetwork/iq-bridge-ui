@@ -15,21 +15,15 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": [
-    "react"
-  ],
+  "plugins": ["react"],
   "rules": {
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [
-          ".js",
-          ".jsx"
-        ]
+        "extensions": [".js", ".jsx"]
       }
     ],
-    "react/jsx-props-no-spreading": [
-      "off"
-    ]
+    "react/jsx-props-no-spreading": ["off"],
+    "react/jsx-one-expression-per-line": "off"
   }
 }

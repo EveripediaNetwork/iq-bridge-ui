@@ -30,7 +30,7 @@ const TxSuccessAlert = ({ txId }) => {
 };
 
 TxSuccessAlert.propTypes = {
-  txId: PropTypes.string.isRequired,
+  txId: PropTypes.string.isRequired
 };
 
 export default TxSuccessAlert;

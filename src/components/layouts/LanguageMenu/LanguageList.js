@@ -44,7 +44,7 @@ const LanguageList = ({ handleChange, languageData }) => {
   return (
     <Container>
       <LanguageUnorderedList>
-        {languageData.map((lang) => (
+        {languageData.map(lang => (
           <LanguageItem onClick={handleChange} key={lang}>
             <span>&nbsp;</span>
             {lang}
@@ -58,7 +58,7 @@ const LanguageList = ({ handleChange, languageData }) => {
 
 LanguageList.propTypes = {
   handleChange: PropTypes.func.isRequired,
-  languageData: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  languageData: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired
 };
 
 export default LanguageList;

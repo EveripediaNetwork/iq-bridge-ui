@@ -3,11 +3,11 @@ export const colors = {
   secondary: "#3d0080",
   black: "#000000",
   white: "#FFFFFF",
-  grey: "#EDEFF3",
+  grey: "#EDEFF3"
 };
 
 export const typography = {
-  primary: `'Roboto', sans-serif;`,
+  primary: `'Roboto', sans-serif;`
 };
 
 export const isDesktop = window.innerWidth > 991;

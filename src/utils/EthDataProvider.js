@@ -6,14 +6,14 @@ const minterAbi = [
       {
         internalType: "uint256",
         name: "_amount",
-        type: "uint256",
-      },
+        type: "uint256"
+      }
     ],
     name: "mint",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
-  },
+    type: "function"
+  }
 ];
 
 const erc20Abi = [
@@ -22,43 +22,43 @@ const erc20Abi = [
     inputs: [
       {
         name: "_owner",
-        type: "address",
-      },
+        type: "address"
+      }
     ],
     name: "balanceOf",
     outputs: [
       {
         name: "balance",
-        type: "uint256",
-      },
+        type: "uint256"
+      }
     ],
     payable: false,
-    type: "function",
+    type: "function"
   },
   {
     inputs: [
       {
         internalType: "address",
         name: "spender",
-        type: "address",
+        type: "address"
       },
       {
         internalType: "uint256",
         name: "amount",
-        type: "uint256",
-      },
+        type: "uint256"
+      }
     ],
     name: "approve",
     outputs: [
       {
         internalType: "bool",
         name: "",
-        type: "bool",
-      },
+        type: "bool"
+      }
     ],
     stateMutability: "nonpayable",
-    type: "function",
-  },
+    type: "function"
+  }
 ];
 
 // const pIQAddress = "0xbff1365cf0a67431484c00c63bf14cfd9abbce5d"; // GOERLI
@@ -68,7 +68,7 @@ const maticHiIQAddress = "0xfC0fA725E8fB4D87c38EcE56e8852258219C64Ee";
 const pIQAddress = "0xa23d33d5e0a61ba81919bfd727c671bb03ab0fea";
 const pMinterAddress = "0x30953aebf5e3f2c139e9e19bf246dd3a575ddaf7";
 
-const getPTokensUserBalance = async (wallet) => {
+const getPTokensUserBalance = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
     const erc20 = new ethers.Contract(pIQAddress, erc20Abi, provider);

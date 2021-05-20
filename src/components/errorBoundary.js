@@ -5,7 +5,7 @@ export default class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasError: false,
+      hasError: false
     };
   }
 
@@ -27,5 +27,5 @@ export default class ErrorBoundary extends Component {
 
 ErrorBoundary.propTypes = {
   children: PropTypes.node.isRequired,
-  fallback: PropTypes.any,
+  fallback: PropTypes.node.isRequired,
 };
