@@ -83,7 +83,7 @@ const Home = () => {
                       size="lg"
                       block
                     >
-                      {t("lock")}
+                      {t("swap")}
                     </Button>
                   </Form>
                 </Card.Body>

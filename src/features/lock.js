@@ -14,6 +14,10 @@ import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
 import { lockTokensTx } from "../utils/EthDataProvider";
 
+const HeaderText = styled.div`
+  background-color: #f7f7f9;
+`;
+
 const IconWrapper = styled(Button)`
   margin: 15px;
   color: rgb(86, 90, 105);
@@ -153,6 +157,9 @@ const Lock = () => {
               />
               <Card className="mx-auto shadow-sm">
                 <Card.Body>
+                  <HeaderText className="shadow-sm rounded p-3 text-justify mb-3 highlight">
+                    {t("lock_description")}
+                  </HeaderText>
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
                     <SwapContainer
                       token={token1}
@@ -175,7 +182,7 @@ const Lock = () => {
                       size="lg"
                       block
                     >
-                      {t("Lock IQ")}
+                      {t("lock")}
                     </Button>
                   </Form>
                 </Card.Body>
