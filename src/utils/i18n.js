@@ -34,7 +34,8 @@ export const resources = {
       max_profit: "Maximum profit",
       value_restriction: "Input value must be between 1 and 1460",
       lock_period: "Lock period (days)",
-      login_info: "Login on Matic Wallet to stake your tokens",
+      login_info_eos: "Login on EOS Wallet to bridge your tokens",
+      login_info_matic: "Login on Matic Wallet to stake your tokens",
       login_info_eth: "Login on ETH Wallet to swap your tokens",
       // dialog tx
       confirming_tx: "Confirming transaction...",
@@ -93,7 +94,8 @@ export const resources = {
       max_profit: "최대 수익",
       lock_period: "잠금 기간 (일)",
       value_restriction: "입력 값은 1에서 1460 사이 여야합니다.",
-      login_info: "토큰을 스테이 킹하려면 Matic Wallet에 로그인하십시오.",
+      login_info_eos: "로그인해서 스왑하기",
+      login_info_matic: "토큰을 스테이 킹하려면 Matic Wallet에 로그인하십시오.",
       // dialog tx
       confirming_tx: "트랜잭션 진행중...",
       confirmed_tx: "트랜잭션 완료!",
@@ -152,7 +154,8 @@ export const resources = {
       max_profit: "最大收益",
       lock_period: "锁定期（天）",
       value_restriction: "输入值必须在1到1460之间",
-      login_info: "在Matic Wallet上登录以抵押您的代币",
+      login_info_eos: "로그인해서 스왑하기",
+      login_info_matic: "在Matic Wallet上登录以抵押您的代币",
       // dialog tx
       confirming_tx: "确认交易...",
       confirmed_tx: "交易已确认!",
