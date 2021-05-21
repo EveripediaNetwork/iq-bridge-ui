@@ -1,23 +1,26 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Card } from "react-bootstrap";
 import PropTypes from "prop-types";
-import { useWatch } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { asset } from "eos-common";
-
-import { amountToAsset, getPriceInfo } from "../../utils/EosDataProvider";
-import SlippageContext from "../../context/settingsProvider/InitialSettingsContext";
-import { prediqTokensContract } from "../../config";
 
 const SubCard = styled(Card)`
   max-width: 400px;
   z-index: -1;
   top: -22px;
   margin-top: 12px;
+  border-radius: 0 !important;
+
   .card-body {
     padding: 0.35rem !important;
   }
+`;
+
+const StyledDivider = styled.hr`
+  margin-top: 2px;
+  margin-bottom: 2px;
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
 const SwapInfo = styled.div`
@@ -37,76 +40,25 @@ const SwapInfo = styled.div`
   }
 `;
 
-const InfoSwapCard = ({ control, pools, pairs, minReceived }) => {
+const InfoSwapCard = ({ timeLocked, tokensLocked }) => {
   const { t } = useTranslation();
-  const [assets, setAssets] = useState();
-  const [fee, setFee] = useState();
-  const [maxProfit, setMaxProfit] = useState();
-
-  const { FromAmount, ToAmount } = useWatch(control);
-
-  const { slippageLimit } = useContext(SlippageContext);
-
-  useEffect(() => {
-    if (!pools || pools.length === 0) {
-      return; // no pools
-    }
-    // TODO: calculate data from pool
-
-    if (pairs) {
-      setFee(pairs.fee / 100.0);
-      const assetToGive = amountToAsset(FromAmount, pairs.from.asset);
-      const assetToReceive = amountToAsset(ToAmount, pairs.to.asset);
-      const assetsNew = getPriceInfo(assetToGive, assetToReceive, pairs);
-      setAssets(assetsNew);
-      const calculatedMaxProfit = asset(
-        assetToReceive.amount - assetToGive.amount,
-        assetToGive.symbol
-      );
-      setMaxProfit(calculatedMaxProfit.to_string());
-    }
-  }, [pools, pairs, FromAmount, ToAmount]);
-
-  const displayMaxProfit =
-    pairs &&
-    pairs.from &&
-    pairs.to &&
-    [pairs.from.contract, pairs.to.contract].some(
-      str => str === prediqTokensContract
-    );
-
   return (
-    <SubCard className="mx-auto shadow-none">
+    <SubCard className="mx-auto shadow shadow-lg rounded-bottom">
       <Card.Body>
         <SwapInfo>
           <div className="infoLine">
-            <div>{t("min_received")}</div>
-            <div>{minReceived}</div>
+            <div>{t("time_locked")}</div>
+            <div className="font-weight-bold">{timeLocked}</div>
           </div>
-          {pairs &&
-            pairs.from &&
-            pairs.from.contract !== prediqTokensContract &&
-            displayMaxProfit && (
-              <div className="infoLine">
-                <div>{t("max_profit")}</div>
-                <div>{maxProfit}</div>
-              </div>
-            )}
+          <StyledDivider />
           <div className="infoLine">
-            <div>{t("price_impact")}</div>
-            {assets && assets.priceImpact > slippageLimit ? (
-              <span className="warning">
-                {isNaN(assets?.priceImpact) ? 0 : assets?.priceImpact}%
-              </span>
-            ) : (
-              <span className="safe">
-                {isNaN(assets?.priceImpact) ? 0 : assets?.priceImpact}%
-              </span>
-            )}
-          </div>
-          <div className="infoLine">
-            <div>{t("liquidity_fee")}</div>
-            <div>{fee}%</div>
+            <div>{t("hiiq_balance")}</div>
+            <div>
+              <strong>
+                {Number((tokensLocked * 3 * timeLocked) / 1460).toFixed(2)}
+              </strong>{" "}
+              hiIQ
+            </div>
           </div>
         </SwapInfo>
       </Card.Body>
@@ -115,10 +67,8 @@ const InfoSwapCard = ({ control, pools, pairs, minReceived }) => {
 };
 
 InfoSwapCard.propTypes = {
-  control: PropTypes.any,
-  pools: PropTypes.any,
-  pairs: PropTypes.any,
-  minReceived: PropTypes.any
+  timeLocked: PropTypes.number.isRequired,
+  tokensLocked: PropTypes.number.isRequired
 };
 
 export default InfoSwapCard;

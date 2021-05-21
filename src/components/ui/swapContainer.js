@@ -93,7 +93,7 @@ const SwapHeader = styled.div`
   justify-self: flex-end;
 `;
 
-const SwapContainer = ({ token, header }) => {
+const SwapContainer = ({ token, header, setFilled }) => {
   const { t } = useTranslation();
   const { register } = useFormContext();
   const swapRef = useRef();
@@ -124,6 +124,7 @@ const SwapContainer = ({ token, header }) => {
             autoComplete="off"
             name={`${header}Amount`}
             placeholder={token ? `0.${"0".repeat(token.precision)}` : "0.000"}
+            onChange={e => setFilled(e.target.value)}
             ref={e => {
               register(e, { required: true });
               swapRef.current = e;
@@ -148,7 +149,8 @@ const SwapContainer = ({ token, header }) => {
 
 SwapContainer.propTypes = {
   token: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  header: PropTypes.string.isRequired
+  header: PropTypes.string.isRequired,
+  setFilled: PropTypes.func.isRequired
 };
 
 export default SwapContainer;

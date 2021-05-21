@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
@@ -13,6 +13,7 @@ import SwapContainer from "../components/ui/swapContainer";
 import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
 import { lockTokensTx } from "../utils/EthDataProvider";
+import InfoSwapCard from "../components/ui/infoSwapCard";
 
 const HeaderText = styled.div`
   background-color: #f7f7f9;
@@ -65,7 +66,8 @@ const Lock = () => {
   const [txDone, setTxDone] = useState(false);
   const [lockValue, setLockValue] = useState(0);
   const [validInput, setValidInput] = useState(true);
-  const [token1, setToken1] = React.useState({
+  const [filledAmount, setFilledAmount] = useState();
+  const [token1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "IQ",
     precision: 3
@@ -163,8 +165,8 @@ const Lock = () => {
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
                     <SwapContainer
                       token={token1}
-                      setToken={setToken1}
                       header="From"
+                      setFilled={setFilledAmount}
                     />
                     <div className="d-flex justify-content-center">
                       <IconWrapper bsPrefix="switch" onClick={() => {}}>
@@ -187,6 +189,13 @@ const Lock = () => {
                   </Form>
                 </Card.Body>
               </Card>
+
+              {lockValue !== 0 && filledAmount && (
+                <InfoSwapCard
+                  tokensLocked={Number(filledAmount)}
+                  timeLocked={Number(lockValue)}
+                />
+              )}
             </Col>
           </Row>
           {wallet.account && txDone && (
@@ -209,4 +218,4 @@ const Lock = () => {
   );
 };
 
-export default React.memo(Lock);
+export default memo(Lock);
