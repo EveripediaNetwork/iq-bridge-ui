@@ -30,6 +30,7 @@ const Home = () => {
   const methods = useForm({ mode: "onChange" });
   const authContext = useContext(UALContext);
   const [txData, setTxData] = useState("");
+  // const [selectedTokens, setSelectedTokens] = useState();
   const [token1, setToken1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "IQ",
@@ -88,6 +89,15 @@ const Home = () => {
                   </Form>
                 </Card.Body>
               </Card>
+
+              {/* {selectedTokens.length === 2 && (
+                <InfoSwapCard
+                  control={methods.control}
+                  pools={pools}
+                  pairs={pairs}
+                  minReceived={minReceived}
+                />
+              )} */}
             </Col>
           </Row>
           {authContext.activeUser && txData !== "" && (
