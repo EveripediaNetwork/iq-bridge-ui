@@ -40,10 +40,11 @@ const SwapInfo = styled.div`
   }
 `;
 
-const InfoSwapCard = ({ timeLocked, tokensLocked }) => {
+const InfoSwapCard = ({ timeLocked, currentHiIQ, tokensLocked }) => {
   const { t } = useTranslation();
+
   return (
-    <SubCard className="mx-auto shadow shadow-lg rounded-bottom">
+    <SubCard className="mx-auto shadow-sm rounded-bottom">
       <Card.Body>
         <SwapInfo>
           <div className="infoLine">
@@ -52,10 +53,19 @@ const InfoSwapCard = ({ timeLocked, tokensLocked }) => {
           </div>
           <StyledDivider />
           <div className="infoLine">
-            <div>{t("hiiq_balance")}</div>
+            <div>{t("current_hiiq_balance")}</div>
+            <div>
+              <strong>{Number(currentHiIQ).toFixed(2)}</strong> hiIQ
+            </div>
+          </div>
+          <StyledDivider />
+          <div className="infoLine">
+            <div>{t("new_hiiq_balance")}</div>
             <div>
               <strong>
-                {Number((tokensLocked * 3 * timeLocked) / 1460).toFixed(2)}
+                {Number(
+                  tokensLocked + (tokensLocked * 3 * timeLocked) / 1460
+                ).toFixed(2)}
               </strong>{" "}
               hiIQ
             </div>
@@ -68,6 +78,7 @@ const InfoSwapCard = ({ timeLocked, tokensLocked }) => {
 
 InfoSwapCard.propTypes = {
   timeLocked: PropTypes.number.isRequired,
+  currentHiIQ: PropTypes.string.isRequired,
   tokensLocked: PropTypes.number.isRequired
 };
 

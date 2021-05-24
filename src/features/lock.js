@@ -12,8 +12,12 @@ import Layout from "../components/layouts/layout";
 import SwapContainer from "../components/ui/swapContainer";
 import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
-import { lockTokensTx } from "../utils/EthDataProvider";
+import {
+  lockTokensTx,
+  getTokensUserBalanceMaticLocked
+} from "../utils/EthDataProvider";
 import InfoSwapCard from "../components/ui/infoSwapCard";
+import { getUserTokenBalance } from "../utils/EosDataProvider";
 
 const HeaderText = styled.div`
   background-color: #f7f7f9;
@@ -65,6 +69,7 @@ const Lock = () => {
   const wallet = useWallet();
   const [txDone, setTxDone] = useState(false);
   const [lockValue, setLockValue] = useState(0);
+  const [currentHiIQ, setCurrentHiIQ] = useState(0);
   const [validInput, setValidInput] = useState(true);
   const [filledAmount, setFilledAmount] = useState();
   const [token1] = useState({
@@ -79,7 +84,7 @@ const Lock = () => {
     if (!wallet.account) {
       return;
     }
-    await lockTokensTx(data.FromAmount, data.Time, wallet);
+    await lockTokensTx(data.FromAmount, String(lockValue), wallet);
 
     setTxDone(true);
   };
@@ -107,6 +112,7 @@ const Lock = () => {
         <Row>
           <Col className="d-flex flex-column justify-content-center" xs={9}>
             <Slider
+              disabled={wallet.account === null}
               railStyle={{ backgroundColor: "lightgray", height: 11 }}
               trackStyle={{ height: 14 }}
               handleStyle={{
@@ -124,6 +130,7 @@ const Lock = () => {
           </Col>
           <Col className="p-0">
             <InputLockValue
+              disabled={wallet.account === null}
               value={lockValue}
               className="text-center"
               type="number"
@@ -143,6 +150,12 @@ const Lock = () => {
       </Container>
     </LockValueInfoContainer>
   );
+
+  useEffect(() => {
+    (async () => {
+      setCurrentHiIQ(await getTokensUserBalanceMaticLocked(wallet));
+    })();
+  }, [wallet.status]);
 
   return (
     <Layout>
@@ -166,7 +179,7 @@ const Lock = () => {
                     <SwapContainer
                       token={token1}
                       header="From"
-                      setFilled={setFilledAmount}
+                      setFilled={val => setFilledAmount(val)}
                     />
                     <div className="d-flex justify-content-center">
                       <IconWrapper bsPrefix="switch" onClick={() => {}}>
@@ -177,7 +190,9 @@ const Lock = () => {
                     {LockValueJSX()}
                     <br />
                     <Button
-                      disabled={!wallet.account}
+                      disabled={
+                        !wallet.account || lockValue === 0 || !filledAmount
+                      }
                       variant="primary"
                       className="text-capitalize"
                       type="submit"
@@ -193,6 +208,7 @@ const Lock = () => {
               {lockValue !== 0 && filledAmount && (
                 <InfoSwapCard
                   tokensLocked={Number(filledAmount)}
+                  currentHiIQ={currentHiIQ}
                   timeLocked={Number(lockValue)}
                 />
               )}

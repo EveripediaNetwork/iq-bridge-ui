@@ -8,5 +8,6 @@ module.exports = {
   rpcPort: process.env.REACT_APP_RPC_PORT,
   prediqTokensContract: process.env.REACT_APP_PREDIQTOKENS_CONTRACT,
   everipediaIqContract: process.env.REACT_APP_EVERIPEDIAIQ_CONTRACT,
-  isProd: process.env.REACT_APP_IS_PROD
+  isProd: process.env.REACT_APP_IS_PROD,
+  ethBasedChainId: process.env.REACT_APP_ETH_BASED_CHAIN_ID
 };

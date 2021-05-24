@@ -42,7 +42,8 @@ export const resources = {
       login_info_matic: "Login on Matic Wallet to stake your tokens",
       login_info_eth: "Login on ETH Wallet to swap your tokens",
       time_locked: "Time Locked (days)",
-      hiiq_balance: "hiIQ balance",
+      current_hiiq_balance: "Current hiIQ",
+      new_hiiq_balance: "New hiIQ",
       // dialog tx
       confirming_tx: "Confirming transaction...",
       confirmed_tx: "Transaction confirmed!",
@@ -100,7 +101,8 @@ export const resources = {
       min_received: "최소 수령액",
       max_profit: "최대 수익",
       lock_period: "잠금 기간 (일)",
-      hiiq_balance: "hiIQ 균형",
+      current_hiiq_balance: "현재 hiIQ",
+      new_hiiq_balance: "새로운 hiIQ",
       lock_description:
         "IQ를 오래 잠글수록 더 많은 hiIQ를 받게됩니다. 더 많은 IQ를 잠 그거나 잠금 기간을 연장하여 추가 hiIQ를 얻을 수도 있습니다. hiIQ는 잠금 기간 동안 천천히 감소하여 결국 IQ와 1 : 1에 도달합니다.",
       value_restriction: "입력 값은 1에서 1460 사이 여야합니다.",
@@ -164,7 +166,8 @@ export const resources = {
       price_impact: "价格影响",
       liquidity_fee: "流动性提供者费用",
       min_received: "最低可获得",
-      hiiq_balance: "hiIQ余额",
+      current_hiiq_balance: "当前的hiIQ",
+      new_hiiq_balance: "新的hiIQ",
       max_profit: "最大收益",
       lock_period: "锁定期（天）",
       lock_description:

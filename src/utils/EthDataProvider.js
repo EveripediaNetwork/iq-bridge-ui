@@ -301,8 +301,13 @@ const getTokensUserBalanceMatic = async wallet => {
 const getTokensUserBalanceMaticLocked = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-    const erc20 = new ethers.Contract(maticHiIQAddress, hiIQAbi, provider);
-    const balanc = await erc20.balanceOf(wallet.account);
+    const hiIQ = new ethers.Contract(
+      maticHiIQAddress,
+      hiIQAbi,
+      provider.getSigner()
+    );
+
+    const balanc = await hiIQ["balanceOf(address)"](wallet.account);
     return ethers.utils.formatEther(balanc);
   }
   return 0;
@@ -331,6 +336,7 @@ const convertPTokensTx = async (amount, wallet) => {
 
 const lockTokensTx = async (amount, time, wallet) => {
   const amountParsed = ethers.utils.parseEther(amount).toString();
+  const timeParsed = ethers.utils.parseEther(time).toString();
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
     const erc20 = new ethers.Contract(
@@ -343,8 +349,12 @@ const lockTokensTx = async (amount, time, wallet) => {
       hiIQAbi,
       provider.getSigner()
     );
-    await erc20.approve(maticHiIQAddress, amountParsed, { gasLimit: 70000 });
-    await hiIQ.create_lock(amountParsed, time, { gasLimit: 125000 }); // TODO: proper gas
+
+    await erc20.approve(maticHiIQAddress, amountParsed, { gasLimit: 700000 });
+    await hiIQ.create_lock(amountParsed, timeParsed, {
+      gasLimit: 700000
+    });
+
     return true;
   }
   return false;

@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { UseWalletProvider } from "use-wallet";
+
 import Error from "./features/error";
 import Loading from "./features/loading";
 import ErrorBoundary from "./components/errorBoundary";
@@ -9,6 +10,7 @@ import {
   UALProviderSwitch,
   WalletProvider
 } from "./context/walletProvider/walletProviderFacade";
+import { ethBasedChainId } from "./config";
 
 const HomePage = lazy(() => import("./features/home"));
 const EthPage = lazy(() => import("./features/eth"));
@@ -19,7 +21,7 @@ function App() {
     <ErrorBoundary fallback={<Error />}>
       <Suspense fallback={<Loading />}>
         <UseWalletProvider
-          chainId={1} // 5 GOERLI // TODO: make it flexible (137 for Matic)
+          chainId={Number(ethBasedChainId)} // 5 GOERLI // TODO: make it flexible (137 for Matic)
           connectors={{
             fortmatic: { apiKey: "" },
             portis: { dAppId: "" },

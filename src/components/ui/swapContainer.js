@@ -122,6 +122,7 @@ const SwapContainer = ({ token, header, setFilled }) => {
         <SwapTokenInputContainer>
           <SwapTokenInput
             autoComplete="off"
+            disabled={wallet.account === null}
             name={`${header}Amount`}
             placeholder={token ? `0.${"0".repeat(token.precision)}` : "0.000"}
             onChange={e => setFilled(e.target.value)}
