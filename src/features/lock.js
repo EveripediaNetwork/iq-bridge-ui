@@ -1,23 +1,36 @@
 import React, { useState, useEffect, memo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
-import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
-import { ArrowDownShort } from "react-bootstrap-icons";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  Row,
+  Accordion
+} from "react-bootstrap";
+import {
+  ArrowDownShort,
+  QuestionCircle,
+  BoxArrowUpRight
+} from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 
+import { maticExplorerUrl } from "../config";
 import Layout from "../components/layouts/layout";
 import SwapContainer from "../components/ui/swapContainer";
 import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
 import {
   lockTokensTx,
+  increaseAmount,
   getTokensUserBalanceMaticLocked
 } from "../utils/EthDataProvider";
 import InfoSwapCard from "../components/ui/infoSwapCard";
-import { getUserTokenBalance } from "../utils/EosDataProvider";
 
 const HeaderText = styled.div`
   background-color: #f7f7f9;
@@ -84,7 +97,11 @@ const Lock = () => {
     if (!wallet.account) {
       return;
     }
-    await lockTokensTx(data.FromAmount, String(lockValue), wallet);
+    currentHiIQ !== 0
+      ? await increaseAmount(data.FromAmount, wallet)
+      : await lockTokensTx(data.FromAmount, String(lockValue), wallet);
+
+    setCurrentHiIQ(await getTokensUserBalanceMaticLocked(wallet));
 
     setTxDone(true);
   };
@@ -172,9 +189,53 @@ const Lock = () => {
               />
               <Card className="mx-auto shadow-sm">
                 <Card.Body>
-                  <HeaderText className="shadow-sm rounded p-3 text-justify mb-3 highlight">
-                    {t("lock_description")}
-                  </HeaderText>
+                  <Accordion>
+                    <div className="d-flex flex-row justify-content-end">
+                      <Accordion.Toggle
+                        as={Button}
+                        variant="light"
+                        eventKey="0"
+                      >
+                        <QuestionCircle />
+                      </Accordion.Toggle>
+                    </div>
+                    <Accordion.Collapse eventKey="0">
+                      <HeaderText className="shadow-sm rounded p-3 text-justify m-3 highlight">
+                        {t("lock_description")}
+                      </HeaderText>
+                    </Accordion.Collapse>
+                  </Accordion>
+                  <br />
+                  {wallet && wallet.account && currentHiIQ !== 0 && (
+                    <div className="mx-auto d-flex flex-row justify-content-center">
+                      <Row className="w-75">
+                        <Col
+                          sm={9}
+                          md={9}
+                          className="p-0 d-flex justify-content-end flex-column align-middle"
+                        >
+                          <h3 className="font-weight-light m-0 text-right">
+                            <strong>
+                              {Number(currentHiIQ).toFixed(2)} hiIQ
+                            </strong>{" "}
+                            {t("locked")}
+                          </h3>
+                        </Col>
+                        <Col sm={3} md={3}>
+                          <Button size="sm" variant="link">
+                            <a
+                              target="_blank"
+                              href={`${maticExplorerUrl}address/${wallet.account}/tokens`}
+                              rel="noreferrer"
+                            >
+                              <BoxArrowUpRight />
+                            </a>
+                          </Button>
+                        </Col>
+                      </Row>
+                    </div>
+                  )}
+                  <br />
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
                     <SwapContainer
                       token={token1}

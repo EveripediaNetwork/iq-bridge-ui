@@ -38,6 +38,7 @@ export const resources = {
       lock_period: "Lock period (days)",
       lock_description:
         "The longer you lock your IQ, the more hiIQ you will receive. You can also get additional hiIQ by locking more IQ or extending the lock period. hiIQ decays slowly over your locking period, eventually reaching 1-to-1 with IQ.",
+      locked: "locked",
       login_info_eos: "Login on EOS Wallet to bridge your tokens",
       login_info_matic: "Login on Matic Wallet to stake your tokens",
       login_info_eth: "Login on ETH Wallet to swap your tokens",
@@ -105,6 +106,7 @@ export const resources = {
       new_hiiq_balance: "새로운 hiIQ",
       lock_description:
         "IQ를 오래 잠글수록 더 많은 hiIQ를 받게됩니다. 더 많은 IQ를 잠 그거나 잠금 기간을 연장하여 추가 hiIQ를 얻을 수도 있습니다. hiIQ는 잠금 기간 동안 천천히 감소하여 결국 IQ와 1 : 1에 도달합니다.",
+      locked: "잠김",
       value_restriction: "입력 값은 1에서 1460 사이 여야합니다.",
       login_info_eos: "로그인해서 스왑하기",
       login_info_matic: "토큰을 스테이 킹하려면 Matic Wallet에 로그인하십시오.",
@@ -172,6 +174,7 @@ export const resources = {
       lock_period: "锁定期（天）",
       lock_description:
         "锁定IQ的时间越长，收到的hiIQ越多。您还可以通过锁定更多IQ或延长锁定时间来获得其他hiIQ。在锁定期间，hiIQ会缓慢衰减，最终与IQ达到1比1。",
+      locked: "已锁定",
       value_restriction: "输入值必须在1到1460之间",
       login_info_eos: "로그인해서 스왑하기",
       login_info_matic: "在Matic Wallet上登录以抵押您的代币",

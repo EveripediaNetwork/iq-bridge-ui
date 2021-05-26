@@ -9,5 +9,6 @@ module.exports = {
   prediqTokensContract: process.env.REACT_APP_PREDIQTOKENS_CONTRACT,
   everipediaIqContract: process.env.REACT_APP_EVERIPEDIAIQ_CONTRACT,
   isProd: process.env.REACT_APP_IS_PROD,
-  ethBasedChainId: process.env.REACT_APP_ETH_BASED_CHAIN_ID
+  ethBasedChainId: process.env.REACT_APP_ETH_BASED_CHAIN_ID,
+  maticExplorerUrl: process.env.REACT_APP_MATIC_EXPLORER_URL
 };

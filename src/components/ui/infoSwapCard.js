@@ -53,13 +53,6 @@ const InfoSwapCard = ({ timeLocked, currentHiIQ, tokensLocked }) => {
           </div>
           <StyledDivider />
           <div className="infoLine">
-            <div>{t("current_hiiq_balance")}</div>
-            <div>
-              <strong>{Number(currentHiIQ).toFixed(2)}</strong> hiIQ
-            </div>
-          </div>
-          <StyledDivider />
-          <div className="infoLine">
             <div>{t("new_hiiq_balance")}</div>
             <div>
               <strong>

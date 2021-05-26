@@ -360,10 +360,34 @@ const lockTokensTx = async (amount, time, wallet) => {
   return false;
 };
 
+const increaseAmount = async (amount, wallet) => {
+  const amountParsed = ethers.utils.parseEther(amount).toString();
+
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+    const erc20 = new ethers.Contract(
+      maticIQAddress,
+      erc20Abi,
+      provider.getSigner()
+    );
+    const hiIQ = new ethers.Contract(
+      maticHiIQAddress,
+      hiIQAbi,
+      provider.getSigner()
+    );
+
+    await erc20.approve(maticHiIQAddress, amountParsed, { gasLimit: 700000 });
+    await hiIQ.increase_amount(amountParsed, {
+      gasLimit: 700000
+    });
+  }
+};
+
 export {
   convertPTokensTx,
   getPTokensUserBalance,
   getTokensUserBalanceMatic,
   lockTokensTx,
+  increaseAmount,
   getTokensUserBalanceMaticLocked
 };
