@@ -45,6 +45,10 @@ export const resources = {
       time_locked: "Time Locked (days)",
       current_hiiq_balance: "Current hiIQ",
       new_hiiq_balance: "New hiIQ",
+      updating_balance: "Updating balance...",
+      no_hiiq_tokens_locked: "No hiIQ tokens locked so far",
+      loading: "Loading",
+      disconnected: "Disconnected",
       // dialog tx
       confirming_tx: "Confirming transaction...",
       confirmed_tx: "Transaction confirmed!",
@@ -112,6 +116,10 @@ export const resources = {
       login_info_matic: "토큰을 스테이 킹하려면 Matic Wallet에 로그인하십시오.",
       time_locked: "잠긴 시간 (일)",
       lock_time: "잠긴 시간",
+      updating_balance: "잔액 업데이트...",
+      no_hiiq_tokens_locked: "지금까지 잠긴 hiIQ 토큰이 없습니다.",
+      loading: "로딩 중",
+      disconnected: "연결 끊김",
       // dialog tx
       confirming_tx: "트랜잭션 진행중...",
       confirmed_tx: "트랜잭션 완료!",
@@ -179,6 +187,10 @@ export const resources = {
       login_info_eos: "로그인해서 스왑하기",
       login_info_matic: "在Matic Wallet上登录以抵押您的代币",
       time_locked: "时间锁定(天)",
+      updating_balance: "更新余额...",
+      no_hiiq_tokens_locked: "到目前为止，尚未锁定任何hiIQ令牌",
+      loading: "载入中",
+      disconnected: "断线",
       // dialog tx
       confirming_tx: "确认交易...",
       confirmed_tx: "交易已确认!",

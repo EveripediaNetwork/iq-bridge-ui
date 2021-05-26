@@ -360,7 +360,7 @@ const lockTokensTx = async (amount, time, wallet) => {
   return false;
 };
 
-const increaseAmount = async (amount, wallet) => {
+const increaseAmount = async (amount, wallet, handleConfirmation) => {
   const amountParsed = ethers.utils.parseEther(amount).toString();
 
   if (wallet.status === "connected") {
@@ -377,9 +377,14 @@ const increaseAmount = async (amount, wallet) => {
     );
 
     await erc20.approve(maticHiIQAddress, amountParsed, { gasLimit: 700000 });
-    await hiIQ.increase_amount(amountParsed, {
+    const result = await hiIQ.increase_amount(amountParsed, {
       gasLimit: 700000
     });
+
+    provider
+      .waitForTransaction(result.hash)
+      .then(() => handleConfirmation("success"))
+      .catch(err => handleConfirmation(err));
   }
 };
 

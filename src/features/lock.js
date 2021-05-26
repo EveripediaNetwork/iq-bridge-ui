@@ -81,8 +81,10 @@ const Lock = () => {
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
   const [txDone, setTxDone] = useState(false);
+  const [updatingBalance, setUpdatingBalance] = useState(false);
+  const [loadingBalance, setLoadingBalance] = useState(false);
   const [lockValue, setLockValue] = useState(0);
-  const [currentHiIQ, setCurrentHiIQ] = useState(0);
+  const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
   const [validInput, setValidInput] = useState(true);
   const [filledAmount, setFilledAmount] = useState();
   const [token1] = useState({
@@ -93,18 +95,23 @@ const Lock = () => {
 
   const validnum = a => a >= 0 && a <= 1460;
 
+  const handleConfirmation = async result => {
+    if (result === "success")
+      setCurrentHiIQ(await getTokensUserBalanceMaticLocked(wallet));
+
+    setUpdatingBalance(false);
+  };
+
   const onSubmit = async data => {
     if (!wallet.account) {
       return;
     }
 
-    if (currentHiIQ !== 0) await increaseAmount(data.FromAmount, wallet);
+    if (currentHiIQ !== 0)
+      await increaseAmount(data.FromAmount, wallet, handleConfirmation);
     else await lockTokensTx(data.FromAmount, String(lockValue), wallet);
 
-    // necessary due to block confirmation time
-    setTimeout(async () => {
-      setCurrentHiIQ(await getTokensUserBalanceMaticLocked(wallet));
-    }, 7000);
+    setUpdatingBalance(true);
 
     setTxDone(true);
   };
@@ -172,9 +179,12 @@ const Lock = () => {
   );
 
   useEffect(() => {
-    (async () => {
-      setCurrentHiIQ(await getTokensUserBalanceMaticLocked(wallet));
-    })();
+    if (wallet.status === "connected")
+      (async () => {
+        setLoadingBalance(true);
+        setCurrentHiIQ(await getTokensUserBalanceMaticLocked(wallet));
+        setLoadingBalance(false);
+      })();
   }, [wallet.status]);
 
   return (
@@ -194,12 +204,70 @@ const Lock = () => {
                 <Card.Body>
                   <Accordion>
                     <div className="d-flex flex-row justify-content-end">
+                      {(wallet && wallet.account) ||
+                      wallet.status === "connected" ||
+                      wallet.status === "connecting" ? (
+                        <>
+                          {currentHiIQ && currentHiIQ > 0 ? (
+                            <div className="mx-auto d-flex flex-row justify-content-center align-items-center  w-75">
+                              <Row className="w-100 align-middle">
+                                <Col sm={10} md={10} className="p-0">
+                                  <h4 className="font-weight-light m-0 text-right">
+                                    {!updatingBalance ? (
+                                      <>
+                                        <strong>
+                                          {Number(currentHiIQ).toFixed(2)} hiIQ
+                                        </strong>{" "}
+                                        {t("locked")}
+                                      </>
+                                    ) : (
+                                      <div className="w-75 d-flex flex-column text-center justify-content-center">
+                                        {t("updating_balance")}
+                                      </div>
+                                    )}
+                                  </h4>
+                                </Col>
+                                <Col sm={2} md={2}>
+                                  <Button className="py-0 pl-0" variant="link">
+                                    <a
+                                      target="_blank"
+                                      href={`${maticExplorerUrl}address/${wallet.account}/tokens`}
+                                      rel="noreferrer"
+                                    >
+                                      <BoxArrowUpRight />
+                                    </a>
+                                  </Button>
+                                </Col>
+                              </Row>
+                            </div>
+                          ) : (
+                            <div className="w-75 d-flex flex-column justify-content-center">
+                              <strong className="text-center text-uppercase">
+                                {!loadingBalance &&
+                                currentHiIQ &&
+                                currentHiIQ === 0
+                                  ? t("no_hiiq_tokens_locked")
+                                  : t("loading")}
+                              </strong>
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <div className="w-75 d-flex flex-column justify-content-center">
+                          <strong className="text-center text-uppercase">
+                            {t("disconnected")}
+                          </strong>
+                        </div>
+                      )}
                       <Accordion.Toggle
                         as={Button}
                         variant="light"
                         eventKey="0"
+                        className="d-flex flex-row justify-content-center align-middle"
                       >
-                        <QuestionCircle />
+                        <Button variant="light">
+                          <QuestionCircle />
+                        </Button>
                       </Accordion.Toggle>
                     </div>
                     <Accordion.Collapse eventKey="0">
@@ -208,36 +276,6 @@ const Lock = () => {
                       </HeaderText>
                     </Accordion.Collapse>
                   </Accordion>
-                  <br />
-                  {wallet && wallet.account && currentHiIQ !== 0 && (
-                    <div className="mx-auto d-flex flex-row justify-content-center">
-                      <Row className="w-75">
-                        <Col
-                          sm={9}
-                          md={9}
-                          className="p-0 d-flex justify-content-end flex-column align-middle"
-                        >
-                          <h3 className="font-weight-light m-0 text-right">
-                            <strong>
-                              {Number(currentHiIQ).toFixed(2)} hiIQ
-                            </strong>{" "}
-                            {t("locked")}
-                          </h3>
-                        </Col>
-                        <Col sm={3} md={3}>
-                          <Button size="sm" variant="link">
-                            <a
-                              target="_blank"
-                              href={`${maticExplorerUrl}address/${wallet.account}/tokens`}
-                              rel="noreferrer"
-                            >
-                              <BoxArrowUpRight />
-                            </a>
-                          </Button>
-                        </Col>
-                      </Row>
-                    </div>
-                  )}
                   <br />
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
                     <SwapContainer
