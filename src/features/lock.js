@@ -97,11 +97,14 @@ const Lock = () => {
     if (!wallet.account) {
       return;
     }
-    currentHiIQ !== 0
-      ? await increaseAmount(data.FromAmount, wallet)
-      : await lockTokensTx(data.FromAmount, String(lockValue), wallet);
 
-    setCurrentHiIQ(await getTokensUserBalanceMaticLocked(wallet));
+    if (currentHiIQ !== 0) await increaseAmount(data.FromAmount, wallet);
+    else await lockTokensTx(data.FromAmount, String(lockValue), wallet);
+
+    // necessary due to block confirmation time
+    setTimeout(async () => {
+      setCurrentHiIQ(await getTokensUserBalanceMaticLocked(wallet));
+    }, 7000);
 
     setTxDone(true);
   };
@@ -269,7 +272,6 @@ const Lock = () => {
               {lockValue !== 0 && filledAmount && (
                 <InfoSwapCard
                   tokensLocked={Number(filledAmount)}
-                  currentHiIQ={currentHiIQ}
                   timeLocked={Number(lockValue)}
                 />
               )}

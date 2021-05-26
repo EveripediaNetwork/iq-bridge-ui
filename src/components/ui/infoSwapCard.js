@@ -40,7 +40,7 @@ const SwapInfo = styled.div`
   }
 `;
 
-const InfoSwapCard = ({ timeLocked, currentHiIQ, tokensLocked }) => {
+const InfoSwapCard = ({ timeLocked, tokensLocked }) => {
   const { t } = useTranslation();
 
   return (
@@ -71,7 +71,6 @@ const InfoSwapCard = ({ timeLocked, currentHiIQ, tokensLocked }) => {
 
 InfoSwapCard.propTypes = {
   timeLocked: PropTypes.number.isRequired,
-  currentHiIQ: PropTypes.string.isRequired,
   tokensLocked: PropTypes.number.isRequired
 };
 
