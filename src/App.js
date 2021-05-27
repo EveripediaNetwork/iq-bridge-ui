@@ -14,7 +14,7 @@ import { ethBasedChainId } from "./config";
 
 const HomePage = lazy(() => import("./features/home"));
 const EthPage = lazy(() => import("./features/eth"));
-const LockPage = lazy(() => import("./features/lock"));
+const LockPage = lazy(() => import("./features/Lock/lock"));
 
 function App() {
   return (
