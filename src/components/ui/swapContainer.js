@@ -10,7 +10,7 @@ import { getUserTokenBalance } from "../../utils/EosDataProvider";
 import {
   getPTokensUserBalance,
   getTokensUserBalanceMatic
-} from "../../utils/EthDataProvider";
+} from "../../utils/EthDataProvider/EthDataProvider";
 
 const SwapContainerWrapper = styled.div`
   border-radius: 15px;

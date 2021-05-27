@@ -9,7 +9,7 @@ import Layout from "../components/layouts/layout";
 import SwapContainer from "../components/ui/swapContainer";
 import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
-import { convertPTokensTx } from "../utils/EthDataProvider";
+import { convertPTokensTx } from "../utils/EthDataProvider/EthDataProvider";
 
 const IconWrapper = styled(Button)`
   margin: 15px;

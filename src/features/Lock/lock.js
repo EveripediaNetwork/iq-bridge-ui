@@ -24,7 +24,7 @@ import {
   lockTokensTx,
   increaseAmount,
   getTokensUserBalanceMaticLocked
-} from "../../utils/EthDataProvider";
+} from "../../utils/EthDataProvider/EthDataProvider";
 import InfoSwapCard from "../../components/ui/infoSwapCard";
 
 const HeaderText = styled.div`
@@ -105,12 +105,14 @@ const Lock = () => {
                 <Card.Body>
                   <Accordion>
                     <div className="d-flex flex-row justify-content-end">
-                      <LockHeader
-                        wallet={wallet}
-                        currentHiIQ={currentHiIQ}
-                        updatingBalance={updatingBalance}
-                        loadingBalance={loadingBalance}
-                      />
+                      {currentHiIQ && (
+                        <LockHeader
+                          wallet={wallet}
+                          currentHiIQ={currentHiIQ}
+                          updatingBalance={updatingBalance}
+                          loadingBalance={loadingBalance}
+                        />
+                      )}
                       <Accordion.Toggle
                         as={Button}
                         variant="light"

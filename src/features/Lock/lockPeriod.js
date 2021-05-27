@@ -59,6 +59,11 @@ const LockPeriod = ({ wallet, updateParentLockValue }) => {
     }
   };
 
+  const handleOnSliderChange = value => {
+    setLockValue(value);
+    updateParentLockValue(value);
+  };
+
   return (
     <LockValueInfoContainer className="rounded pr-3 pl-3 pt-2 pb-3">
       <div className="d-flex flex-row w-100 justify-content-end">
@@ -76,7 +81,7 @@ const LockPeriod = ({ wallet, updateParentLockValue }) => {
                 height: 22,
                 width: 22
               }}
-              onChange={setLockValue}
+              onChange={handleOnSliderChange}
               className="mb-3"
               value={lockValue}
               min={1}

@@ -73,7 +73,7 @@ const LockHeader = ({
 
 LockHeader.propTypes = {
   wallet: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  currentHiIQ: PropTypes.number.isRequired,
+  currentHiIQ: PropTypes.string.isRequired,
   updatingBalance: PropTypes.bool.isRequired,
   loadingBalance: PropTypes.bool.isRequired
 };
