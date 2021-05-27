@@ -34,7 +34,7 @@ const Layout = ({ children }) => {
       <Navbar expand="lg" className="p-3 font-weight-bold text-capitalize">
         <Navbar.Brand as={Link} to={`/${LngUrl}`}>
           <span title="iq bridge" role="img" aria-label="brain">
-            🌉
+            🧠
           </span>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
