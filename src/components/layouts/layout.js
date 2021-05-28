@@ -74,7 +74,7 @@ const Layout = ({ children }) => {
                   onClick={authContext.showModal}
                   className="text-capitalize"
                 >
-                  EOS Wallet
+                  {t("eos_wallet")}
                 </Button>
               ) : (
                 <Button
@@ -93,7 +93,7 @@ const Layout = ({ children }) => {
                   }}
                   className="text-capitalize"
                 >
-                  Ethereum Wallet
+                  {t("ethereum_wallet")}
                 </Button>
               ) : (
                 <Button

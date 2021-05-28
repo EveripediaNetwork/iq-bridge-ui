@@ -6,6 +6,8 @@ export const resources = {
   en: {
     translation: {
       // layout
+      eos_wallet: "EOS Wallet",
+      ethereum_wallet: "Ethereum Wallet",
       swap: "Swap",
       lock: "Lock",
       pool: "pool",
@@ -73,11 +75,20 @@ export const resources = {
       done: "Done",
       en: "EN",
       ko: "한국어",
-      zh: "中文"
+      zh: "中文",
+      // other
+      select_wallet: "Select a wallet",
+      transaction_executed: "Transaction Executed",
+      go_to: "Go to",
+      step: "Step 2",
+      error: "Error"
     }
   },
   ko: {
     translation: {
+      // layout
+      eos_wallet: "EOS 지갑",
+      ethereum_wallet: "이더 리움 지갑",
       swap: "교환",
       lock: "자물쇠",
       pool: "풀",
@@ -144,12 +155,21 @@ export const resources = {
       done: "완료",
       en: "EN",
       ko: "한국어",
-      zh: "中文"
+      zh: "中文",
+      // other
+      select_wallet: "지갑 선택",
+      transaction_executed: "거래 실행",
+      go_to: "이동",
+      step: "2 단계",
+      error: "오류"
     }
   },
 
   zh: {
     translation: {
+      // layout
+      eos_wallet: "EOS钱包",
+      ethereum_wallet: "以太坊钱包",
       swap: "交换",
       lock: "锁",
       pool: "池子",
@@ -215,7 +235,13 @@ export const resources = {
       done: "完成",
       en: "EN",
       ko: "한국어",
-      zh: "中文"
+      zh: "中文",
+      // other
+      select_wallet: "选择一个钱包",
+      transaction_executed: "Transaction Executed",
+      go_to: "去",
+      step_2: "第2步",
+      error: "错误"
     }
   }
 };

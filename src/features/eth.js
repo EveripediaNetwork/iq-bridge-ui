@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
@@ -106,4 +106,4 @@ const Eth = () => {
   );
 };
 
-export default React.memo(Eth);
+export default memo(Eth);

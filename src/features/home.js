@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, memo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
@@ -110,4 +110,4 @@ const Home = () => {
   );
 };
 
-export default React.memo(Home);
+export default memo(Home);

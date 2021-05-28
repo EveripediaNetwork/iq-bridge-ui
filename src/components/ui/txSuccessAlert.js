@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Alert } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const StyledAlert = styled(Alert)`
   max-width: 450px;
@@ -15,15 +16,16 @@ const StyledSpan = styled.span`
 `;
 
 const TxSuccessAlert = ({ txId }) => {
+  const { t } = useTranslation();
   const explorer = `https://bloks.io/transaction/${txId}`;
   return (
     <StyledAlert className="mx-auto shadow-sm text-center" variant="success">
       <CheckSquare />
       <StyledSpan>
         <a target="_blank" rel="noopener noreferrer" href={explorer}>
-          Transaction Executed
+          {t("transaction_executed")}
         </a>
-        ! Go to <Link to="/eth">Step 2</Link>
+        {t("go_to")} <Link to="/eth">{t("step_2")}</Link>
       </StyledSpan>
     </StyledAlert>
   );

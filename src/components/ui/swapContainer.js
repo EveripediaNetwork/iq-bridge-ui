@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { UALContext } from "ual-reactjs-renderer";
 import { useWallet } from "use-wallet";
+
 import { getUserTokenBalance } from "../../utils/EosDataProvider";
 import {
   getPTokensUserBalance,

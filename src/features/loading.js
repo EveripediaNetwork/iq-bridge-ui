@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 
 import styled from "styled-components";
@@ -50,4 +50,4 @@ Loading.defaultProps = {
   cover: false
 };
 
-export default React.memo(Loading);
+export default memo(Loading);
