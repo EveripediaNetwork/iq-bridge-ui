@@ -152,7 +152,11 @@ const SwapContainer = ({ token, header, setFilled }) => {
 SwapContainer.propTypes = {
   token: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   header: PropTypes.string.isRequired,
-  setFilled: PropTypes.func.isRequired
+  setFilled: PropTypes.func
+};
+
+SwapContainer.defaultProps = {
+  setFilled: () => {}
 };
 
 export default SwapContainer;

@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { UseWalletProvider } from "use-wallet";
 
@@ -10,33 +10,39 @@ import {
   UALProviderSwitch,
   WalletProvider
 } from "./context/walletProvider/walletProviderFacade";
-import { ethBasedChainId } from "./config";
+import { ChainIdContext } from "./context/chainIdProvider/chainIdContext";
+import { ethChainId } from "./config";
 
 const HomePage = lazy(() => import("./features/home"));
 const EthPage = lazy(() => import("./features/eth"));
 const LockPage = lazy(() => import("./features/Lock/lock"));
 
 function App() {
+  const [currentChainId, setCurrentChainId] = useState(ethChainId);
+  const value = { currentChainId, setCurrentChainId };
+
   return (
     <ErrorBoundary fallback={<Error />}>
       <Suspense fallback={<Loading />}>
-        <UseWalletProvider
-          chainId={Number(ethBasedChainId)} // 5 GOERLI // TODO: make it flexible (137 for Matic)
-          connectors={{
-            fortmatic: { apiKey: "" },
-            portis: { dAppId: "" },
-            walletconnect: { rpcUrl: process.env.REACT_APP_ETH_URL },
-            walletlink: { url: process.env.REACT_APP_ETH_URL }
-          }}
-        >
-          <UALProviderSwitch>
-            <WalletProvider>
-              <Router>
-                <Routes />
-              </Router>
-            </WalletProvider>
-          </UALProviderSwitch>
-        </UseWalletProvider>
+        <ChainIdContext.Provider value={value}>
+          <UseWalletProvider
+            chainId={currentChainId} // 5 GOERLI // TODO: make it flexible (137 for Matic)
+            connectors={{
+              fortmatic: { apiKey: "" },
+              portis: { dAppId: "" },
+              walletconnect: { rpcUrl: process.env.REACT_APP_ETH_URL },
+              walletlink: { url: process.env.REACT_APP_ETH_URL }
+            }}
+          >
+            <UALProviderSwitch>
+              <WalletProvider>
+                <Router>
+                  <Routes />
+                </Router>
+              </WalletProvider>
+            </UALProviderSwitch>
+          </UseWalletProvider>
+        </ChainIdContext.Provider>
       </Suspense>
     </ErrorBoundary>
   );

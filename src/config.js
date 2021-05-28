@@ -8,6 +8,7 @@ module.exports = {
   rpcPort: process.env.REACT_APP_RPC_PORT,
   everipediaIqContract: process.env.REACT_APP_EVERIPEDIAIQ_CONTRACT,
   isProd: process.env.REACT_APP_IS_PROD,
-  ethBasedChainId: process.env.REACT_APP_ETH_BASED_CHAIN_ID,
+  ethChainId: Number(process.env.REACT_APP_ETH_CHAIN_ID),
+  maticChainId: Number(process.env.REACT_APP_MATIC_CHAIN_ID),
   maticExplorerUrl: process.env.REACT_APP_MATIC_EXPLORER_URL
 };

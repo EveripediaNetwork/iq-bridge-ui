@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { useState, useEffect, memo, useContext } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import {
@@ -14,6 +14,8 @@ import { ArrowDownShort, QuestionCircle } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
 
+import { ChainIdContext } from "../../context/chainIdProvider/chainIdContext";
+import { ethChainId, maticChainId } from "../../config";
 import LockPeriod from "./lockPeriod";
 import LockHeader from "./lockHeader";
 import Layout from "../../components/layouts/layout";
@@ -44,6 +46,7 @@ const IconWrapper = styled(Button)`
 
 const Lock = () => {
   const { t } = useTranslation();
+  const { currentChainId, setCurrentChainId } = useContext(ChainIdContext);
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
   const [txDone, setTxDone] = useState(false);
@@ -80,13 +83,24 @@ const Lock = () => {
   };
 
   useEffect(() => {
-    if (wallet.status === "connected")
+    if (
+      wallet.status === "connected" &&
+      currentChainId === maticChainId &&
+      wallet.ethereum
+    )
       (async () => {
         setLoadingBalance(true);
         setCurrentHiIQ(await getTokensUserBalanceMaticLocked(wallet));
         setLoadingBalance(false);
       })();
   }, [wallet.status]);
+
+  useEffect(() => {
+    if (currentChainId === ethChainId || !currentChainId) {
+      setCurrentChainId(maticChainId);
+      wallet.reset();
+    }
+  }, [currentChainId]);
 
   return (
     <Layout>
@@ -132,11 +146,13 @@ const Lock = () => {
                   </Accordion>
                   <br />
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
-                    <SwapContainer
-                      token={token1}
-                      header="From"
-                      setFilled={val => setFilledAmount(val)}
-                    />
+                    {currentChainId === maticChainId && (
+                      <SwapContainer
+                        token={token1}
+                        header="From"
+                        setFilled={val => setFilledAmount(val)}
+                      />
+                    )}
                     <div className="d-flex justify-content-center">
                       <IconWrapper bsPrefix="switch" onClick={() => {}}>
                         <ArrowDownShort />

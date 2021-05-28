@@ -1,15 +1,18 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useContext, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { ArrowDownShort } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
+
 import Layout from "../components/layouts/layout";
 import SwapContainer from "../components/ui/swapContainer";
 import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
 import { convertPTokensTx } from "../utils/EthDataProvider/EthDataProvider";
+import { ChainIdContext } from "../context/chainIdProvider/chainIdContext";
+import { ethChainId, maticChainId } from "../config";
 
 const IconWrapper = styled(Button)`
   margin: 15px;
@@ -26,10 +29,11 @@ const MainCard = styled(Card)``;
 
 const Eth = () => {
   const { t } = useTranslation();
+  const { currentChainId, setCurrentChainId } = useContext(ChainIdContext);
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
   const [txDone, setTxDone] = useState(false);
-  const [token1, setToken1] = React.useState({
+  const [token1, setToken1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "pIQ",
     precision: 3
@@ -39,10 +43,18 @@ const Eth = () => {
     if (!wallet.account) {
       return;
     }
+
     await convertPTokensTx(data.FromAmount, wallet);
 
     setTxDone(true);
   };
+
+  useEffect(() => {
+    if (currentChainId === maticChainId || !currentChainId) {
+      wallet.reset();
+      setCurrentChainId(ethChainId);
+    }
+  }, [currentChainId]);
 
   return (
     <Layout>
@@ -60,11 +72,13 @@ const Eth = () => {
               <MainCard className="mx-auto shadow-sm">
                 <Card.Body>
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
-                    <SwapContainer
-                      token={token1}
-                      setToken={setToken1}
-                      header="From"
-                    />
+                    {currentChainId === ethChainId && (
+                      <SwapContainer
+                        token={token1}
+                        setToken={setToken1}
+                        header="From"
+                      />
+                    )}
                     <div className="d-flex justify-content-center">
                       <IconWrapper bsPrefix="switch" onClick={() => {}}>
                         <ArrowDownShort />
