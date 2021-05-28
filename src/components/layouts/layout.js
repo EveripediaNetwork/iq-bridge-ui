@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
-import { Button, Container, Form, Nav, Navbar } from "react-bootstrap";
+import styled from "styled-components";
+import { Button, Container, Row, Col, Nav, Navbar } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
@@ -14,6 +15,10 @@ const isWalletConnected = () => {
 
   return val ? JSON.parse(val) : null;
 };
+
+const StyledButtonsRow = styled(Row)`
+  min-width: 350px;
+`;
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -62,42 +67,47 @@ const Layout = ({ children }) => {
             </Nav.Link>
           </Nav>
           <LanguageSelector />
-          <Form inline>
-            {authContext.activeUser === null ? (
-              <Button
-                onClick={authContext.showModal}
-                className="text-capitalize"
-              >
-                EOS Wallet
-              </Button>
-            ) : (
-              <Button onClick={authContext.logout} className="text-capitalize">
-                {t("logout")} EOS
-              </Button>
-            )}
-          </Form>
-          <Form inline>
-            {wallet.status !== "connected" ? (
-              <Button
-                onClick={() => {
-                  setEthModalShow(true);
-                }}
-                className="text-capitalize ml-2"
-              >
-                Ethereum Wallet
-              </Button>
-            ) : (
-              <Button
-                onClick={() => {
-                  wallet.reset();
-                  localStorage.removeItem("__WALLET_CONNECTED");
-                }}
-                className="text-capitalize ml-2"
-              >
-                {t("logout")} ETH
-              </Button>
-            )}
-          </Form>
+          <StyledButtonsRow>
+            <Col sm={5} md={6} className="mt-2">
+              {authContext.activeUser === null ? (
+                <Button
+                  onClick={authContext.showModal}
+                  className="text-capitalize"
+                >
+                  EOS Wallet
+                </Button>
+              ) : (
+                <Button
+                  onClick={authContext.logout}
+                  className="text-capitalize"
+                >
+                  {t("logout")} EOS
+                </Button>
+              )}
+            </Col>
+            <Col sm={5} md={6} className="mt-2">
+              {wallet.status !== "connected" ? (
+                <Button
+                  onClick={() => {
+                    setEthModalShow(true);
+                  }}
+                  className="text-capitalize"
+                >
+                  Ethereum Wallet
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    wallet.reset();
+                    localStorage.removeItem("__WALLET_CONNECTED");
+                  }}
+                  className="text-capitalize"
+                >
+                  {t("logout")} ETH
+                </Button>
+              )}
+            </Col>
+          </StyledButtonsRow>
         </Navbar.Collapse>
       </Navbar>
       {children}
