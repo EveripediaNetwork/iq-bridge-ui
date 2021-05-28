@@ -38,10 +38,10 @@ const InputErrorText = styled(Form.Text)`
 
 const LockPeriod = ({ wallet, updateParentLockValue }) => {
   const { t } = useTranslation();
-  const [lockValue, setLockValue] = useState(0);
-  const [validInput, setValidInput] = useState(true);
+  const [lockValue, setLockValue] = useState();
+  const [validInput, setValidInput] = useState(undefined);
 
-  const validnum = a => a >= 0 && a <= 1460;
+  const validnum = a => a >= 1 && a <= 1460;
 
   useEffect(() => setValidInput(validnum(lockValue)), [lockValue]);
 
@@ -99,7 +99,7 @@ const LockPeriod = ({ wallet, updateParentLockValue }) => {
             />
           </Col>
         </Row>
-        {!validInput && (
+        {validInput && validInput === false && (
           <Row>
             <Col className="d-flex flex-column justify-content-center">
               <InputErrorText className="text-center">
