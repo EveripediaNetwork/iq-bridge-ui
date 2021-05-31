@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { UALContext } from "ual-reactjs-renderer";
 import { useWallet } from "use-wallet";
+import { ArrowBarDown } from "react-bootstrap-icons";
 
 import { getUserTokenBalance } from "../../utils/EosDataProvider";
 import { maticChainId } from "../../config";
@@ -93,6 +94,12 @@ const SwapHeader = styled.div`
   justify-self: flex-end;
 `;
 
+const ClickToFillBtn = styled(Button)`
+  :hover {
+    color: black;
+  }
+`;
+
 const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
   const { t } = useTranslation();
   const { register } = useFormContext();
@@ -118,10 +125,25 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
     })();
   }, [authContext, wallet, token]);
 
+  const handleTriggerFillInput = () => {
+    swapRef.current.value = balToken;
+    setFilled(swapRef.current.value);
+  };
+
   return (
     <SwapContainerWrapper>
       <SwapTokenHeader className="text-capitalize">
-        <SwapBalance>{`${t("balance")}: ${balToken}`}</SwapBalance>
+        <SwapBalance>
+          {`${t("balance")}: ${balToken}`}
+          <ClickToFillBtn
+            size="sm"
+            variant="light"
+            onClick={handleTriggerFillInput}
+            className="mx-2 pt-0 mb-1"
+          >
+            <ArrowBarDown />
+          </ClickToFillBtn>
+        </SwapBalance>
         <SwapHeader>{t(header.toLowerCase())}</SwapHeader>
       </SwapTokenHeader>
       <SwapTokenContainer>
