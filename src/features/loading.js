@@ -1,8 +1,8 @@
 import React, { memo } from "react";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
-
 import styled from "styled-components";
 import PropTypes from "prop-types";
+
 import GlobalStyle from "../components/globalStyles";
 
 const LoadingContainer = styled(Container)`
@@ -21,26 +21,23 @@ const LoadingContainer = styled(Container)`
       : ""}
 `;
 
-const Loading = ({ cover }) => {
-  return (
-    <LoadingContainer fluid cover={cover.toString()}>
-      <GlobalStyle />
-      <Row>
-        <Col
-          className="text-center"
-          style={{
-            position: "absolute",
-            left: "50%",
-            top: "50%",
-            transform: "translate(-50%, -50%)"
-          }}
-        >
-          <Spinner animation="grow" variant="primary" />
-        </Col>
-      </Row>
-    </LoadingContainer>
-  );
-};
+const StyledCol = styled(Col)`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const Loading = ({ cover }) => (
+  <LoadingContainer fluid cover={cover.toString()}>
+    <GlobalStyle />
+    <Row>
+      <StyledCol className="text-center">
+        <Spinner animation="grow" variant="primary" />
+      </StyledCol>
+    </Row>
+  </LoadingContainer>
+);
 
 Loading.propTypes = {
   cover: PropTypes.bool

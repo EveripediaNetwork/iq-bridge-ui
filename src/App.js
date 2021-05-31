@@ -48,7 +48,7 @@ function App() {
   );
 }
 
-function Routes() {
+const Routes = () => {
   useGoogleAnalytics();
   return (
     <Switch>
@@ -57,6 +57,6 @@ function Routes() {
       <Route exact path="/lock" component={LockPage} />
     </Switch>
   );
-}
+};
 
 export default App;

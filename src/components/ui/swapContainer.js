@@ -1,5 +1,5 @@
-import { Button, Form } from "react-bootstrap";
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { Button, Form } from "react-bootstrap";
 import styled from "styled-components";
 import { useFormContext } from "react-hook-form";
 import PropTypes from "prop-types";
@@ -35,8 +35,6 @@ const SwapTokenContainer = styled.div`
   grid-template-columns: 45% auto;
   justify-content: space-between;
 `;
-
-const SwapTokenInputContainer = styled.div``;
 
 const SwapTokenInput = styled(Form.Control)`
   border: 0px !important;
@@ -120,7 +118,7 @@ const SwapContainer = ({ token, header, setFilled }) => {
         <SwapHeader>{t(header.toLowerCase())}</SwapHeader>
       </SwapTokenHeader>
       <SwapTokenContainer>
-        <SwapTokenInputContainer>
+        <div>
           <SwapTokenInput
             autoComplete="off"
             disabled={wallet.account === null}
@@ -132,7 +130,7 @@ const SwapContainer = ({ token, header, setFilled }) => {
               swapRef.current = e;
             }}
           />
-        </SwapTokenInputContainer>
+        </div>
 
         <Form.Control
           type="hidden"

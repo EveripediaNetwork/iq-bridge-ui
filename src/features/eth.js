@@ -25,8 +25,6 @@ const IconWrapper = styled(Button)`
   background: none;
 `;
 
-const MainCard = styled(Card)``;
-
 const Eth = () => {
   const { t } = useTranslation();
   const { currentChainId, setCurrentChainId } = useContext(ChainIdContext);
@@ -69,7 +67,7 @@ const Eth = () => {
                 className="brain"
                 icon="🌉"
               />
-              <MainCard className="mx-auto shadow-sm">
+              <Card className="mx-auto shadow-sm">
                 <Card.Body>
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
                     {currentChainId === ethChainId && (
@@ -97,7 +95,7 @@ const Eth = () => {
                     </Button>
                   </Form>
                 </Card.Body>
-              </MainCard>
+              </Card>
             </Col>
           </Row>
           {wallet.account && txDone && (

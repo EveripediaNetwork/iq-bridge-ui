@@ -1,5 +1,5 @@
-import { InfoCircle } from "react-bootstrap-icons";
 import React from "react";
+import { InfoCircle } from "react-bootstrap-icons";
 import styled from "styled-components";
 import { Alert } from "react-bootstrap";
 import PropTypes from "prop-types";
@@ -13,14 +13,12 @@ const StyledSpan = styled.span`
   margin-left: 5px;
 `;
 
-const InfoAlert = ({ text }) => {
-  return (
-    <StyledAlert className="mx-auto shadow-sm text-center" variant="info">
-      <InfoCircle />
-      <StyledSpan>{text}</StyledSpan>
-    </StyledAlert>
-  );
-};
+const InfoAlert = ({ text }) => (
+  <StyledAlert className="mx-auto shadow-sm text-center" variant="info">
+    <InfoCircle />
+    <StyledSpan>{text}</StyledSpan>
+  </StyledAlert>
+);
 
 InfoAlert.propTypes = {
   text: PropTypes.string.isRequired

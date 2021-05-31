@@ -69,7 +69,7 @@ const Home = () => {
                       header="From"
                     />
                     <div className="d-flex justify-content-center">
-                      <IconWrapper bsPrefix="switch" onClick={() => {}}>
+                      <IconWrapper bsPrefix="switch">
                         <ArrowDownShort />
                       </IconWrapper>
                     </div>

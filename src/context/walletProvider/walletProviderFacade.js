@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, createContext } from "react";
 import PropTypes from "prop-types";
 import { UALContext, UALProvider } from "ual-reactjs-renderer";
 import {
@@ -7,7 +7,7 @@ import {
   supportedChains
 } from "../../utils/UalProvider";
 
-export const WallerProviderContext = React.createContext(null);
+export const WallerProviderContext = createContext(null);
 
 /**
  * WalletProvider Proxies the local wallet provider or the parent's
@@ -54,17 +54,15 @@ export const WalletProvider = ({ children }) => {
  * @returns {*}
  * @constructor
  */
-export const UALProviderSwitch = ({ children }) => {
-  return (
-    <UALProvider
-      chains={supportedChains}
-      authenticators={supportedAuthenticators}
-      appName={appName}
-    >
-      {children}
-    </UALProvider>
-  );
-};
+export const UALProviderSwitch = ({ children }) => (
+  <UALProvider
+    chains={supportedChains}
+    authenticators={supportedAuthenticators}
+    appName={appName}
+  >
+    {children}
+  </UALProvider>
+);
 
 WalletProvider.propTypes = {
   children: PropTypes.node.isRequired
