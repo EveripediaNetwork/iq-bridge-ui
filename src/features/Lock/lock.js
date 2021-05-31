@@ -53,7 +53,8 @@ const Lock = () => {
   const [txDone, setTxDone] = useState(false);
   const [updatingBalance, setUpdatingBalance] = useState(false);
   const [loadingBalance, setLoadingBalance] = useState(false);
-  const [lockValue, setLockValue] = useState(0);
+  const [balance, setBalance] = useState();
+  const [lockValue, setLockValue] = useState(7);
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
   const [openWrongChainModal, setOpenWrongChainModal] = useState(false);
@@ -127,7 +128,7 @@ const Lock = () => {
                       {currentHiIQ && (
                         <LockHeader
                           wallet={wallet}
-                          currentHiIQ={currentHiIQ}
+                          currentHiIQ={Number(currentHiIQ)}
                           updatingBalance={updatingBalance}
                           loadingBalance={loadingBalance}
                         />
@@ -155,6 +156,7 @@ const Lock = () => {
                       <SwapContainer
                         token={token1}
                         header="From"
+                        setParentBalance={setBalance}
                         setFilled={val => setFilledAmount(val)}
                       />
                     )}
@@ -171,7 +173,11 @@ const Lock = () => {
                     <br />
                     <Button
                       disabled={
-                        !wallet.account || lockValue === 0 || !filledAmount
+                        !wallet.account ||
+                        !balance ||
+                        balance === 0 ||
+                        lockValue === 0 ||
+                        !filledAmount
                       }
                       variant="primary"
                       className="text-capitalize"
@@ -185,7 +191,7 @@ const Lock = () => {
                 </Card.Body>
               </Card>
 
-              {lockValue !== 0 && filledAmount && (
+              {lockValue !== 0 && filledAmount && balance && balance !== 0 && (
                 <InfoSwapCard
                   tokensLocked={Number(filledAmount)}
                   timeLocked={Number(lockValue)}

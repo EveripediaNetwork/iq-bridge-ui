@@ -93,7 +93,7 @@ const SwapHeader = styled.div`
   justify-self: flex-end;
 `;
 
-const SwapContainer = ({ token, header, setFilled }) => {
+const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
   const { t } = useTranslation();
   const { register } = useFormContext();
   const swapRef = useRef();
@@ -111,7 +111,9 @@ const SwapContainer = ({ token, header, setFilled }) => {
         token.name === "IQ" &&
         wallet.chainId === maticChainId
       ) {
-        setBalance(await getTokensUserBalanceMatic(wallet));
+        const balance = Number(await getTokensUserBalanceMatic(wallet));
+        setBalance(balance);
+        setParentBalance(balance);
       }
     })();
   }, [authContext, wallet, token]);
@@ -155,11 +157,13 @@ const SwapContainer = ({ token, header, setFilled }) => {
 SwapContainer.propTypes = {
   token: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   header: PropTypes.string.isRequired,
-  setFilled: PropTypes.func
+  setFilled: PropTypes.func,
+  setParentBalance: PropTypes.func
 };
 
 SwapContainer.defaultProps = {
-  setFilled: () => {}
+  setFilled: () => {},
+  setParentBalance: () => {}
 };
 
 export default SwapContainer;

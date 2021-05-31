@@ -16,9 +16,7 @@ const LockHeader = ({
 
   return (
     <>
-      {(wallet && wallet.account) ||
-      wallet.status === "connected" ||
-      wallet.status === "connecting" ? (
+      {wallet.status === "connected" || wallet.status === "connecting" ? (
         <>
           {currentHiIQ && currentHiIQ > 0 ? (
             <div className="mx-auto d-flex flex-row justify-content-center align-items-center  w-75">
@@ -53,7 +51,7 @@ const LockHeader = ({
           ) : (
             <div className="w-75 d-flex flex-column justify-content-center">
               <strong className="text-center text-uppercase">
-                {!loadingBalance && currentHiIQ && currentHiIQ === 0
+                {!loadingBalance && currentHiIQ === 0
                   ? t("no_hiiq_tokens_locked")
                   : t("loading")}
               </strong>
@@ -73,7 +71,7 @@ const LockHeader = ({
 
 LockHeader.propTypes = {
   wallet: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  currentHiIQ: PropTypes.string.isRequired,
+  currentHiIQ: PropTypes.number.isRequired,
   updatingBalance: PropTypes.bool.isRequired,
   loadingBalance: PropTypes.bool.isRequired
 };
