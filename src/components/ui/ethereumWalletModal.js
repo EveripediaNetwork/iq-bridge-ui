@@ -40,7 +40,10 @@ const StyledListGroup = styled(ListGroup)`
 const EthereumWalletModal = ({ ...otherProps }) => {
   const { t } = useTranslation();
   const wallet = useWallet();
-  const activate = connector => wallet.connect(connector);
+  const activate = connector => {
+    console.log(connector);
+    wallet.connect(connector);
+  };
   return (
     <StyledModal
       {...otherProps}

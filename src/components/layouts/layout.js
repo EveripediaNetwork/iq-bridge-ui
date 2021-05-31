@@ -91,9 +91,14 @@ const Layout = ({ children }) => {
               {t("LOCK")}
             </Nav.Link>
           </Nav>
-          <LanguageSelector />
-          <StyledButtonsRow>
-            <Col sm={5} md={6} className="mt-2">
+          <LanguageSelector className="pr-4" />
+          <StyledButtonsRow xs={4} sm={4}>
+            <Col
+              xs={6}
+              sm={5}
+              md={5}
+              className="mt-2 pr-0 pl-0 d-flex flex-row justify-content-center"
+            >
               {authContext.activeUser === null ? (
                 <Button
                   onClick={authContext.showModal}
@@ -110,7 +115,7 @@ const Layout = ({ children }) => {
                 </Button>
               )}
             </Col>
-            <Col sm={5} md={6} className="mt-2">
+            <Col xs={6} sm={5} md={6} className="mt-2 pl-0">
               {wallet.status !== "connected" ? (
                 <Button
                   onClick={() => {
