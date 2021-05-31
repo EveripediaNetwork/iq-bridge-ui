@@ -8,6 +8,7 @@ import { UALContext } from "ual-reactjs-renderer";
 import { useWallet } from "use-wallet";
 
 import { getUserTokenBalance } from "../../utils/EosDataProvider";
+import { maticChainId } from "../../config";
 import {
   getPTokensUserBalance,
   getTokensUserBalanceMatic
@@ -105,7 +106,11 @@ const SwapContainer = ({ token, header, setFilled }) => {
         setBalance(await getUserTokenBalance(authContext));
       } else if (wallet.account && token.name === "pIQ") {
         setBalance(await getPTokensUserBalance(wallet));
-      } else if (wallet.account && token.name === "IQ") {
+      } else if (
+        wallet.account &&
+        token.name === "IQ" &&
+        wallet.chainId === maticChainId
+      ) {
         setBalance(await getTokensUserBalanceMatic(wallet));
       }
     })();

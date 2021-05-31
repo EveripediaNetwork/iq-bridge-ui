@@ -11,6 +11,7 @@ const pIQAddress = "0xa23d33d5e0a61ba81919bfd727c671bb03ab0fea";
 const pMinterAddress = "0x30953aebf5e3f2c139e9e19bf246dd3a575ddaf7";
 
 const getPTokensUserBalance = async wallet => {
+  console.log(wallet);
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
     const erc20 = new ethers.Contract(pIQAddress, erc20Abi, provider);

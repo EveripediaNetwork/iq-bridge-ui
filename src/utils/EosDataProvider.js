@@ -2,6 +2,7 @@ import { asset } from "eos-common";
 import { everipediaIqContract } from "../config";
 
 const getUserTokenBalance = async ual => {
+  console.log(ual);
   if (!ual.activeUser) {
     return null;
   }

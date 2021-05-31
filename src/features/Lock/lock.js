@@ -102,6 +102,8 @@ const Lock = () => {
     }
   }, [currentChainId]);
 
+  console.log(wallet);
+
   return (
     <Layout>
       <Container className="p-2 mt-3" fluid>

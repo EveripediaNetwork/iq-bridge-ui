@@ -21,6 +21,8 @@ function App() {
   const [currentChainId, setCurrentChainId] = useState(ethChainId);
   const value = { currentChainId, setCurrentChainId };
 
+  console.log(currentChainId);
+
   return (
     <ErrorBoundary fallback={<Error />}>
       <Suspense fallback={<Loading />}>
