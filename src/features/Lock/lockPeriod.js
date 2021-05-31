@@ -38,7 +38,7 @@ const InputErrorText = styled(Form.Text)`
 
 const LockPeriod = ({ wallet, updateParentLockValue }) => {
   const { t } = useTranslation();
-  const [lockValue, setLockValue] = useState();
+  const [lockValue, setLockValue] = useState(7);
   const [validInput, setValidInput] = useState(undefined);
 
   const validnum = a => a >= 1 && a <= 1460;

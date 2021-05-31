@@ -1,7 +1,15 @@
 import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Button, Container, Row, Col, Nav, Navbar } from "react-bootstrap";
+import {
+  Button,
+  Container,
+  Row,
+  Col,
+  Nav,
+  Navbar,
+  NavDropdown
+} from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
@@ -44,19 +52,35 @@ const Layout = ({ children }) => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link
-              active={location.pathname === "/"}
-              as={Link}
-              to={`/${LngUrl}`}
+            <NavDropdown
+              active={location.pathname === "/" || location.pathname === "/eth"}
+              title="BRIDGE"
+              id="basic-nav-dropdown"
             >
-              {t("EOS")}
-            </Nav.Link>
-            <Nav.Link
-              active={location.pathname === "/eth"}
-              as={Link}
-              to={`/eth${LngUrl}`}
-            >
-              {t("ETH")}
+              <NavDropdown.Item
+                active={location.pathname === "/"}
+                as={Link}
+                to={`/${LngUrl}`}
+              >
+                EOS → pIQ
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                active={location.pathname === "/eth"}
+                as={Link}
+                to={`/eth${LngUrl}`}
+              >
+                pIQ → IQ
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="https://wallet.matic.network/">
+                ETH ↔ Matic
+              </NavDropdown.Item>
+              <NavDropdown.Item href="https://multichain.xyz/">
+                ETH ↔ BSC
+              </NavDropdown.Item>
+            </NavDropdown>
+            <Nav.Link href="https://learn.everipedia.org/">
+              {t("LEARN")}
             </Nav.Link>
             <Nav.Link
               active={location.pathname === "/lock"}

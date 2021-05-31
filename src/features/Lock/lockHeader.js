@@ -42,7 +42,7 @@ const LockHeader = ({
                     <a
                       target="_blank"
                       href={`${maticExplorerUrl}address/${wallet.account}/tokens`}
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                     >
                       <BoxArrowUpRight />
                     </a>
