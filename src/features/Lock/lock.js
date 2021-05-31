@@ -22,6 +22,7 @@ import Layout from "../../components/layouts/layout";
 import SwapContainer from "../../components/ui/swapContainer";
 import CardTitle from "../../components/ui/cardTitle";
 import InfoAlert from "../../components/ui/infoAlert";
+import WrongChainModal from "../../components/ui/wrongChainModal";
 import {
   lockTokensTx,
   increaseAmount,
@@ -55,6 +56,7 @@ const Lock = () => {
   const [lockValue, setLockValue] = useState(0);
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
+  const [openWrongChainModal, setOpenWrongChainModal] = useState(false);
   const [token1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "IQ",
@@ -93,6 +95,9 @@ const Lock = () => {
         setCurrentHiIQ(await getTokensUserBalanceMaticLocked(wallet));
         setLoadingBalance(false);
       })();
+
+    if (wallet.status === "error" && wallet.chainId === maticChainId)
+      setOpenWrongChainModal(true);
   }, [wallet.status]);
 
   useEffect(() => {
@@ -101,8 +106,6 @@ const Lock = () => {
       wallet.reset();
     }
   }, [currentChainId]);
-
-  console.log(wallet);
 
   return (
     <Layout>
@@ -206,6 +209,12 @@ const Lock = () => {
           )}
         </FormProvider>
       </Container>
+      <WrongChainModal
+        show={openWrongChainModal}
+        currentChainId={currentChainId}
+        ethChainId={ethChainId}
+        onHide={() => setOpenWrongChainModal(false)}
+      />
     </Layout>
   );
 };

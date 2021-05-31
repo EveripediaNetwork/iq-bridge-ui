@@ -41,7 +41,7 @@ const EthereumWalletModal = ({ ...otherProps }) => {
   const { t } = useTranslation();
   const wallet = useWallet();
   const activate = connector => {
-    console.log(connector);
+    wallet.reset();
     wallet.connect(connector);
   };
   return (
