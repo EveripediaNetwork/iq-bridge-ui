@@ -38,7 +38,7 @@ const SwapTokenContainer = styled.div`
   justify-content: space-between;
 `;
 
-const SwapTokenInput = styled(Form.Control)`
+const SwapTokenInput = styled.input`
   border: 0px !important;
   padding: 5px !important;
   font-size: 30px !important;
@@ -130,6 +130,14 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
     setFilled(swapRef.current.value);
   };
 
+  const handleOnInputChange = event => {
+    let { value } = event.target;
+    const { min, max } = event.target;
+    value = Math.max(Number(min), Math.min(Number(max), Number(value)));
+    swapRef.current.value = value;
+    setFilled(value);
+  };
+
   return (
     <SwapContainerWrapper>
       <SwapTokenHeader className="text-capitalize">
@@ -149,11 +157,13 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
       <SwapTokenContainer>
         <div>
           <SwapTokenInput
-            autoComplete="off"
+            type="number"
+            min={0}
+            max={balToken}
             disabled={wallet.account === null}
             name={`${header}Amount`}
             placeholder={token ? `0.${"0".repeat(token.precision)}` : "0.000"}
-            onChange={e => setFilled(e.target.value)}
+            onChange={handleOnInputChange}
             ref={e => {
               register(e, { required: true });
               swapRef.current = e;
