@@ -66,8 +66,9 @@ const Lock = () => {
   });
 
   const handleConfirmation = async result => {
-    if (result === "success")
+    if (result === "success") {
       setCurrentHiIQ(await getTokensUserBalanceLocked(wallet));
+    }
 
     setUpdatingBalance(false);
   };
@@ -79,18 +80,22 @@ const Lock = () => {
 
     if (currentHiIQ !== 0)
       await increaseAmount(data.FromAmount, wallet, handleConfirmation);
-    else await lockTokensTx(data.FromAmount, String(lockValue), wallet);
+    else await lockTokensTx(data.FromAmount, lockValue, wallet);
 
     setUpdatingBalance(true);
 
     setTxDone(true);
   };
 
+  const handleSetLockValue = lv => {
+    setLockValue(lv);
+  };
+
   useEffect(() => {
     if (wallet.status === "connected" && wallet.ethereum)
       (async () => {
         setLoadingBalance(true);
-        setCurrentHiIQ(await getTokensUserBalanceLocked(wallet));
+        setCurrentHiIQ(Number(await getTokensUserBalanceLocked(wallet)));
         setLoadingBalance(false);
       })();
 
@@ -165,7 +170,7 @@ const Lock = () => {
                     <br />
                     <LockPeriod
                       wallet={wallet}
-                      updateParentLockValue={setLockValue}
+                      updateParentLockValue={handleSetLockValue}
                     />
                     <br />
                     <Button
