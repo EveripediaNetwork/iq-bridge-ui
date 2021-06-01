@@ -110,6 +110,8 @@ const Lock = () => {
     }
   }, [currentChainId]);
 
+  console.log(currentHiIQ);
+
   return (
     <Layout>
       <Container className="p-2 mt-3" fluid>
@@ -127,10 +129,10 @@ const Lock = () => {
                 <Card.Body>
                   <Accordion>
                     <div className="d-flex flex-row justify-content-end">
-                      {currentHiIQ && (
+                      {currentHiIQ !== undefined && (
                         <LockHeader
                           wallet={wallet}
-                          currentHiIQ={Number(currentHiIQ)}
+                          currentHiIQ={currentHiIQ}
                           updatingBalance={updatingBalance}
                           loadingBalance={loadingBalance}
                         />
