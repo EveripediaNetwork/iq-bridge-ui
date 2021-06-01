@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Row, Col } from "react-bootstrap";
 import styled from "styled-components";
 import { useFormContext } from "react-hook-form";
 import PropTypes from "prop-types";
@@ -30,16 +30,11 @@ const SwapTokenHeader = styled.div`
   flex-direction: row;
 `;
 
-const SwapTokenContainer = styled.div`
-  display: grid;
-  grid-template-columns: 45% auto;
-  justify-content: space-between;
-`;
-
 const SwapTokenInput = styled.input`
   border: 0px !important;
   padding: 5px !important;
   font-size: 30px !important;
+  max-width: 100%;
 
   :focus {
     box-shadow: none !important;
@@ -59,6 +54,7 @@ const SwapTokenListButton = styled(Button)`
   border: 0px !important;
   width: fit-content;
   height: 100%;
+  margin: 0;
   vertical-align: middle;
 `;
 
@@ -86,6 +82,7 @@ const SwapBalance = styled.div`
   justify-self: flex-start;
   flex-grow: 1;
   cursor: pointer;
+  max-width: 100%;
 `;
 
 const SwapHeader = styled.div`
@@ -162,8 +159,8 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
         </SwapBalance>
         <SwapHeader>{t(header.toLowerCase())}</SwapHeader>
       </SwapTokenHeader>
-      <SwapTokenContainer>
-        <div>
+      <Row className="d-flex flex-row justify-content-between">
+        <Col xs={9} md={9} lg={9}>
           <SwapTokenInput
             type="number"
             min={0}
@@ -177,19 +174,25 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
               swapRef.current = e;
             }}
           />
-        </div>
-
-        <Form.Control
-          type="hidden"
-          name={`${header}Token`}
-          value={token ? token.name : ""}
-          ref={register({ required: true })}
-        />
-        <SwapTokenListButton>
-          <SwapTokenIcon src={token.icon} />
-          <SwapTokenName>{token.name}</SwapTokenName>
-        </SwapTokenListButton>
-      </SwapTokenContainer>
+        </Col>
+        <Col
+          xs={3}
+          md={3}
+          lg={3}
+          className="d-flex flex-row justify-content-end"
+        >
+          <Form.Control
+            type="hidden"
+            name={`${header}Token`}
+            value={token ? token.name : ""}
+            ref={register({ required: true })}
+          />
+          <SwapTokenListButton className="p-0 m-0">
+            <SwapTokenIcon src={token.icon} />
+            <SwapTokenName>{token.name}</SwapTokenName>
+          </SwapTokenListButton>
+        </Col>
+      </Row>
     </SwapContainerWrapper>
   );
 };
