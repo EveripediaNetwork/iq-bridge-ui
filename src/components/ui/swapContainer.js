@@ -6,13 +6,11 @@ import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { UALContext } from "ual-reactjs-renderer";
 import { useWallet } from "use-wallet";
-import { ArrowBarDown } from "react-bootstrap-icons";
 
 import { getUserTokenBalance } from "../../utils/EosDataProvider";
-import { maticChainId } from "../../config";
 import {
   getPTokensUserBalance,
-  getTokensUserBalanceMatic
+  getTokensUserBalance
 } from "../../utils/EthDataProvider/EthDataProvider";
 
 const SwapContainerWrapper = styled.div`
@@ -95,6 +93,10 @@ const SwapHeader = styled.div`
 `;
 
 const ClickToFillBtn = styled(Button)`
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #aeabab !important;
+
   :hover {
     color: black;
   }
@@ -109,16 +111,24 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
   const [balToken, setBalance] = useState("0");
   useEffect(() => {
     (async () => {
-      if (authContext.activeUser && token.name === "IQ") {
+      if (
+        token.chain === "EOS" &&
+        authContext.activeUser &&
+        token.name === "IQ"
+      ) {
         setBalance(await getUserTokenBalance(authContext));
-      } else if (wallet.account && token.name === "pIQ") {
+      } else if (
+        token.chain === "Ethereum" &&
+        wallet.account &&
+        token.name === "pIQ"
+      ) {
         setBalance(await getPTokensUserBalance(wallet));
       } else if (
+        token.chain === "Ethereum" &&
         wallet.account &&
-        token.name === "IQ" &&
-        wallet.chainId === maticChainId
+        token.name === "IQ"
       ) {
-        const balance = Number(await getTokensUserBalanceMatic(wallet));
+        const balance = Number(await getTokensUserBalance(wallet));
         setBalance(balance);
         setParentBalance(balance);
       }
@@ -142,14 +152,12 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
     <SwapContainerWrapper>
       <SwapTokenHeader className="text-capitalize">
         <SwapBalance>
-          {`${t("balance")}: ${balToken}`}
           <ClickToFillBtn
             size="sm"
-            variant="light"
+            variant="transparent"
             onClick={handleTriggerFillInput}
-            className="mx-2 pt-0 mb-1"
           >
-            <ArrowBarDown />
+            {`${t("balance")}: ${balToken}`}
           </ClickToFillBtn>
         </SwapBalance>
         <SwapHeader>{t(header.toLowerCase())}</SwapHeader>

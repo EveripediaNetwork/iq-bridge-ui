@@ -83,15 +83,15 @@ const Layout = ({ children }) => {
                 ETH ↔ BSC
               </NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="https://learn.everipedia.org/">
-              {t("LEARN")}
-            </Nav.Link>
             <Nav.Link
               active={location.pathname === "/lock"}
               as={Link}
               to={`/lock${LngUrl}`}
             >
               {t("LOCK")}
+            </Nav.Link>
+            <Nav.Link href="https://learn.everipedia.org/">
+              {t("LEARN")}
             </Nav.Link>
           </Nav>
           <LanguageSelector className="pr-4" />

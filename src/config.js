@@ -9,6 +9,5 @@ module.exports = {
   everipediaIqContract: process.env.REACT_APP_EVERIPEDIAIQ_CONTRACT,
   isProd: process.env.REACT_APP_IS_PROD,
   ethChainId: Number(process.env.REACT_APP_ETH_CHAIN_ID),
-  maticChainId: Number(process.env.REACT_APP_MATIC_CHAIN_ID),
   maticExplorerUrl: process.env.REACT_APP_MATIC_EXPLORER_URL
 };

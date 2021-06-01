@@ -33,7 +33,8 @@ const Home = () => {
   const [token1, setToken1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "IQ",
-    precision: 3
+    precision: 3,
+    chain: "EOS"
   });
 
   const onSubmit = async data => {

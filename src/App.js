@@ -26,7 +26,7 @@ function App() {
       <Suspense fallback={<Loading />}>
         <ChainIdContext.Provider value={value}>
           <UseWalletProvider
-            chainId={currentChainId} // 5 GOERLI // TODO: make it flexible (137 for Matic)
+            chainId={currentChainId} // 5 GOERLI
             connectors={{
               fortmatic: { apiKey: "" },
               portis: { dAppId: "" },

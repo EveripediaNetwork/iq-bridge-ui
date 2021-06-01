@@ -13,7 +13,7 @@ import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
 import { convertPTokensTx } from "../utils/EthDataProvider/EthDataProvider";
 import { ChainIdContext } from "../context/chainIdProvider/chainIdContext";
-import { ethChainId, maticChainId } from "../config";
+import { ethChainId } from "../config";
 
 const IconWrapper = styled(Button)`
   margin: 15px;
@@ -36,7 +36,8 @@ const Eth = () => {
   const [token1, setToken1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "pIQ",
-    precision: 3
+    precision: 3,
+    chain: "Ethereum"
   });
 
   const onSubmit = async data => {
@@ -50,7 +51,7 @@ const Eth = () => {
   };
 
   useEffect(() => {
-    if (currentChainId === maticChainId || !currentChainId) {
+    if (!currentChainId) {
       wallet.reset();
       setCurrentChainId(ethChainId);
     }

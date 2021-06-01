@@ -1,21 +1,21 @@
-import React, { useState, useEffect, memo, useContext } from "react";
+import React, { memo, useContext, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import {
+  Accordion,
   Button,
   Card,
   Col,
   Container,
   Form,
-  Row,
-  Accordion
+  Row
 } from "react-bootstrap";
 import { ArrowDownShort, QuestionCircle } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
 
 import { ChainIdContext } from "../../context/chainIdProvider/chainIdContext";
-import { ethChainId, maticChainId } from "../../config";
+import { ethChainId } from "../../config";
 import LockPeriod from "./lockPeriod";
 import LockHeader from "./lockHeader";
 import Layout from "../../components/layouts/layout";
@@ -24,9 +24,9 @@ import CardTitle from "../../components/ui/cardTitle";
 import InfoAlert from "../../components/ui/infoAlert";
 import WrongChainModal from "../../components/ui/wrongChainModal";
 import {
-  lockTokensTx,
+  getTokensUserBalanceLocked,
   increaseAmount,
-  getTokensUserBalanceMaticLocked
+  lockTokensTx
 } from "../../utils/EthDataProvider/EthDataProvider";
 import InfoSwapCard from "../../components/ui/infoSwapCard";
 
@@ -61,12 +61,13 @@ const Lock = () => {
   const [token1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "IQ",
-    precision: 3
+    precision: 3,
+    chain: "Ethereum"
   });
 
   const handleConfirmation = async result => {
     if (result === "success")
-      setCurrentHiIQ(await getTokensUserBalanceMaticLocked(wallet));
+      setCurrentHiIQ(await getTokensUserBalanceLocked(wallet));
 
     setUpdatingBalance(false);
   };
@@ -86,24 +87,20 @@ const Lock = () => {
   };
 
   useEffect(() => {
-    if (
-      wallet.status === "connected" &&
-      currentChainId === maticChainId &&
-      wallet.ethereum
-    )
+    if (wallet.status === "connected" && wallet.ethereum)
       (async () => {
         setLoadingBalance(true);
-        setCurrentHiIQ(await getTokensUserBalanceMaticLocked(wallet));
+        setCurrentHiIQ(await getTokensUserBalanceLocked(wallet));
         setLoadingBalance(false);
       })();
 
-    if (wallet.status === "error" && wallet.chainId === maticChainId)
+    if (wallet.status === "error" && !wallet.chainId === ethChainId)
       setOpenWrongChainModal(true);
   }, [wallet.status]);
 
   useEffect(() => {
-    if (currentChainId === ethChainId || !currentChainId) {
-      setCurrentChainId(maticChainId);
+    if (!currentChainId) {
+      setCurrentChainId(ethChainId);
       wallet.reset();
     }
   }, [currentChainId]);
@@ -152,7 +149,7 @@ const Lock = () => {
                   </Accordion>
                   <br />
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
-                    {currentChainId === maticChainId && (
+                    {currentChainId === ethChainId && (
                       <SwapContainer
                         token={token1}
                         header="From"
@@ -209,7 +206,7 @@ const Lock = () => {
           {!wallet.account && (
             <Row>
               <Col>
-                <InfoAlert text={t("login_info_matic")} />
+                <InfoAlert text={t("login_info_eth")} />
               </Col>
             </Row>
           )}
