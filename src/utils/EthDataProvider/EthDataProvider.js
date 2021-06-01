@@ -63,7 +63,7 @@ const convertPTokensTx = async (amount, wallet) => {
       minterAbi,
       provider.getSigner()
     );
-    await erc20.approve(pMinterAddress, amountParsed, { gasLimit: 70000 });
+    await erc20.approve(pMinterAddress, amountParsed);
     await pMinter.mint(amountParsed, { gasLimit: 125000 });
     return true;
   }
@@ -86,7 +86,7 @@ const lockTokensTx = async (amount, time, wallet) => {
       provider.getSigner()
     );
 
-    await erc20.approve(hiIQAddress, amountParsed, { gasLimit: 700000 });
+    await erc20.approve(hiIQAddress, amountParsed);
     await hiIQ.create_lock(amountParsed, timeParsed, {
       gasLimit: 700000
     });
@@ -112,7 +112,7 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
       provider.getSigner()
     );
 
-    await erc20.approve(hiIQAddress, amountParsed, { gasLimit: 700000 });
+    await erc20.approve(hiIQAddress, amountParsed);
     const result = await hiIQ.increase_amount(amountParsed, {
       gasLimit: 700000
     });
