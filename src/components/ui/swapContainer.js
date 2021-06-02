@@ -99,6 +99,16 @@ const ClickToFillBtn = styled(Button)`
   }
 `;
 
+const inputDisabled = (chain, ethWallet, eosWallet) => {
+  if (chain === "Ethereum" && ethWallet.account === null) {
+    return true;
+  }
+  if (chain === "EOS" && !eosWallet.activeUser) {
+    return true;
+  }
+  return false;
+};
+
 const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
   const { t } = useTranslation();
   const { register } = useFormContext();
@@ -113,7 +123,8 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
         authContext.activeUser &&
         token.name === "IQ"
       ) {
-        setBalance(await getUserTokenBalance(authContext));
+        const balance = await getUserTokenBalance(authContext);
+        setBalance(balance.toString().replace(" IQ", ""));
       } else if (
         token.chain === "Ethereum" &&
         wallet.account &&
@@ -138,9 +149,9 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
   };
 
   const handleOnInputChange = event => {
-    let { value } = event.target;
-    const { min, max } = event.target;
-    value = Math.max(Number(min), Math.min(Number(max), Number(value)));
+    const { value } = event.target;
+    // const { min, max } = event.target;
+    // value = Math.max(Number(min), Math.min(Number(max), Number(value)));
     swapRef.current.value = value;
     setFilled(value);
   };
@@ -162,10 +173,10 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
       <Row className="d-flex flex-row justify-content-between">
         <Col xs={9} md={9} lg={9}>
           <SwapTokenInput
-            type="number"
+            type="text"
             min={0}
             max={balToken}
-            disabled={wallet.account === null}
+            disabled={inputDisabled(token.chain, wallet, authContext)}
             name={`${header}Amount`}
             placeholder={token ? `0.${"0".repeat(token.precision)}` : "0.000"}
             onChange={handleOnInputChange}
