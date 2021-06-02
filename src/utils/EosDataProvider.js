@@ -15,29 +15,6 @@ const getUserTokenBalance = async ual => {
   return response.length > 0 ? asset(response[0]) : null;
 };
 
-const getPriceInfo = (assetToGive, assetToReceive, pair) => {
-  const price =
-    parseFloat(assetToReceive.toString().split(" ")[0]) /
-    parseFloat(assetToGive.toString().split(" ")[0]);
-  const spotPrice = pair.to.amount / pair.from.amount;
-  const priceImpact = Math.abs(
-    parseFloat(
-      ((1 - (price * (1 + pair.fee / 10000)) / spotPrice) * 100).toFixed(2)
-    )
-  );
-  const token1 = `1 ${assetToGive.symbol.code().toString()}`;
-  const token2 = `${price.toFixed(4)} ${assetToReceive.symbol
-    .code()
-    .toString()}`;
-
-  return {
-    price,
-    spotPrice,
-    priceImpact,
-    rate: `${token1} Per ${token2}`
-  };
-};
-
 const convertTokensTx = async (quantity, ethAddress, ual) => {
   return ual.activeUser.signTransaction(
     {
@@ -67,4 +44,4 @@ const convertTokensTx = async (quantity, ethAddress, ual) => {
   );
 };
 
-export { convertTokensTx, getUserTokenBalance, getPriceInfo };
+export { convertTokensTx, getUserTokenBalance };
