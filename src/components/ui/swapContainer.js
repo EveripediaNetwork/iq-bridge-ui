@@ -151,7 +151,6 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
   const handleOnInputChange = event => {
     let { value } = event.target;
     const { min, max } = event.target;
-    value = String(value).replace(/[^\w\s]/gi, "");
     value = Math.max(Number(min), Math.min(Number(max), Number(value)));
     swapRef.current.value = value;
     setFilled(value);
@@ -174,7 +173,7 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
       <Row className="d-flex flex-row justify-content-between">
         <Col xs={9} md={9} lg={9}>
           <SwapTokenInput
-            type="text"
+            type="number"
             min={0}
             max={balToken}
             disabled={inputDisabled(token.chain, wallet, authContext)}
