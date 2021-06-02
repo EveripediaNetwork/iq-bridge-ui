@@ -25,8 +25,6 @@ const IconWrapper = styled(Button)`
   background: none;
 `;
 
-const MainCard = styled(Card)``;
-
 const Home = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
@@ -35,13 +33,13 @@ const Home = () => {
   const [token1, setToken1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "IQ",
-    precision: 3
+    precision: 3,
+    chain: "EOS"
   });
 
   const onSubmit = async data => {
-    if (!authContext.activeUser) {
-      return;
-    }
+    if (!authContext.activeUser) return;
+
     const result = await convertTokensTx(
       `${parseFloat(data.FromAmount).toFixed(3)} ${data.FromToken}`,
       data.address,
@@ -63,7 +61,7 @@ const Home = () => {
                 className="brain"
                 icon="🌉"
               />
-              <MainCard className="mx-auto shadow-sm">
+              <Card className="mx-auto shadow-sm">
                 <Card.Body>
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
                     <SwapContainer
@@ -90,7 +88,7 @@ const Home = () => {
                     </Button>
                   </Form>
                 </Card.Body>
-              </MainCard>
+              </Card>
             </Col>
           </Row>
           {authContext.activeUser && txData !== "" && (
@@ -103,7 +101,7 @@ const Home = () => {
           {!authContext.activeUser && (
             <Row>
               <Col>
-                <InfoAlert text={t("login_info")} />
+                <InfoAlert text={t("login_info_eos")} />
               </Col>
             </Row>
           )}

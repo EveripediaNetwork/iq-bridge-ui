@@ -6,7 +6,10 @@ export const resources = {
   en: {
     translation: {
       // layout
-      swap: "swap",
+      eos_wallet: "EOS Wallet",
+      ethereum_wallet: "Ethereum Wallet",
+      swap: "Swap",
+      lock: "Lock",
       pool: "pool",
       convert: "convert",
       logout: "logout",
@@ -25,14 +28,28 @@ export const resources = {
       balance: "balance",
       from: "from",
       to: "to",
+      your_eth_address: "Your Ethereum Address",
       select_token: "Select a token",
       price: "Price",
       price_impact: "Price impact",
       liquidity_fee: "Liquidity provider fee",
       min_received: "Minimum received",
       max_profit: "Maximum profit",
-      login_info: "Login on EOS Wallet to bridge your tokens",
-      login_info_eth: "Login on ETH Wallet to swap your tokens",
+      // Lock page
+      value_restriction: "Input value must be between 1 and 1460",
+      lock_period: "Lock period (days)",
+      lock_description:
+        "The longer you lock your IQ, the more hiIQ you will receive. You can also get additional hiIQ by locking more IQ or extending the lock period. hiIQ decays slowly over your locking period, eventually reaching 1-to-1 with IQ.",
+      locked: "locked",
+      login_info_eos: "Login on EOS Wallet to bridge your tokens",
+      login_info_eth: "Login on ETH Wallet to lock your tokens",
+      time_locked: "Time Locked (days)",
+      current_hiiq_balance: "Current hiIQ",
+      new_hiiq_balance: "New hiIQ",
+      updating_balance: "Updating balance...",
+      no_hiiq_tokens_locked: "No hiIQ tokens locked so far",
+      loading: "Loading",
+      disconnected: "Disconnected",
       // dialog tx
       confirming_tx: "Confirming transaction...",
       confirmed_tx: "Transaction confirmed!",
@@ -57,12 +74,22 @@ export const resources = {
       done: "Done",
       en: "EN",
       ko: "한국어",
-      zh: "中文"
+      zh: "中文",
+      // other
+      select_wallet: "Select a wallet",
+      transaction_executed: "Transaction Executed",
+      go_to: "Go to",
+      step: "Step 2",
+      error: "Error"
     }
   },
   ko: {
     translation: {
-      swap: "스왑",
+      // layout
+      eos_wallet: "EOS 지갑",
+      ethereum_wallet: "이더 리움 지갑",
+      swap: "교환",
+      lock: "자물쇠",
       pool: "풀",
       convert: "전환",
       logout: "로그아웃",
@@ -77,17 +104,32 @@ export const resources = {
       market: "시장",
       max_shares: "이용가능한 지분",
       amount_shares_convert: "전환할 지분",
-      // swap page
+      // lock page
       balance: "잔액",
       from: "보내는이",
       to: "받는이",
+      your_eth_address: "귀하의 이더 리움 주소",
       select_token: "토큰",
       price: "가격",
       price_impact: "가격 변화",
       liquidity_fee: "유동성 공급 수수료",
       min_received: "최소 수령액",
       max_profit: "최대 수익",
-      login_info: "로그인해서 스왑하기",
+      lock_period: "잠금 기간 (일)",
+      current_hiiq_balance: "현재 hiIQ",
+      new_hiiq_balance: "새로운 hiIQ",
+      lock_description:
+        "IQ를 오래 잠글수록 더 많은 hiIQ를 받게됩니다. 더 많은 IQ를 잠 그거나 잠금 기간을 연장하여 추가 hiIQ를 얻을 수도 있습니다. hiIQ는 잠금 기간 동안 천천히 감소하여 결국 IQ와 1 : 1에 도달합니다.",
+      locked: "잠김",
+      value_restriction: "입력 값은 1에서 1460 사이 여야합니다.",
+      login_info_eos: "로그인해서 스왑하기",
+      login_info_eth: "토큰을 잠 그려면 ETH 지갑에 로그인하세요.",
+      time_locked: "잠긴 시간 (일)",
+      lock_time: "잠긴 시간",
+      updating_balance: "잔액 업데이트...",
+      no_hiiq_tokens_locked: "지금까지 잠긴 hiIQ 토큰이 없습니다.",
+      loading: "로딩 중",
+      disconnected: "연결 끊김",
       // dialog tx
       confirming_tx: "트랜잭션 진행중...",
       confirmed_tx: "트랜잭션 완료!",
@@ -112,13 +154,23 @@ export const resources = {
       done: "완료",
       en: "EN",
       ko: "한국어",
-      zh: "中文"
+      zh: "中文",
+      // other
+      select_wallet: "지갑 선택",
+      transaction_executed: "거래 실행",
+      go_to: "이동",
+      step: "2 단계",
+      error: "오류"
     }
   },
 
   zh: {
     translation: {
-      swap: "兑换",
+      // layout
+      eos_wallet: "EOS钱包",
+      ethereum_wallet: "以太坊钱包",
+      swap: "交换",
+      lock: "锁",
       pool: "池子",
       convert: "转换",
       logout: "登出",
@@ -133,17 +185,31 @@ export const resources = {
       market: "市场",
       max_shares: "最大可用的股份",
       amount_shares_convert: "要转换的股份数量",
-      // swap page
+      // lock page
       balance: "余额",
       from: "从",
       to: "到",
+      your_eth_address: "您的以太坊地址",
       select_token: "选择一种代币",
       price: "价格",
       price_impact: "价格影响",
       liquidity_fee: "流动性提供者费用",
       min_received: "最低可获得",
+      current_hiiq_balance: "当前的hiIQ",
+      new_hiiq_balance: "新的hiIQ",
       max_profit: "最大收益",
-      login_info: "登录交易",
+      lock_period: "锁定期（天）",
+      lock_description:
+        "锁定IQ的时间越长，收到的hiIQ越多。您还可以通过锁定更多IQ或延长锁定时间来获得其他hiIQ。在锁定期间，hiIQ会缓慢衰减，最终与IQ达到1比1。",
+      locked: "已锁定",
+      value_restriction: "输入值必须在1到1460之间",
+      login_info_eos: "로그인해서 스왑하기",
+      login_info_eth: "登录 ETH 钱包以锁定您的代币",
+      time_locked: "时间锁定(天)",
+      updating_balance: "更新余额...",
+      no_hiiq_tokens_locked: "到目前为止，尚未锁定任何hiIQ令牌",
+      loading: "载入中",
+      disconnected: "断线",
       // dialog tx
       confirming_tx: "确认交易...",
       confirmed_tx: "交易已确认!",
@@ -168,7 +234,13 @@ export const resources = {
       done: "完成",
       en: "EN",
       ko: "한국어",
-      zh: "中文"
+      zh: "中文",
+      // other
+      select_wallet: "选择一个钱包",
+      transaction_executed: "Transaction Executed",
+      go_to: "去",
+      step_2: "第2步",
+      error: "错误"
     }
   }
 };

@@ -2,6 +2,7 @@ import React from "react";
 import { ListGroup, ListGroupItem, Modal } from "react-bootstrap";
 import styled from "styled-components";
 import { useWallet } from "use-wallet";
+import { useTranslation } from "react-i18next";
 
 const StyledModal = styled(Modal)`
   div {
@@ -37,8 +38,12 @@ const StyledListGroup = styled(ListGroup)`
 `;
 
 const EthereumWalletModal = ({ ...otherProps }) => {
+  const { t } = useTranslation();
   const wallet = useWallet();
-  const activate = connector => wallet.connect(connector);
+  const activate = connector => {
+    wallet.reset();
+    wallet.connect(connector);
+  };
   return (
     <StyledModal
       {...otherProps}
@@ -49,7 +54,7 @@ const EthereumWalletModal = ({ ...otherProps }) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Select a wallet:
+          {t("select_wallet")}:
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

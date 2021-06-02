@@ -6,5 +6,7 @@ $theme-colors: (
 
 $border-radius: 15px;
 
+$btn-focus-box-shadow: none !important;
+
 /* import bootstrap to set changes */
 @import "../../node_modules/bootstrap/scss/bootstrap";

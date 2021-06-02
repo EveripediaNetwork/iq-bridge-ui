@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Row, Col } from "react-bootstrap";
 import styled from "styled-components";
 import { useFormContext } from "react-hook-form";
 import PropTypes from "prop-types";
@@ -8,7 +8,10 @@ import { UALContext } from "ual-reactjs-renderer";
 import { useWallet } from "use-wallet";
 
 import { getUserTokenBalance } from "../../utils/EosDataProvider";
-import { getPTokensUserBalance } from "../../utils/EthDataProvider";
+import {
+  getPTokensUserBalance,
+  getTokensUserBalance
+} from "../../utils/EthDataProvider/EthDataProvider";
 
 const SwapContainerWrapper = styled.div`
   border-radius: 15px;
@@ -27,16 +30,11 @@ const SwapTokenHeader = styled.div`
   flex-direction: row;
 `;
 
-const SwapTokenContainer = styled.div`
-  display: grid;
-  grid-template-columns: 45% auto;
-  justify-content: space-between;
-`;
-
-const SwapTokenInput = styled(Form.Control)`
+const SwapTokenInput = styled.input`
   border: 0px !important;
   padding: 5px !important;
   font-size: 30px !important;
+  max-width: 100%;
 
   :focus {
     box-shadow: none !important;
@@ -56,6 +54,7 @@ const SwapTokenListButton = styled(Button)`
   border: 0px !important;
   width: fit-content;
   height: 100%;
+  margin: 0;
   vertical-align: middle;
 `;
 
@@ -83,13 +82,24 @@ const SwapBalance = styled.div`
   justify-self: flex-start;
   flex-grow: 1;
   cursor: pointer;
+  max-width: 100%;
 `;
 
 const SwapHeader = styled.div`
   justify-self: flex-end;
 `;
 
-const SwapContainer = ({ token, header }) => {
+const ClickToFillBtn = styled(Button)`
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #aeabab !important;
+
+  :hover {
+    color: black;
+  }
+`;
+
+const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
   const { t } = useTranslation();
   const { register } = useFormContext();
   const swapRef = useRef();
@@ -98,51 +108,105 @@ const SwapContainer = ({ token, header }) => {
   const [balToken, setBalance] = useState("0");
   useEffect(() => {
     (async () => {
-      if (authContext.activeUser && token.name === "IQ") {
+      if (
+        token.chain === "EOS" &&
+        authContext.activeUser &&
+        token.name === "IQ"
+      ) {
         setBalance(await getUserTokenBalance(authContext));
-      } else if (wallet.account && token.name === "pIQ") {
+      } else if (
+        token.chain === "Ethereum" &&
+        wallet.account &&
+        token.name === "pIQ"
+      ) {
         setBalance(await getPTokensUserBalance(wallet));
+      } else if (
+        token.chain === "Ethereum" &&
+        wallet.account &&
+        token.name === "IQ"
+      ) {
+        const balance = Number(await getTokensUserBalance(wallet));
+        setBalance(balance);
+        setParentBalance(balance);
       }
     })();
   }, [authContext, wallet, token]);
 
+  const handleTriggerFillInput = () => {
+    swapRef.current.value = balToken;
+    setFilled(swapRef.current.value);
+  };
+
+  const handleOnInputChange = event => {
+    let { value } = event.target;
+    const { min, max } = event.target;
+    value = Math.max(Number(min), Math.min(Number(max), Number(value)));
+    swapRef.current.value = value;
+    setFilled(value);
+  };
+
   return (
     <SwapContainerWrapper>
       <SwapTokenHeader className="text-capitalize">
-        <SwapBalance>{`${t("balance")}: ${balToken}`}</SwapBalance>
+        <SwapBalance>
+          <ClickToFillBtn
+            size="sm"
+            variant="transparent"
+            onClick={handleTriggerFillInput}
+          >
+            {`${t("balance")}: ${balToken}`}
+          </ClickToFillBtn>
+        </SwapBalance>
         <SwapHeader>{t(header.toLowerCase())}</SwapHeader>
       </SwapTokenHeader>
-      <SwapTokenContainer>
-        <div>
+      <Row className="d-flex flex-row justify-content-between">
+        <Col xs={9} md={9} lg={9}>
           <SwapTokenInput
-            autoComplete="off"
+            type="number"
+            min={0}
+            max={balToken}
+            disabled={wallet.account === null}
             name={`${header}Amount`}
             placeholder={token ? `0.${"0".repeat(token.precision)}` : "0.000"}
+            onChange={handleOnInputChange}
             ref={e => {
               register(e, { required: true });
               swapRef.current = e;
             }}
           />
-        </div>
-
-        <Form.Control
-          type="hidden"
-          name={`${header}Token`}
-          value={token ? token.name : ""}
-          ref={register({ required: true })}
-        />
-        <SwapTokenListButton>
-          <SwapTokenIcon src={token.icon} />
-          <SwapTokenName>{token.name}</SwapTokenName>
-        </SwapTokenListButton>
-      </SwapTokenContainer>
+        </Col>
+        <Col
+          xs={3}
+          md={3}
+          lg={3}
+          className="d-flex flex-row justify-content-end"
+        >
+          <Form.Control
+            type="hidden"
+            name={`${header}Token`}
+            value={token ? token.name : ""}
+            ref={register({ required: true })}
+          />
+          <SwapTokenListButton className="p-0 m-0">
+            <SwapTokenIcon src={token.icon} />
+            <SwapTokenName>{token.name}</SwapTokenName>
+          </SwapTokenListButton>
+        </Col>
+      </Row>
     </SwapContainerWrapper>
   );
 };
 
 SwapContainer.propTypes = {
   token: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  header: PropTypes.string.isRequired
+  header: PropTypes.string.isRequired,
+  setFilled: PropTypes.func,
+  setParentBalance: PropTypes.func
+};
+
+SwapContainer.defaultProps = {
+  setFilled: () => {},
+  setParentBalance: () => {}
 };
 
 export default SwapContainer;

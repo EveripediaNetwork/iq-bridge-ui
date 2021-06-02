@@ -11,3 +11,5 @@ export const typography = {
 };
 
 export const isDesktop = window.innerWidth > 991;
+export const defaultSlippage = 1;
+export const defaultSlippagePercentage = 0.01;
