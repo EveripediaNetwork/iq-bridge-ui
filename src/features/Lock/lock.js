@@ -110,9 +110,6 @@ const Lock = () => {
     }
   }, [currentChainId]);
 
-  console.log(ethChainId);
-  console.log(currentChainId);
-
   return (
     <Layout>
       <Container className="p-2 mt-3" fluid>
