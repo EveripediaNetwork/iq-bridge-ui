@@ -124,7 +124,7 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
         token.name === "IQ"
       ) {
         const balance = await getUserTokenBalance(authContext);
-        setBalance(balance.toString().replace(" IQ", ""));
+        if (balance) setBalance(balance.toString().replace(" IQ", ""));
       } else if (
         token.chain === "Ethereum" &&
         wallet.account &&
@@ -149,9 +149,10 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
   };
 
   const handleOnInputChange = event => {
-    const { value } = event.target;
-    // const { min, max } = event.target;
-    // value = Math.max(Number(min), Math.min(Number(max), Number(value)));
+    let { value } = event.target;
+    const { min, max } = event.target;
+    value = String(value).replace(/[^\w\s]/gi, "");
+    value = Math.max(Number(min), Math.min(Number(max), Number(value)));
     swapRef.current.value = value;
     setFilled(value);
   };
