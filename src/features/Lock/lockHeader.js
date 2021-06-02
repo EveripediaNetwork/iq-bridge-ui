@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { BoxArrowUpRight } from "react-bootstrap-icons";
 import { Button } from "react-bootstrap";
 
-import { maticExplorerUrl } from "../../config"; // TODO: use etherscan
+import { ethBasedExplorerUrl } from "../../config"; // TODO: use etherscan
 
 const LockHeader = ({
   wallet,
@@ -35,7 +35,7 @@ const LockHeader = ({
               >
                 <a
                   target="_blank"
-                  href={`${maticExplorerUrl}address/${wallet.account}/tokens`}
+                  href={`${ethBasedExplorerUrl}address/${wallet.account}/tokens`}
                   rel="noopener noreferrer"
                 >
                   <BoxArrowUpRight />

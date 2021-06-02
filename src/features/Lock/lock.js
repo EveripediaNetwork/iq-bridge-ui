@@ -110,7 +110,8 @@ const Lock = () => {
     }
   }, [currentChainId]);
 
-  console.log(currentHiIQ);
+  console.log(ethChainId);
+  console.log(currentChainId);
 
   return (
     <Layout>

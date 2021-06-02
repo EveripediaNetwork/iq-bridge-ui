@@ -8,7 +8,6 @@ import { useWallet } from "use-wallet";
 
 import Layout from "../components/layouts/layout";
 import SwapContainer from "../components/ui/swapContainer";
-import WrongChainModal from "../components/ui/wrongChainModal";
 import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
 import { convertPTokensTx } from "../utils/EthDataProvider/EthDataProvider";
@@ -30,7 +29,6 @@ const Eth = () => {
   const { t } = useTranslation();
   const { currentChainId, setCurrentChainId } = useContext(ChainIdContext);
   const methods = useForm({ mode: "onChange" });
-  const [openWrongChainModal, setOpenWrongChainModal] = useState(false);
   const wallet = useWallet();
   const [txDone, setTxDone] = useState(false);
   const [token1, setToken1] = useState({
@@ -56,11 +54,6 @@ const Eth = () => {
       setCurrentChainId(ethChainId);
     }
   }, [currentChainId]);
-
-  useEffect(() => {
-    if (wallet.status === "error" && wallet.chainId === ethChainId)
-      setOpenWrongChainModal(true);
-  }, [wallet.status]);
 
   return (
     <Layout>
@@ -122,12 +115,6 @@ const Eth = () => {
           )}
         </FormProvider>
       </Container>
-      <WrongChainModal
-        show={openWrongChainModal}
-        currentChainId={currentChainId}
-        ethChainId={ethChainId}
-        onHide={() => setOpenWrongChainModal(false)}
-      />
     </Layout>
   );
 };
