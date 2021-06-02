@@ -159,7 +159,7 @@ const Lock = () => {
                         token={token1}
                         header="From"
                         setParentBalance={setBalance}
-                        setFilled={val => setFilledAmount(val)}
+                        setFilled={setFilledAmount}
                       />
                     )}
                     <div className="d-flex justify-content-center">

@@ -30,7 +30,7 @@ const SwapTokenHeader = styled.div`
   flex-direction: row;
 `;
 
-const SwapTokenInput = styled.input`
+const SwapTokenInput = styled(Form.Control)`
   border: 0px !important;
   padding: 5px !important;
   font-size: 30px !important;
@@ -116,6 +116,8 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
   const authContext = useContext(UALContext);
   const wallet = useWallet();
   const [balToken, setBalance] = useState("0");
+  const [isValidInput, setIsValidInput] = useState();
+
   useEffect(() => {
     (async () => {
       if (
@@ -150,9 +152,18 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
 
   const handleOnInputChange = event => {
     let { value } = event.target;
-    const { min, max } = event.target;
-    value = Math.max(Number(min), Math.min(Number(max), Number(value)));
-    swapRef.current.value = value;
+    value = Number(value);
+
+    if (value < 0 || value > balToken || Number.isNaN(value)) {
+      setIsValidInput(false);
+      setFilled(undefined);
+      return;
+    }
+
+    setIsValidInput(true);
+
+    if (value === 0) return;
+
     setFilled(value);
   };
 
@@ -173,8 +184,9 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
       <Row className="d-flex flex-row justify-content-between">
         <Col xs={9} md={9} lg={9}>
           <SwapTokenInput
-            type="number"
+            type="text"
             min={0}
+            isInvalid={isValidInput === false}
             max={balToken}
             disabled={inputDisabled(token.chain, wallet, authContext)}
             name={`${header}Amount`}
