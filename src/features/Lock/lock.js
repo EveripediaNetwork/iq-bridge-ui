@@ -211,7 +211,7 @@ const Lock = () => {
           {!wallet.account && (
             <Row>
               <Col>
-                <InfoAlert text={t("login_info_eth")} />
+                <InfoAlert text={t("login_info_eth_locking")} />
               </Col>
             </Row>
           )}
