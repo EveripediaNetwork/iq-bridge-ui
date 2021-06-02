@@ -3,6 +3,7 @@ import { Form } from "react-bootstrap";
 import styled from "styled-components";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
 
 const SwapContainerWrapper = styled.div`
   border-radius: 15px;
@@ -41,21 +42,22 @@ const SwapTokenInput = styled(Form.Control)`
   }
 `;
 
-const AddressContainer = () => {
+const AddressContainer = ({
+  title = "your_eth_address",
+  placeholder = "0x0"
+}) => {
   const { t } = useTranslation();
   const { register } = useFormContext();
   const swapRef = useRef();
   return (
     <SwapContainerWrapper>
-      <SwapTokenHeader className="text-capitalize">
-        {t("your_eth_address")}
-      </SwapTokenHeader>
+      <SwapTokenHeader className="text-capitalize">{t(title)}</SwapTokenHeader>
       <SwapTokenContainer>
         <SwapTokenInputContainer>
           <SwapTokenInput
             autoComplete="off"
             name="address"
-            placeholder="0x0"
+            placeholder={placeholder}
             ref={e => {
               register(e, { required: true });
               swapRef.current = e;
@@ -65,6 +67,11 @@ const AddressContainer = () => {
       </SwapTokenContainer>
     </SwapContainerWrapper>
   );
+};
+
+AddressContainer.propTypes = {
+  title: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired
 };
 
 export default AddressContainer;

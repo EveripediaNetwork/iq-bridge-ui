@@ -9,6 +9,7 @@ import {
 import { erc20Abi } from "./erc20.abi";
 import { hiIQAbi } from "./hiIQ.abi";
 import { minterAbi } from "./minter.abi";
+import { ptokenAbi } from "./ptoken.abi";
 
 const getPTokensUserBalance = async wallet => {
   if (wallet.status === "connected") {
@@ -62,6 +63,32 @@ const convertPTokensTx = async (amount, wallet) => {
     await erc20.approve(pMinterAddress, amountParsed);
     await pMinter.mint(amountParsed, { gasLimit: 125000 });
     return true;
+  }
+  return false;
+};
+
+const reverseIQtoEOSTx = async (amount, wallet, eosAccount) => {
+  const amountParsed = ethers.utils.parseEther(amount).toString();
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+    const erc20 = new ethers.Contract(
+      iqAddress,
+      erc20Abi,
+      provider.getSigner()
+    );
+    const pTokens = new ethers.Contract(
+      pIQAddress,
+      ptokenAbi,
+      provider.getSigner()
+    );
+    const pMinter = new ethers.Contract(
+      pMinterAddress,
+      minterAbi,
+      provider.getSigner()
+    );
+    await erc20.approve(pMinterAddress, amountParsed);
+    await pMinter.burn(amountParsed, { gasLimit: 125000 }); // TODO: check gas
+    return pTokens.redeem(amountParsed, eosAccount); // TODO: check gas
   }
   return false;
 };
@@ -127,6 +154,7 @@ export {
   convertPTokensTx,
   getPTokensUserBalance,
   getTokensUserBalance,
+  reverseIQtoEOSTx,
   lockTokensTx,
   increaseAmount,
   getTokensUserBalanceLocked
