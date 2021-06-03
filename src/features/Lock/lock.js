@@ -60,7 +60,7 @@ const Lock = () => {
   const [filledAmount, setFilledAmount] = useState();
   const [openWrongChainModal, setOpenWrongChainModal] = useState(false);
   const [openTxDetailsDialog, setOpenTxDetailsDialog] = useState(true);
-  const [txDetails, setTxDetails] = useState();
+  const [hashes, setHashes] = useState([]);
   const [token1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "IQ",
@@ -76,16 +76,20 @@ const Lock = () => {
     setUpdatingBalance(false);
   };
 
+  const appendNewTxHash = txHash => setHashes(prev => prev.concat(txHash));
+
   const onSubmit = async data => {
-    if (!wallet.account) {
-      return;
-    }
+    if (!wallet.account) return;
 
     if (currentHiIQ !== 0)
-      setTxDetails(
-        await increaseAmount(data.FromAmount, wallet, handleConfirmation)
+      await increaseAmount(
+        data.FromAmount,
+        wallet,
+        handleConfirmation,
+        appendNewTxHash
       );
-    else setTxDetails(await lockTokensTx(data.FromAmount, lockValue, wallet));
+    else
+      await lockTokensTx(data.FromAmount, lockValue, wallet, appendNewTxHash);
 
     setOpenTxDetailsDialog(true);
 
@@ -116,8 +120,6 @@ const Lock = () => {
       wallet.reset();
     }
   }, [currentChainId]);
-
-  console.log(txDetails);
 
   return (
     <Layout>
@@ -227,10 +229,13 @@ const Lock = () => {
         </FormProvider>
       </Container>
 
-      <TxDetailsDialog
-        show={openTxDetailsDialog}
-        onHide={() => setOpenTxDetailsDialog(false)}
-      />
+      {hashes.length >= 1 && (
+        <TxDetailsDialog
+          show={openTxDetailsDialog}
+          hashes={hashes}
+          onHide={() => setOpenTxDetailsDialog(false)}
+        />
+      )}
       <WrongChainModal
         show={openWrongChainModal}
         currentChainId={currentChainId}

@@ -66,7 +66,7 @@ const convertPTokensTx = async (amount, wallet) => {
   return false;
 };
 
-const lockTokensTx = async (amount, time, wallet) => {
+const lockTokensTx = async (amount, time, wallet, appendNewTxHash) => {
   const amountParsed = ethers.utils.parseEther(amount).toString();
   const d = new Date();
   d.setDate(d.getDate() + time);
@@ -85,16 +85,26 @@ const lockTokensTx = async (amount, time, wallet) => {
       provider.getSigner()
     );
 
-    await erc20.approve(hiIQAddress, amountParsed);
+    const approveResult = await erc20.approve(hiIQAddress, amountParsed);
+    appendNewTxHash(approveResult.hash);
     const result = await hiIQ.create_lock(amountParsed, String(timeParsed), {
       gasLimit: 700000
     });
 
+    appendNewTxHash(result.hash);
+
     return true;
   }
+
+  return false;
 };
 
-const increaseAmount = async (amount, wallet, handleConfirmation) => {
+const increaseAmount = async (
+  amount,
+  wallet,
+  handleConfirmation,
+  appendNewTxHash
+) => {
   const amountParsed = ethers.utils.parseEther(amount).toString();
 
   if (wallet.status === "connected") {
@@ -110,10 +120,14 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
       provider.getSigner()
     );
 
-    await erc20.approve(hiIQAddress, amountParsed);
+    const approveResult = await erc20.approve(hiIQAddress, amountParsed);
+    appendNewTxHash(approveResult.hash);
+
     const result = await hiIQ.increase_amount(amountParsed, {
       gasLimit: 700000
     });
+
+    appendNewTxHash(result.hash);
 
     provider
       .waitForTransaction(result.hash)
@@ -122,6 +136,8 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
 
     return result;
   }
+
+  return false;
 };
 
 export {

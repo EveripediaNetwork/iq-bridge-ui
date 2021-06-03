@@ -1,31 +1,52 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Alert, ListGroup } from "react-bootstrap";
+import { Search } from "react-bootstrap-icons";
+import { useTranslation } from "react-i18next";
 
-const TxDetailsDialog = ({ hash, from, to, ...props }) => {
+import { ethBasedExplorerUrl } from "../../config";
+
+const TxDetailsDialog = ({ hashes, ...props }) => {
+  const { t } = useTranslation();
+
+  const chunkString = stringToChunk =>
+    `${stringToChunk.match(/.{1,20}/g)[0]}...`;
+
   return (
     <Modal {...props} size="sm" centered>
       <Modal.Header closeButton className="px-3 py-2">
         <Modal.Title className="font-weight-light">
-          Transaction details
+          {t("transactions")}
         </Modal.Title>
       </Modal.Header>
 
-      <Modal.Body>
-        <div className="d-flex flex-column justify-content-start">
-          <p>From: {from}</p>
-          <p>To: {to}</p>
-        </div>
-        <div className="d-flex flex-row justify-content-center">
-          <Button variant="link">
-            <a
-              target="_blank"
-              href={`https://goerli.etherscan.io/tx/${hash}`}
-              rel="noopener noreferrer"
+      <Modal.Body className="pb-0">
+        <ListGroup
+          style={{ maxWidth: 250 }}
+          className="d-flex mx-auto flex-column justify-content-start"
+        >
+          {hashes.map(hash => (
+            <ListGroup.Item
+              key={hash}
+              className="d-flex flex-row justify-content-center"
             >
-              View on explorer
-            </a>
-          </Button>
+              <p className="m-0">{chunkString(hash)}</p>
+              <Button size="sm" className="pt-0 ml-1" variant="light">
+                <a
+                  target="_blank"
+                  href={`${ethBasedExplorerUrl}tx/${hash}`}
+                  rel="noopener noreferrer"
+                >
+                  <Search />
+                </a>
+              </Button>
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+        <div className="d-flex flex-row mt-1 justify-content-center">
+          <Alert variant="light" className="p-0 font-italic text-center">
+            {t("txAlert")}
+          </Alert>
         </div>
       </Modal.Body>
     </Modal>
@@ -33,15 +54,7 @@ const TxDetailsDialog = ({ hash, from, to, ...props }) => {
 };
 
 TxDetailsDialog.propTypes = {
-  hash: PropTypes.string.isRequired,
-  from: PropTypes.string.isRequired,
-  to: PropTypes.string.isRequired
-};
-
-TxDetailsDialog.defaultProps = {
-  hash: "0x8827c2d6b21884b93884c8c5c3cced052f2dc1e5cc94390352690d3578bbd7bb",
-  from: "0xAe65930180ef4d86dbD1844275433E9e1d6311ED",
-  to: "0xC03bCACC5377b7cc6634537650A7a1D14711c1A3"
+  hashes: PropTypes.array.isRequired
 };
 
 export default TxDetailsDialog;
