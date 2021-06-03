@@ -146,6 +146,8 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
   }, [authContext, wallet, token]);
 
   const handleTriggerFillInput = () => {
+    if (!isValidInput) setIsValidInput(true);
+
     swapRef.current.value = balToken;
     setFilled(swapRef.current.value);
   };
@@ -154,7 +156,7 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
     let { value } = event.target;
     value = Number(value);
 
-    if (value < 0 || value > balToken || Number.isNaN(value)) {
+    if (Number.isNaN(value) || value < 0 || value > balToken) {
       setIsValidInput(false);
       setFilled(undefined);
       return;
