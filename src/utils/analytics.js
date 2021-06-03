@@ -1,7 +1,7 @@
 // if changes config, change it on index.html too
 function init() {
   window.gtag("js", new Date());
-  window.gtag("config", "G-XXXXXX"); // TODO: change
+  window.gtag("config", "G-930GNK8YNW");
 }
 
 function sendEvent(action, data) {
