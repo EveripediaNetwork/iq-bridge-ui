@@ -86,13 +86,12 @@ const lockTokensTx = async (amount, time, wallet) => {
     );
 
     await erc20.approve(hiIQAddress, amountParsed);
-    await hiIQ.create_lock(amountParsed, String(timeParsed), {
+    const result = await hiIQ.create_lock(amountParsed, String(timeParsed), {
       gasLimit: 700000
     });
 
     return true;
   }
-  return false;
 };
 
 const increaseAmount = async (amount, wallet, handleConfirmation) => {
@@ -120,6 +119,8 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
       .waitForTransaction(result.hash)
       .then(() => handleConfirmation("success"))
       .catch(err => handleConfirmation(err));
+
+    return result;
   }
 };
 
