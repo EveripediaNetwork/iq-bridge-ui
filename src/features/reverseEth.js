@@ -91,6 +91,7 @@ const ReverseEth = () => {
                     <AddressContainer
                       title="your_eos_address"
                       placeholder="eos_account"
+                      pattern="^[a-z0-9.]{1,12}$"
                     />
                     <br />
                     <Button

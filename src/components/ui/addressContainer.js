@@ -37,6 +37,10 @@ const SwapTokenInput = styled(Form.Control)`
     box-shadow: none !important;
   }
 
+  :invalid {
+    border: red solid 1px !important;
+  }
+
   @media (max-width: 768px) {
     font-size: 25px !important;
   }
@@ -44,7 +48,8 @@ const SwapTokenInput = styled(Form.Control)`
 
 const AddressContainer = ({
   title = "your_eth_address",
-  placeholder = "0x0"
+  placeholder = "0x0",
+  pattern = ""
 }) => {
   const { t } = useTranslation();
   const { register } = useFormContext();
@@ -55,6 +60,7 @@ const AddressContainer = ({
       <SwapTokenContainer>
         <SwapTokenInputContainer>
           <SwapTokenInput
+            pattern={pattern}
             autoComplete="off"
             name="address"
             placeholder={placeholder}
@@ -71,7 +77,8 @@ const AddressContainer = ({
 
 AddressContainer.propTypes = {
   title: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired
+  placeholder: PropTypes.string.isRequired,
+  pattern: PropTypes.string.isRequired
 };
 
 export default AddressContainer;
