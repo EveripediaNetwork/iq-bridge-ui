@@ -1,4 +1,4 @@
-import React, { memo, useContext, useEffect, useState } from "react";
+import React, { memo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
@@ -11,10 +11,7 @@ import SwapContainer from "../components/ui/swapContainer";
 import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
 import { reverseIQtoEOSTx } from "../utils/EthDataProvider/EthDataProvider";
-import { ChainIdContext } from "../context/chainIdProvider/chainIdContext";
-import { ethChainId } from "../config";
 import AddressContainer from "../components/ui/addressContainer";
-import TxSuccessAlert from "../components/ui/txSuccessAlert";
 
 // TODO: this is 3-4 times already, time to extract
 const IconWrapper = styled(Button)`
@@ -30,10 +27,9 @@ const IconWrapper = styled(Button)`
 
 const ReverseEth = () => {
   const { t } = useTranslation();
-  const { currentChainId, setCurrentChainId } = useContext(ChainIdContext);
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
-  const [txData, setTxData] = useState("");
+  const [txDone, setTxDone] = useState(false);
   const [token1, setToken1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "IQ",
@@ -45,20 +41,9 @@ const ReverseEth = () => {
     if (!wallet.account) {
       return;
     }
-    const result = await reverseIQtoEOSTx(
-      data.FromAmount,
-      wallet,
-      data.address
-    );
-    setTxData(result.transactionId);
+    await reverseIQtoEOSTx(data.FromAmount, wallet, data.address);
+    setTxDone(true);
   };
-
-  useEffect(() => {
-    if (!currentChainId) {
-      wallet.reset();
-      setCurrentChainId(ethChainId);
-    }
-  }, [currentChainId]);
 
   return (
     <Layout>
@@ -76,13 +61,11 @@ const ReverseEth = () => {
               <Card className="mx-auto shadow-sm">
                 <Card.Body>
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
-                    {currentChainId === ethChainId && (
-                      <SwapContainer
-                        token={token1}
-                        setToken={setToken1}
-                        header="From"
-                      />
-                    )}
+                    <SwapContainer
+                      token={token1}
+                      setToken={setToken1}
+                      header="From"
+                    />
                     <div className="d-flex justify-content-center">
                       <IconWrapper bsPrefix="switch" onClick={() => {}}>
                         <ArrowDownShort />
@@ -109,10 +92,10 @@ const ReverseEth = () => {
               </Card>
             </Col>
           </Row>
-          {wallet.account && txData !== "" && (
+          {wallet.account && txDone && (
             <Row>
               <Col>
-                <TxSuccessAlert txId={txData} />
+                <InfoAlert text="Transactions broadcasted" />
               </Col>
             </Row>
           )}

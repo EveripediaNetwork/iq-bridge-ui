@@ -98,7 +98,7 @@ const Home = () => {
           {authContext.activeUser && txData !== "" && (
             <Row>
               <Col>
-                <TxSuccessAlert txId={txData} />
+                <TxSuccessAlert txId={txData} step2 />
               </Col>
             </Row>
           )}
