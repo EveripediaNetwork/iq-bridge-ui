@@ -104,6 +104,9 @@ const Layout = ({ children }) => {
             <Nav.Link href="https://learn.everipedia.org/">
               {t("LEARN")}
             </Nav.Link>
+            <Nav.Link href="https://snapshot.everipedia.com/">
+              {t("GOVERNANCE")}
+            </Nav.Link>
           </Nav>
           <LanguageSelector className="pr-4" />
           <StyledButtonsRow xs={4} sm={4}>
