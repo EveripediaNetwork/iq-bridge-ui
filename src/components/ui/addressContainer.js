@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Form } from "react-bootstrap";
 import styled from "styled-components";
 import { useFormContext } from "react-hook-form";
@@ -37,10 +37,6 @@ const SwapTokenInput = styled(Form.Control)`
     box-shadow: none !important;
   }
 
-  :invalid {
-    border: red solid 1px !important;
-  }
-
   @media (max-width: 768px) {
     font-size: 25px !important;
   }
@@ -54,15 +50,26 @@ const AddressContainer = ({
   const { t } = useTranslation();
   const { register } = useFormContext();
   const swapRef = useRef();
+  const [isInvalid, setInvalid] = useState(false);
+
+  const handleOnInputChange = event => {
+    const { value } = event.target;
+    swapRef.current.value = value;
+    const result = new RegExp(pattern).test(value);
+    setInvalid(!result);
+  };
+
   return (
     <SwapContainerWrapper>
       <SwapTokenHeader className="text-capitalize">{t(title)}</SwapTokenHeader>
       <SwapTokenContainer>
         <SwapTokenInputContainer>
           <SwapTokenInput
+            isInvalid={isInvalid}
             pattern={pattern}
             autoComplete="off"
             name="address"
+            onChange={handleOnInputChange}
             placeholder={placeholder}
             ref={e => {
               register(e, { required: true });
