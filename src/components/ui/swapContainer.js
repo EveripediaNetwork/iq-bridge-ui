@@ -30,7 +30,7 @@ const SwapTokenHeader = styled.div`
   flex-direction: row;
 `;
 
-const SwapTokenInput = styled.input`
+const SwapTokenInput = styled(Form.Control)`
   border: 0px !important;
   padding: 5px !important;
   font-size: 30px !important;
@@ -116,6 +116,8 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
   const authContext = useContext(UALContext);
   const wallet = useWallet();
   const [balToken, setBalance] = useState("0");
+  const [isValidInput, setIsValidInput] = useState();
+
   useEffect(() => {
     (async () => {
       if (
@@ -124,7 +126,7 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
         token.name === "IQ"
       ) {
         const balance = await getUserTokenBalance(authContext);
-        setBalance(balance.toString().replace(" IQ", ""));
+        if (balance) setBalance(balance.toString().replace(" IQ", ""));
       } else if (
         token.chain === "Ethereum" &&
         wallet.account &&
@@ -144,15 +146,26 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
   }, [authContext, wallet, token]);
 
   const handleTriggerFillInput = () => {
+    if (!isValidInput) setIsValidInput(true);
+
     swapRef.current.value = balToken;
     setFilled(swapRef.current.value);
   };
 
   const handleOnInputChange = event => {
-    const { value } = event.target;
-    // const { min, max } = event.target;
-    // value = Math.max(Number(min), Math.min(Number(max), Number(value)));
-    swapRef.current.value = value;
+    let { value } = event.target;
+    value = Number(value);
+
+    if (Number.isNaN(value) || value < 0 || value > balToken) {
+      setIsValidInput(false);
+      setFilled(undefined);
+      return;
+    }
+
+    setIsValidInput(true);
+
+    if (value === 0) return;
+
     setFilled(value);
   };
 
@@ -175,6 +188,7 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
           <SwapTokenInput
             type="text"
             min={0}
+            isInvalid={isValidInput === false}
             max={balToken}
             disabled={inputDisabled(token.chain, wallet, authContext)}
             name={`${header}Amount`}
