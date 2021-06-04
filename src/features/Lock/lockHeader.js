@@ -24,9 +24,7 @@ const LockHeader = ({
                 {!updatingBalance ? (
                   <>{Number(currentHiIQ).toFixed(2)} hiIQ</>
                 ) : (
-                  <div className="w-75 d-flex flex-column text-center justify-content-center">
-                    {t("updating_balance")}
-                  </div>
+                  <>{t("updating_balance")}</>
                 )}
               </h3>
               <Button
