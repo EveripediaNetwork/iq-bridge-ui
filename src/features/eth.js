@@ -6,6 +6,7 @@ import { ArrowDownShort } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
 
+import TxDetailsDialog from "../components/ui/txDetailsDialog";
 import Layout from "../components/layouts/layout";
 import SwapContainer from "../components/ui/swapContainer";
 import CardTitle from "../components/ui/cardTitle";
@@ -31,6 +32,8 @@ const Eth = () => {
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
   const [txDone, setTxDone] = useState(false);
+  const [openTxDetailsDialog, setOpenTxDetailsDialog] = useState(true);
+  const [hashes, setHashes] = useState([]);
   const [token1, setToken1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "pIQ",
@@ -38,14 +41,21 @@ const Eth = () => {
     chain: "Ethereum"
   });
 
+  const appendNewTxHash = txHash => setHashes(prev => prev.concat(txHash));
+
   const onSubmit = async data => {
     if (!wallet.account) {
       return;
     }
 
-    await convertPTokensTx(data.FromAmount, wallet);
+    await convertPTokensTx(data.FromAmount, wallet, appendNewTxHash);
 
     setTxDone(true);
+  };
+
+  const handleOnDialogHide = () => {
+    setOpenTxDetailsDialog(false);
+    setHashes([]);
   };
 
   useEffect(() => {
@@ -99,6 +109,13 @@ const Eth = () => {
               </Card>
             </Col>
           </Row>
+          {hashes.length >= 1 && (
+            <TxDetailsDialog
+              show={openTxDetailsDialog}
+              hashes={hashes}
+              onHide={handleOnDialogHide}
+            />
+          )}
           {wallet.account && txDone && (
             <Row>
               <Col>

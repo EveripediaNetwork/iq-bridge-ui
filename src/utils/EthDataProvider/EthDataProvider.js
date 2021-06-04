@@ -45,7 +45,7 @@ const getTokensUserBalanceLocked = async wallet => {
   return 0;
 };
 
-const convertPTokensTx = async (amount, wallet) => {
+const convertPTokensTx = async (amount, wallet, appendNewTxHash) => {
   const amountParsed = ethers.utils.parseEther(amount).toString();
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
@@ -59,8 +59,12 @@ const convertPTokensTx = async (amount, wallet) => {
       minterAbi,
       provider.getSigner()
     );
-    await erc20.approve(pMinterAddress, amountParsed);
-    await pMinter.mint(amountParsed, { gasLimit: 125000 });
+    const approveResult = await erc20.approve(pMinterAddress, amountParsed);
+    appendNewTxHash(approveResult.hash);
+
+    const result = await pMinter.mint(amountParsed, { gasLimit: 125000 });
+    appendNewTxHash(result.hash);
+
     return true;
   }
   return false;
