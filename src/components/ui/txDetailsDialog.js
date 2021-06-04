@@ -54,7 +54,7 @@ const TxDetailsDialog = ({ hashes, ...props }) => {
 };
 
 TxDetailsDialog.propTypes = {
-  hashes: PropTypes.array.isRequired
+  hashes: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
 export default TxDetailsDialog;

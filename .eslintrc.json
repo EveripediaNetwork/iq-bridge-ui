@@ -26,7 +26,6 @@
     ],
     "react/jsx-props-no-spreading": ["off"],
     "react/jsx-one-expression-per-line": "off",
-    "import/prefer-default-export": "off",
-    "react/forbid-prop-types": "off"
+    "import/prefer-default-export": "off"
   }
 }
