@@ -41,14 +41,12 @@ const Eth = () => {
     chain: "Ethereum"
   });
 
-  const appendNewTxHash = txHash => setHashes(prev => prev.concat(txHash));
-
   const onSubmit = async data => {
     if (!wallet.account) {
       return;
     }
 
-    await convertPTokensTx(data.FromAmount, wallet, appendNewTxHash);
+    setHashes(await convertPTokensTx(data.FromAmount, wallet));
 
     setTxDone(true);
   };

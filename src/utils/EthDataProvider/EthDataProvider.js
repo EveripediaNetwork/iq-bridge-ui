@@ -45,7 +45,7 @@ const getTokensUserBalanceLocked = async wallet => {
   return 0;
 };
 
-const convertPTokensTx = async (amount, wallet, appendNewTxHash) => {
+const convertPTokensTx = async (amount, wallet) => {
   const amountParsed = ethers.utils.parseEther(amount).toString();
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
@@ -59,18 +59,19 @@ const convertPTokensTx = async (amount, wallet, appendNewTxHash) => {
       minterAbi,
       provider.getSigner()
     );
+    const hashes = [];
     const approveResult = await erc20.approve(pMinterAddress, amountParsed);
-    appendNewTxHash(approveResult.hash);
+    hashes.push(approveResult.hash);
 
     const result = await pMinter.mint(amountParsed, { gasLimit: 125000 });
-    appendNewTxHash(result.hash);
+    hashes.push(result.hash);
 
-    return true;
+    return hashes;
   }
   return false;
 };
 
-const lockTokensTx = async (amount, time, wallet, appendNewTxHash) => {
+const lockTokensTx = async (amount, time, wallet) => {
   const amountParsed = ethers.utils.parseEther(amount).toString();
   const d = new Date();
   d.setDate(d.getDate() + time);
@@ -89,26 +90,23 @@ const lockTokensTx = async (amount, time, wallet, appendNewTxHash) => {
       provider.getSigner()
     );
 
+    const hashes = [];
     const approveResult = await erc20.approve(hiIQAddress, amountParsed);
-    appendNewTxHash(approveResult.hash);
+    hashes.push(approveResult.hash);
+
     const result = await hiIQ.create_lock(amountParsed, String(timeParsed), {
       gasLimit: 700000
     });
 
-    appendNewTxHash(result.hash);
+    hashes.push(result.hash);
 
-    return true;
+    return hashes;
   }
 
   return false;
 };
 
-const increaseAmount = async (
-  amount,
-  wallet,
-  handleConfirmation,
-  appendNewTxHash
-) => {
+const increaseAmount = async (amount, wallet, handleConfirmation) => {
   const amountParsed = ethers.utils.parseEther(amount).toString();
 
   if (wallet.status === "connected") {
@@ -124,14 +122,16 @@ const increaseAmount = async (
       provider.getSigner()
     );
 
+    const hashes = [];
+
     const approveResult = await erc20.approve(hiIQAddress, amountParsed);
-    appendNewTxHash(approveResult.hash);
+    hashes.push(approveResult.hash);
 
     const result = await hiIQ.increase_amount(amountParsed, {
       gasLimit: 700000
     });
 
-    appendNewTxHash(result.hash);
+    hashes.push(result.hash);
 
     provider
       .waitForTransaction(result.hash)

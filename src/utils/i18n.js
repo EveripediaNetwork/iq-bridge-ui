@@ -89,16 +89,16 @@ export const resources = {
   },
   ko: {
     translation: {
-// layout
-      eos_wallet: "이오스 지갑" ,
-      ethereum_wallet: "이더리움 지갑" ,
+      // layout
+      eos_wallet: "이오스 지갑",
+      ethereum_wallet: "이더리움 지갑",
       swap: "스왑",
       lock: "락업",
       pool: "풀",
       convert: "전환",
       logout: "로그아웃",
       connect_wallet: "지갑에 연결",
-      // pool page 
+      // pool page
       // convert page
       tokens: "토큰",
       liquidity: "유동성",
@@ -116,27 +116,28 @@ export const resources = {
       select_token: "토큰 선택",
       price: "가격",
       price_impact: "가격 영향",
-      liquidity_fee : "유동성 제공자 수수료",
+      liquidity_fee: "유동성 제공자 수수료",
       min_received: "최소 수령액",
       max_profit: "최대 수익",
-      // lock page 
+      // lock page
       value_restriction: "입력 값은 1에서 1460 사이여야 합니다.",
       lock_period: "락업 기간(일)",
-      lock_description: "IQ를 오래 잠글수록 더 많은 hiIQ를 받게 됩니다. 더 많은 IQ를 잠그거나 잠금 기간을 연장하여 추가 hiIQ를 얻을 수도 있습니다. hiIQ는 잠금 기간 동안 서서히 감소하여 결국 IQ랑 1:1에 도달합니다.",
+      lock_description:
+        "IQ를 오래 잠글수록 더 많은 hiIQ를 받게 됩니다. 더 많은 IQ를 잠그거나 잠금 기간을 연장하여 추가 hiIQ를 얻을 수도 있습니다. hiIQ는 잠금 기간 동안 서서히 감소하여 결국 IQ랑 1:1에 도달합니다.",
       locked: "락업된 개수",
       login_info_eos: "이오스 지갑에 로그인하여 토큰을 브리지합니다.",
       login_info_eth: "이더리움 지갑에 로그인하여 토큰을 스왑하십시오.",
       login_info_eth_locking: "이더리움 지갑에 로그인하여 토큰을 락업하십시오.",
       time_locked: "락업 기간(일)",
       current_hiiq_balance: "현재 hiIQ 잔액",
-      new_hiiq_balance: "새로운 hiIQ 잔액" ,
+      new_hiiq_balance: "새로운 hiIQ 잔액",
       updating_balance: "잔액 업데이트중...",
       no_hiiq_tokens_locked: "지금까지 락업된 hiIQ 토큰이 없습니다.",
       Loading: "Loading",
       disconnected: "연결 끊김",
       // dialog tx
       confirming_tx: "거래 확인 중...",
-      confirmed_tx : "거래확정!",
+      confirmed_tx: "거래확정!",
       something_wrong: "문제가 발생했습니다.",
       current_supply: "현재 공급량",
       pool_shares: "받을 풀 셰어",
@@ -144,10 +145,9 @@ export const resources = {
       tokens_add_liquidity: "유동성을 추가할 토큰",
       add_liquidity: "유동성 추가",
       remove_liquidity: "유동성 제거",
-      amount_of_liquidity_to_remove: "Amount of liquidity to remove",
       transactions: "업무",
       txAlert: "네트워크 속도에 따라 거래 세부 정보가 제공됩니다.",
-      amount_of_liquidity_to_remove : "제거할 유동성 개수",
+      amount_of_liquidity_to_remove: "제거할 유동성 개수",
       // settings
       settings: "설정",
       transaction_settings: "거래 설정",
@@ -163,7 +163,7 @@ export const resources = {
       ko: "한국어",
       zh: "中文",
       // other
-      select_wallet: "지갑 선택" ,
+      select_wallet: "지갑 선택",
       transaction_executed: "거래 실행 완료",
       go_to: "이동",
       step: "2 단계",
@@ -229,7 +229,6 @@ export const resources = {
       tokens_add_liquidity: "添加流动性代币",
       add_liquidity: "添加流动性",
       remove_liquidity: "移除流动性",
-      amount_of_liquidity_to_remove: "Amount of liquidity to remove",
       transactions: "交易",
       txAlert: "交易详情将取决于网络的速度",
       amount_of_liquidity_to_remove: "移除流动性数量",
@@ -237,8 +236,7 @@ export const resources = {
       settings: "设置",
       transaction_settings: "交易设置",
       slippage_tolerance: "最大滑点",
-      settings_statement:
-        "*如果执行时价格变化超过设定的量，交易将停止",
+      settings_statement: "*如果执行时价格变化超过设定的量，交易将停止",
       confirm: "确认",
       // language
       language: "语言e",

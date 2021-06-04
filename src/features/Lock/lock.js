@@ -76,20 +76,14 @@ const Lock = () => {
     setUpdatingBalance(false);
   };
 
-  const appendNewTxHash = txHash => setHashes(prev => prev.concat(txHash));
-
   const onSubmit = async data => {
     if (!wallet.account) return;
 
     if (currentHiIQ !== 0)
-      await increaseAmount(
-        data.FromAmount,
-        wallet,
-        handleConfirmation,
-        appendNewTxHash
+      setHashes(
+        await increaseAmount(data.FromAmount, wallet, handleConfirmation)
       );
-    else
-      await lockTokensTx(data.FromAmount, lockValue, wallet, appendNewTxHash);
+    else setHashes(await lockTokensTx(data.FromAmount, lockValue, wallet));
 
     setOpenTxDetailsDialog(true);
 
