@@ -60,9 +60,14 @@ const convertPTokensTx = async (amount, wallet) => {
       minterAbi,
       provider.getSigner()
     );
-    await erc20.approve(pMinterAddress, amountParsed);
-    await pMinter.mint(amountParsed, { gasLimit: 125000 });
-    return true;
+    const hashes = [];
+    const approveResult = await erc20.approve(pMinterAddress, amountParsed);
+    hashes.push(approveResult.hash);
+
+    const result = await pMinter.mint(amountParsed, { gasLimit: 125000 });
+    hashes.push(result.hash);
+
+    return hashes;
   }
   return false;
 };
@@ -115,13 +120,19 @@ const lockTokensTx = async (amount, time, wallet) => {
       provider.getSigner()
     );
 
-    await erc20.approve(hiIQAddress, amountParsed);
-    await hiIQ.create_lock(amountParsed, String(timeParsed), {
+    const hashes = [];
+    const approveResult = await erc20.approve(hiIQAddress, amountParsed);
+    hashes.push(approveResult.hash);
+
+    const result = await hiIQ.create_lock(amountParsed, String(timeParsed), {
       gasLimit: 700000
     });
 
-    return true;
+    hashes.push(result.hash);
+
+    return hashes;
   }
+
   return false;
 };
 
@@ -141,16 +152,26 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
       provider.getSigner()
     );
 
-    await erc20.approve(hiIQAddress, amountParsed);
+    const hashes = [];
+
+    const approveResult = await erc20.approve(hiIQAddress, amountParsed);
+    hashes.push(approveResult.hash);
+
     const result = await hiIQ.increase_amount(amountParsed, {
       gasLimit: 700000
     });
+
+    hashes.push(result.hash);
 
     provider
       .waitForTransaction(result.hash)
       .then(() => handleConfirmation("success"))
       .catch(err => handleConfirmation(err));
+
+    return result;
   }
+
+  return false;
 };
 
 export {

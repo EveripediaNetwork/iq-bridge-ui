@@ -63,6 +63,9 @@ export const resources = {
       add_liquidity: "add liquidity",
       remove_liquidity: "remove liquidity",
       amount_of_liquidity_to_remove: "Amount of liquidity to remove",
+      transactions: "Transactions",
+      txAlert:
+        "Transaction details will be available depeding on how fast the network is",
       // settings
       settings: "Settings",
       transaction_settings: "Transaction Settings",
@@ -144,6 +147,8 @@ export const resources = {
       tokens_add_liquidity: "유동성을 추가할 토큰",
       add_liquidity: "유동성 추가",
       remove_liquidity: "유동성 제거",
+      transactions: "업무",
+      txAlert: "네트워크 속도에 따라 거래 세부 정보가 제공됩니다.",
       amount_of_liquidity_to_remove: "제거할 유동성 개수",
       // settings
       settings: "설정",
@@ -227,6 +232,8 @@ export const resources = {
       tokens_add_liquidity: "添加流动性代币",
       add_liquidity: "添加流动性",
       remove_liquidity: "移除流动性",
+      transactions: "交易",
+      txAlert: "交易详情将取决于网络的速度",
       amount_of_liquidity_to_remove: "移除流动性数量",
       // settings
       settings: "设置",
