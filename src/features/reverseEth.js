@@ -1,19 +1,19 @@
-import React, { useContext, useState, memo } from "react";
+import React, { memo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { ArrowDownShort } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
+import { useWallet } from "use-wallet";
 
-import { WallerProviderContext as UALContext } from "../context/walletProvider/walletProviderFacade";
 import Layout from "../components/layouts/layout";
 import SwapContainer from "../components/ui/swapContainer";
 import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
+import { reverseIQtoEOSTx } from "../utils/EthDataProvider/EthDataProvider";
 import AddressContainer from "../components/ui/addressContainer";
-import { convertTokensTx } from "../utils/EosDataProvider";
-import TxSuccessAlert from "../components/ui/txSuccessAlert";
 
+// TODO: this is 3-4 times already, time to extract
 const IconWrapper = styled(Button)`
   margin: 15px;
   color: rgb(86, 90, 105);
@@ -25,28 +25,24 @@ const IconWrapper = styled(Button)`
   background: none;
 `;
 
-const Home = () => {
+const ReverseEth = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
-  const authContext = useContext(UALContext);
-  const [filled, setFilled] = useState();
-  const [txData, setTxData] = useState("");
+  const wallet = useWallet();
+  const [txDone, setTxDone] = useState(false);
   const [token1, setToken1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "IQ",
     precision: 3,
-    chain: "EOS"
+    chain: "Ethereum"
   });
 
   const onSubmit = async data => {
-    if (!authContext.activeUser) return;
-
-    const result = await convertTokensTx(
-      `${parseFloat(data.FromAmount).toFixed(3)} ${data.FromToken}`,
-      data.address,
-      authContext
-    );
-    setTxData(result.transactionId);
+    if (!wallet.account) {
+      return;
+    }
+    await reverseIQtoEOSTx(data.FromAmount, wallet, data.address);
+    setTxDone(true);
   };
 
   return (
@@ -68,46 +64,45 @@ const Home = () => {
                     <SwapContainer
                       token={token1}
                       setToken={setToken1}
-                      setFilled={setFilled}
                       header="From"
                     />
                     <div className="d-flex justify-content-center">
-                      <IconWrapper bsPrefix="switch">
+                      <IconWrapper bsPrefix="switch" onClick={() => {}}>
                         <ArrowDownShort />
                       </IconWrapper>
                     </div>
                     <AddressContainer
-                      placeholder="0x0"
-                      title="your_eth_address"
-                      pattern="^0x[a-fA-F0-9]{40}$"
+                      title="your_eos_address"
+                      placeholder="eos_account"
+                      pattern="^[a-z0-9.]{1,12}$"
                     />
                     <br />
                     <Button
-                      disabled={!authContext.activeUser || !filled}
+                      disabled={!wallet.account}
                       variant="primary"
                       className="text-capitalize"
                       type="submit"
                       size="lg"
                       block
                     >
-                      {t("swap")}
+                      {t("Swap IQ to EOS")}
                     </Button>
                   </Form>
                 </Card.Body>
               </Card>
             </Col>
           </Row>
-          {authContext.activeUser && txData !== "" && (
+          {wallet.account && txDone && (
             <Row>
               <Col>
-                <TxSuccessAlert txId={txData} />
+                <InfoAlert text="Transactions broadcasted" />
               </Col>
             </Row>
           )}
-          {!authContext.activeUser && (
+          {!wallet.account && (
             <Row>
               <Col>
-                <InfoAlert text={t("login_info_eos")} />
+                <InfoAlert text={t("login_info_eth")} />
               </Col>
             </Row>
           )}
@@ -117,4 +112,4 @@ const Home = () => {
   );
 };
 
-export default memo(Home);
+export default memo(ReverseEth);

@@ -15,6 +15,7 @@ import { ethChainId } from "./config";
 
 const HomePage = lazy(() => import("./features/home"));
 const EthPage = lazy(() => import("./features/eth"));
+const ReverseEthPage = lazy(() => import("./features/reverseEth"));
 const LockPage = lazy(() => import("./features/Lock/lock"));
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
             connectors={{
               fortmatic: { apiKey: "" },
               portis: { dAppId: "" },
-              walletconnect: { rpcUrl: process.env.REACT_APP_ETH_URL },
+              walletconnect: { rpcUrl: process.env.REACT_APP_ETH_URL }, // TODO: move to config & define
               walletlink: { url: process.env.REACT_APP_ETH_URL }
             }}
           >
@@ -55,6 +56,7 @@ const Routes = () => {
       <Route exact path="/" component={HomePage} />
       <Route exact path="/eth" component={EthPage} />
       <Route exact path="/lock" component={LockPage} />
+      <Route exact path="/reverseEth" component={ReverseEthPage} />
     </Switch>
   );
 };
