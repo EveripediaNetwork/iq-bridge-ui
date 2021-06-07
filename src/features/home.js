@@ -29,6 +29,7 @@ const Home = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const authContext = useContext(UALContext);
+  const [filled, setFilled] = useState();
   const [txData, setTxData] = useState("");
   const [token1, setToken1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
@@ -67,6 +68,7 @@ const Home = () => {
                     <SwapContainer
                       token={token1}
                       setToken={setToken1}
+                      setFilled={setFilled}
                       header="From"
                     />
                     <div className="d-flex justify-content-center">
@@ -81,7 +83,7 @@ const Home = () => {
                     />
                     <br />
                     <Button
-                      disabled={!authContext.activeUser}
+                      disabled={!authContext.activeUser || !filled}
                       variant="primary"
                       className="text-capitalize"
                       type="submit"
