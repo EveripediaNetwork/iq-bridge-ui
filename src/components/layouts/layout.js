@@ -57,7 +57,11 @@ const Layout = ({ children }) => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
             <NavDropdown
-              active={location.pathname === "/" || location.pathname === "/eth"}
+              active={
+                location.pathname === "/" ||
+                location.pathname === "/eth" ||
+                location.pathname === "/reverseEth"
+              }
               title="BRIDGE"
               id="basic-nav-dropdown"
             >
@@ -74,6 +78,13 @@ const Layout = ({ children }) => {
                 to={`/eth${LngUrl}`}
               >
                 pIQ → IQ
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                active={location.pathname === "/reverseEth"}
+                as={Link}
+                to={`/reverseEth${LngUrl}`}
+              >
+                ETH → EOS
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="https://wallet.matic.network/">

@@ -1,8 +1,9 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Form } from "react-bootstrap";
 import styled from "styled-components";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
 
 const SwapContainerWrapper = styled.div`
   border-radius: 15px;
@@ -41,21 +42,35 @@ const SwapTokenInput = styled(Form.Control)`
   }
 `;
 
-const AddressContainer = () => {
+const AddressContainer = ({
+  title = "your_eth_address",
+  placeholder = "0x0",
+  pattern = ""
+}) => {
   const { t } = useTranslation();
   const { register } = useFormContext();
   const swapRef = useRef();
+  const [isInvalid, setInvalid] = useState(false);
+
+  const handleOnInputChange = event => {
+    const { value } = event.target;
+    swapRef.current.value = value;
+    const result = new RegExp(pattern).test(value);
+    setInvalid(!result);
+  };
+
   return (
     <SwapContainerWrapper>
-      <SwapTokenHeader className="text-capitalize">
-        {t("your_eth_address")}
-      </SwapTokenHeader>
+      <SwapTokenHeader className="text-capitalize">{t(title)}</SwapTokenHeader>
       <SwapTokenContainer>
         <SwapTokenInputContainer>
           <SwapTokenInput
+            isInvalid={isInvalid}
+            pattern={pattern}
             autoComplete="off"
             name="address"
-            placeholder="0x0"
+            onChange={handleOnInputChange}
+            placeholder={placeholder}
             ref={e => {
               register(e, { required: true });
               swapRef.current = e;
@@ -65,6 +80,12 @@ const AddressContainer = () => {
       </SwapTokenContainer>
     </SwapContainerWrapper>
   );
+};
+
+AddressContainer.propTypes = {
+  title: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  pattern: PropTypes.string.isRequired
 };
 
 export default AddressContainer;
