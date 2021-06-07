@@ -87,7 +87,7 @@ const reverseIQtoEOSTx = async (amount, wallet, eosAccount) => {
       provider.getSigner()
     );
     await erc20.approve(pMinterAddress, amountParsed);
-    await pMinter.burn(amountParsed, { gasLimit: 75000 });
+    await pMinter.burn(amountParsed);
     await pTokens.redeem(amountParsed, eosAccount, { gasLimit: 50000 });
 
     return true;
