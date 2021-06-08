@@ -1,4 +1,4 @@
-import React, { memo, useContext, useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import {
@@ -14,8 +14,6 @@ import { ArrowDownShort, QuestionCircle } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
 
-import { ChainIdContext } from "../../context/chainIdProvider/chainIdContext";
-import { ethChainId } from "../../config";
 import LockPeriod from "./lockPeriod";
 import LockHeader from "./lockHeader";
 import Layout from "../../components/layouts/layout";
@@ -48,7 +46,6 @@ const IconWrapper = styled(Button)`
 
 const Lock = () => {
   const { t } = useTranslation();
-  const { currentChainId, setCurrentChainId } = useContext(ChainIdContext);
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
   const [txDone, setTxDone] = useState(false);
@@ -104,16 +101,9 @@ const Lock = () => {
         setLoadingBalance(false);
       })();
 
-    if (wallet.status === "error" && !wallet.chainId === ethChainId)
+    if (wallet.status === "error" && wallet.account === null)
       setOpenWrongChainModal(true);
   }, [wallet.status]);
-
-  useEffect(() => {
-    if (!currentChainId) {
-      setCurrentChainId(ethChainId);
-      wallet.reset();
-    }
-  }, [currentChainId]);
 
   return (
     <Layout>
@@ -159,14 +149,12 @@ const Lock = () => {
                   </Accordion>
                   <br />
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
-                    {currentChainId === ethChainId && (
-                      <SwapContainer
-                        token={token1}
-                        header="From"
-                        setParentBalance={setBalance}
-                        setFilled={setFilledAmount}
-                      />
-                    )}
+                    <SwapContainer
+                      token={token1}
+                      header="From"
+                      setParentBalance={setBalance}
+                      setFilled={setFilledAmount}
+                    />
                     <div className="d-flex justify-content-center">
                       <IconWrapper bsPrefix="switch" onClick={() => {}}>
                         <ArrowDownShort />
@@ -232,8 +220,6 @@ const Lock = () => {
       )}
       <WrongChainModal
         show={openWrongChainModal}
-        currentChainId={currentChainId}
-        ethChainId={ethChainId}
         onHide={() => setOpenWrongChainModal(false)}
       />
     </Layout>
