@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { UseWalletProvider } from "use-wallet";
 
@@ -10,7 +10,6 @@ import {
   UALProviderSwitch,
   WalletProvider
 } from "./context/walletProvider/walletProviderFacade";
-import { ChainIdContext } from "./context/chainIdProvider/chainIdContext";
 import { ethChainId } from "./config";
 
 const HomePage = lazy(() => import("./features/home"));
@@ -19,31 +18,26 @@ const ReverseEthPage = lazy(() => import("./features/reverseEth"));
 const LockPage = lazy(() => import("./features/Lock/lock"));
 
 function App() {
-  const [currentChainId, setCurrentChainId] = useState(ethChainId);
-  const value = { currentChainId, setCurrentChainId };
-
   return (
     <ErrorBoundary fallback={<Error />}>
       <Suspense fallback={<Loading />}>
-        <ChainIdContext.Provider value={value}>
-          <UseWalletProvider
-            chainId={currentChainId} // 5 GOERLI
-            connectors={{
-              fortmatic: { apiKey: "" },
-              portis: { dAppId: "" },
-              walletconnect: { rpcUrl: process.env.REACT_APP_ETH_URL }, // TODO: move to config & define
-              walletlink: { url: process.env.REACT_APP_ETH_URL }
-            }}
-          >
-            <UALProviderSwitch>
-              <WalletProvider>
-                <Router>
-                  <Routes />
-                </Router>
-              </WalletProvider>
-            </UALProviderSwitch>
-          </UseWalletProvider>
-        </ChainIdContext.Provider>
+        <UseWalletProvider
+          chainId={ethChainId} // 5 GOERLI
+          connectors={{
+            fortmatic: { apiKey: "" },
+            portis: { dAppId: "" },
+            walletconnect: { rpcUrl: process.env.REACT_APP_ETH_URL },
+            walletlink: { url: process.env.REACT_APP_ETH_URL }
+          }}
+        >
+          <UALProviderSwitch>
+            <WalletProvider>
+              <Router>
+                <Routes />
+              </Router>
+            </WalletProvider>
+          </UALProviderSwitch>
+        </UseWalletProvider>
       </Suspense>
     </ErrorBoundary>
   );
