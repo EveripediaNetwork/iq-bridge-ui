@@ -12,11 +12,12 @@ import WalletConnectSvg from "../../static/assets/WalletConnect.svg";
 import TorusSvg from "../../static/assets/Torus.svg";
 
 const StyledWalletCard = styled(Card)`
-  min-width: 200px !important;
-  max-width: 300px;
+  min-width: 150px !important;
+  max-width: 185px;
   text-align: center;
-  min-height: 130px;
-  height: 150px;
+  min-height: 80px;
+  cursor: pointer;
+  height: 100px;
 `;
 
 const StyledWalletSvg = styled(Card.Img)`
@@ -33,22 +34,22 @@ const EthereumWalletModal = ({ ...otherProps }) => {
   return (
     <Modal
       {...otherProps}
-      size="lg"
+      size="md"
       aria-labelledby="login-modal"
       centered
       scrollable
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          {t("select_wallet")}:
+          {t("select_wallet")}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Container>
-          <Row className="justify-content-md-center m-1">
-            <Col sm={5}>
+          <Row className="justify-content-md-center justify-content-center m-1">
+            <Col sm={5} className="p-1">
               <StyledWalletCard
-                className="p-3 shadow-sm mx-auto"
+                className="p-2 shadow-sm mx-auto"
                 key="injected"
                 onClick={() => {
                   activate("injected");
@@ -63,13 +64,12 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                 </div>
                 <Card.Body className="p-1">
                   <Card.Title>MetaMask</Card.Title>
-                  <Card.Text>Connect to your MetaMask Wallet</Card.Text>
                 </Card.Body>
               </StyledWalletCard>
             </Col>
-            <Col sm={5}>
+            <Col sm={5} className="p-1">
               <StyledWalletCard
-                className="p-3 shadow-sm mx-auto"
+                className="p-2 shadow-sm mx-auto"
                 key="portis"
                 onClick={() => {
                   activate("portis");
@@ -84,16 +84,15 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                 </div>
                 <Card.Body className="p-1">
                   <Card.Title>Portis</Card.Title>
-                  <Card.Text>Connect to your Portis Wallet</Card.Text>
                 </Card.Body>
               </StyledWalletCard>
             </Col>
           </Row>
 
-          <Row className="justify-content-md-center m-1">
-            <Col sm={5}>
+          <Row className="justify-content-md-center justify-content-center m-1">
+            <Col sm={5} className="p-1">
               <StyledWalletCard
-                className="p-3 shadow-sm mx-auto"
+                className="p-2 shadow-sm mx-auto"
                 key="frame"
                 action
                 onClick={() => {
@@ -109,13 +108,12 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                 </div>
                 <Card.Body className="p-1">
                   <Card.Title>Frame</Card.Title>
-                  <Card.Text>Connect to your Frame Wallet</Card.Text>
                 </Card.Body>
               </StyledWalletCard>
             </Col>
-            <Col sm={5}>
+            <Col sm={5} className="p-1">
               <StyledWalletCard
-                className="p-3 shadow-sm mx-auto"
+                className="p-2 shadow-sm mx-auto"
                 key="fortmatic"
                 action
                 onClick={() => {
@@ -131,15 +129,14 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                 </div>
                 <Card.Body className="p-1">
                   <Card.Title>Fortmatic</Card.Title>
-                  <Card.Text>Connect with your Fortmatic account</Card.Text>
                 </Card.Body>
               </StyledWalletCard>
             </Col>
           </Row>
-          <Row className="justify-content-md-center m-1">
-            <Col sm={5}>
+          <Row className="justify-content-md-center justify-content-center m-1">
+            <Col sm={5} className="p-1">
               <StyledWalletCard
-                className="p-3 shadow-sm mx-auto"
+                className="p-2 shadow-sm mx-auto"
                 key="walletconnect"
                 action
                 onClick={() => {
@@ -155,13 +152,12 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                 </div>
                 <Card.Body className="p-1">
                   <Card.Title>WalletConnect</Card.Title>
-                  <Card.Text>Scan with WalletConnect to connect</Card.Text>
                 </Card.Body>
               </StyledWalletCard>
             </Col>
-            <Col sm={5}>
+            <Col sm={5} className="p-1">
               <StyledWalletCard
-                className="p-3 shadow-sm mx-auto"
+                className="p-2 shadow-sm mx-auto"
                 key="torus"
                 action
                 onClick={() => {
@@ -177,7 +173,6 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                 </div>
                 <Card.Body className="p-1">
                   <Card.Title>Torus</Card.Title>
-                  <Card.Text>Connect with your Torus account</Card.Text>
                 </Card.Body>
               </StyledWalletCard>
             </Col>

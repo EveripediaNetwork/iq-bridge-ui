@@ -6,7 +6,6 @@ import { ArrowDownShort } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
 
-
 import WrongChainModal from "../components/ui/wrongChainModal";
 import TxDetailsDialog from "../components/ui/txDetailsDialog";
 import Layout from "../components/layouts/layout";
