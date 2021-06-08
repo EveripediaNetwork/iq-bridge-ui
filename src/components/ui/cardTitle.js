@@ -7,17 +7,20 @@ const Title = styled.div`
   font-size: 70px;
 `;
 
-const CardTitle = ({ title, className, icon }) => (
+const CardTitle = ({ title, className = "brain", icon }) => (
   <Title>
     <span title={title} role="img" aria-label={title} className={className}>
       {icon}
     </span>
   </Title>
 );
+CardTitle.defaultProps = {
+  className: "brain"
+};
 
 CardTitle.propTypes = {
   title: PropTypes.string.isRequired,
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
   icon: PropTypes.string.isRequired
 };
 

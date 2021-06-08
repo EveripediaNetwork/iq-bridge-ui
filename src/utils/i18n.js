@@ -85,7 +85,9 @@ export const resources = {
       transaction_executed: "Transaction Executed",
       go_to: "Go to",
       step: "Step 2",
-      error: "Error"
+      error: "Error",
+      // voting
+      voting: "voting"
     }
   },
   ko: {
@@ -169,7 +171,9 @@ export const resources = {
       transaction_executed: "거래 실행 완료",
       go_to: "이동",
       step: "2 단계",
-      error: "오류"
+      error: "오류",
+      // voting
+      voting: "voting"
     }
   },
 
@@ -253,7 +257,9 @@ export const resources = {
       transaction_executed: "交易已执行",
       go_to: "前往",
       step: "步骤 2",
-      error: "错误"
+      error: "错误",
+      // voting
+      voting: "voting"
     }
   }
 };

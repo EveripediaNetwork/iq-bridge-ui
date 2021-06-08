@@ -51,13 +51,7 @@ const ReverseEth = () => {
         <FormProvider {...methods}>
           <Row>
             <Col>
-              <CardTitle
-                title="IQ Bridge"
-                role="img"
-                aria-label="brain"
-                className="brain"
-                icon="🌉"
-              />
+              <CardTitle title="IQ Bridge" aria-label="brain" icon="🌉" />
               <Card className="mx-auto shadow-sm">
                 <Card.Body>
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
