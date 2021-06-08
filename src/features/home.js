@@ -85,7 +85,11 @@ const Home = () => {
                         <ArrowDownShort />
                       </IconWrapper>
                     </div>
-                    <AddressContainer />
+                    <AddressContainer
+                      placeholder="0x0"
+                      title="your_eth_address"
+                      pattern="^0x[a-fA-F0-9]{40}$"
+                    />
                     <br />
                     <Button
                       disabled={!authContext.activeUser || !filled}

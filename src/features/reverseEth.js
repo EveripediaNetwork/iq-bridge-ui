@@ -1,4 +1,4 @@
-import React, { useState, memo, useEffect } from "react";
+import React, { memo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
@@ -6,15 +6,14 @@ import { ArrowDownShort } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
 
-
-import WrongChainModal from "../components/ui/wrongChainModal";
-import TxDetailsDialog from "../components/ui/txDetailsDialog";
 import Layout from "../components/layouts/layout";
 import SwapContainer from "../components/ui/swapContainer";
 import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
-import { convertPTokensTx } from "../utils/EthDataProvider/EthDataProvider";
+import { reverseIQtoEOSTx } from "../utils/EthDataProvider/EthDataProvider";
+import AddressContainer from "../components/ui/addressContainer";
 
+// TODO: this is 3-4 times already, time to extract
 const IconWrapper = styled(Button)`
   margin: 15px;
   color: rgb(86, 90, 105);
@@ -26,17 +25,14 @@ const IconWrapper = styled(Button)`
   background: none;
 `;
 
-const Eth = () => {
+const ReverseEth = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
   const [txDone, setTxDone] = useState(false);
-  const [openWrongChainModal, setOpenWrongChainModal] = useState(false);
-  const [openTxDetailsDialog, setOpenTxDetailsDialog] = useState(true);
-  const [hashes, setHashes] = useState([]);
   const [token1, setToken1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
-    name: "pIQ",
+    name: "IQ",
     precision: 3,
     chain: "Ethereum"
   });
@@ -45,21 +41,9 @@ const Eth = () => {
     if (!wallet.account) {
       return;
     }
-
-    setHashes(await convertPTokensTx(data.FromAmount, wallet));
-
+    await reverseIQtoEOSTx(data.FromAmount, wallet, data.address);
     setTxDone(true);
   };
-
-  const handleOnDialogHide = () => {
-    setOpenTxDetailsDialog(false);
-    setHashes([]);
-  };
-
-  useEffect(() => {
-    if (wallet.status === "error" && wallet.account === null)
-      setOpenWrongChainModal(true);
-  }, [wallet.status]);
 
   return (
     <Layout>
@@ -87,6 +71,11 @@ const Eth = () => {
                         <ArrowDownShort />
                       </IconWrapper>
                     </div>
+                    <AddressContainer
+                      title="your_eos_address"
+                      placeholder="eos_account"
+                      pattern="^[a-z0-9.]{1,12}$"
+                    />
                     <br />
                     <Button
                       disabled={!wallet.account}
@@ -96,24 +85,17 @@ const Eth = () => {
                       size="lg"
                       block
                     >
-                      {t("Swap to IQ ERC20")}
+                      {t("Swap IQ to EOS")}
                     </Button>
                   </Form>
                 </Card.Body>
               </Card>
             </Col>
           </Row>
-          {hashes.length >= 1 && (
-            <TxDetailsDialog
-              show={openTxDetailsDialog}
-              hashes={hashes}
-              onHide={handleOnDialogHide}
-            />
-          )}
           {wallet.account && txDone && (
             <Row>
               <Col>
-                <InfoAlert text="Tx executed" />
+                <InfoAlert text="Transactions broadcasted" />
               </Col>
             </Row>
           )}
@@ -126,12 +108,8 @@ const Eth = () => {
           )}
         </FormProvider>
       </Container>
-      <WrongChainModal
-        show={openWrongChainModal}
-        onHide={() => setOpenWrongChainModal(false)}
-      />
     </Layout>
   );
 };
 
-export default memo(Eth);
+export default memo(ReverseEth);
