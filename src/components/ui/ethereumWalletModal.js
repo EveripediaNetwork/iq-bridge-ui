@@ -1,40 +1,27 @@
 import React from "react";
-import { ListGroup, ListGroupItem, Modal } from "react-bootstrap";
+import { Container, Modal, Row, Col, Card } from "react-bootstrap";
 import styled from "styled-components";
 import { useWallet } from "use-wallet";
 import { useTranslation } from "react-i18next";
 
-const StyledModal = styled(Modal)`
-  div {
-    max-width: 400px;
-    border-radius: 15px;
-    border-bottom: 0px;
-  }
+import MetaMaskSvg from "../../static/assets/MetaMask.svg";
+import PortisSvg from "../../static/assets/portis.svg";
+import FrameSvg from "../../static/assets/Frame.svg";
+import FortmaticSvg from "../../static/assets/Fortmatic.svg";
+import WalletConnectSvg from "../../static/assets/WalletConnect.svg";
+import TorusSvg from "../../static/assets/Torus.svg";
 
-  .modal-title {
-    font-size: 20px;
-    color: #206acb;
-  }
-
-  .modal-body {
-    padding: 1rem !important;
-  }
-
-  .list-group-item {
-    border: 0px;
-  }
+const StyledWalletCard = styled(Card)`
+  min-width: 150px !important;
+  max-width: 185px;
+  text-align: center;
+  min-height: 80px;
+  cursor: pointer;
+  height: 100px;
 `;
 
-const StyledListGroupItem = styled(ListGroupItem)`
-  &&& {
-    border-bottom: 1px solid #f2f2f2;
-    padding-left: 5px;
-  }
-`;
-
-const StyledListGroup = styled(ListGroup)`
-  border: 1px solid #f2f2f2;
-  padding: 0;
+const StyledWalletSvg = styled(Card.Img)`
+  max-width: 45px;
 `;
 
 const EthereumWalletModal = ({ ...otherProps }) => {
@@ -45,25 +32,25 @@ const EthereumWalletModal = ({ ...otherProps }) => {
     wallet.connect(connector);
   };
   return (
-    <StyledModal
+    <Modal
       {...otherProps}
       size="md"
-      aria-labelledby="contained-modal-title-vcenter"
+      aria-labelledby="login-modal"
       centered
       scrollable
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          {t("select_wallet")}:
+          {t("select_wallet")}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="connect">
-          <div className="connect-buttons">
-            <StyledListGroup variant="flush">
-              <StyledListGroupItem
+        <Container>
+          <Row className="justify-content-md-center justify-content-center m-1">
+            <Col sm={5} className="p-1">
+              <StyledWalletCard
+                className="p-2 shadow-sm mx-auto"
                 key="injected"
-                action
                 onClick={() => {
                   activate("injected");
                   localStorage.setItem(
@@ -72,12 +59,18 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                   );
                 }}
               >
-                Metamask
-              </StyledListGroupItem>
-
-              <StyledListGroupItem
+                <div className="d-flex flex-row justify-content-center">
+                  <StyledWalletSvg variant="top" src={MetaMaskSvg} />
+                </div>
+                <Card.Body className="p-1">
+                  <Card.Title>MetaMask</Card.Title>
+                </Card.Body>
+              </StyledWalletCard>
+            </Col>
+            <Col sm={5} className="p-1">
+              <StyledWalletCard
+                className="p-2 shadow-sm mx-auto"
                 key="portis"
-                action
                 onClick={() => {
                   activate("portis");
                   localStorage.setItem(
@@ -86,10 +79,20 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                   );
                 }}
               >
-                Portis
-              </StyledListGroupItem>
+                <div className="d-flex flex-row justify-content-center">
+                  <StyledWalletSvg variant="top" src={PortisSvg} />
+                </div>
+                <Card.Body className="p-1">
+                  <Card.Title>Portis</Card.Title>
+                </Card.Body>
+              </StyledWalletCard>
+            </Col>
+          </Row>
 
-              <StyledListGroupItem
+          <Row className="justify-content-md-center justify-content-center m-1">
+            <Col sm={5} className="p-1">
+              <StyledWalletCard
+                className="p-2 shadow-sm mx-auto"
                 key="frame"
                 action
                 onClick={() => {
@@ -100,10 +103,17 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                   );
                 }}
               >
-                Frame
-              </StyledListGroupItem>
-
-              <StyledListGroupItem
+                <div className="d-flex flex-row justify-content-center">
+                  <StyledWalletSvg variant="top" src={FrameSvg} />
+                </div>
+                <Card.Body className="p-1">
+                  <Card.Title>Frame</Card.Title>
+                </Card.Body>
+              </StyledWalletCard>
+            </Col>
+            <Col sm={5} className="p-1">
+              <StyledWalletCard
+                className="p-2 shadow-sm mx-auto"
                 key="fortmatic"
                 action
                 onClick={() => {
@@ -114,10 +124,19 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                   );
                 }}
               >
-                Fortmatic
-              </StyledListGroupItem>
-
-              <StyledListGroupItem
+                <div className="d-flex flex-row justify-content-center">
+                  <StyledWalletSvg variant="top" src={FortmaticSvg} />
+                </div>
+                <Card.Body className="p-1">
+                  <Card.Title>Fortmatic</Card.Title>
+                </Card.Body>
+              </StyledWalletCard>
+            </Col>
+          </Row>
+          <Row className="justify-content-md-center justify-content-center m-1">
+            <Col sm={5} className="p-1">
+              <StyledWalletCard
+                className="p-2 shadow-sm mx-auto"
                 key="walletconnect"
                 action
                 onClick={() => {
@@ -128,10 +147,17 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                   );
                 }}
               >
-                walletconnect
-              </StyledListGroupItem>
-
-              <StyledListGroupItem
+                <div className="d-flex flex-row justify-content-center">
+                  <StyledWalletSvg variant="top" src={WalletConnectSvg} />
+                </div>
+                <Card.Body className="p-1">
+                  <Card.Title>WalletConnect</Card.Title>
+                </Card.Body>
+              </StyledWalletCard>
+            </Col>
+            <Col sm={5} className="p-1">
+              <StyledWalletCard
+                className="p-2 shadow-sm mx-auto"
                 key="torus"
                 action
                 onClick={() => {
@@ -142,27 +168,18 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                   );
                 }}
               >
-                torus
-              </StyledListGroupItem>
-
-              <StyledListGroupItem
-                key="walletlink"
-                action
-                onClick={() => {
-                  activate("walletlink");
-                  localStorage.setItem(
-                    "__WALLET_CONNECTED",
-                    JSON.stringify("walletlink")
-                  );
-                }}
-              >
-                walletlink
-              </StyledListGroupItem>
-            </StyledListGroup>
-          </div>
-        </div>
+                <div className="d-flex flex-row justify-content-center">
+                  <StyledWalletSvg variant="top" src={TorusSvg} />
+                </div>
+                <Card.Body className="p-1">
+                  <Card.Title>Torus</Card.Title>
+                </Card.Body>
+              </StyledWalletCard>
+            </Col>
+          </Row>
+        </Container>
       </Modal.Body>
-    </StyledModal>
+    </Modal>
   );
 };
 

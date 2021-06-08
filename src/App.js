@@ -10,7 +10,13 @@ import {
   UALProviderSwitch,
   WalletProvider
 } from "./context/walletProvider/walletProviderFacade";
-import { ethChainId } from "./config";
+import {
+  ethChainId,
+  fortmaticApiKey,
+  portisId,
+  walletConnectRpcUrl,
+  walletLinkUrl
+} from "./config";
 
 const HomePage = lazy(() => import("./features/home"));
 const EthPage = lazy(() => import("./features/eth"));
@@ -24,10 +30,10 @@ function App() {
         <UseWalletProvider
           chainId={ethChainId} // 5 GOERLI
           connectors={{
-            fortmatic: { apiKey: "" },
-            portis: { dAppId: "" },
-            walletconnect: { rpcUrl: process.env.REACT_APP_ETH_URL },
-            walletlink: { url: process.env.REACT_APP_ETH_URL }
+            fortmatic: { apiKey: fortmaticApiKey },
+            portis: { dAppId: portisId },
+            walletconnect: { rpcUrl: walletConnectRpcUrl },
+            walletlink: { url: walletLinkUrl }
           }}
         >
           <UALProviderSwitch>
