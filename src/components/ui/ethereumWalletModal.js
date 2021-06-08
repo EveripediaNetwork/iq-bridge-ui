@@ -63,7 +63,7 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                   <StyledWalletSvg variant="top" src={MetaMaskSvg} />
                 </div>
                 <Card.Body className="p-1">
-                  <Card.Title>MetaMask</Card.Title>
+                  <div className="card-title h6">MetaMask</div>
                 </Card.Body>
               </StyledWalletCard>
             </Col>
@@ -83,7 +83,7 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                   <StyledWalletSvg variant="top" src={PortisSvg} />
                 </div>
                 <Card.Body className="p-1">
-                  <Card.Title>Portis</Card.Title>
+                  <div className="card-title h6">Portis</div>
                 </Card.Body>
               </StyledWalletCard>
             </Col>
@@ -107,7 +107,7 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                   <StyledWalletSvg variant="top" src={FrameSvg} />
                 </div>
                 <Card.Body className="p-1">
-                  <Card.Title>Frame</Card.Title>
+                  <div className="card-title h6">Frame</div>
                 </Card.Body>
               </StyledWalletCard>
             </Col>
@@ -128,7 +128,7 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                   <StyledWalletSvg variant="top" src={FortmaticSvg} />
                 </div>
                 <Card.Body className="p-1">
-                  <Card.Title>Fortmatic</Card.Title>
+                  <div className="card-title h6">Fortmatic</div>
                 </Card.Body>
               </StyledWalletCard>
             </Col>
@@ -151,7 +151,7 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                   <StyledWalletSvg variant="top" src={WalletConnectSvg} />
                 </div>
                 <Card.Body className="p-1">
-                  <Card.Title>WalletConnect</Card.Title>
+                  <div className="card-title h6">WalletConnect</div>
                 </Card.Body>
               </StyledWalletCard>
             </Col>
@@ -172,7 +172,7 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                   <StyledWalletSvg variant="top" src={TorusSvg} />
                 </div>
                 <Card.Body className="p-1">
-                  <Card.Title>Torus</Card.Title>
+                  <div className="card-title h6">Torus</div>
                 </Card.Body>
               </StyledWalletCard>
             </Col>
