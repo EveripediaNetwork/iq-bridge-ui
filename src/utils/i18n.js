@@ -86,6 +86,9 @@ export const resources = {
       go_to: "Go to",
       step: "Step 2",
       error: "Error",
+      wrong_chain_modal_title: "Wrong Network",
+      wrong_chain_modal_body:
+        "Please connect to the appropiate Ethereum Network",
       // voting
       voting: "voting"
     }
@@ -172,6 +175,8 @@ export const resources = {
       go_to: "이동",
       step: "2 단계",
       error: "오류",
+      wrong_chain_modal_title: "잘못된 네트워크",
+      wrong_chain_modal_body: "적절한 이더 리움 네트워크에 연결하십시오",
       // voting
       voting: "voting"
     }
@@ -258,6 +263,13 @@ export const resources = {
       go_to: "前往",
       step: "步骤 2",
       error: "错误",
+      transaction_executed: "Transaction Executed",
+      go_to: "去",
+      step_2: "第2步",
+      error: "错误",
+      wrong_chain_modal_title: "错误的网络",
+      wrong_chain_modal_body: "请连接到合适的以太坊网络",
+      select_wallet: "选择一个钱包",
       // voting
       voting: "voting"
     }

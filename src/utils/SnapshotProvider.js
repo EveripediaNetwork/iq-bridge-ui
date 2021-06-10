@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const vote = async wallet => {
   if (wallet.status === "connected") {
     return 1;
@@ -6,12 +8,34 @@ const vote = async wallet => {
 };
 
 const getProposals = async () => {
-  return [
+  const { data } = await axios.post(
+    "https://hub.snapshot.page/graphql",
     {
-      id: 1,
-      name: "Lorem ipso"
+      query: `
+    query Proposals {
+      proposals(first: 20, skip: 0, where: {space_in: ["everipediaiq.eth"]}, orderBy: "created", orderDirection: desc) {
+        id
+        title
+        body
+        choices
+        start
+        end
+        snapshot
+        state
+        author
+        space {
+          id
+          name
+        }
+      }
     }
-  ];
+    `
+    },
+    { headers: { "Content-Type": "application/json" } }
+  );
+
+  console.log(data.data.proposals);
+  return data.data.proposals;
 };
 
 export { getProposals, vote };

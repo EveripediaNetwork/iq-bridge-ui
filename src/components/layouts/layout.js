@@ -15,11 +15,9 @@ import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
 
 import { WallerProviderContext as UALContext } from "../../context/walletProvider/walletProviderFacade";
-import { ChainIdContext } from "../../context/chainIdProvider/chainIdContext";
 import GlobalStyle from "../globalStyles";
 import LanguageSelector from "./LanguageMenu/LanguageSelector";
 import EthereumWalletModal from "../ui/ethereumWalletModal";
-import { ethChainId } from "../../config";
 
 const isWalletConnected = () => {
   const val = localStorage.getItem("__WALLET_CONNECTED");
@@ -34,7 +32,6 @@ const StyledButtonsRow = styled(Row)`
 const Layout = ({ children }) => {
   const location = useLocation();
   const authContext = useContext(UALContext);
-  const chainIdContext = useContext(ChainIdContext);
   const { t, i18n } = useTranslation();
   const LngUrl = `?lng=${i18n.language}`;
   const [ethModalShow, setEthModalShow] = useState(false);
@@ -156,11 +153,7 @@ const Layout = ({ children }) => {
                   }}
                   className="text-capitalize"
                 >
-                  {t("logout")}{" "}
-                  {chainIdContext.currentChainId &&
-                  chainIdContext.currentChainId === ethChainId
-                    ? "ETH"
-                    : "MATIC"}
+                  {t("logout")} ETH
                 </Button>
               )}
             </Col>

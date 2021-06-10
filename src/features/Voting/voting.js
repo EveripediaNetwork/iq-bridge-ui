@@ -9,53 +9,68 @@ import InfoAlert from "../../components/ui/infoAlert";
 import VotingSelector from "./votingSelector";
 import VotingProposalContent from "./votingProposalContent";
 import VotingProposalForm from "./votingProposalForm";
+import { ProposalContext } from "../../context/proposalContext";
 
 const Voting = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
   const [txDone, setTxDone] = useState(false);
-  const [proposal, setProposal] = useState(null);
+  const [proposals, setProposals] = useState();
+  const [selectedProposal, setSelectedProposal] = useState();
+
+  const proposalContextValue = {
+    proposals,
+    setProposals,
+    selectedProposal,
+    setSelectedProposal
+  };
 
   return (
     <Layout>
       <Container className="p-2 mt-3" fluid>
         <FormProvider {...methods}>
-          <Row>
-            <Col>
-              <CardTitle
-                title={t("voting")}
-                aria-label={t("voting")}
-                icon="⚖"
-              />
-              <Card className="mx-auto shadow-sm">
-                <Card.Body>
-                  <div className="d-flex flex-row justify-content-center">
-                    <VotingSelector onSelect={setProposal} />
-                  </div>
-                  <VotingProposalContent proposal={proposal} />
-                  <VotingProposalForm
-                    proposal={proposal}
-                    onTxDone={setTxDone}
-                  />
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-          {wallet.account && txDone && (
+          <ProposalContext.Provider value={proposalContextValue}>
             <Row>
               <Col>
-                <InfoAlert text={t("confirmed_tx")} />
+                <CardTitle
+                  title={t("voting")}
+                  aria-label={t("voting")}
+                  icon="⚖"
+                />
+                <Card className="mx-auto shadow-sm">
+                  <Card.Body>
+                    <div className="d-flex flex-row justify-content-center">
+                      <VotingSelector
+                        showModal={false}
+                        onSelect={setSelectedProposal}
+                      />
+                    </div>
+                    <VotingProposalContent proposal={selectedProposal} />
+                    <br />
+                    <VotingProposalForm
+                      proposal={setSelectedProposal}
+                      onTxDone={setTxDone}
+                    />
+                  </Card.Body>
+                </Card>
               </Col>
             </Row>
-          )}
-          {!wallet.account && (
-            <Row>
-              <Col>
-                <InfoAlert text={t("login_info_eth")} />
-              </Col>
-            </Row>
-          )}
+            {wallet.account && txDone && (
+              <Row>
+                <Col>
+                  <InfoAlert text={t("confirmed_tx")} />
+                </Col>
+              </Row>
+            )}
+            {!wallet.account && (
+              <Row>
+                <Col>
+                  <InfoAlert text={t("login_info_eth")} />
+                </Col>
+              </Row>
+            )}
+          </ProposalContext.Provider>
         </FormProvider>
       </Container>
     </Layout>

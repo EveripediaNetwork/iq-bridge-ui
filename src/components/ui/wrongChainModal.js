@@ -1,14 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
 import { Modal } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 const StyledModal = styled(Modal)`
   padding: 10px;
   border-radius: 15px;
 `;
 
-const WrongChainModal = ({ currentChainId, ethChainId, ...props }) => {
+const WrongChainModal = ({ ...props }) => {
+  const { t } = useTranslation();
+
   return (
     <StyledModal
       {...props}
@@ -18,24 +20,16 @@ const WrongChainModal = ({ currentChainId, ethChainId, ...props }) => {
       className="rounded"
     >
       <Modal.Header closeButton className="px-3 py-2">
-        <Modal.Title>Wrong Network</Modal.Title>
+        <Modal.Title>{t("wrong_chain_modal_title")}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body className="px-3 py-2">
-        <p>
-          Please connect to the{" "}
-          {currentChainId === ethChainId
-            ? "appropiate Ethereum Network"
-            : "Matic Network"}
-        </p>
+        <p>{t("wrong_chain_modal_body")}</p>
       </Modal.Body>
     </StyledModal>
   );
 };
 
-WrongChainModal.propTypes = {
-  currentChainId: PropTypes.number.isRequired,
-  ethChainId: PropTypes.number.isRequired
-};
+WrongChainModal.propTypes = {};
 
 export default WrongChainModal;
