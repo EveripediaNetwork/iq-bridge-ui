@@ -34,7 +34,6 @@ const getProposals = async () => {
     { headers: { "Content-Type": "application/json" } }
   );
 
-  console.log(data.data.proposals);
   return data.data.proposals;
 };
 
