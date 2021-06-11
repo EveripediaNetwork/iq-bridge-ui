@@ -1,6 +1,4 @@
 import React, { useContext, useState, useEffect } from "react";
-import styled from "styled-components";
-import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { Modal, ListGroup, Button, Col, Row, Spinner } from "react-bootstrap";
 import { ArrowLeft } from "react-bootstrap-icons";
@@ -10,6 +8,7 @@ import { getProposals } from "../../utils/SnapshotProvider";
 import { ProposalContext } from "../../context/proposalContext";
 
 const ProposalsModal = ({ ...props }) => {
+  const { t } = useTranslation();
   const [showDetails, setShowDetails] = useState(false);
   const [showProposalAtIndex, setShowProposalAtIndex] = useState();
   const [headerText, setHeaderText] = useState("Current proposals");
@@ -22,13 +21,13 @@ const ProposalsModal = ({ ...props }) => {
   const handleShowDetailsClick = index => {
     setShowDetails(true);
     setShowProposalAtIndex(index);
-    setHeaderText("Details");
+    setHeaderText(t("details"));
   };
 
   const handleGoBack = () => {
     setShowDetails(false);
     setShowProposalAtIndex(undefined);
-    setHeaderText("Current proposals");
+    setHeaderText(t("current_proposals"));
   };
 
   useEffect(() => {
@@ -68,7 +67,7 @@ const ProposalsModal = ({ ...props }) => {
                     size="sm"
                     variant="light"
                   >
-                    Details
+                    {t("details")}
                   </Button>
                 </ListGroup.Item>
               ))
@@ -91,7 +90,7 @@ const ProposalsModal = ({ ...props }) => {
                   target="_blank"
                   href={`https://snapshot.org/#/everipediaiq.eth/proposal/${proposals[showProposalAtIndex].id}`}
                 >
-                  See on Snapshot
+                  {t("see_on_snapshot")}
                 </a>
               </Button>
             </div>

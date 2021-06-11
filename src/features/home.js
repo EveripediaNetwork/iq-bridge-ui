@@ -72,7 +72,7 @@ const Home = () => {
                       token={token1}
                       setToken={setToken1}
                       setFilled={setFilled}
-                      header="From"
+                      header={t("from")}
                     />
                     <div className="d-flex justify-content-center">
                       <IconWrapper bsPrefix="switch">

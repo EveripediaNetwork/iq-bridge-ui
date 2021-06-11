@@ -145,7 +145,7 @@ const Lock = () => {
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
                     <SwapContainer
                       token={token1}
-                      header="From"
+                      header={t("from")}
                       setParentBalance={setBalance}
                       setFilled={setFilledAmount}
                     />
@@ -191,7 +191,7 @@ const Lock = () => {
           {wallet.account && txDone && (
             <Row>
               <Col>
-                <InfoAlert text="Tx executed" />
+                <InfoAlert text={t("tx_executed")} />
               </Col>
             </Row>
           )}

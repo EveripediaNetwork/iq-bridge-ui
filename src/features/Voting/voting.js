@@ -53,7 +53,7 @@ const Voting = () => {
                             variant="light"
                             onClick={handleSelectProposalClick}
                           >
-                            Select a proposal
+                            {t("select_a_proposal")}
                           </Button>
                         </div>
 
