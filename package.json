@@ -5,6 +5,7 @@
   "dependencies": {
     "@everipedia/ual-mykey": "0.3.0",
     "@everipedia/ual-scatter": "0.3.0",
+    "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
     "eos-common": "^0.8.0",
     "eosjs": "^21.0.3",

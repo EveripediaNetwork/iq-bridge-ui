@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import { snapshotGraphqlEndpoint } from "../config";
+
 const vote = async wallet => {
   if (wallet.status === "connected") {
     return 1;
@@ -9,7 +11,7 @@ const vote = async wallet => {
 
 const getProposals = async () => {
   const { data } = await axios.post(
-    "https://hub.snapshot.page/graphql",
+    snapshotGraphqlEndpoint,
     {
       query: `
     query Proposals {

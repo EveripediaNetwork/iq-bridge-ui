@@ -1,9 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { Modal, ListGroup, Button, Col, Row, Spinner } from "react-bootstrap";
+import { Modal, ListGroup, Button, Spinner } from "react-bootstrap";
 import { ArrowLeft } from "react-bootstrap-icons";
 import ReactMarkdown from "react-markdown";
 
+import { snapshotBaseUrl } from "../../config";
 import { getProposals } from "../../utils/SnapshotProvider";
 import { ProposalContext } from "../../context/proposalContext";
 
@@ -12,11 +14,10 @@ const ProposalsModal = ({ ...props }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [showProposalAtIndex, setShowProposalAtIndex] = useState();
   const [headerText, setHeaderText] = useState("Current proposals");
-  const { proposals, setProposals, selectedProposal, setSelectedPropsal } =
-    useContext(ProposalContext);
+  const { proposals, setProposals } = useContext(ProposalContext);
 
   const chunkString = str =>
-    str.length > 35 ? str.match(/.{1,25}/g)[0] + "..." : str;
+    str.length > 25 ? `${str.match(/.{1,25}/g)[0]}...` : str;
 
   const handleShowDetailsClick = index => {
     setShowDetails(true);
@@ -87,8 +88,9 @@ const ProposalsModal = ({ ...props }) => {
             <div className="text-center">
               <Button variant="light">
                 <a
+                  rel="noopener noreferrer"
                   target="_blank"
-                  href={`https://snapshot.org/#/everipediaiq.eth/proposal/${proposals[showProposalAtIndex].id}`}
+                  href={`${snapshotBaseUrl}${proposals[showProposalAtIndex].id}`}
                 >
                   {t("see_on_snapshot")}
                 </a>
@@ -99,6 +101,10 @@ const ProposalsModal = ({ ...props }) => {
       </Modal.Body>
     </Modal>
   );
+};
+
+ProposalsModal.propTypes = {
+  show: PropTypes.bool.isRequired
 };
 
 export default ProposalsModal;
