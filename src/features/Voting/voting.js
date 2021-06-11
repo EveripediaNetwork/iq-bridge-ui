@@ -11,6 +11,8 @@ import InfoAlert from "../../components/ui/infoAlert";
 import VotingProposalContent from "./votingProposalContent";
 import VotingProposalForm from "./votingProposalForm";
 import { ProposalContext } from "../../context/proposalContext";
+import GenericDialog from "../../components/ui/genericDialog";
+import ProposalDetails from "../../components/ui/proposalDetails";
 
 const Voting = () => {
   const { t } = useTranslation();
@@ -20,6 +22,7 @@ const Voting = () => {
   const [proposals, setProposals] = useState();
   const [selectedProposal, setSelectedProposal] = useState();
   const [openProposalsModal, setOpenProposalsModal] = useState(false);
+  const [openSelectedProposal, setOpenSelectedProposal] = useState(false);
 
   const handleSelectProposalClick = () => {
     setOpenProposalsModal(true);
@@ -60,13 +63,29 @@ const Voting = () => {
                           </div>
                         ) : (
                           <div style={{ maxWidth: "100%" }}>
-                            <Button variant="outline-dark">
+                            <Button
+                              onClick={() => setOpenSelectedProposal(true)}
+                              variant="outline-dark"
+                            >
                               {selectedProposal.title.length > 25
                                 ? `${
                                     selectedProposal.title.match(/.{1,25}/g)[0]
                                   }...`
                                 : selectedProposal.title}
                             </Button>
+                            <GenericDialog
+                              show={openSelectedProposal}
+                              onHide={() => setOpenSelectedProposal(false)}
+                              size="md"
+                              title="Details"
+                              body={
+                                // eslint-disable-next-line react/jsx-wrap-multilines
+                                <ProposalDetails
+                                  setShow={() => setOpenSelectedProposal(false)}
+                                  proposal={selectedProposal}
+                                />
+                              }
+                            />
                           </div>
                         )}
 

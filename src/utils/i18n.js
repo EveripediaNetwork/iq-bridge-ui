@@ -53,12 +53,15 @@ export const resources = {
       new_hiiq_balance: "New hiIQ",
       // proposalsModal
       details: "Details",
-      see_on_snapshot: "See on Snapshot",
       current_proposals: "Current Proposals",
+      // proposalDetails
       start: "Start",
       at: "At",
       end: "End",
       select_for_voting: "Select for voting",
+      selected: "Selected",
+      see_on_snapshot: "See on Snapshot",
+
       // swapContainer
       balance: "balance",
       // txDetailsDialog
@@ -138,8 +141,14 @@ export const resources = {
       new_hiiq_balance: "새로운 hiIQ",
       // proposalsModal
       details: "세부",
-      see_on_snapshot: "스냅 샷보기",
       current_proposals: "현재 제안",
+      // proposalDetails
+      start: "스타트",
+      at: "에서",
+      end: "종료",
+      select_for_voting: "투표를 위해 선택",
+      selected: "선택된",
+      see_on_snapshot: "스냅 샷보기",
       // swapContainer
       balance: "밸런스",
       // txDetailsDialog
@@ -218,8 +227,14 @@ export const resources = {
       new_hiiq_balance: "新高智商",
       // proposalsModal
       details: "细节",
-      see_on_snapshot: "在快照上查看",
       current_proposals: "当前提案",
+      // proposalDetails
+      start: "开始",
+      at: "在",
+      end: "结尾",
+      select_for_voting: "选择投票",
+      selected: "已选",
+      see_on_snapshot: "在 Snapshot 上查看",
       // swapContainer
       balance: "平衡",
       // txDetailsDialog
