@@ -98,6 +98,13 @@ const Layout = ({ children }) => {
             >
               {t("LOCK")}
             </Nav.Link>
+            <Nav.Link
+              active={location.pathname === "/stats"}
+              as={Link}
+              to={`/stats${LngUrl}`}
+            >
+              {t("STATS")}
+            </Nav.Link>
             <Nav.Link href="https://learn.everipedia.org/">
               {t("LEARN")}
             </Nav.Link>

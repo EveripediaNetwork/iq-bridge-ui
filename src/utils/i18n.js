@@ -36,6 +36,8 @@ export const resources = {
       liquidity_fee: "Liquidity provider fee",
       min_received: "Minimum received",
       max_profit: "Maximum profit",
+      // stats
+      stats: "Stats",
       // Lock page
       value_restriction: "Input value must be between 1 and 1460",
       lock_period: "Lock period (days)",
@@ -124,6 +126,8 @@ export const resources = {
       liquidity_fee: "유동성 제공자 수수료",
       min_received: "최소 수령액",
       max_profit: "최대 수익",
+      // stats
+      stats: "Stats",
       // lock page
       value_restriction: "입력 값은 1에서 1460 사이여야 합니다.",
       lock_period: "락업 기간(일)",
@@ -211,6 +215,8 @@ export const resources = {
       liquidity_fee: "流动性提供者手续费",
       min_received: "至少获取",
       max_profit: "最大利润",
+      // stats
+      stats: "Stats",
       // Lock page
       value_restriction: "输入值必须介于1到1460",
       lock_period: "锁定时长 (days)",
