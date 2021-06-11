@@ -1,7 +1,15 @@
 import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { Modal, ListGroup, Button, Spinner } from "react-bootstrap";
+import {
+  Modal,
+  ListGroup,
+  Button,
+  Spinner,
+  Container,
+  Col,
+  Row
+} from "react-bootstrap";
 import { ArrowLeft } from "react-bootstrap-icons";
 import ReactMarkdown from "react-markdown";
 
@@ -83,6 +91,36 @@ const ProposalsModal = ({ ...props }) => {
             <h4 className="text-center text-info">
               {proposals[showProposalAtIndex].title}
             </h4>
+            <Container className="shadow-sm p-3">
+              <Row>
+                <Col xs>
+                  <strong>Start: </strong>
+                  {new Date(
+                    proposals[showProposalAtIndex].start * 1000
+                  ).toLocaleDateString("en-US")}
+                  <br />
+                  <small className="text-muted">
+                    <strong>At: </strong>
+                    {new Date(
+                      proposals[showProposalAtIndex].start * 1000
+                    ).toLocaleTimeString()}
+                  </small>
+                </Col>
+                <Col xs>
+                  <strong>End: </strong>
+                  {new Date(
+                    proposals[showProposalAtIndex].end * 1000
+                  ).toLocaleDateString()}
+                  <br />
+                  <small className="text-muted">
+                    <strong>At: </strong>
+                    {new Date(
+                      proposals[showProposalAtIndex].end * 1000
+                    ).toLocaleTimeString()}
+                  </small>
+                </Col>
+              </Row>
+            </Container>
             <hr />
             <ReactMarkdown>{proposals[showProposalAtIndex].body}</ReactMarkdown>
             <div className="text-center">
