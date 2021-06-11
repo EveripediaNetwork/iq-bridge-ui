@@ -3,8 +3,8 @@ import { FormProvider, useForm } from "react-hook-form";
 import { Card, Col, Container, Row, Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
-import ProposalsModal from "../../components/ui/proposalsModal";
 
+import ProposalsModal from "../../components/ui/proposalsModal";
 import Layout from "../../components/layouts/layout";
 import CardTitle from "../../components/ui/cardTitle";
 import InfoAlert from "../../components/ui/infoAlert";
@@ -48,16 +48,30 @@ const Voting = () => {
                   <Card.Body>
                     <div className="d-flex flex-row justify-content-center">
                       <div className="d-flex flex-column justify-content center">
-                        <div className="text-center">
-                          <Button
-                            variant="light"
-                            onClick={handleSelectProposalClick}
-                          >
-                            {t("select_a_proposal")}
-                          </Button>
-                        </div>
+                        {!selectedProposal ? (
+                          <div className="text-center">
+                            <Button
+                              variant="light"
+                              style={{ maxWidth: "100%" }}
+                              onClick={handleSelectProposalClick}
+                            >
+                              {t("select_a_proposal")}
+                            </Button>
+                          </div>
+                        ) : (
+                          <div style={{ maxWidth: "100%" }}>
+                            <Button variant="outline-dark">
+                              {selectedProposal.title.length > 25
+                                ? `${
+                                    selectedProposal.title.match(/.{1,25}/g)[0]
+                                  }...`
+                                : selectedProposal.title}
+                            </Button>
+                          </div>
+                        )}
 
                         <ProposalsModal
+                          setShow={setOpenProposalsModal}
                           onHide={() => setOpenProposalsModal(false)}
                           show={openProposalsModal}
                         />

@@ -55,6 +55,10 @@ export const resources = {
       details: "Details",
       see_on_snapshot: "See on Snapshot",
       current_proposals: "Current Proposals",
+      start: "Start",
+      at: "At",
+      end: "End",
+      select_for_voting: "Select for voting",
       // swapContainer
       balance: "balance",
       // txDetailsDialog

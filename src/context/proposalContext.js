@@ -4,5 +4,5 @@ export const ProposalContext = createContext({
   proposals: undefined,
   setProposals: () => {},
   selectedProposal: undefined,
-  setSelectedPropsal: () => {}
+  setSelectedProposal: () => {}
 });
