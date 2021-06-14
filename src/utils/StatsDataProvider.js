@@ -24,7 +24,7 @@ const getVolume = async () => {
 const getTotals = async () => {
   return {
     totals: {
-      eos: 100
+      eos: 10019699034
     }
   };
 };
