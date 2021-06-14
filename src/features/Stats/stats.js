@@ -1,12 +1,96 @@
-import React, { memo } from "react";
-import { Card, Col, Container, Row } from "react-bootstrap";
+import React, { memo, useEffect, useState } from "react";
+import { Card, Col, Container, Row, Spinner } from "react-bootstrap";
+import * as Humanize from "humanize-plus";
 
+import styled from "styled-components";
 import Layout from "../../components/layouts/layout";
 import CardTitle from "../../components/ui/cardTitle";
+import {
+  getEpData,
+  getSocialData,
+  getTokenHolders,
+  getTotals,
+  getVolume
+} from "../../utils/StatsDataProvider";
+
+const DataTitle = styled.div`
+  font-size: 20px;
+  border-bottom: 1px solid #ecebeb;
+  margin: 20px 5px 5px 5px;
+`;
+
+const DataRow = styled.div`
+  content: "";
+  display: table;
+  clear: both;
+  width: 100%;
+  margin-bottom: 4px;
+`;
+
+const Icon = styled.div`
+  img {
+    width: 23px;
+  }
+
+  float: left;
+  width: 8%;
+}
+`;
+
+const Title = styled.div`
+  padding-left: 2px;
+  float: left;
+  width: 62%;
+}
+`;
+
+const Value = styled.div`
+  float: right;
+  width: 30%;
+  text-align: right;
+}
+`;
+
+const showData = value => {
+  return value ? (
+    Humanize.intComma(value)
+  ) : (
+    <Spinner animation="border" variant="primary" role="status" size="sm">
+      <span className="sr-only">Loading...</span>
+    </Spinner>
+  );
+};
 
 const Stats = () => {
   // const { t } = useTranslation();
-  // TODO: add translations / improve UI (add icons) / think about strategy to retrieve data
+  // TODO: add translations
+  const [data, setData] = useState({});
+  useEffect(() => {
+    async function run() {
+      const holders = await getTokenHolders();
+      setData(prevState => {
+        return { ...prevState, ...holders };
+      });
+      const volume = await getVolume();
+      setData(prevState => {
+        return { ...prevState, ...volume };
+      });
+      const totals = await getTotals();
+      setData(prevState => {
+        return { ...prevState, ...totals };
+      });
+      const ep = await getEpData();
+      setData(prevState => {
+        return { ...prevState, ...ep };
+      });
+      const social = await getSocialData();
+      setData(prevState => {
+        return { ...prevState, ...social };
+      });
+    }
+
+    run();
+  }, []);
   return (
     <Layout>
       <Container className="p-2 mt-3" fluid>
@@ -21,116 +105,159 @@ const Stats = () => {
             />
             <Card className="mx-auto shadow-sm">
               <Card.Body>
-                <table>
-                  <tr>
-                    <td>EOS Holders</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td>Ethereum Holders</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td>Polygon Holders</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td>BSC Holders</td>
-                    <td>3</td>
-                  </tr>
-                </table>
-                <hr />
+                <DataTitle>Holders</DataTitle>
+                <DataRow>
+                  <Icon>
+                    <img alt="EOS" src="/tokens/1765.png" />
+                  </Icon>
+                  <Title>EOS Holders</Title>
+                  <Value>{showData(data.holders?.eos)}</Value>
+                </DataRow>
+                <DataRow>
+                  <Icon>
+                    <img alt="ethereum" src="/tokens/1027.png" />
+                  </Icon>
+                  <Title>Ethereum Holders</Title>
+                  <Value>{showData(data.holders?.eth)}</Value>
+                </DataRow>
+                <DataRow>
+                  <Icon>
+                    <img alt="polygon" src="/tokens/3890.png" />
+                  </Icon>
+                  <Title>Polygon Holders</Title>
+                  <Value>{showData(data.holders?.matic)}</Value>
+                </DataRow>
+                <DataRow>
+                  <Icon>
+                    <img alt="BSC" src="/tokens/1839.png" />
+                  </Icon>
+                  <Title>BSC Holders</Title>
+                  <Value>{showData(data.holders?.bsc)}</Value>
+                </DataRow>
 
-                <table>
-                  <tr>
-                    <td>EOS Volume</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td>Ethereum Volume</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td>Polygon Volume</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td>BSC Volume</td>
-                    <td>3</td>
-                  </tr>
-                </table>
-                <hr />
+                <DataTitle>Volume</DataTitle>
+                <DataRow>
+                  <Icon>
+                    <img alt="EOS" src="/tokens/1765.png" />
+                  </Icon>
+                  <Title>EOS Volume</Title>
+                  <Value>{showData(data.volume?.eos)}</Value>
+                </DataRow>
+                <DataRow>
+                  <Icon>
+                    <img alt="ethereum" src="/tokens/1027.png" />
+                  </Icon>
+                  <Title>Ethereum Volume</Title>
+                  <Value>{showData(data.volume?.eth)}</Value>
+                </DataRow>
+                <DataRow>
+                  <Icon>
+                    <img alt="polygon" src="/tokens/3890.png" />
+                  </Icon>
+                  <Title>Polygon Volume</Title>
+                  <Value>{showData(data.volume?.matic)}</Value>
+                </DataRow>
+                <DataRow>
+                  <Icon>
+                    <img alt="BSC" src="/tokens/1839.png" />
+                  </Icon>
+                  <Title>BSC Volume</Title>
+                  <Value>{showData(data.volume?.bsc)}</Value>
+                </DataRow>
 
-                <table>
-                  <tr>
-                    <td>Total Volume</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td>Total Holders</td>
-                    <td>3</td>
-                  </tr>
-                </table>
-                <hr />
+                <DataTitle>Total</DataTitle>
+                <DataRow>
+                  <Icon>
+                    <img alt="IQ" src="/tokens/2930.png" />
+                  </Icon>
+                  <Title>Total Volume</Title>
+                  <Value>153,000</Value>
+                </DataRow>
+                <DataRow>
+                  <Icon>
+                    <img alt="IQ" src="/tokens/2930.png" />
+                  </Icon>
+                  <Title>Total Holders</Title>
+                  <Value>3,000</Value>
+                </DataRow>
 
-                <table>
-                  <tr>
-                    <td>HiIQ tokens</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td>HiIQ holders</td>
-                    <td>3</td>
-                  </tr>
-                </table>
-                <hr />
+                <DataTitle>HiIQ</DataTitle>
+                <DataRow>
+                  <Icon>
+                    <img alt="IQ" src="/tokens/2930.png" />
+                  </Icon>
+                  <Title>HiIQ tokens</Title>
+                  <Value>153,000</Value>
+                </DataRow>
+                <DataRow>
+                  <Icon>
+                    <img alt="IQ" src="/tokens/2930.png" />
+                  </Icon>
+                  <Title>HiIQ holders</Title>
+                  <Value>3,000</Value>
+                </DataRow>
 
-                <table>
-                  <tr>
-                    <td>LP liquidity Uniswap v3</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td>LP liquidity QuickSwap</td>
-                    <td>3</td>
-                  </tr>
-                </table>
-                <hr />
+                <DataTitle>Apps</DataTitle>
+                <DataRow>
+                  <Icon>
+                    <img alt="IQ" src="/tokens/2930.png" />
+                  </Icon>
+                  <Title>PredIQt markets</Title>
+                  <Value>153,000</Value>
+                </DataRow>
+                <DataRow>
+                  <Icon>
+                    <img alt="IQ" src="/tokens/2930.png" />
+                  </Icon>
+                  <Title>Everipedia articles</Title>
+                  <Value>{showData(data.ep?.articles)}</Value>
+                </DataRow>
+                <DataRow>
+                  <Icon>
+                    <img alt="IQ" src="/tokens/2930.png" />
+                  </Icon>
+                  <Title>Everipedia Editors</Title>
+                  <Value>{showData(data.ep?.editors)}</Value>
+                </DataRow>
+                <DataRow>
+                  <Icon>
+                    <img alt="IQ" src="/tokens/2930.png" />
+                  </Icon>
+                  <Title>Everipedia page views</Title>
+                  <Value>{showData(data.ep?.views)}</Value>
+                </DataRow>
 
-                <table>
-                  <tr>
-                    <td>PredIQt markets</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td>Everipedia articles</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td>Everipedia Editors</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td>Everipedia page views</td>
-                    <td>3</td>
-                  </tr>
-                </table>
-                <hr />
+                <DataTitle>Liquidity</DataTitle>
+                <DataRow>
+                  <Icon>
+                    <img alt="uni" src="/tokens/7083.png" />
+                  </Icon>
+                  <Title>LP liquidity Uniswap v3</Title>
+                  <Value>153,000</Value>
+                </DataRow>
+                <DataRow>
+                  <Icon>
+                    <img alt="Quickswap" src="/tokens/8206.png" />
+                  </Icon>
+                  <Title>LP liquidity QuickSwap</Title>
+                  <Value>3,000</Value>
+                </DataRow>
 
-                <table>
-                  <tr>
-                    <td>Reddit users</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td>Tg users</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td>Twitter users</td>
-                    <td>3</td>
-                  </tr>
-                </table>
+                <DataTitle>Social</DataTitle>
+                <DataRow>
+                  <Icon>
+                    <img alt="IQ" src="/tokens/2930.png" />
+                  </Icon>
+                  <Title>Reddit users</Title>
+                  <Value>{showData(data.social?.reddit)}</Value>
+                </DataRow>
+                <DataRow>
+                  <Icon>
+                    <img alt="IQ" src="/tokens/2930.png" />
+                  </Icon>
+                  <Title>Twitter followers</Title>
+                  <Value>{showData(data.social?.twitter)}</Value>
+                </DataRow>
               </Card.Body>
             </Card>
           </Col>
