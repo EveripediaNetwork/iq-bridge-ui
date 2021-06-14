@@ -5,7 +5,7 @@ import { Modal } from "react-bootstrap";
 const GenericDialog = ({ size, title, body, ...props }) => {
   return (
     <Modal size={size} centered className="rounded" {...props}>
-      <Modal.Header>
+      <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>{body}</Modal.Body>

@@ -1,16 +1,17 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { Card, Col, Container, Row, Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
 
+import { ProposalContext } from "../../context/proposalContext";
+import { getProposals } from "../../utils/SnapshotProvider";
 import ProposalsModal from "../../components/ui/proposalsModal";
 import Layout from "../../components/layouts/layout";
 import CardTitle from "../../components/ui/cardTitle";
 import InfoAlert from "../../components/ui/infoAlert";
 import VotingProposalContent from "./votingProposalContent";
 import VotingProposalForm from "./votingProposalForm";
-import { ProposalContext } from "../../context/proposalContext";
 import GenericDialog from "../../components/ui/genericDialog";
 import ProposalDetails from "../../components/ui/proposalDetails";
 
@@ -21,6 +22,7 @@ const Voting = () => {
   const [txDone, setTxDone] = useState(false);
   const [proposals, setProposals] = useState();
   const [selectedProposal, setSelectedProposal] = useState();
+  const [selectedChoice, setSelectedChoice] = useState();
   const [openProposalsModal, setOpenProposalsModal] = useState(false);
   const [openSelectedProposal, setOpenSelectedProposal] = useState(false);
 
@@ -28,12 +30,21 @@ const Voting = () => {
     setOpenProposalsModal(true);
   };
 
+  const handleVote = () => {};
+
   const proposalContextValue = {
     proposals,
     setProposals,
     selectedProposal,
     setSelectedProposal
   };
+
+  useEffect(() => {
+    (async () => {
+      const data = await getProposals(1);
+      setSelectedProposal(data[0]);
+    })();
+  }, []);
 
   return (
     <Layout>
@@ -65,7 +76,7 @@ const Voting = () => {
                           <div style={{ maxWidth: "100%" }}>
                             <Button
                               onClick={() => setOpenSelectedProposal(true)}
-                              variant="outline-dark"
+                              variant="outline-success"
                             >
                               {selectedProposal.title.length > 25
                                 ? `${
@@ -98,10 +109,27 @@ const Voting = () => {
                     </div>
                     <VotingProposalContent proposal={selectedProposal} />
                     <br />
-                    <VotingProposalForm
-                      proposal={setSelectedProposal}
-                      onTxDone={setTxDone}
-                    />
+                    {selectedProposal && (
+                      <>
+                        <hr />
+                        <VotingProposalForm
+                          setSelectedChoice={setSelectedChoice}
+                          choices={selectedProposal.choices}
+                        />
+                        <hr />
+                      </>
+                    )}
+                    <Button
+                      disabled={!selectedProposal || !selectedChoice}
+                      onClick={handleVote}
+                      variant="primary"
+                      className="text-capitalize"
+                      type="submit"
+                      size="lg"
+                      block
+                    >
+                      Vote
+                    </Button>
                   </Card.Body>
                 </Card>
               </Col>

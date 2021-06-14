@@ -39,7 +39,7 @@ const ProposalsModal = ({ setShow, ...props }) => {
   useEffect(() => {
     if (props.show === true && !proposals)
       (async () => {
-        const data = await getProposals();
+        const data = await getProposals(20);
         setProposals(data);
       })();
   }, [props.show]);

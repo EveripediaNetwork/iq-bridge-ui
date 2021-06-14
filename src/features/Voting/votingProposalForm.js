@@ -1,30 +1,45 @@
 import React, { memo } from "react";
 import PropTypes from "prop-types";
-import { Button, Form } from "react-bootstrap";
+import styled from "styled-components";
+import { ButtonGroup, ToggleButton } from "react-bootstrap";
+
+const StyledToggleButton = styled(ToggleButton)`
+  max-width: fit-content;
+`;
 
 // eslint-disable-next-line no-unused-vars
-const VotingProposalForm = ({ proposal = null, onTxDone }) => {
-  if (proposal === null) {
-    return <>Loading...</>;
-  }
+const VotingProposalForm = ({ choices, setSelectedChoice }) => {
+  const handleClick = event => {
+    if (event.target.value) {
+      setSelectedChoice(event.target.value);
+      console.log(event.target.value);
+    }
+  };
+
   return (
-    <Form>
-      <Button
-        variant="primary"
-        className="text-capitalize"
-        type="submit"
-        size="lg"
-        block
-      >
-        option 1
-      </Button>
-    </Form>
+    <ButtonGroup
+      toggle
+      onClick={handleClick}
+      className="d-flex flex-row flex-wrap justify-content-center"
+    >
+      {choices.map(o => (
+        <StyledToggleButton
+          key={o}
+          value={o}
+          variant="light"
+          type="radio"
+          className="shadow m-1 rounded"
+        >
+          {o}
+        </StyledToggleButton>
+      ))}
+    </ButtonGroup>
   );
 };
 
 VotingProposalForm.propTypes = {
-  onTxDone: PropTypes.func.isRequired,
-  proposal: PropTypes.object.isRequired // eslint-disable-line react/forbid-prop-types
+  choices: PropTypes.arrayOf(PropTypes.string).isRequired, // eslint-disable-line react/forbid-prop-types,
+  setSelectedChoice: PropTypes.func.isRequired
 };
 
 export default memo(VotingProposalForm);

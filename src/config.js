@@ -18,6 +18,10 @@ module.exports = {
   walletConnectRpcUrl: process.env.REACT_APP_WALLET_CONNECT_RPC_URL,
   walletLinkUrl: process.env.REACT_APP_WALLET_LINK_URL,
   portisId: process.env.REACT_APP_PORTIS_ID,
-  snapshotBaseUrl: process.env.REACT_APP_SNAPSHOT_BASE_URL,
-  snapshotGraphqlEndpoint: process.env.REACT_APP_SNAPSHOT_GRAPHQL_ENDPOINT
+  snapshotBaseUrl:
+    process.env.REACT_APP_SNAPSHOT_BASE_URL ||
+    "https://snapshot.org/#/everipediaiq.eth/proposal/",
+  snapshotGraphqlEndpoint:
+    process.env.REACT_APP_SNAPSHOT_GRAPHQL_ENDPOINT ||
+    "https://hub.snapshot.page/graphql"
 };

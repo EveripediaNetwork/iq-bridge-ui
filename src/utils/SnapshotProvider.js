@@ -9,13 +9,13 @@ const vote = async wallet => {
   return 0;
 };
 
-const getProposals = async () => {
+const getProposals = async first => {
   const { data } = await axios.post(
     snapshotGraphqlEndpoint,
     {
       query: `
     query Proposals {
-      proposals(first: 20, skip: 0, where: {space_in: ["everipediaiq.eth"]}, orderBy: "created", orderDirection: desc) {
+      proposals(first: ${first}, skip: 0, where: {space_in: ["everipediaiq.eth"]}, orderBy: "created", orderDirection: asc) {
         id
         title
         body
@@ -36,6 +36,7 @@ const getProposals = async () => {
     { headers: { "Content-Type": "application/json" } }
   );
 
+  console.log(data.data.proposals);
   return data.data.proposals;
 };
 

@@ -47,7 +47,9 @@ const ProposalDetails = ({ proposal, setShow }) => {
 
   return (
     <div>
-      <h4 className="text-center text-info">{proposal.title}</h4>
+      <h4 className="text-center font-weight-light text-info">
+        {proposal.title}
+      </h4>
       <Container className="shadow-sm p-3">
         <Row>
           <Col xs>
