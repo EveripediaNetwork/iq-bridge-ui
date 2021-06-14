@@ -36,8 +36,21 @@ const getProposals = async first => {
     { headers: { "Content-Type": "application/json" } }
   );
 
-  console.log(data.data.proposals);
   return data.data.proposals;
 };
 
-export { getProposals, vote };
+const getVotes = async (id, first) => {
+  const { data } = await axios.post(snapshotGraphqlEndpoint, {
+    query: `
+    query {
+      votes(first: ${first}, skip: 0, where: {proposal: "${id}"}, orderBy: "created", orderDirection: desc) {
+        choice
+      }
+    }    
+    `
+  });
+
+  return data.data.votes;
+};
+
+export { getProposals, getVotes, vote };

@@ -5,12 +5,12 @@ import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
 
 import { ProposalContext } from "../../context/proposalContext";
-import { getProposals } from "../../utils/SnapshotProvider";
+import { getProposals, getVotes } from "../../utils/SnapshotProvider";
 import ProposalsModal from "../../components/ui/proposalsModal";
 import Layout from "../../components/layouts/layout";
 import CardTitle from "../../components/ui/cardTitle";
 import InfoAlert from "../../components/ui/infoAlert";
-import VotingProposalContent from "./votingProposalContent";
+import VotingChart from "./votingChart";
 import VotingProposalForm from "./votingProposalForm";
 import GenericDialog from "../../components/ui/genericDialog";
 import ProposalDetails from "../../components/ui/proposalDetails";
@@ -23,6 +23,7 @@ const Voting = () => {
   const [proposals, setProposals] = useState();
   const [selectedProposal, setSelectedProposal] = useState();
   const [selectedChoice, setSelectedChoice] = useState();
+  const [votes, setVotes] = useState();
   const [openProposalsModal, setOpenProposalsModal] = useState(false);
   const [openSelectedProposal, setOpenSelectedProposal] = useState(false);
 
@@ -45,6 +46,15 @@ const Voting = () => {
       setSelectedProposal(data[0]);
     })();
   }, []);
+
+  useEffect(() => {
+    if (selectedProposal && selectedProposal.id)
+      (async () => {
+        const data = await getVotes(selectedProposal.id, 1000);
+        setVotes(data);
+        console.log(data);
+      })();
+  }, [selectedProposal]);
 
   return (
     <Layout>
@@ -107,8 +117,12 @@ const Voting = () => {
                         />
                       </div>
                     </div>
-                    <VotingProposalContent proposal={selectedProposal} />
-                    <br />
+                    {selectedProposal && votes && (
+                      <VotingChart
+                        votes={votes}
+                        choices={selectedProposal.choices}
+                      />
+                    )}
                     {selectedProposal && (
                       <>
                         <hr />
