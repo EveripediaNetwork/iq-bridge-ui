@@ -4,12 +4,25 @@ import { Pie } from "react-chartjs-2";
 
 const VotingChart = ({ choices, votes }) => {
   const [votesCount, setVotesCount] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [borderColors, setBorderColors] = useState([]);
+
+  const getRandomRGBColor = () => {
+    const r = Math.floor(Math.random() * 255);
+    const g = Math.floor(Math.random() * 255);
+    const b = Math.floor(Math.random() * 255);
+    return `rgb(${r}, ${g}, ${b}, 0.6)`;
+  };
+
   useEffect(() => {
-    for (let i = 0; i < choices.length; i++)
+    for (let i = 0; i < choices.length; i++) {
       setVotesCount(prev => [
         votes.filter(v => v.choice === i).length,
         ...prev
       ]);
+      setColors(prev => [getRandomRGBColor(), ...prev]);
+      setBorderColors(prev => [getRandomRGBColor(), ...prev]);
+    }
   }, []);
 
   const data = {
@@ -18,28 +31,12 @@ const VotingChart = ({ choices, votes }) => {
       {
         label: "# of Votes",
         data: votesCount,
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)"
-          // "rgba(255, 206, 86, 0.2)",
-          // "rgba(75, 192, 192, 0.2)",
-          // "rgba(153, 102, 255, 0.2)",
-          // "rgba(255, 159, 64, 0.2)"
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)"
-          // "rgba(255, 206, 86, 1)",
-          // "rgba(75, 192, 192, 1)",
-          // "rgba(153, 102, 255, 1)",
-          // "rgba(255, 159, 64, 1)"
-        ],
+        backgroundColor: colors,
+        borderColor: borderColors,
         borderWidth: 1
       }
     ]
   };
-
-  console.log(choices);
 
   return (
     <div className="d-flex justify-content-center mt-2 mb-2">
