@@ -10,10 +10,8 @@ const StyledToggleButton = styled(ToggleButton)`
 // eslint-disable-next-line no-unused-vars
 const VotingProposalForm = ({ choices, setSelectedChoice }) => {
   const handleClick = event => {
-    if (event.target.value) {
-      setSelectedChoice(event.target.value);
-      console.log(event.target.value);
-    }
+    if (event.target.value) setSelectedChoice(event.target.value);
+    else setSelectedChoice(undefined);
   };
 
   return (

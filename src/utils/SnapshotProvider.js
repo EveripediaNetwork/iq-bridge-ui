@@ -1,9 +1,15 @@
 import axios from "axios";
+import { ethers } from "ethers";
 
 import { snapshotGraphqlEndpoint } from "../config";
 
-const vote = async wallet => {
+const vote = async (wallet, id, choice, address) => {
   if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+
+    provider
+      .getSigner()
+      .signTransaction({ type: "vote", from: wallet.account });
     return 1;
   }
   return 0;

@@ -1,8 +1,9 @@
 import React, { memo, useState, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { Card, Col, Container, Row, Button } from "react-bootstrap";
+import { Card, Col, Container, Row, Button, Spinner } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
+import styled from "styled-components";
 
 import { ProposalContext } from "../../context/proposalContext";
 import { getProposals, getVotes } from "../../utils/SnapshotProvider";
@@ -15,6 +16,18 @@ import VotingProposalForm from "./votingProposalForm";
 import GenericDialog from "../../components/ui/genericDialog";
 import ProposalDetails from "../../components/ui/proposalDetails";
 
+const StyledCard = styled(Card)`
+  min-height: 500px;
+`;
+
+const SpinnerDiv = styled.div`
+  height: 533px;
+`;
+
+const SelectedProposalButton = styled(Button)`
+  border-radius: 5px !important;
+`;
+
 const Voting = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
@@ -22,6 +35,7 @@ const Voting = () => {
   const [txDone, setTxDone] = useState(false);
   const [proposals, setProposals] = useState();
   const [selectedProposal, setSelectedProposal] = useState();
+  const [loadingSelectedProposal, setLoadingSelectedProposal] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState();
   const [votes, setVotes] = useState();
   const [openProposalsModal, setOpenProposalsModal] = useState(false);
@@ -42,8 +56,10 @@ const Voting = () => {
 
   useEffect(() => {
     (async () => {
+      setLoadingSelectedProposal(true);
       const data = await getProposals(1);
       setSelectedProposal(data[0]);
+      setLoadingSelectedProposal(false);
     })();
   }, []);
 
@@ -52,7 +68,6 @@ const Voting = () => {
       (async () => {
         const data = await getVotes(selectedProposal.id, 1000);
         setVotes(data);
-        console.log(data);
       })();
   }, [selectedProposal]);
 
@@ -68,32 +83,37 @@ const Voting = () => {
                   aria-label={t("voting")}
                   icon="⚖"
                 />
-                <Card className="mx-auto shadow-sm">
+                <StyledCard className="mx-auto shadow-sm">
                   <Card.Body>
                     <div className="d-flex flex-row justify-content-center">
                       <div className="d-flex flex-column justify-content center">
                         {!selectedProposal ? (
-                          <div className="text-center">
-                            <Button
-                              variant="light"
-                              style={{ maxWidth: "100%" }}
-                              onClick={handleSelectProposalClick}
-                            >
-                              {t("select_a_proposal")}
-                            </Button>
-                          </div>
+                          <>
+                            {!loadingSelectedProposal && (
+                              <div className="text-center">
+                                <Button
+                                  variant="light"
+                                  style={{ maxWidth: "100%" }}
+                                  onClick={handleSelectProposalClick}
+                                >
+                                  {t("select_a_proposal")}
+                                </Button>
+                              </div>
+                            )}
+                          </>
                         ) : (
                           <div style={{ maxWidth: "100%" }}>
-                            <Button
+                            <SelectedProposalButton
                               onClick={() => setOpenSelectedProposal(true)}
-                              variant="outline-success"
+                              className="shadow-sm"
+                              variant="success"
                             >
-                              {selectedProposal.title.length > 25
+                              {selectedProposal.title.length > 35
                                 ? `${
-                                    selectedProposal.title.match(/.{1,25}/g)[0]
+                                    selectedProposal.title.match(/.{1,35}/g)[0]
                                   }...`
                                 : selectedProposal.title}
-                            </Button>
+                            </SelectedProposalButton>
                             <GenericDialog
                               show={openSelectedProposal}
                               onHide={() => setOpenSelectedProposal(false)}
@@ -117,11 +137,29 @@ const Voting = () => {
                         />
                       </div>
                     </div>
-                    {selectedProposal && votes && (
+                    {selectedProposal && votes ? (
                       <VotingChart
                         votes={votes}
                         choices={selectedProposal.choices}
                       />
+                    ) : (
+                      <>
+                        {!loadingSelectedProposal && (
+                          <SpinnerDiv className="d-flex flex-column align-items-center justify-content-center text-center">
+                            {!selectedProposal ? (
+                              <>
+                                <h2 className="font-weight-light">
+                                  Select a proposal to see details
+                                </h2>
+                                <br />
+                                <h2>😃</h2>
+                              </>
+                            ) : (
+                              <Spinner animation="grow" />
+                            )}
+                          </SpinnerDiv>
+                        )}
+                      </>
                     )}
                     {selectedProposal && (
                       <>
@@ -133,19 +171,21 @@ const Voting = () => {
                         <hr />
                       </>
                     )}
-                    <Button
-                      disabled={!selectedProposal || !selectedChoice}
-                      onClick={handleVote}
-                      variant="primary"
-                      className="text-capitalize"
-                      type="submit"
-                      size="lg"
-                      block
-                    >
-                      Vote
-                    </Button>
+                    {selectedProposal && (
+                      <Button
+                        disabled={!selectedProposal || !selectedChoice}
+                        onClick={handleVote}
+                        variant="primary"
+                        className="text-capitalize"
+                        type="submit"
+                        size="lg"
+                        block
+                      >
+                        Vote
+                      </Button>
+                    )}
                   </Card.Body>
-                </Card>
+                </StyledCard>
               </Col>
             </Row>
             {wallet.account && txDone && (

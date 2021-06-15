@@ -55,12 +55,13 @@ export const resources = {
       details: "Details",
       current_proposals: "Current Proposals",
       // proposalDetails
-      start: "Start",
+      started: "Started",
       at: "At",
-      end: "End",
+      ending: "Ending",
+      ended: "Ended",
       select_for_voting: "Select for voting",
       selected: "Selected",
-      see_on_snapshot: "See on Snapshot",
+      see_on_snapshot: "Go to proposals",
 
       // swapContainer
       balance: "balance",
@@ -143,12 +144,13 @@ export const resources = {
       details: "세부",
       current_proposals: "현재 제안",
       // proposalDetails
-      start: "스타트",
+      started: "Started",
       at: "에서",
-      end: "종료",
+      ending: "Ending",
+      ended: "Ended",
       select_for_voting: "투표를 위해 선택",
       selected: "선택된",
-      see_on_snapshot: "스냅 샷보기",
+      see_on_snapshot: "Go to proposals",
       // swapContainer
       balance: "밸런스",
       // txDetailsDialog
@@ -229,12 +231,13 @@ export const resources = {
       details: "细节",
       current_proposals: "当前提案",
       // proposalDetails
-      start: "开始",
+      started: "Started",
       at: "在",
-      end: "结尾",
+      ending: "Ending",
+      ended: "Ended",
       select_for_voting: "选择投票",
       selected: "已选",
-      see_on_snapshot: "在 Snapshot 上查看",
+      see_on_snapshot: "Go to proposals",
       // swapContainer
       balance: "平衡",
       // txDetailsDialog

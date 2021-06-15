@@ -45,15 +45,17 @@ const ProposalDetails = ({ proposal, setShow }) => {
     );
   };
 
+  console.log(proposal);
+
   return (
     <div>
-      <h4 className="text-center font-weight-light text-info">
+      <h4 className="text-center font-weight-light text-primary">
         {proposal.title}
       </h4>
       <Container className="shadow-sm p-3">
         <Row>
           <Col xs>
-            <strong>{t("start")}: </strong>
+            <strong>{t("started")}: </strong>
             {new Date(proposal.start * 1000).toLocaleDateString("en-US")}
             <br />
             <small className="text-muted">
@@ -62,7 +64,9 @@ const ProposalDetails = ({ proposal, setShow }) => {
             </small>
           </Col>
           <Col xs>
-            <strong>{t("end")}: </strong>
+            <strong>
+              {proposal.state === "closed" ? t("ended") : t("ending")}:{" "}
+            </strong>
             {new Date(proposal.end * 1000).toLocaleDateString()}
             <br />
             <small className="text-muted">
@@ -93,7 +97,7 @@ const ProposalDetails = ({ proposal, setShow }) => {
           <a
             rel="noopener noreferrer"
             target="_blank"
-            href={`${snapshotBaseUrl}${proposal.id}`}
+            href={`${snapshotBaseUrl}`}
           >
             {t("see_on_snapshot")}
           </a>
