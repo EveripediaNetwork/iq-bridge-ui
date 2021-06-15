@@ -9,7 +9,6 @@ import {
   getEpData,
   getSocialData,
   getTokenHolders,
-  getTotals,
   getHiIQ,
   getLPs,
   getVolume
@@ -76,10 +75,6 @@ const Stats = () => {
       const volume = await getVolume();
       setData(prevState => {
         return { ...prevState, ...volume };
-      });
-      const totals = await getTotals();
-      setData(prevState => {
-        return { ...prevState, ...totals };
       });
       const hiiq = await getHiIQ();
       setData(prevState => {
@@ -198,7 +193,7 @@ const Stats = () => {
                   <Value>
                     {showData(
                       parseInt(data.holders?.eos || 0, 10) +
-                        parseInt(data.holders?.eth || 0, 10, 10) +
+                        parseInt(data.holders?.eth || 0, 10) +
                         parseInt(data.holders?.matic || 0, 10) +
                         parseInt(data.holders?.bsc || 0, 10)
                     )}

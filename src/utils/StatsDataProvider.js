@@ -1,5 +1,3 @@
-// https://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names=everipedia
-
 const getTokenHolders = async () => {
   const response = await fetch(
     "https://www.api.bloks.io/tokens?type=tokenHoldersCount&chain=eos&contract=everipediaiq&symbol=IQ"
@@ -42,14 +40,6 @@ const getHiIQ = async () => {
     hiiq: {
       holders: data.token?.holdersCount || 0,
       volume: parseInt(data.token?.totalSupply, 10) / 10e17 || 0
-    }
-  };
-};
-
-const getTotals = async () => {
-  return {
-    totals: {
-      eos: 10019699034
     }
   };
 };
@@ -135,7 +125,6 @@ const getSocialData = async () => {
 export {
   getTokenHolders,
   getVolume,
-  getTotals,
   getEpData,
   getSocialData,
   getHiIQ,
