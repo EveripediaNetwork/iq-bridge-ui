@@ -1,3 +1,9 @@
+// TODO: get apis for hardcoded values
+const eosVolume = 10019699034;
+const twitterFollowers = 118300;
+const maticHolders = 1568;
+const bscHolders = 72;
+
 const getTokenHolders = async () => {
   const response = await fetch(
     "https://www.api.bloks.io/tokens?type=tokenHoldersCount&chain=eos&contract=everipediaiq&symbol=IQ"
@@ -5,37 +11,47 @@ const getTokenHolders = async () => {
   const data = await response.text();
 
   const response2 = await fetch(
-    "https://ethplorer.io/service/service.php?data=0x579cea1889991f68acc35ff5c3dd0621ff29b0c9&page=chart%3Dcandlestick"
+    "https://ethplorer.io/service/service.php?data=0x579cea1889991f68acc35ff5c3dd0621ff29b0c9"
   );
   const data2 = await response2.json();
   return {
     holders: {
       eos: data,
-      eth: data2.token.holdersCount
+      eth: data2.token.holdersCount,
+      matic: maticHolders,
+      bsc: bscHolders
     }
   };
 };
 
 const getVolume = async () => {
   const response = await fetch(
-    "https://ethplorer.io/service/service.php?data=0x579cea1889991f68acc35ff5c3dd0621ff29b0c9&page=chart%3Dcandlestick"
+    "https://ethplorer.io/service/service.php?data=0x579cea1889991f68acc35ff5c3dd0621ff29b0c9"
   );
   const data = await response.json();
-  // TODO: remove tokens that are in bridges current_supply - bridge per chain
+  const ethVolume = data.token.totalSupply;
+  const maticVolume = data.holders.filter(
+    h => h.address === "0x40ec5b33f54e0e8a33a975908c5ba1c14e5bbbdf"
+  );
+  const bscVolume = data.holders.filter(
+    h => h.address === "0x533e3c0e6b48010873b947bddc4721b1bdff9648"
+  );
+
   return {
     volume: {
-      eos: 10019699034,
-      eth: parseInt(data.token.totalSupply, 10) / 10e17
+      eos: eosVolume - ethVolume / 10e17,
+      eth: (ethVolume - maticVolume[0].balance - bscVolume[0].balance) / 10e17,
+      matic: maticVolume[0].balance / 10e17,
+      bsc: bscVolume[0].balance / 10e17
     }
   };
 };
 
 const getHiIQ = async () => {
   const response = await fetch(
-    "https://ethplorer.io/service/service.php?data=0x1bf5457ecaa14ff63cc89efd560e251e814e16ba&page=chart%3Dcandlestick"
+    "https://ethplorer.io/service/service.php?data=0x1bf5457ecaa14ff63cc89efd560e251e814e16ba"
   );
   const data = await response.json();
-  // TODO: remove tokens that are in bridges current_supply - bridge per chain
   return {
     hiiq: {
       holders: data.token?.holdersCount || 0,
@@ -116,7 +132,7 @@ const getSocialData = async () => {
   const data = await response.json();
   return {
     social: {
-      twitter: 118300,
+      twitter: twitterFollowers,
       reddit: data.data.subscribers
     }
   };

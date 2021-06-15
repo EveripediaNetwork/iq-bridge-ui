@@ -38,6 +38,15 @@ export const resources = {
       max_profit: "Maximum profit",
       // stats
       stats: "Stats",
+      holders: "holders",
+      volume: "volume",
+      total: "total",
+      apps: "apps",
+      prediqt_markets: "PredIQt markets",
+      everipedia_articles: "Everipedia articles",
+      everipedia_onchain_edits: "Everipedia Onchain Edits",
+      everipedia_page_views: "Everipedia Page Views",
+      social: "Social",
       // Lock page
       value_restriction: "Input value must be between 1 and 1460",
       lock_period: "Lock period (days)",
@@ -128,6 +137,15 @@ export const resources = {
       max_profit: "최대 수익",
       // stats
       stats: "Stats",
+      holders: "holders",
+      volume: "volume",
+      total: "total",
+      apps: "apps",
+      prediqt_markets: "PredIQt markets",
+      everipedia_articles: "Everipedia articles",
+      everipedia_onchain_edits: "Everipedia Onchain Edits",
+      everipedia_page_views: "Everipedia Page Views",
+      social: "Social",
       // lock page
       value_restriction: "입력 값은 1에서 1460 사이여야 합니다.",
       lock_period: "락업 기간(일)",
@@ -217,6 +235,15 @@ export const resources = {
       max_profit: "最大利润",
       // stats
       stats: "Stats",
+      holders: "holders",
+      volume: "volume",
+      total: "total",
+      apps: "apps",
+      prediqt_markets: "PredIQt markets",
+      everipedia_articles: "Everipedia articles",
+      everipedia_onchain_edits: "Everipedia Onchain Edits",
+      everipedia_page_views: "Everipedia Page Views",
+      social: "Social",
       // Lock page
       value_restriction: "输入值必须介于1到1460",
       lock_period: "锁定时长 (days)",

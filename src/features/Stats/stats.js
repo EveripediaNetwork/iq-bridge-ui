@@ -3,6 +3,7 @@ import { Card, Col, Container, Row, Spinner } from "react-bootstrap";
 import * as Humanize from "humanize-plus";
 
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 import Layout from "../../components/layouts/layout";
 import CardTitle from "../../components/ui/cardTitle";
 import {
@@ -18,6 +19,7 @@ const DataTitle = styled.div`
   font-size: 20px;
   border-bottom: 1px solid #ecebeb;
   margin: 20px 5px 5px 5px;
+  text-transform: capitalize;
 `;
 
 const DataRow = styled.div`
@@ -63,7 +65,7 @@ const showData = value => {
 };
 
 const Stats = () => {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
   // TODO: add translations
   const [data, setData] = useState({});
   useEffect(() => {
@@ -110,72 +112,74 @@ const Stats = () => {
             />
             <Card className="mx-auto shadow-sm">
               <Card.Body>
-                <DataTitle>Holders</DataTitle>
+                <DataTitle>{t("holders")}</DataTitle>
                 <DataRow>
                   <Icon>
                     <img alt="EOS" src="/tokens/1765.png" />
                   </Icon>
-                  <Title>EOS Holders</Title>
+                  <Title>EOS {t("holders")}</Title>
                   <Value>{showData(data.holders?.eos)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="ethereum" src="/tokens/1027.png" />
                   </Icon>
-                  <Title>Ethereum Holders</Title>
+                  <Title>Ethereum {t("holders")}</Title>
                   <Value>{showData(data.holders?.eth)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="polygon" src="/tokens/3890.png" />
                   </Icon>
-                  <Title>Polygon Holders</Title>
+                  <Title>Polygon {t("holders")}</Title>
                   <Value>{showData(data.holders?.matic)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="BSC" src="/tokens/1839.png" />
                   </Icon>
-                  <Title>BSC Holders</Title>
+                  <Title>BSC {t("holders")}</Title>
                   <Value>{showData(data.holders?.bsc)}</Value>
                 </DataRow>
 
-                <DataTitle>Volume</DataTitle>
+                <DataTitle>{t("volume")}</DataTitle>
                 <DataRow>
                   <Icon>
                     <img alt="EOS" src="/tokens/1765.png" />
                   </Icon>
-                  <Title>EOS Volume</Title>
+                  <Title>EOS {t("volume")}</Title>
                   <Value>{showData(data.volume?.eos)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="ethereum" src="/tokens/1027.png" />
                   </Icon>
-                  <Title>Ethereum Volume</Title>
+                  <Title>Ethereum {t("volume")}</Title>
                   <Value>{showData(data.volume?.eth)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="polygon" src="/tokens/3890.png" />
                   </Icon>
-                  <Title>Polygon Volume</Title>
+                  <Title>Polygon {t("volume")}</Title>
                   <Value>{showData(data.volume?.matic)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="BSC" src="/tokens/1839.png" />
                   </Icon>
-                  <Title>BSC Volume</Title>
+                  <Title>BSC {t("volume")}</Title>
                   <Value>{showData(data.volume?.bsc)}</Value>
                 </DataRow>
 
-                <DataTitle>Total</DataTitle>
+                <DataTitle>{t("total")}</DataTitle>
                 <DataRow>
                   <Icon>
                     <img alt="IQ" src="/tokens/2930.png" />
                   </Icon>
-                  <Title>Total Volume</Title>
+                  <Title>
+                    {t("total")} {t("volume")}
+                  </Title>
                   <Value>
                     {showData(
                       parseInt(data.volume?.eos || 0, 10) +
@@ -189,7 +193,9 @@ const Stats = () => {
                   <Icon>
                     <img alt="IQ" src="/tokens/2930.png" />
                   </Icon>
-                  <Title>Total Holders</Title>
+                  <Title>
+                    {t("total")} {t("holders")}
+                  </Title>
                   <Value>
                     {showData(
                       parseInt(data.holders?.eos || 0, 10) +
@@ -205,64 +211,64 @@ const Stats = () => {
                   <Icon>
                     <img alt="IQ" src="/tokens/2930.png" />
                   </Icon>
-                  <Title>HiIQ tokens</Title>
+                  <Title>HiIQ {t("volume")}</Title>
                   <Value>{showData(data.hiiq?.holders)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="IQ" src="/tokens/2930.png" />
                   </Icon>
-                  <Title>HiIQ holders</Title>
+                  <Title>HiIQ {t("holders")}</Title>
                   <Value>{showData(data.hiiq?.volume)}</Value>
                 </DataRow>
 
-                <DataTitle>Apps</DataTitle>
+                <DataTitle>{t("apps")}</DataTitle>
                 <DataRow>
                   <Icon>
                     <img alt="IQ" src="/tokens/2930.png" />
                   </Icon>
-                  <Title>PredIQt markets</Title>
+                  <Title>{t("prediqt_markets")}</Title>
                   <Value>{showData(data.prediqt?.markets)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="IQ" src="/tokens/2930.png" />
                   </Icon>
-                  <Title>Everipedia articles</Title>
+                  <Title>{t("everipedia_articles")}</Title>
                   <Value>{showData(data.ep?.articles)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="IQ" src="/tokens/2930.png" />
                   </Icon>
-                  <Title>Everipedia Onchain Edits</Title>
+                  <Title>{t("everipedia_onchain_edits")}</Title>
                   <Value>{showData(data.ep?.edits)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="IQ" src="/tokens/2930.png" />
                   </Icon>
-                  <Title>Everipedia page views</Title>
+                  <Title>{t("everipedia_page_views")}</Title>
                   <Value>{showData(data.ep?.views)}</Value>
                 </DataRow>
 
-                <DataTitle>Liquidity</DataTitle>
+                <DataTitle>{t("liquidity")}</DataTitle>
                 <DataRow>
                   <Icon>
                     <img alt="uni" src="/tokens/7083.png" />
                   </Icon>
-                  <Title>LP liquidity Uniswap v2</Title>
+                  <Title>LP {t("liquidity")} Uniswap v2</Title>
                   <Value>${showData(data.lp?.uniswap)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="Quickswap" src="/tokens/8206.png" />
                   </Icon>
-                  <Title>LP liquidity QuickSwap</Title>
+                  <Title>LP {t("liquidity")} QuickSwap</Title>
                   <Value>${showData(data.lp?.quickswap)}</Value>
                 </DataRow>
 
-                <DataTitle>Social</DataTitle>
+                <DataTitle>{t("social")}</DataTitle>
                 <DataRow>
                   <Icon>
                     <img alt="IQ" src="/tokens/2930.png" />
