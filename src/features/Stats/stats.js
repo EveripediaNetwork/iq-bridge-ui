@@ -10,6 +10,8 @@ import {
   getSocialData,
   getTokenHolders,
   getTotals,
+  getHiIQ,
+  getLPs,
   getVolume
 } from "../../utils/StatsDataProvider";
 
@@ -52,7 +54,7 @@ const Value = styled.div`
 `;
 
 const showData = value => {
-  return value ? (
+  return value !== undefined ? (
     Humanize.intComma(value)
   ) : (
     <Spinner animation="border" variant="primary" role="status" size="sm">
@@ -79,13 +81,21 @@ const Stats = () => {
       setData(prevState => {
         return { ...prevState, ...totals };
       });
-      const ep = await getEpData();
+      const hiiq = await getHiIQ();
       setData(prevState => {
-        return { ...prevState, ...ep };
+        return { ...prevState, ...hiiq };
+      });
+      const lp = await getLPs();
+      setData(prevState => {
+        return { ...prevState, ...lp };
       });
       const social = await getSocialData();
       setData(prevState => {
         return { ...prevState, ...social };
+      });
+      const ep = await getEpData();
+      setData(prevState => {
+        return { ...prevState, ...ep };
       });
     }
 
@@ -171,14 +181,28 @@ const Stats = () => {
                     <img alt="IQ" src="/tokens/2930.png" />
                   </Icon>
                   <Title>Total Volume</Title>
-                  <Value>153,000</Value>
+                  <Value>
+                    {showData(
+                      parseInt(data.volume?.eos || 0, 10) +
+                        parseInt(data.volume?.eth || 0, 10) +
+                        parseInt(data.volume?.matic || 0, 10) +
+                        parseInt(data.volume?.bsc || 0, 10)
+                    )}
+                  </Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="IQ" src="/tokens/2930.png" />
                   </Icon>
                   <Title>Total Holders</Title>
-                  <Value>3,000</Value>
+                  <Value>
+                    {showData(
+                      parseInt(data.holders?.eos || 0, 10) +
+                        parseInt(data.holders?.eth || 0, 10, 10) +
+                        parseInt(data.holders?.matic || 0, 10) +
+                        parseInt(data.holders?.bsc || 0, 10)
+                    )}
+                  </Value>
                 </DataRow>
 
                 <DataTitle>HiIQ</DataTitle>
@@ -187,14 +211,14 @@ const Stats = () => {
                     <img alt="IQ" src="/tokens/2930.png" />
                   </Icon>
                   <Title>HiIQ tokens</Title>
-                  <Value>153,000</Value>
+                  <Value>{showData(data.hiiq?.holders)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="IQ" src="/tokens/2930.png" />
                   </Icon>
                   <Title>HiIQ holders</Title>
-                  <Value>3,000</Value>
+                  <Value>{showData(data.hiiq?.volume)}</Value>
                 </DataRow>
 
                 <DataTitle>Apps</DataTitle>
@@ -203,7 +227,7 @@ const Stats = () => {
                     <img alt="IQ" src="/tokens/2930.png" />
                   </Icon>
                   <Title>PredIQt markets</Title>
-                  <Value>153,000</Value>
+                  <Value>{showData(data.prediqt?.markets)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
@@ -216,8 +240,8 @@ const Stats = () => {
                   <Icon>
                     <img alt="IQ" src="/tokens/2930.png" />
                   </Icon>
-                  <Title>Everipedia Editors</Title>
-                  <Value>{showData(data.ep?.editors)}</Value>
+                  <Title>Everipedia Onchain Edits</Title>
+                  <Value>{showData(data.ep?.edits)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
@@ -232,15 +256,15 @@ const Stats = () => {
                   <Icon>
                     <img alt="uni" src="/tokens/7083.png" />
                   </Icon>
-                  <Title>LP liquidity Uniswap v3</Title>
-                  <Value>153,000</Value>
+                  <Title>LP liquidity Uniswap v2</Title>
+                  <Value>${showData(data.lp?.uniswap)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="Quickswap" src="/tokens/8206.png" />
                   </Icon>
                   <Title>LP liquidity QuickSwap</Title>
-                  <Value>3,000</Value>
+                  <Value>${showData(data.lp?.quickswap)}</Value>
                 </DataRow>
 
                 <DataTitle>Social</DataTitle>
