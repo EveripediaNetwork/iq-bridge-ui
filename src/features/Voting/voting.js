@@ -6,7 +6,7 @@ import { useWallet } from "use-wallet";
 import styled from "styled-components";
 
 import { ProposalContext } from "../../context/proposalContext";
-import { getProposals, getVotes } from "../../utils/SnapshotProvider";
+import { vote, getProposals, getVotes } from "../../utils/SnapshotProvider";
 import ProposalsModal from "../../components/ui/proposalsModal";
 import Layout from "../../components/layouts/layout";
 import CardTitle from "../../components/ui/cardTitle";
@@ -45,7 +45,9 @@ const Voting = () => {
     setOpenProposalsModal(true);
   };
 
-  const handleVote = () => {};
+  const handleVote = async () => {
+    await vote(wallet, selectedProposal.id, selectedChoice);
+  };
 
   const proposalContextValue = {
     proposals,
@@ -105,7 +107,7 @@ const Voting = () => {
                           <div style={{ maxWidth: "100%" }}>
                             <SelectedProposalButton
                               onClick={() => setOpenSelectedProposal(true)}
-                              className="shadow-sm"
+                              className="shadow"
                               variant="success"
                             >
                               {selectedProposal.title.length > 35
@@ -173,7 +175,11 @@ const Voting = () => {
                     )}
                     {selectedProposal && (
                       <Button
-                        disabled={!selectedProposal || !selectedChoice}
+                        disabled={
+                          !selectedProposal ||
+                          !selectedChoice ||
+                          !wallet.account
+                        }
                         onClick={handleVote}
                         variant="primary"
                         className="text-capitalize"

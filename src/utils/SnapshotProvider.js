@@ -1,15 +1,25 @@
 import axios from "axios";
 import { ethers } from "ethers";
 
+import client from "../helpers/snapshotClient";
 import { snapshotGraphqlEndpoint } from "../config";
 
-const vote = async (wallet, id, choice, address) => {
+const vote = async (wallet, id, choice) => {
   if (wallet.status === "connected") {
+    console.log(wallet);
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
 
-    provider
-      .getSigner()
-      .signTransaction({ type: "vote", from: wallet.account });
+    const result = await client.broadcast(
+      provider,
+      wallet.account,
+      "everipediaiq.eth",
+      "vote",
+      { proposal: id, choice: ["2"] }
+    );
+
+    client.broadcast();
+
+    console.log(result);
     return 1;
   }
   return 0;
@@ -28,13 +38,7 @@ const getProposals = async first => {
         choices
         start
         end
-        snapshot
         state
-        author
-        space {
-          id
-          name
-        }
       }
     }
     `

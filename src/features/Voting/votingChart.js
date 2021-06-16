@@ -47,7 +47,7 @@ const VotingChart = ({ choices, votes }) => {
 
 VotingChart.propTypes = {
   choices: PropTypes.arrayOf(PropTypes.string).isRequired,
-  votes: PropTypes.arrayOf(PropTypes.number).isRequired
+  votes: PropTypes.arrayOf(PropTypes.object).isRequired // eslint-disable-line react/forbid-prop-types
 };
 
 export default memo(VotingChart);
