@@ -6,7 +6,12 @@ import { useWallet } from "use-wallet";
 import styled from "styled-components";
 
 import { ProposalContext } from "../../context/proposalContext";
-import { vote, getProposals, getVotes } from "../../utils/SnapshotProvider";
+import {
+  vote,
+  getProposals,
+  getVoteByVoter,
+  getVotes
+} from "../../utils/SnapshotProvider";
 import ProposalsModal from "../../components/ui/proposalsModal";
 import Layout from "../../components/layouts/layout";
 import CardTitle from "../../components/ui/cardTitle";
@@ -46,7 +51,8 @@ const Voting = () => {
   };
 
   const handleVote = async () => {
-    await vote(wallet, selectedProposal.id, selectedChoice);
+    const flag = await vote(wallet, selectedProposal.id, selectedChoice);
+    if (flag === 1) setTxDone(true);
   };
 
   const handleSetSelecthedChoice = value => {
@@ -70,13 +76,20 @@ const Voting = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedProposal && selectedProposal.id)
+    if (selectedProposal && selectedProposal.id) {
       (async () => {
         const data = await getVotes(selectedProposal.id, 1000);
         setVotes(data);
-        console.log(data);
       })();
+    }
   }, [selectedProposal]);
+
+  useEffect(() => {
+    (async () => {
+      if (wallet.status === "connected")
+        setSelectedChoice(await getVoteByVoter(wallet.account));
+    })();
+  }, [wallet.status]);
 
   return (
     <Layout>
@@ -172,8 +185,9 @@ const Voting = () => {
                       <>
                         <hr />
                         <VotingProposalForm
-                          setSelectedChoice={handleSetSelecthedChoice}
                           choices={selectedProposal.choices}
+                          selectedChoice={selectedChoice}
+                          setSelectedChoice={handleSetSelecthedChoice}
                         />
                         <hr />
                       </>

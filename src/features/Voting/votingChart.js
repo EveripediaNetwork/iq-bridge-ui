@@ -15,7 +15,7 @@ const VotingChart = ({ choices, votes }) => {
   };
 
   useEffect(() => {
-    for (let i = 1; i <= choices.length; i++) {
+    for (let i = 1; i <= choices.length; i += 1) {
       setVotesCount(prev => [
         ...prev,
         votes.filter(v => v.choice === i).length

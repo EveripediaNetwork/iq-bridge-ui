@@ -14,14 +14,12 @@ const vote = async (wallet, id, choice) => {
       type: "vote",
       payload: {
         proposal: id,
-        choice: choice,
+        choice,
         metadata: {}
       }
     });
 
     const sig = await provider.getSigner().signMessage(msg);
-
-    console.log(sig);
 
     const response = await fetch(`https://hub.snapshot.page/api/message`, {
       method: "POST",
@@ -32,7 +30,7 @@ const vote = async (wallet, id, choice) => {
       body: JSON.stringify({ msg, sig, address: wallet.account })
     });
 
-    const result = await response.json();
+    await response.json();
 
     return 1;
   }
@@ -63,6 +61,20 @@ const getProposals = async first => {
   return data.data.proposals;
 };
 
+const getVoteByVoter = async address => {
+  const { data } = await axios.post(snapshotGraphqlEndpoint, {
+    query: `
+    query {
+      votes(where: {voter: "${address}"}) {
+        choice
+      }
+    }
+    `
+  });
+
+  return data.data.votes[0].choice;
+};
+
 const getVotes = async (id, first) => {
   const { data } = await axios.post(snapshotGraphqlEndpoint, {
     query: `
@@ -77,4 +89,4 @@ const getVotes = async (id, first) => {
   return data.data.votes;
 };
 
-export { getProposals, getVotes, vote };
+export { getProposals, getVoteByVoter, getVotes, vote };
