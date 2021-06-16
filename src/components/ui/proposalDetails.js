@@ -45,8 +45,6 @@ const ProposalDetails = ({ proposal, setShow }) => {
     );
   };
 
-  console.log(proposal);
-
   return (
     <div>
       <h4 className="text-center font-weight-light text-primary">

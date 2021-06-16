@@ -49,6 +49,10 @@ const Voting = () => {
     await vote(wallet, selectedProposal.id, selectedChoice);
   };
 
+  const handleSetSelecthedChoice = value => {
+    setSelectedChoice(selectedProposal.choices.indexOf(value) + 1);
+  };
+
   const proposalContextValue = {
     proposals,
     setProposals,
@@ -70,6 +74,7 @@ const Voting = () => {
       (async () => {
         const data = await getVotes(selectedProposal.id, 1000);
         setVotes(data);
+        console.log(data);
       })();
   }, [selectedProposal]);
 
@@ -167,7 +172,7 @@ const Voting = () => {
                       <>
                         <hr />
                         <VotingProposalForm
-                          setSelectedChoice={setSelectedChoice}
+                          setSelectedChoice={handleSetSelecthedChoice}
                           choices={selectedProposal.choices}
                         />
                         <hr />

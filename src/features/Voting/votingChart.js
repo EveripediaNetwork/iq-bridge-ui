@@ -15,10 +15,10 @@ const VotingChart = ({ choices, votes }) => {
   };
 
   useEffect(() => {
-    for (let i = 0; i < choices.length; i++) {
+    for (let i = 1; i <= choices.length; i++) {
       setVotesCount(prev => [
-        votes.filter(v => v.choice === i).length,
-        ...prev
+        ...prev,
+        votes.filter(v => v.choice === i).length
       ]);
       setColors(prev => [getRandomRGBColor(), ...prev]);
       setBorderColors(prev => [getRandomRGBColor(), ...prev]);

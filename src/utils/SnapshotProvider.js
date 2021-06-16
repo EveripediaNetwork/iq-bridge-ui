@@ -1,25 +1,39 @@
 import axios from "axios";
 import { ethers } from "ethers";
 
-import client from "../helpers/snapshotClient";
 import { snapshotGraphqlEndpoint } from "../config";
 
 const vote = async (wallet, id, choice) => {
   if (wallet.status === "connected") {
-    console.log(wallet);
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
 
-    const result = await client.broadcast(
-      provider,
-      wallet.account,
-      "everipediaiq.eth",
-      "vote",
-      { proposal: id, choice: ["2"] }
-    );
+    const msg = JSON.stringify({
+      version: "0.1.3",
+      timestamp: (Date.now() / 1e3).toFixed(),
+      space: "everipediaiq.eth",
+      type: "vote",
+      payload: {
+        proposal: id,
+        choice: choice,
+        metadata: {}
+      }
+    });
 
-    client.broadcast();
+    const sig = await provider.getSigner().signMessage(msg);
 
-    console.log(result);
+    console.log(sig);
+
+    const response = await fetch(`https://hub.snapshot.page/api/message`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ msg, sig, address: wallet.account })
+    });
+
+    const result = await response.json();
+
     return 1;
   }
   return 0;
@@ -31,7 +45,7 @@ const getProposals = async first => {
     {
       query: `
     query Proposals {
-      proposals(first: ${first}, skip: 0, where: {space_in: ["everipediaiq.eth"]}, orderBy: "created", orderDirection: asc) {
+      proposals(first: ${first}, skip: 0, where: {space_in: ["everipediaiq.eth"]}, orderBy: "created", orderDirection: desc) {
         id
         title
         body
