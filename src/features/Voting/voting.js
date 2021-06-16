@@ -22,11 +22,11 @@ import GenericDialog from "../../components/ui/genericDialog";
 import ProposalDetails from "../../components/ui/proposalDetails";
 
 const StyledCard = styled(Card)`
-  min-height: 500px;
+  min-height: 583px;
 `;
 
 const SpinnerDiv = styled.div`
-  height: 533px;
+  height: 583px;
 `;
 
 const SelectedProposalButton = styled(Button)`
@@ -43,6 +43,7 @@ const Voting = () => {
   const [loadingSelectedProposal, setLoadingSelectedProposal] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState();
   const [votes, setVotes] = useState();
+  const [alreadyVoted, setAlreadyVoted] = useState(false);
   const [openProposalsModal, setOpenProposalsModal] = useState(false);
   const [openSelectedProposal, setOpenSelectedProposal] = useState(false);
 
@@ -86,8 +87,10 @@ const Voting = () => {
 
   useEffect(() => {
     (async () => {
-      if (wallet.status === "connected")
+      if (wallet.status === "connected") {
         setSelectedChoice(await getVoteByVoter(wallet.account));
+        setAlreadyVoted(true);
+      }
     })();
   }, [wallet.status]);
 
@@ -104,7 +107,7 @@ const Voting = () => {
                   icon="⚖"
                 />
                 <StyledCard className="mx-auto shadow-sm">
-                  <Card.Body>
+                  <Card.Body className="d-flex flex-column justify-content-between">
                     <div className="d-flex flex-row justify-content-center">
                       <div className="d-flex flex-column justify-content center">
                         {!selectedProposal ? (
@@ -182,22 +185,16 @@ const Voting = () => {
                       </>
                     )}
                     {selectedProposal && (
-                      <>
-                        <hr />
-                        <VotingProposalForm
-                          choices={selectedProposal.choices}
-                          selectedChoice={selectedChoice}
-                          setSelectedChoice={handleSetSelecthedChoice}
-                        />
-                        <hr />
-                      </>
+                      <VotingProposalForm
+                        choices={selectedProposal.choices}
+                        selectedChoice={selectedChoice}
+                        setSelectedChoice={handleSetSelecthedChoice}
+                      />
                     )}
                     {selectedProposal && (
                       <Button
                         disabled={
-                          !selectedProposal ||
-                          !selectedChoice ||
-                          !wallet.account
+                          !selectedProposal || !alreadyVoted || !wallet.account
                         }
                         onClick={handleVote}
                         variant="primary"
