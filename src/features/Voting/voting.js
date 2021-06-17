@@ -189,7 +189,7 @@ const Voting = () => {
                         )}
                       </>
                     )}
-                    {selectedProposal && (
+                    {selectedProposal && wallet.account !== null && (
                       <VotingProposalForm
                         choices={selectedProposal.choices}
                         selectedChoice={selectedChoice}
