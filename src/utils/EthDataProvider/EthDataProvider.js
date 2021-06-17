@@ -63,7 +63,7 @@ const convertPTokensTx = async (amount, wallet) => {
     const hashes = [];
     const userAddress = await provider.getSigner().getAddress();
     const allowedTokens = await erc20.allowance(userAddress, pMinterAddress);
-    if (allowedTokens.lt(amount)) {
+    if (allowedTokens.lt(amountParsed)) {
       const approveResult = await erc20.approve(
         pMinterAddress,
         ethers.constants.MaxUint256
@@ -100,7 +100,7 @@ const reverseIQtoEOSTx = async (amount, wallet, eosAccount) => {
     );
     const userAddress = await provider.getSigner().getAddress();
     const allowedTokens = await erc20.allowance(userAddress, pMinterAddress);
-    if (allowedTokens.lt(amount)) {
+    if (allowedTokens.lt(amountParsed)) {
       await erc20.approve(pMinterAddress, ethers.constants.MaxUint256);
     }
     await pMinter.burn(amountParsed);
@@ -134,7 +134,7 @@ const lockTokensTx = async (amount, time, wallet) => {
     const hashes = [];
     const userAddress = await provider.getSigner().getAddress();
     const allowedTokens = await erc20.allowance(userAddress, hiIQAddress);
-    if (allowedTokens.lt(amount)) {
+    if (allowedTokens.lt(amountParsed)) {
       const approveResult = await erc20.approve(
         hiIQAddress,
         ethers.constants.MaxUint256
@@ -174,7 +174,7 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
 
     const userAddress = await provider.getSigner().getAddress();
     const allowedTokens = await erc20.allowance(userAddress, hiIQAddress);
-    if (allowedTokens.lt(amount)) {
+    if (allowedTokens.lt(amountParsed)) {
       const approveResult = await erc20.approve(
         hiIQAddress,
         ethers.constants.MaxUint256
