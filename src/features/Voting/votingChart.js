@@ -15,6 +15,7 @@ const VotingChart = ({ choices, votes }) => {
   };
 
   useEffect(() => {
+    setVotesCount([]);
     for (let i = 1; i <= choices.length; i += 1) {
       setVotesCount(prev => [
         ...prev,
@@ -23,7 +24,7 @@ const VotingChart = ({ choices, votes }) => {
       setColors(prev => [getRandomRGBColor(), ...prev]);
       setBorderColors(prev => [getRandomRGBColor(), ...prev]);
     }
-  }, []);
+  }, [votes]);
 
   const data = {
     labels: choices,

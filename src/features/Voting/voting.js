@@ -44,6 +44,7 @@ const Voting = () => {
   const [selectedChoice, setSelectedChoice] = useState();
   const [votes, setVotes] = useState();
   const [alreadyVoted, setAlreadyVoted] = useState(false);
+  const [loadVotes, setLoadVotes] = useState(true);
   const [openProposalsModal, setOpenProposalsModal] = useState(false);
   const [openSelectedProposal, setOpenSelectedProposal] = useState(false);
 
@@ -53,7 +54,10 @@ const Voting = () => {
 
   const handleVote = async () => {
     const flag = await vote(wallet, selectedProposal.id, selectedChoice);
-    if (flag === 1) setTxDone(true);
+    if (flag === 1) {
+      setTxDone(true);
+      setLoadVotes(true);
+    }
   };
 
   const handleSetSelecthedChoice = value => {
@@ -77,13 +81,14 @@ const Voting = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedProposal && selectedProposal.id) {
+    if (selectedProposal && selectedProposal.id && loadVotes === true) {
       (async () => {
         const data = await getVotes(selectedProposal.id, 1000);
         setVotes(data);
+        setLoadVotes(false);
       })();
     }
-  }, [selectedProposal]);
+  }, [selectedProposal, loadVotes]);
 
   useEffect(() => {
     (async () => {
