@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
 
 import {
-  iqAddress,
   hiIQAddress,
+  iqAddress,
   pIQAddress,
   pMinterAddress
 } from "../../config";
@@ -10,6 +10,20 @@ import { erc20Abi } from "./erc20.abi";
 import { hiIQAbi } from "./hiIQ.abi";
 import { minterAbi } from "./minter.abi";
 import { ptokenAbi } from "./ptoken.abi";
+
+const needsApproval = async (provider, erc20, amount, spender, hashes) => {
+  const userAddress = await provider.getSigner().getAddress();
+  const allowedTokens = await erc20.allowance(userAddress, spender);
+  if (allowedTokens.lt(amount)) {
+    const approveResult = await erc20.approve(
+      spender,
+      ethers.constants.MaxUint256
+    );
+    hashes.push(approveResult.hash);
+  }
+
+  return hashes;
+};
 
 const getPTokensUserBalance = async wallet => {
   if (wallet.status === "connected") {
@@ -60,9 +74,13 @@ const convertPTokensTx = async (amount, wallet) => {
       minterAbi,
       provider.getSigner()
     );
-    const hashes = [];
-    const approveResult = await erc20.approve(pMinterAddress, amountParsed);
-    hashes.push(approveResult.hash);
+    const hashes = await needsApproval(
+      provider,
+      erc20,
+      amountParsed,
+      pMinterAddress,
+      []
+    );
 
     const result = await pMinter.mint(amountParsed, { gasLimit: 125000 });
     hashes.push(result.hash);
@@ -91,7 +109,7 @@ const reverseIQtoEOSTx = async (amount, wallet, eosAccount) => {
       minterAbi,
       provider.getSigner()
     );
-    await erc20.approve(pMinterAddress, amountParsed);
+    await needsApproval(provider, erc20, amountParsed, pMinterAddress, []);
     await pMinter.burn(amountParsed);
     await pTokens.redeem(amountParsed, eosAccount, { gasLimit: 50000 });
 
@@ -120,10 +138,13 @@ const lockTokensTx = async (amount, time, wallet) => {
       provider.getSigner()
     );
 
-    const hashes = [];
-    const approveResult = await erc20.approve(hiIQAddress, amountParsed);
-    hashes.push(approveResult.hash);
-
+    const hashes = await needsApproval(
+      provider,
+      erc20,
+      amountParsed,
+      hiIQAddress,
+      []
+    );
     const result = await hiIQ.create_lock(amountParsed, String(timeParsed), {
       gasLimit: 700000
     });
@@ -152,10 +173,13 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
       provider.getSigner()
     );
 
-    const hashes = [];
-
-    const approveResult = await erc20.approve(hiIQAddress, amountParsed);
-    hashes.push(approveResult.hash);
+    const hashes = await needsApproval(
+      provider,
+      erc20,
+      amountParsed,
+      hiIQAddress,
+      []
+    );
 
     const result = await hiIQ.increase_amount(amountParsed, {
       gasLimit: 700000

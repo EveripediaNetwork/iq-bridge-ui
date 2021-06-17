@@ -34,7 +34,7 @@ const TxDetailsDialog = ({ hashes, ...props }) => {
               <Button size="sm" className="pt-0 ml-1" variant="light">
                 <a
                   target="_blank"
-                  href={`${ethBasedExplorerUrl}tx/${hash}`}
+                  href={`${ethBasedExplorerUrl}/tx/${hash}`}
                   rel="noopener noreferrer"
                 >
                   <Search />
