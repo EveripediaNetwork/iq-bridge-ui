@@ -44,20 +44,24 @@ const VotingChart = ({ choices, votes }) => {
           const score = scoreKeys.findIndex(s => s == c.voter);
           // eslint-disable-next-line no-unused-expressions
           // eslint-disable-next-line eqeqeq
-          return c.voter == scoreKeys[score] ? scoreValues[score] : 0;
+          const power = c.voter == scoreKeys[score] ? scoreValues[score] : 0;
+          // eslint-disable-next-line no-param-reassign
+          c.power = power;
+
+          return power;
         })
         .reduce((a, b) => a + b, 0);
 
       setVotesCount(prev => [...prev, choiceVotingResult]);
-
       setColors(prev => [getRandomRGBColor(), ...prev]);
       setBorderColors(prev => [getRandomRGBColor(), ...prev]);
     }
   };
 
   useEffect(() => {
-    for (let i = 0; i < votes.length; i += 1)
-      setAddresses(prev => [...prev, `"${votes[i].voter}"`]);
+    if (addresses.length < votes.length)
+      for (let i = 0; i < votes.length; i += 1)
+        setAddresses(prev => [...prev, `"${votes[i].voter}"`]);
   }, [votes]);
 
   useEffect(() => {
