@@ -81,6 +81,7 @@ const getVotes = async (id, first) => {
     query {
       votes(first: ${first}, skip: 0, where: {proposal: "${id}"}, orderBy: "created", orderDirection: desc) {
         choice
+        voter
       }
     }    
     `
@@ -89,4 +90,18 @@ const getVotes = async (id, first) => {
   return data.data.votes;
 };
 
-export { getProposals, getVoteByVoter, getVotes, vote };
+const getScores = async addresses => {
+  const { data } = await axios.post(snapshotGraphqlEndpoint, {
+    query: `
+      query {
+        scores(space: "everipediaiq.eth", strategies: [{name: "erc20-balance-of", params: {address: "0x579cea1889991f68acc35ff5c3dd0621ff29b0c9", decimals: 18}, network: "1"}], network: "1", addresses: [${addresses}]) {
+          scores
+        }
+      }
+    `
+  });
+
+  return data.data.scores.scores[0];
+};
+
+export { getProposals, getVoteByVoter, getVotes, vote, getScores };
