@@ -2,7 +2,7 @@
 const eosVolume = 10019699034;
 const twitterFollowers = 118300;
 const maticHolders = 1568;
-const bscHolders = 72;
+const bscHolders = 802;
 
 const getTokenHolders = async () => {
   const response = await fetch(
