@@ -72,7 +72,7 @@ const getVoteByVoter = async address => {
     `
   });
 
-  return data.data.votes[0].choice;
+  return data.data.votes[0];
 };
 
 const getVotes = async (id, first) => {

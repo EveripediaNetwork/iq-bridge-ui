@@ -18,6 +18,7 @@ import CardTitle from "../../components/ui/cardTitle";
 import InfoAlert from "../../components/ui/infoAlert";
 import VotingChart from "./votingChart";
 import VotingProposalForm from "./votingProposalForm";
+import VoteBreakdown from "../../components/ui/voteBreakdown";
 import GenericDialog from "../../components/ui/genericDialog";
 import ProposalDetails from "../../components/ui/proposalDetails";
 
@@ -93,7 +94,8 @@ const Voting = () => {
   useEffect(() => {
     (async () => {
       if (wallet.status === "connected") {
-        setSelectedChoice(await getVoteByVoter(wallet.account));
+        const result = await getVoteByVoter(wallet.account);
+        if (result) setSelectedChoice(result.choice);
         setAlreadyVoted(true);
       }
     })();
@@ -188,6 +190,12 @@ const Voting = () => {
                           </SpinnerDiv>
                         )}
                       </>
+                    )}
+                    {votes && (
+                      <VoteBreakdown
+                        choices={selectedProposal.choices}
+                        votes={votes}
+                      />
                     )}
                     {selectedProposal && wallet.account !== null && (
                       <VotingProposalForm
