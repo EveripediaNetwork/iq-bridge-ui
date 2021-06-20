@@ -46,6 +46,7 @@ const Voting = () => {
   const [votes, setVotes] = useState();
   const [alreadyVoted, setAlreadyVoted] = useState(false);
   const [loadVotes, setLoadVotes] = useState(true);
+  const [onVotingTimeWindow, setOnVotingTimeWindow] = useState();
   const [openProposalsModal, setOpenProposalsModal] = useState(false);
   const [openSelectedProposal, setOpenSelectedProposal] = useState(false);
 
@@ -88,6 +89,12 @@ const Voting = () => {
         setVotes(data);
         setLoadVotes(false);
       })();
+    }
+
+    if (selectedProposal) {
+      setOnVotingTimeWindow(
+        new Date() <= new Date(selectedProposal.end * 1000)
+      );
     }
   }, [selectedProposal, loadVotes]);
 
@@ -191,7 +198,7 @@ const Voting = () => {
                         )}
                       </>
                     )}
-                    {votes && (
+                    {selectedProposal && votes && (
                       <VoteBreakdown
                         choices={selectedProposal.choices}
                         votes={votes}
@@ -202,21 +209,25 @@ const Voting = () => {
                         choices={selectedProposal.choices}
                         selectedChoice={selectedChoice}
                         setSelectedChoice={handleSetSelecthedChoice}
+                        onVotingTimeWindow={onVotingTimeWindow}
                       />
                     )}
                     {selectedProposal && (
                       <Button
                         disabled={
-                          !selectedProposal || !alreadyVoted || !wallet.account
+                          !selectedProposal ||
+                          !alreadyVoted ||
+                          !wallet.account ||
+                          !onVotingTimeWindow
                         }
                         onClick={handleVote}
-                        variant="primary"
+                        variant={onVotingTimeWindow ? "primary" : "danger"}
                         className="text-capitalize"
                         type="submit"
                         size="lg"
                         block
                       >
-                        Vote
+                        {onVotingTimeWindow ? "Vote" : "Voting ended"}
                       </Button>
                     )}
                   </Card.Body>
