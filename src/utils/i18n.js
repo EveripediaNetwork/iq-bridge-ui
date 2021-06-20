@@ -39,6 +39,18 @@ export const resources = {
       voting_ended: "Voting ended",
       // ## votingProposalForm
       submit_your_vote_deletion: "Submit your vote deletion",
+      // stats
+      holders: "Holders",
+      volume: "volume",
+      total: "total",
+      apps: "apps",
+      prediqt_markets: "PredIQt markets",
+      everipedia_articles: "Everipedia articles",
+      everipedia_onchain_edits: "Everipedia Onchain Edits",
+      everipedia_page_views: "Everipedia Page Views",
+      liquidity: "liquidity",
+      social: "Social",
+      twitter_follower: "Twitter followers",
       // error
       error: "Error",
       // ---------------------------------------------------------------
@@ -136,6 +148,18 @@ export const resources = {
       voting_ended: "Voting ended",
       // ## votingProposalForm
       submit_your_vote_deletion: "Submit your vote deletion",
+      // stats
+      holders: "Holders",
+      volume: "volume",
+      total: "total",
+      apps: "apps",
+      prediqt_markets: "PredIQt markets",
+      everipedia_articles: "Everipedia articles",
+      everipedia_onchain_edits: "Everipedia Onchain Edits",
+      everipedia_page_views: "Everipedia Page Views",
+      liquidity: "liquidity",
+      social: "Social",
+      twitter_follower: "Twitter followers",
       // error
       error: "오류",
       // ---------------------------------------------------------------
@@ -232,6 +256,18 @@ export const resources = {
       voting_ended: "Voting ended",
       // ## votingProposalForm
       submit_your_vote_deletion: "Submit your vote deletion",
+      // stats
+      holders: "Holders",
+      volume: "volume",
+      total: "total",
+      apps: "apps",
+      prediqt_markets: "PredIQt markets",
+      everipedia_articles: "Everipedia articles",
+      everipedia_onchain_edits: "Everipedia Onchain Edits",
+      everipedia_page_views: "Everipedia Page Views",
+      liquidity: "liquidity",
+      social: "Social",
+      twitter_follower: "Twitter followers",
       // error
       error: "错误",
       // ---------------------------------------------------------------
