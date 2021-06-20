@@ -1,6 +1,7 @@
 import React, { useState, useEffect, memo } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 import {
   ButtonGroup,
   ToggleButton,
@@ -21,6 +22,7 @@ const VotingProposalForm = ({
   setSelectedChoice,
   onVotingTimeWindow
 }) => {
+  const { t } = useTranslation();
   const [showAlert, setShowAlert] = useState(false);
 
   const handleClick = event => {
@@ -75,7 +77,7 @@ const VotingProposalForm = ({
       )}
       {showAlert && (
         <Alert className="mt-2" variant="primary">
-          Submit your vote deletion
+          {t("submit_your_vote_deletion")}
         </Alert>
       )}
     </div>

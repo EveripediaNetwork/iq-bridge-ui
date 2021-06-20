@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { ListGroup, Button, Col, Row } from "react-bootstrap";
 import { BarChartLineFill } from "react-bootstrap-icons";
+import { useTranslation } from "react-i18next";
 
 import { ethBasedExplorerUrl } from "../../config";
 import GenericDialog from "./genericDialog";
@@ -15,6 +16,7 @@ const Link = styled.a`
 `;
 
 const VoteBreakdown = ({ votes, choices }) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   return (
@@ -23,21 +25,13 @@ const VoteBreakdown = ({ votes, choices }) => {
         show={open}
         onHide={() => setOpen(false)}
         size="md"
-        title="Votes Breakdown"
+        title={t("votes_breakdown")}
         body={
           <ListGroup>
             {votes.map(v => (
               <ListGroup.Item key={v.voter}>
                 <Row className="d-flex flex-row flex-wrap justify-content-between">
-                  <Col
-                    sm={5}
-                    className="text-center"
-                    style={{
-                      maxWidth: "150px !imporant",
-                      width: "150px !important",
-                      minWidth: "150px !important"
-                    }}
-                  >
+                  <Col sm={5} className="text-center">
                     <Link
                       target="_blank"
                       rel="noopener noreferrer"
@@ -66,7 +60,7 @@ const VoteBreakdown = ({ votes, choices }) => {
           className="align-middle"
           onClick={() => setOpen(true)}
         >
-          <span className="mr-2">Votes Breakdown</span>
+          <span className="mr-2">{t("votes_breakdown")}</span>
           <BarChartLineFill className="mb-2" />
         </Button>
       </div>

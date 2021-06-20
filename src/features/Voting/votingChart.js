@@ -61,7 +61,7 @@ const VotingChart = ({ choices, votes }) => {
   useEffect(() => {
     if (addresses.length < votes.length)
       for (let i = 0; i < votes.length; i += 1)
-        setAddresses(prev => [...prev, `${votes[i].voter}`]);
+        setAddresses(prev => [...prev, votes[i].voter]);
   }, [votes]);
 
   useEffect(() => {

@@ -34,6 +34,11 @@ export const resources = {
       confirmed_tx: "Transaction confirmed!",
       voting: "voting",
       select_a_proposal: "Select a proposal",
+      select_proposal_to_see_details: "Select a proposal to see details",
+      vote: "Vote",
+      voting_ended: "Voting ended",
+      // ## votingProposalForm
+      submit_your_vote_deletion: "Submit your vote deletion",
       // error
       error: "Error",
       // ---------------------------------------------------------------
@@ -55,6 +60,8 @@ export const resources = {
       details: "Details",
       current_proposals: "Current Proposals",
       // proposalDetails
+      close_details: "Close details",
+      open_details: "Open details",
       started: "Started",
       at: "At",
       ending: "Ending",
@@ -62,7 +69,8 @@ export const resources = {
       select_for_voting: "Select for voting",
       selected: "Selected",
       see_on_snapshot: "Go to proposals",
-
+      // voteBreakdown
+      votes_breakdown: "Votes Breakdown",
       // swapContainer
       balance: "balance",
       // txDetailsDialog
@@ -123,6 +131,11 @@ export const resources = {
       confirmed_tx: "거래가 확인되었습니다!",
       voting: "투표",
       select_a_proposal: "제안 선택",
+      select_proposal_to_see_details: "Select a proposal to see details",
+      vote: "Vote",
+      voting_ended: "Voting ended",
+      // ## votingProposalForm
+      submit_your_vote_deletion: "Submit your vote deletion",
       // error
       error: "오류",
       // ---------------------------------------------------------------
@@ -144,6 +157,8 @@ export const resources = {
       details: "세부",
       current_proposals: "현재 제안",
       // proposalDetails
+      close_details: "Close details",
+      open_details: "Open details",
       started: "Started",
       at: "에서",
       ending: "Ending",
@@ -151,6 +166,8 @@ export const resources = {
       select_for_voting: "투표를 위해 선택",
       selected: "선택된",
       see_on_snapshot: "Go to proposals",
+      // voteBreakdown
+      votes_breakdown: "Votes Breakdown",
       // swapContainer
       balance: "밸런스",
       // txDetailsDialog
@@ -210,6 +227,11 @@ export const resources = {
       confirmed_tx: "交易确认！",
       voting: "表决",
       select_a_proposal: "选择提案",
+      select_proposal_to_see_details: "Select a proposal to see details",
+      vote: "Vote",
+      voting_ended: "Voting ended",
+      // ## votingProposalForm
+      submit_your_vote_deletion: "Submit your vote deletion",
       // error
       error: "错误",
       // ---------------------------------------------------------------
@@ -231,6 +253,8 @@ export const resources = {
       details: "细节",
       current_proposals: "当前提案",
       // proposalDetails
+      close_details: "Close details",
+      open_details: "Open details",
       started: "Started",
       at: "在",
       ending: "Ending",
@@ -238,6 +262,8 @@ export const resources = {
       select_for_voting: "选择投票",
       selected: "已选",
       see_on_snapshot: "Go to proposals",
+      // voteBreakdown
+      votes_breakdown: "Votes Breakdown",
       // swapContainer
       balance: "平衡",
       // txDetailsDialog

@@ -155,7 +155,7 @@ const Voting = () => {
                               show={openSelectedProposal}
                               onHide={() => setOpenSelectedProposal(false)}
                               size="md"
-                              title="Details"
+                              title={t("details")}
                               body={
                                 // eslint-disable-next-line react/jsx-wrap-multilines
                                 <ProposalDetails
@@ -186,7 +186,7 @@ const Voting = () => {
                             {!selectedProposal ? (
                               <>
                                 <h2 className="font-weight-light">
-                                  Select a proposal to see details
+                                  {t("select_proposal_to_see_details")}
                                 </h2>
                                 <br />
                                 <h2>😃</h2>
@@ -227,7 +227,7 @@ const Voting = () => {
                         size="lg"
                         block
                       >
-                        {onVotingTimeWindow ? "Vote" : "Voting ended"}
+                        {onVotingTimeWindow ? t("vote") : t("voting_ended")}
                       </Button>
                     )}
                   </Card.Body>

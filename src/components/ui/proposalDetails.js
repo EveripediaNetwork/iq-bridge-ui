@@ -40,7 +40,7 @@ const ProposalDetails = ({ proposal, setShow }) => {
 
     return (
       <Button onClick={customizeOnClick} variant="light">
-        {isCurrentEventKey ? "Close details" : "Open details"}
+        {isCurrentEventKey ? t("close_details") : t("open_details")}
       </Button>
     );
   };
