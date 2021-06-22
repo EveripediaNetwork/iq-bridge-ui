@@ -46,7 +46,7 @@ const Voting = () => {
   const [selectedChoice, setSelectedChoice] = useState();
   const [votes, setVotes] = useState();
   const [alreadyVoted, setAlreadyVoted] = useState(false);
-  const [loadVotes, setLoadVotes] = useState(true);
+  const [loadVotes, setLoadVotes] = useState();
   const [onVotingTimeWindow, setOnVotingTimeWindow] = useState();
   const [openProposalsModal, setOpenProposalsModal] = useState(false);
   const [openSelectedProposal, setOpenSelectedProposal] = useState(false);
@@ -81,16 +81,18 @@ const Voting = () => {
       const data = await getProposals(1);
       setSelectedProposal(data[0]);
       setLoadingSelectedProposal(false);
+      setLoadVotes(false);
     })();
   }, []);
 
   useEffect(() => {
-    if (selectedProposal && selectedProposal.id && loadVotes === true) {
+    if (selectedProposal && selectedProposal.id) {
       (async () => {
         setLoadingVotes(true);
         setVotes(undefined);
         const data = await getVotes(selectedProposal.id, 1000);
         setVotes(data);
+        setLoadVotes(false);
         setLoadingVotes(false);
       })();
     }
@@ -99,6 +101,8 @@ const Voting = () => {
       setOnVotingTimeWindow(
         new Date() <= new Date(selectedProposal.end * 1000)
       );
+
+      if (!selectedProposal) setVotes(undefined);
     }
   }, [selectedProposal, loadVotes]);
 
