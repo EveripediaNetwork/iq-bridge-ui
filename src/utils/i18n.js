@@ -37,6 +37,7 @@ export const resources = {
       select_proposal_to_see_details: "Select a proposal to see details",
       vote: "Vote",
       voting_ended: "Voting ended",
+      no_votes_so_far: "No votes so far",
       // ## votingProposalForm
       submit_your_vote_deletion: "Submit your vote deletion",
       // stats
@@ -146,6 +147,7 @@ export const resources = {
       select_proposal_to_see_details: "Select a proposal to see details",
       vote: "Vote",
       voting_ended: "Voting ended",
+      no_votes_so_far: "No votes so far",
       // ## votingProposalForm
       submit_your_vote_deletion: "Submit your vote deletion",
       // stats
@@ -254,6 +256,7 @@ export const resources = {
       select_proposal_to_see_details: "Select a proposal to see details",
       vote: "Vote",
       voting_ended: "Voting ended",
+      no_votes_so_far: "No votes so far",
       // ## votingProposalForm
       submit_your_vote_deletion: "Submit your vote deletion",
       // stats

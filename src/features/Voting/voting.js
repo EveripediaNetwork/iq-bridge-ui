@@ -209,7 +209,7 @@ const Voting = () => {
                           !votes && (
                             <>
                               <h2 className="font-weight-light">
-                                No votes so far
+                                {t("no_votes_so_far")}
                               </h2>
                               <br />
                               <h2>😕</h2>
