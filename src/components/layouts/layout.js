@@ -99,6 +99,13 @@ const Layout = ({ children }) => {
               {t("LOCK")}
             </Nav.Link>
             <Nav.Link
+              active={location.pathname === "/voting"}
+              as={Link}
+              to={`/voting${LngUrl}`}
+            >
+              {t("VOTING")}
+            </Nav.Link>
+            <Nav.Link
               active={location.pathname === "/stats"}
               as={Link}
               to={`/stats${LngUrl}`}
@@ -107,9 +114,6 @@ const Layout = ({ children }) => {
             </Nav.Link>
             <Nav.Link href="https://learn.everipedia.org/">
               {t("LEARN")}
-            </Nav.Link>
-            <Nav.Link href="https://snapshot.everipedia.com/">
-              {t("GOVERNANCE")}
             </Nav.Link>
           </Nav>
           <LanguageSelector className="pr-4" />

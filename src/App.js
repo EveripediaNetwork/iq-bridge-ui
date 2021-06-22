@@ -22,6 +22,7 @@ const HomePage = lazy(() => import("./features/home"));
 const EthPage = lazy(() => import("./features/eth"));
 const ReverseEthPage = lazy(() => import("./features/reverseEth"));
 const LockPage = lazy(() => import("./features/Lock/lock"));
+const VotingPage = lazy(() => import("./features/Voting/voting"));
 const StatsPage = lazy(() => import("./features/Stats/stats"));
 
 function App() {
@@ -58,6 +59,7 @@ const Routes = () => {
       <Route exact path="/eth" component={EthPage} />
       <Route exact path="/lock" component={LockPage} />
       <Route exact path="/reverseEth" component={ReverseEthPage} />
+      <Route exact path="/voting" component={VotingPage} />
       <Route exact path="/stats" component={StatsPage} />
     </Switch>
   );

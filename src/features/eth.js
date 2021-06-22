@@ -66,20 +66,14 @@ const Eth = () => {
         <FormProvider {...methods}>
           <Row>
             <Col>
-              <CardTitle
-                title="IQ Bridge"
-                role="img"
-                aria-label="brain"
-                className="brain"
-                icon="🌉"
-              />
+              <CardTitle title="IQ Bridge" aria-label="brain" icon="🌉" />
               <Card className="mx-auto shadow-sm">
                 <Card.Body>
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
                     <SwapContainer
                       token={token1}
                       setToken={setToken1}
-                      header="From"
+                      header={t("from")}
                     />
                     <div className="d-flex justify-content-center">
                       <IconWrapper bsPrefix="switch" onClick={() => {}}>
@@ -95,7 +89,7 @@ const Eth = () => {
                       size="lg"
                       block
                     >
-                      {t("Swap to IQ ERC20")}
+                      {t("swap_to_iq_erc20")}
                     </Button>
                   </Form>
                 </Card.Body>
@@ -112,7 +106,7 @@ const Eth = () => {
           {wallet.account && txDone && (
             <Row>
               <Col>
-                <InfoAlert text="Tx executed" />
+                <InfoAlert text={t("tx_executed")} />
               </Col>
             </Row>
           )}
