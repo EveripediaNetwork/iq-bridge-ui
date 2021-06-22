@@ -43,7 +43,7 @@ const getProposals = async first => {
     {
       query: `
     query Proposals {
-      proposals(first: ${first}, skip: 0, where: {space_in: ["everipediaiq.eth"]}, orderBy: "created", orderDirection: desc) {
+      proposals(first: ${first}, skip: 0, where: {space_in: ["everipediaiq.eth"], author_in: ["0xaCa39B187352D9805DECEd6E73A3d72ABf86E7A0"]}, orderBy: "created", orderDirection: desc) {
         id
         title
         body
