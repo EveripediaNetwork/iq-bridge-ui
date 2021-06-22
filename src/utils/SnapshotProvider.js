@@ -58,7 +58,7 @@ const getProposals = async first => {
     { headers: { "Content-Type": "application/json" } }
   );
 
-  return data.data.proposals;
+  return data.data.proposals.filter(p => p.title !== "ee");
 };
 
 const getVoteByVoter = async address => {
