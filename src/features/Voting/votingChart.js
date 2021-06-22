@@ -1,10 +1,11 @@
 import React, { memo, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Pie } from "react-chartjs-2";
+import { Spinner } from "react-bootstrap";
 
 import { getScores } from "../../utils/SnapshotProvider";
 
-const VotingChart = ({ choices, votes }) => {
+const VotingChart = ({ choices, votes, loadingVotes }) => {
   const [votesCount, setVotesCount] = useState([]);
   const [addresses, setAddresses] = useState([]);
   const [colors, setColors] = useState([]);
@@ -75,14 +76,21 @@ const VotingChart = ({ choices, votes }) => {
 
   return (
     <div className="d-flex justify-content-center mt-2 mb-2">
-      <Pie style={{ maxHeight: 300 }} data={data} />
+      {!loadingVotes ? (
+        <Pie style={{ maxHeight: 300 }} data={data} />
+      ) : (
+        <h3>
+          <Spinner as="span" /> Loading Votes..
+        </h3>
+      )}
     </div>
   );
 };
 
 VotingChart.propTypes = {
   choices: PropTypes.arrayOf(PropTypes.string).isRequired,
-  votes: PropTypes.arrayOf(PropTypes.object).isRequired // eslint-disable-line react/forbid-prop-types
+  votes: PropTypes.arrayOf(PropTypes.object).isRequired, // eslint-disable-line react/forbid-prop-types
+  loadingVotes: PropTypes.arrayOf(PropTypes.bool).isRequired
 };
 
 export default memo(VotingChart);

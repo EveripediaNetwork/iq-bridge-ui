@@ -2,14 +2,8 @@ import React, { useState, useEffect, memo } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
-import {
-  ButtonGroup,
-  ToggleButton,
-  Badge,
-  Button,
-  Alert
-} from "react-bootstrap";
-import { CheckLg, TrashFill } from "react-bootstrap-icons";
+import { ButtonGroup, ToggleButton, Badge, Alert } from "react-bootstrap";
+import { CheckLg } from "react-bootstrap-icons";
 
 const StyledToggleButton = styled(ToggleButton)`
   max-width: fit-content;
@@ -29,11 +23,6 @@ const VotingProposalForm = ({
     if (!onVotingTimeWindow) return;
     if (event.target.value) setSelectedChoice(event.target.value);
     else setSelectedChoice(undefined);
-  };
-
-  const handleDeleteButtonClick = () => {
-    setSelectedChoice(undefined);
-    setShowAlert(true);
   };
 
   useEffect(() => {
@@ -66,15 +55,6 @@ const VotingProposalForm = ({
           </StyledToggleButton>
         ))}
       </ButtonGroup>
-      {selectedChoice && selectedChoice !== 0 && onVotingTimeWindow ? (
-        <div className="p-1 m-1">
-          <Button variant="danger" onClick={handleDeleteButtonClick}>
-            <TrashFill />
-          </Button>
-        </div>
-      ) : (
-        <></>
-      )}
       {showAlert && (
         <Alert className="mt-2" variant="primary">
           {t("submit_your_vote_deletion")}

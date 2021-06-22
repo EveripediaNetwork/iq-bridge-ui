@@ -27,7 +27,7 @@ const StyledCard = styled(Card)`
 `;
 
 const SpinnerDiv = styled.div`
-  height: 583px;
+  height: 553px;
 `;
 
 const SelectedProposalButton = styled(Button)`
@@ -42,6 +42,7 @@ const Voting = () => {
   const [proposals, setProposals] = useState();
   const [selectedProposal, setSelectedProposal] = useState();
   const [loadingSelectedProposal, setLoadingSelectedProposal] = useState(false);
+  const [loadingVotes, setLoadingVotes] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState();
   const [votes, setVotes] = useState();
   const [alreadyVoted, setAlreadyVoted] = useState(false);
@@ -76,6 +77,7 @@ const Voting = () => {
   useEffect(() => {
     (async () => {
       setLoadingSelectedProposal(true);
+      setLoadVotes(true);
       const data = await getProposals(1);
       setSelectedProposal(data[0]);
       setLoadingSelectedProposal(false);
@@ -85,9 +87,11 @@ const Voting = () => {
   useEffect(() => {
     if (selectedProposal && selectedProposal.id && loadVotes === true) {
       (async () => {
+        setLoadingVotes(true);
+        setVotes(undefined);
         const data = await getVotes(selectedProposal.id, 1000);
         setVotes(data);
-        setLoadVotes(false);
+        setLoadingVotes(false);
       })();
     }
 
@@ -178,12 +182,13 @@ const Voting = () => {
                       <VotingChart
                         votes={votes}
                         choices={selectedProposal.choices}
+                        loadingVotes={loadingVotes}
                       />
                     ) : (
-                      <>
+                      <SpinnerDiv className="d-flex flex-column text-center align-items-center justify-content-center text-center">
                         {!loadingSelectedProposal && (
-                          <SpinnerDiv className="d-flex flex-column align-items-center justify-content-center text-center">
-                            {!selectedProposal ? (
+                          <>
+                            {!selectedProposal && (
                               <>
                                 <h2 className="font-weight-light">
                                   {t("select_proposal_to_see_details")}
@@ -191,12 +196,26 @@ const Voting = () => {
                                 <br />
                                 <h2>😃</h2>
                               </>
-                            ) : (
-                              <Spinner animation="grow" />
                             )}
-                          </SpinnerDiv>
+                          </>
                         )}
-                      </>
+
+                        {!loadingSelectedProposal &&
+                          selectedProposal &&
+                          !votes && (
+                            <>
+                              <h2 className="font-weight-light">
+                                No votes so far
+                              </h2>
+                              <br />
+                              <h2>😕</h2>
+                            </>
+                          )}
+
+                        {loadingSelectedProposal && (
+                          <Spinner animation="grow" />
+                        )}
+                      </SpinnerDiv>
                     )}
                     {selectedProposal && votes && (
                       <VoteBreakdown
@@ -204,7 +223,7 @@ const Voting = () => {
                         votes={votes}
                       />
                     )}
-                    {selectedProposal && wallet.account !== null && (
+                    {selectedProposal && wallet.account !== null && votes && (
                       <VotingProposalForm
                         choices={selectedProposal.choices}
                         selectedChoice={selectedChoice}
@@ -218,7 +237,8 @@ const Voting = () => {
                           !selectedProposal ||
                           !alreadyVoted ||
                           !wallet.account ||
-                          !onVotingTimeWindow
+                          !onVotingTimeWindow ||
+                          !votes
                         }
                         onClick={handleVote}
                         variant={onVotingTimeWindow ? "primary" : "danger"}
