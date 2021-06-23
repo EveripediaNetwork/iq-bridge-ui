@@ -14,6 +14,7 @@ const VotingProposalForm = ({
   choices,
   selectedChoice,
   setSelectedChoice,
+  votingType,
   onVotingTimeWindow
 }) => {
   const { t } = useTranslation();
@@ -41,7 +42,7 @@ const VotingProposalForm = ({
             checked={index + 1 === selectedChoice}
             key={o}
             disabled={!onVotingTimeWindow}
-            value={o}
+            value={o} 
             variant="light"
             type="radio"
             className="shadow m-1 rounded"
