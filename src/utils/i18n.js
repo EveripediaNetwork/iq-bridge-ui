@@ -38,6 +38,8 @@ export const resources = {
       vote: "Vote",
       voting_ended: "Voting ended",
       no_votes_so_far: "No votes so far",
+      // ## votingChart
+      loadingVotes: "Loading Votes",
       // ## votingProposalForm
       submit_your_vote_deletion: "Submit your vote deletion",
       // stats
@@ -148,6 +150,8 @@ export const resources = {
       vote: "Vote",
       voting_ended: "Voting ended",
       no_votes_so_far: "No votes so far",
+      // ## votingChart
+      loadingVotes: "Loading Votes",
       // ## votingProposalForm
       submit_your_vote_deletion: "Submit your vote deletion",
       // stats
@@ -257,6 +261,8 @@ export const resources = {
       vote: "Vote",
       voting_ended: "Voting ended",
       no_votes_so_far: "No votes so far",
+      // ## votingChart
+      loadingVotes: "Loading Votes",
       // ## votingProposalForm
       submit_your_vote_deletion: "Submit your vote deletion",
       // stats
