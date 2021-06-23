@@ -2,10 +2,12 @@ import React, { memo, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Pie } from "react-chartjs-2";
 import { Spinner } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 import { getScores } from "../../utils/SnapshotProvider";
 
 const VotingChart = ({ choices, votes, loadingVotes }) => {
+  const { t } = useTranslation();
   const [votesCount, setVotesCount] = useState([]);
   const [addresses, setAddresses] = useState([]);
   const [colors, setColors] = useState([]);
@@ -80,7 +82,7 @@ const VotingChart = ({ choices, votes, loadingVotes }) => {
         <Pie style={{ maxHeight: 300 }} data={data} />
       ) : (
         <h3>
-          <Spinner as="span" /> Loading Votes..
+          <Spinner as="span" /> {t("loadingVotes")}
         </h3>
       )}
     </div>

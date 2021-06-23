@@ -1,8 +1,7 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { memo } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { useTranslation } from "react-i18next";
-import { ButtonGroup, ToggleButton, Badge, Alert } from "react-bootstrap";
+import { ButtonGroup, ToggleButton, Badge } from "react-bootstrap";
 import { CheckLg } from "react-bootstrap-icons";
 
 const StyledToggleButton = styled(ToggleButton)`
@@ -16,18 +15,11 @@ const VotingProposalForm = ({
   setSelectedChoice,
   onVotingTimeWindow
 }) => {
-  const { t } = useTranslation();
-  const [showAlert, setShowAlert] = useState(false);
-
   const handleClick = event => {
     if (!onVotingTimeWindow) return;
     if (event.target.value) setSelectedChoice(event.target.value);
     else setSelectedChoice(undefined);
   };
-
-  useEffect(() => {
-    if (selectedChoice && showAlert) setShowAlert(false);
-  }, [selectedChoice]);
 
   return (
     <div className="text-center">
@@ -55,11 +47,6 @@ const VotingProposalForm = ({
           </StyledToggleButton>
         ))}
       </ButtonGroup>
-      {showAlert && (
-        <Alert className="mt-2" variant="primary">
-          {t("submit_your_vote_deletion")}
-        </Alert>
-      )}
     </div>
   );
 };
