@@ -116,6 +116,8 @@ const Voting = () => {
     })();
   }, [wallet.status]);
 
+  console.log(selectedProposal);
+
   return (
     <Layout>
       <Container className="p-2 mt-3" fluid>
@@ -231,6 +233,7 @@ const Voting = () => {
                       <VotingProposalForm
                         choices={selectedProposal.choices}
                         selectedChoice={selectedChoice}
+                        votingType={selectedProposal.type}
                         setSelectedChoice={handleSetSelecthedChoice}
                         onVotingTimeWindow={onVotingTimeWindow}
                       />

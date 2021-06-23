@@ -49,6 +49,7 @@ const getProposals = async first => {
         body
         choices
         start
+        type
         end
         state
       }
