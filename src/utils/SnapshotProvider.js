@@ -61,11 +61,11 @@ const getProposals = async first => {
   return data.data.proposals;
 };
 
-const getVoteByVoter = async address => {
+const getVoteByVoter = async (address, proposalId) => {
   const { data } = await axios.post(snapshotGraphqlEndpoint, {
     query: `
     query {
-      votes(where: {voter: "${address}"}) {
+      votes(where: {voter: "${address}", proposal: "${proposalId}"}) {
         choice
       }
     }
