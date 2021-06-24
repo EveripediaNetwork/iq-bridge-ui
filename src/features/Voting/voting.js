@@ -102,19 +102,25 @@ const Voting = () => {
         new Date() <= new Date(selectedProposal.end * 1000)
       );
 
-      if (!selectedProposal) setVotes(undefined);
+      if (!selectedProposal) {
+        setVotes(undefined);
+        setSelectedChoice(undefined);
+      }
     }
   }, [selectedProposal, loadVotes]);
 
   useEffect(() => {
     (async () => {
-      if (wallet.status === "connected") {
-        const result = await getVoteByVoter(wallet.account);
+      if (wallet.status === "connected" && selectedProposal) {
+        const result = await getVoteByVoter(
+          wallet.account,
+          selectedProposal.id
+        );
         if (result) setSelectedChoice(result.choice);
         setAlreadyVoted(true);
       }
     })();
-  }, [wallet.status]);
+  }, [selectedProposal, wallet.status]);
 
   return (
     <Layout>
@@ -182,7 +188,7 @@ const Voting = () => {
                         />
                       </div>
                     </div>
-                    {selectedProposal && votes ? (
+                    {selectedProposal && votes && votes.length > 0 ? (
                       <VotingChart
                         votes={votes}
                         choices={selectedProposal.choices}
@@ -206,7 +212,8 @@ const Voting = () => {
 
                         {!loadingSelectedProposal &&
                           selectedProposal &&
-                          !votes && (
+                          votes &&
+                          votes.length === 0 && (
                             <>
                               <h2 className="font-weight-light">
                                 {t("no_votes_so_far")}
@@ -221,7 +228,7 @@ const Voting = () => {
                         )}
                       </SpinnerDiv>
                     )}
-                    {selectedProposal && votes && (
+                    {selectedProposal && votes && votes.length > 0 && (
                       <VoteBreakdown
                         choices={selectedProposal.choices}
                         votes={votes}
