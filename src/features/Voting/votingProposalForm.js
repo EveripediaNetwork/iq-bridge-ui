@@ -6,7 +6,6 @@ import {
   ButtonGroup,
   ToggleButton,
   Badge,
-  Alert,
   ToggleButtonGroup
 } from "react-bootstrap";
 import { CheckLg } from "react-bootstrap-icons";
@@ -24,16 +23,18 @@ const VotingProposalForm = ({
   onVotingTimeWindow
 }) => {
   const { t } = useTranslation();
-  const [showAlert, setShowAlert] = useState(false);
+  const [showBadge, setShowBadge] = useState(false);
 
   const handleClick = event => {
     if (!onVotingTimeWindow) return;
-    if (event.target.value) setSelectedChoice(event.target.value);
-    else setSelectedChoice(undefined);
+    if (event.target.value) {
+      setSelectedChoice(event.target.value);
+      setShowBadge(true);
+    } else setSelectedChoice(undefined);
   };
 
   useEffect(() => {
-    if (selectedChoice && showAlert) setShowAlert(false);
+    if (selectedChoice && showBadge) setShowBadge(false);
   }, [selectedChoice]);
 
   const buttonDetails = (o, index) => (
@@ -85,11 +86,7 @@ const VotingProposalForm = ({
           ))}
         </ToggleButtonGroup>
       )}
-      {showAlert && (
-        <Alert className="mt-2" variant="primary">
-          {t("submit_your_vote_deletion")}
-        </Alert>
-      )}
+      {showBadge && <h6 className="mt-2" variant="primary"></h6>}
     </div>
   );
 };
