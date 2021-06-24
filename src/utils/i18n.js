@@ -146,8 +146,8 @@ export const resources = {
       confirmed_tx: "거래가 확인되었습니다!",
       voting: "투표",
       select_a_proposal: "제안 선택",
-      select_proposal_to_see_details: "Select a proposal to see details",
-      vote: "Vote",
+      select_proposal_to_see_details: "세부 정보를 보려면 제안을 선택하세요.",
+      vote: "투표",
       voting_ended: "투표 종료",
       no_votes_so_far: "지금까지 투표가 없습니다.",
       // ## votingChart
@@ -263,7 +263,6 @@ export const resources = {
       // ## votingChart
       loadingVotes: "加载投票",
       // ## votingProposalForm
-      submit_your_vote_deletion: "Submit your vote deletion",
       // stats
       holders: "Holders",
       volume: "volume",
