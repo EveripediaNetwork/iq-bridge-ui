@@ -29,32 +29,52 @@ const VotingProposalForm = ({
     if (!onVotingTimeWindow) return;
     if (event.target.value) {
       setSelectedChoice(event.target.value);
-      setShowBadge(true);
-    } else setSelectedChoice(undefined);
+      if (votingType === "approval") setShowBadge(true);
+    } /*else setSelectedChoice(undefined);*/
   };
 
   useEffect(() => {
-    if (selectedChoice && showBadge) setShowBadge(false);
+    if (
+      votingType === "approval" &&
+      selectedChoice &&
+      selectedChoice.length === 0
+    )
+      setShowBadge(false);
   }, [selectedChoice]);
 
-  const buttonDetails = (o, index) => (
-    <>
-      <span>{o}</span>{" "}
-      {index + 1 === selectedChoice && (
-        <Badge variant="success">
-          <CheckLg />
-        </Badge>
-      )}
-    </>
-  );
+  const buttonDetails = (o, index) => {
+    console.log(index + 1);
+    if (selectedChoice) console.log(index + 1 === selectedChoice[index]);
+    const badge = () => (
+      <Badge variant="success">
+        <CheckLg />
+      </Badge>
+    );
+    return (
+      <>
+        {o && <span>{o}</span>}
+        {votingType === "single-choice" && index + 1 === selectedChoice && (
+          <>{badge()}</>
+        )}
+        {votingType === "approval" &&
+          selectedChoice &&
+          selectedChoice.length > 0 &&
+          index + 1 === selectedChoice.find(e => e === index + 1) && (
+            <>{badge()}</>
+          )}
+      </>
+    );
+  };
+
+  console.log(selectedChoice);
 
   return (
     <div className="text-center">
-      {votingType !== "single-choice" ? (
+      {votingType === "single-choice" && (
         <ButtonGroup
           toggle
           onClick={handleClick}
-          className="d-flex flex-row flex-wrap justify-content-center"
+          className="d-flex my-3 flex-row flex-wrap justify-content-center"
         >
           {choices.map((o, index) => (
             <StyledToggleButton
@@ -70,8 +90,13 @@ const VotingProposalForm = ({
             </StyledToggleButton>
           ))}
         </ButtonGroup>
-      ) : (
-        <ToggleButtonGroup type="checkbox" onClick={handleClick}>
+      )}
+      {votingType === "approval" && (
+        <ToggleButtonGroup
+          className="w-100 my-3 justify-content-center"
+          type="checkbox"
+          onClick={handleClick}
+        >
           {choices.map((o, index) => (
             <StyledToggleButton
               key={o}
@@ -81,26 +106,29 @@ const VotingProposalForm = ({
               type="checkbox"
               className="shadow m-1 rounded"
             >
-              <span>{o}</span>{" "}
+              {buttonDetails(o, index)}
             </StyledToggleButton>
           ))}
         </ToggleButtonGroup>
       )}
-      {showBadge && <h6 className="mt-2" variant="primary"></h6>}
+      {showBadge && selectedChoice && (
+        <h6 className="mt-2" variant="primary">
+          <Badge variant="primary">{selectedChoice.length}</Badge>
+        </h6>
+      )}
     </div>
   );
 };
 
 VotingProposalForm.propTypes = {
   choices: PropTypes.arrayOf(PropTypes.string).isRequired, // eslint-disable-line react/forbid-prop-types,
-  selectedChoice: PropTypes.number,
+  selectedChoice: PropTypes.any, // eslint-disable-line react/forbid-prop-types
   setSelectedChoice: PropTypes.func.isRequired,
   votingType: PropTypes.string.isRequired,
   onVotingTimeWindow: PropTypes.bool
 };
 
 VotingProposalForm.defaultProps = {
-  selectedChoice: 1000,
   onVotingTimeWindow: false
 };
 

@@ -64,7 +64,19 @@ const Voting = () => {
   };
 
   const handleSetSelecthedChoice = value => {
-    setSelectedChoice(selectedProposal.choices.indexOf(value) + 1);
+    const idxOf = selectedProposal.choices.indexOf(value) + 1;
+    if (selectedProposal.type === "single-choice") {
+      setSelectedChoice(idxOf);
+      return;
+    }
+
+    if (selectedProposal.type === "approval") {
+      if (selectedChoice)
+        if (selectedChoice.includes(idxOf))
+          setSelectedChoice(selectedChoice.filter(c => c !== idxOf));
+        else setSelectedChoice(prev => [...prev, idxOf]);
+      else setSelectedChoice([idxOf]);
+    }
   };
 
   const proposalContextValue = {
@@ -74,6 +86,7 @@ const Voting = () => {
     setSelectedProposal
   };
 
+  console.log(selectedChoice);
   useEffect(() => {
     (async () => {
       setLoadingSelectedProposal(true);
@@ -116,13 +129,14 @@ const Voting = () => {
           wallet.account,
           selectedProposal.id
         );
-        if (result) setSelectedChoice(result.choice);
-        setAlreadyVoted(true);
+        console.log(result);
+        if (result) {
+          setSelectedChoice(result.choice);
+          setAlreadyVoted(true);
+        }
       }
     })();
   }, [selectedProposal, wallet.status]);
-
-  console.log(selectedProposal);
 
   return (
     <Layout>
