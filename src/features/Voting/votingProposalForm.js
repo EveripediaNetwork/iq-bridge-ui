@@ -1,7 +1,6 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { memo } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { useTranslation } from "react-i18next";
 import {
   ButtonGroup,
   ToggleButton,
@@ -22,29 +21,15 @@ const VotingProposalForm = ({
   votingType,
   onVotingTimeWindow
 }) => {
-  const { t } = useTranslation();
-  const [showBadge, setShowBadge] = useState(false);
-
   const handleClick = event => {
     if (!onVotingTimeWindow) return;
     if (event.target.value) {
+      event.preventDefault();
       setSelectedChoice(event.target.value);
-      if (votingType === "approval") setShowBadge(true);
-    } /*else setSelectedChoice(undefined);*/
+    }
   };
 
-  useEffect(() => {
-    if (
-      votingType === "approval" &&
-      selectedChoice &&
-      selectedChoice.length === 0
-    )
-      setShowBadge(false);
-  }, [selectedChoice]);
-
   const buttonDetails = (o, index) => {
-    console.log(index + 1);
-    if (selectedChoice) console.log(index + 1 === selectedChoice[index]);
     const badge = () => (
       <Badge variant="success">
         <CheckLg />
@@ -65,8 +50,6 @@ const VotingProposalForm = ({
       </>
     );
   };
-
-  console.log(selectedChoice);
 
   return (
     <div className="text-center">
@@ -111,18 +94,13 @@ const VotingProposalForm = ({
           ))}
         </ToggleButtonGroup>
       )}
-      {showBadge && selectedChoice && (
-        <h6 className="mt-2" variant="primary">
-          <Badge variant="primary">{selectedChoice.length}</Badge>
-        </h6>
-      )}
     </div>
   );
 };
 
 VotingProposalForm.propTypes = {
   choices: PropTypes.arrayOf(PropTypes.string).isRequired, // eslint-disable-line react/forbid-prop-types,
-  selectedChoice: PropTypes.any, // eslint-disable-line react/forbid-prop-types
+  selectedChoice: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
   setSelectedChoice: PropTypes.func.isRequired,
   votingType: PropTypes.string.isRequired,
   onVotingTimeWindow: PropTypes.bool

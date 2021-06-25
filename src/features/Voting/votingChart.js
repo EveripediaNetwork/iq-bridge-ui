@@ -1,15 +1,19 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { Pie } from "react-chartjs-2";
 import { Spinner } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
+import { ProposalContext } from "../../context/proposalContext";
 import { getScores } from "../../utils/SnapshotProvider";
 
 const VotingChart = ({ choices, votes, loadingVotes }) => {
+  const { t } = useTranslation();
   const [votesCount, setVotesCount] = useState([]);
   const [addresses, setAddresses] = useState([]);
   const [colors, setColors] = useState([]);
   const [borderColors, setBorderColors] = useState([]);
+  const { selectedProposal } = useContext(ProposalContext);
 
   const getRandomRGBColor = () => {
     const r = Math.floor(Math.random() * 255);
@@ -34,7 +38,13 @@ const VotingChart = ({ choices, votes, loadingVotes }) => {
   const handleSetVotesCount = scores => {
     setVotesCount([]);
     for (let i = 1; i <= choices.length; i += 1) {
-      const choiceCount = votes.filter(v => v.choice === i);
+      const choiceCount = votes.filter(v => {
+        if (selectedProposal.type === "approval") return v.choice.includes(i);
+
+        if (selectedProposal.type === "single-choice") return v.choice === i;
+
+        return false;
+      });
 
       const choiceVotingResult = choiceCount
         .map(c => {
@@ -77,10 +87,10 @@ const VotingChart = ({ choices, votes, loadingVotes }) => {
   return (
     <div className="d-flex justify-content-center mt-2 mb-2">
       {!loadingVotes ? (
-        <Pie style={{ maxHeight: 300 }} data={data} />
+        <Pie redraw={false} style={{ maxHeight: 300 }} data={data} />
       ) : (
         <h3>
-          <Spinner as="span" /> Loading Votes..
+          <Spinner as="span" /> {t("loadingVotes")}
         </h3>
       )}
     </div>

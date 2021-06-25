@@ -45,7 +45,6 @@ const Voting = () => {
   const [loadingVotes, setLoadingVotes] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState();
   const [votes, setVotes] = useState();
-  const [alreadyVoted, setAlreadyVoted] = useState(false);
   const [loadVotes, setLoadVotes] = useState();
   const [onVotingTimeWindow, setOnVotingTimeWindow] = useState();
   const [openProposalsModal, setOpenProposalsModal] = useState(false);
@@ -56,19 +55,18 @@ const Voting = () => {
   };
 
   const handleVote = async () => {
+    setLoadingVotes(true);
     const flag = await vote(wallet, selectedProposal.id, selectedChoice);
     if (flag === 1) {
       setTxDone(true);
       setLoadVotes(true);
+      setLoadingVotes(false);
     }
   };
 
   const handleSetSelecthedChoice = value => {
     const idxOf = selectedProposal.choices.indexOf(value) + 1;
-    if (selectedProposal.type === "single-choice") {
-      setSelectedChoice(idxOf);
-      return;
-    }
+    if (selectedProposal.type === "single-choice") setSelectedChoice(idxOf);
 
     if (selectedProposal.type === "approval") {
       if (selectedChoice)
@@ -86,7 +84,6 @@ const Voting = () => {
     setSelectedProposal
   };
 
-  console.log(selectedChoice);
   useEffect(() => {
     (async () => {
       setLoadingSelectedProposal(true);
@@ -101,6 +98,9 @@ const Voting = () => {
   useEffect(() => {
     if (selectedProposal && selectedProposal.id) {
       (async () => {
+        setOnVotingTimeWindow(
+          new Date() <= new Date(selectedProposal.end * 1000)
+        );
         setLoadingVotes(true);
         setVotes(undefined);
         const data = await getVotes(selectedProposal.id, 1000);
@@ -110,15 +110,9 @@ const Voting = () => {
       })();
     }
 
-    if (selectedProposal) {
-      setOnVotingTimeWindow(
-        new Date() <= new Date(selectedProposal.end * 1000)
-      );
-
-      if (!selectedProposal) {
-        setVotes(undefined);
-        setSelectedChoice(undefined);
-      }
+    if (!selectedProposal) {
+      setVotes(undefined);
+      setSelectedChoice(undefined);
     }
   }, [selectedProposal, loadVotes]);
 
@@ -129,10 +123,8 @@ const Voting = () => {
           wallet.account,
           selectedProposal.id
         );
-        console.log(result);
         if (result) {
           setSelectedChoice(result.choice);
-          setAlreadyVoted(true);
         }
       }
     })();
@@ -263,10 +255,9 @@ const Voting = () => {
                       <Button
                         disabled={
                           !selectedProposal ||
-                          !alreadyVoted ||
                           !wallet.account ||
                           !onVotingTimeWindow ||
-                          !votes
+                          !selectedChoice
                         }
                         onClick={handleVote}
                         variant={onVotingTimeWindow ? "primary" : "danger"}
