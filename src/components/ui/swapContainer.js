@@ -191,7 +191,7 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
             isInvalid={isValidInput === false}
             max={balToken}
             disabled={inputDisabled(token.chain, wallet, authContext)}
-            name={`${header}Amount`}
+            name="FromAmount"
             placeholder={token ? `0.${"0".repeat(token.precision)}` : "0.000"}
             onChange={handleOnInputChange}
             ref={e => {
@@ -208,7 +208,7 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
         >
           <Form.Control
             type="hidden"
-            name={`${header}Token`}
+            name="FromToken"
             value={token ? token.name : ""}
             ref={register({ required: true })}
           />
