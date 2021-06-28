@@ -21,7 +21,7 @@ const vote = async (wallet, id, choice) => {
 
     const sig = await provider.getSigner().signMessage(msg);
 
-    const response = await fetch(`${snapshotBaseEndpoint}api/message`, {
+    const response = await fetch(`${snapshotBaseEndpoint}/api/message`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -39,7 +39,7 @@ const vote = async (wallet, id, choice) => {
 
 const getProposals = async first => {
   const { data } = await axios.post(
-    `${snapshotBaseEndpoint}graphql`,
+    `${snapshotBaseEndpoint}/graphql`,
     {
       query: `
     query Proposals {
@@ -63,7 +63,7 @@ const getProposals = async first => {
 };
 
 const getVoteByVoter = async (address, proposalId) => {
-  const { data } = await axios.post(`${snapshotBaseEndpoint}graphql`, {
+  const { data } = await axios.post(`${snapshotBaseEndpoint}/graphql`, {
     query: `
     query {
       votes(where: {voter: "${address}", proposal: "${proposalId}"}) {
@@ -77,7 +77,7 @@ const getVoteByVoter = async (address, proposalId) => {
 };
 
 const getVotes = async (id, first) => {
-  const { data } = await axios.post(`${snapshotBaseEndpoint}graphql`, {
+  const { data } = await axios.post(`${snapshotBaseEndpoint}/graphql`, {
     query: `
     query {
       votes(first: ${first}, skip: 0, where: {proposal: "${id}"}, orderBy: "created", orderDirection: desc) {

@@ -100,7 +100,8 @@ const VotingProposalForm = ({
 
 VotingProposalForm.propTypes = {
   choices: PropTypes.arrayOf(PropTypes.string).isRequired, // eslint-disable-line react/forbid-prop-types,
-  selectedChoice: PropTypes.any.isRequired, // eslint-disable-line react/forbid-prop-types
+  // eslint-disable-next-line react/require-default-props
+  selectedChoice: PropTypes.any, // eslint-disable-line react/forbid-prop-types
   setSelectedChoice: PropTypes.func.isRequired,
   votingType: PropTypes.string.isRequired,
   onVotingTimeWindow: PropTypes.bool

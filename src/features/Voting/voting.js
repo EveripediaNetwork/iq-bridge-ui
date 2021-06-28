@@ -91,12 +91,12 @@ const Voting = () => {
       const data = await getProposals(1);
       setSelectedProposal(data[0]);
       setLoadingSelectedProposal(false);
-      setLoadVotes(false);
+      // setLoadVotes(false);
     })();
   }, []);
 
   useEffect(() => {
-    if (selectedProposal && selectedProposal.id) {
+    if (selectedProposal && selectedProposal.id && loadVotes) {
       (async () => {
         setOnVotingTimeWindow(
           new Date() <= new Date(selectedProposal.end * 1000)
@@ -105,7 +105,7 @@ const Voting = () => {
         setVotes(undefined);
         const data = await getVotes(selectedProposal.id, 1000);
         setVotes(data);
-        setLoadVotes(false);
+        // setLoadVotes(false);
         setLoadingVotes(false);
       })();
     }
@@ -240,6 +240,7 @@ const Voting = () => {
                       <VoteBreakdown
                         choices={selectedProposal.choices}
                         votes={votes}
+                        type={selectedProposal.type}
                       />
                     )}
                     {selectedProposal && wallet.account !== null && votes && (
