@@ -127,7 +127,7 @@ export const resources = {
       your_eos_address: "귀하의 EOS 주소",
       eos_account: "EOS 계정",
       swap_iq_to_eos: "IQ를 EOS로 스왑",
-      transactions_broadcasted: "방송 된 거래",
+      transactions_broadcasted: "브로드캐스트된 트랜잭션",
       // lock
       lock: "자물쇠",
       lock_description:
@@ -146,14 +146,13 @@ export const resources = {
       confirmed_tx: "거래가 확인되었습니다!",
       voting: "투표",
       select_a_proposal: "제안 선택",
-      select_proposal_to_see_details: "Select a proposal to see details",
-      vote: "Vote",
-      voting_ended: "Voting ended",
-      no_votes_so_far: "No votes so far",
+      select_proposal_to_see_details: "세부 정보를 보려면 제안을 선택하세요.",
+      vote: "투표",
+      voting_ended: "투표 종료",
+      no_votes_so_far: "지금까지 투표가 없습니다.",
       // ## votingChart
-      loadingVotes: "Loading Votes",
+      loadingVotes: "투표 로딩중",
       // ## votingProposalForm
-      submit_your_vote_deletion: "Submit your vote deletion",
       // stats
       holders: "Holders",
       volume: "volume",
@@ -173,7 +172,7 @@ export const resources = {
       // |||||||||||||||||||| COMMON ||||||||||||||||||||
       your_eth_address: "귀하의 이더 리움 주소",
       from: "부터",
-      tx_executed: "Tx 실행",
+      tx_executed: "트랜잭션 실행",
       login_info_eth: "ETH 지갑에 로그인하여 토큰 교환",
       // ---------------------------------------------------------------
 
@@ -184,20 +183,20 @@ export const resources = {
       time_locked: "잠긴 시간 (일)",
       new_hiiq_balance: "새로운 hiIQ",
       // proposalsModal
-      details: "세부",
+      details: "세부 정보",
       current_proposals: "현재 제안",
       // proposalDetails
-      close_details: "Close details",
-      open_details: "Open details",
-      started: "Started",
-      at: "에서",
-      ending: "Ending",
-      ended: "Ended",
+      close_details: "세부 정보 닫기",
+      open_details: "세부 정보 열기",
+      started: "투표 시작 날짜",
+      at: "시간",
+      ending: "투표 마감 날짜",
+      ended: "투표 마감",
       select_for_voting: "투표를 위해 선택",
-      selected: "선택된",
-      see_on_snapshot: "Go to proposals",
+      selected: "선택 완료",
+      see_on_snapshot: "제안 보기",
       // voteBreakdown
-      votes_breakdown: "Votes Breakdown",
+      votes_breakdown: "투표 내역",
       // swapContainer
       balance: "밸런스",
       // txDetailsDialog
@@ -233,12 +232,12 @@ export const resources = {
       swap: "交换",
       login_info_eos: "登录 EOS 钱包以桥接您的代币",
       // pIQ → IQ
-      swap_to_iq_erc20: "交换到 IQ ERC20",
+      swap_to_iq_erc20: "交易IQ至ERC20",
       // ETH → EOS
       your_eos_address: "您的 EOS 账户",
       eos_account: "EOS账户",
-      swap_iq_to_eos: "将 IQ 换成 EOS",
-      transactions_broadcasted: "交易广播",
+      swap_iq_to_eos: "交易IQ至EOS",
+      transactions_broadcasted: "交易已广播",
       // lock
       lock: "锁",
       lock_description:
@@ -255,16 +254,15 @@ export const resources = {
       value_restriction: "输入值必须在 1 到 1460 之间",
       // voting
       confirmed_tx: "交易确认！",
-      voting: "表决",
-      select_a_proposal: "选择提案",
-      select_proposal_to_see_details: "Select a proposal to see details",
-      vote: "Vote",
-      voting_ended: "Voting ended",
-      no_votes_so_far: "No votes so far",
+      voting: "投票",
+      select_a_proposal: "选择一个提案",
+      select_proposal_to_see_details: "选择一个提案以了解详情",
+      vote: "投票",
+      voting_ended: "投票结束",
+      no_votes_so_far: "暂无投票",
       // ## votingChart
-      loadingVotes: "Loading Votes",
+      loadingVotes: "加载投票",
       // ## votingProposalForm
-      submit_your_vote_deletion: "Submit your vote deletion",
       // stats
       holders: "Holders",
       volume: "volume",
@@ -284,7 +282,7 @@ export const resources = {
       // |||||||||||||||||||| COMMON ||||||||||||||||||||
       your_eth_address: "你的以太坊地址",
       from: "从",
-      tx_executed: "已执行",
+      tx_executed: "Tx 已执行",
       login_info_eth: "Login on ETH Wallet to swap your tokens",
       // ---------------------------------------------------------------
 
@@ -295,20 +293,20 @@ export const resources = {
       time_locked: "锁定时间（天）",
       new_hiiq_balance: "新高智商",
       // proposalsModal
-      details: "细节",
+      details: "详情",
       current_proposals: "当前提案",
       // proposalDetails
-      close_details: "Close details",
-      open_details: "Open details",
-      started: "Started",
-      at: "在",
-      ending: "Ending",
-      ended: "Ended",
+      close_details: "关闭详情",
+      open_details: "打开详情",
+      started: "开始",
+      at: "时间",
+      ending: "结束中",
+      ended: "已结束",
       select_for_voting: "选择投票",
       selected: "已选",
-      see_on_snapshot: "Go to proposals",
+      see_on_snapshot: "前往提案",
       // voteBreakdown
-      votes_breakdown: "Votes Breakdown",
+      votes_breakdown: "投票明细",
       // swapContainer
       balance: "平衡",
       // txDetailsDialog
