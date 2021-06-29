@@ -91,7 +91,6 @@ const Voting = () => {
       const data = await getProposals(1);
       setSelectedProposal(data[0]);
       setLoadingSelectedProposal(false);
-      // setLoadVotes(false);
     })();
   }, []);
 
@@ -105,7 +104,6 @@ const Voting = () => {
         setVotes(undefined);
         const data = await getVotes(selectedProposal.id, 1000);
         setVotes(data);
-        // setLoadVotes(false);
         setLoadingVotes(false);
       })();
     }
