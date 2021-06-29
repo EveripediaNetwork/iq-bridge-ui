@@ -18,6 +18,7 @@ import { WallerProviderContext as UALContext } from "../../context/walletProvide
 import GlobalStyle from "../globalStyles";
 import LanguageSelector from "./LanguageMenu/LanguageSelector";
 import EthereumWalletModal from "../ui/ethereumWalletModal";
+import WrongChainModal from "../ui/wrongChainModal";
 
 const isWalletConnected = () => {
   const val = localStorage.getItem("__WALLET_CONNECTED");
@@ -168,6 +169,7 @@ const Layout = ({ children }) => {
         </Navbar.Collapse>
       </Navbar>
       {children}
+      <WrongChainModal />
       <EthereumWalletModal
         show={ethModalShow}
         onHide={() => setEthModalShow(false)}

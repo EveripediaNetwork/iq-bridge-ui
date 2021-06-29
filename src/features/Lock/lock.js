@@ -20,7 +20,6 @@ import Layout from "../../components/layouts/layout";
 import SwapContainer from "../../components/ui/swapContainer";
 import CardTitle from "../../components/ui/cardTitle";
 import InfoAlert from "../../components/ui/infoAlert";
-import WrongChainModal from "../../components/ui/wrongChainModal";
 import {
   getTokensUserBalanceLocked,
   increaseAmount,
@@ -55,7 +54,6 @@ const Lock = () => {
   const [lockValue, setLockValue] = useState(7);
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
-  const [openWrongChainModal, setOpenWrongChainModal] = useState(false);
   const [openTxDetailsDialog, setOpenTxDetailsDialog] = useState(true);
   const [hashes, setHashes] = useState([]);
   const [token1] = useState({
@@ -100,9 +98,6 @@ const Lock = () => {
         setCurrentHiIQ(Number(await getTokensUserBalanceLocked(wallet)));
         setLoadingBalance(false);
       })();
-
-    if (wallet.status === "error" && wallet.account === null)
-      setOpenWrongChainModal(true);
   }, [wallet.status]);
 
   return (
@@ -212,10 +207,6 @@ const Lock = () => {
           onHide={() => setOpenTxDetailsDialog(false)}
         />
       )}
-      <WrongChainModal
-        show={openWrongChainModal}
-        onHide={() => setOpenWrongChainModal(false)}
-      />
     </Layout>
   );
 };
