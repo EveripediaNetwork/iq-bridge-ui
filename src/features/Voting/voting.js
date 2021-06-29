@@ -45,7 +45,6 @@ const Voting = () => {
   const [loadingVotes, setLoadingVotes] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState();
   const [votes, setVotes] = useState();
-  const [alreadyVoted, setAlreadyVoted] = useState(false);
   const [loadVotes, setLoadVotes] = useState();
   const [onVotingTimeWindow, setOnVotingTimeWindow] = useState();
   const [openProposalsModal, setOpenProposalsModal] = useState(false);
@@ -56,15 +55,26 @@ const Voting = () => {
   };
 
   const handleVote = async () => {
+    setLoadingVotes(true);
     const flag = await vote(wallet, selectedProposal.id, selectedChoice);
     if (flag === 1) {
       setTxDone(true);
       setLoadVotes(true);
+      setLoadingVotes(false);
     }
   };
 
   const handleSetSelecthedChoice = value => {
-    setSelectedChoice(selectedProposal.choices.indexOf(value) + 1);
+    const idxOf = selectedProposal.choices.indexOf(value) + 1;
+    if (selectedProposal.type === "single-choice") setSelectedChoice(idxOf);
+
+    if (selectedProposal.type === "approval") {
+      if (selectedChoice)
+        if (selectedChoice.includes(idxOf))
+          setSelectedChoice(selectedChoice.filter(c => c !== idxOf));
+        else setSelectedChoice(prev => [...prev, idxOf]);
+      else setSelectedChoice([idxOf]);
+    }
   };
 
   const proposalContextValue = {
@@ -81,31 +91,26 @@ const Voting = () => {
       const data = await getProposals(1);
       setSelectedProposal(data[0]);
       setLoadingSelectedProposal(false);
-      setLoadVotes(false);
     })();
   }, []);
 
   useEffect(() => {
-    if (selectedProposal && selectedProposal.id) {
+    if (selectedProposal && selectedProposal.id && loadVotes) {
       (async () => {
+        setOnVotingTimeWindow(
+          new Date() <= new Date(selectedProposal.end * 1000)
+        );
         setLoadingVotes(true);
         setVotes(undefined);
         const data = await getVotes(selectedProposal.id, 1000);
         setVotes(data);
-        setLoadVotes(false);
         setLoadingVotes(false);
       })();
     }
 
-    if (selectedProposal) {
-      setOnVotingTimeWindow(
-        new Date() <= new Date(selectedProposal.end * 1000)
-      );
-
-      if (!selectedProposal) {
-        setVotes(undefined);
-        setSelectedChoice(undefined);
-      }
+    if (!selectedProposal) {
+      setVotes(undefined);
+      setSelectedChoice(undefined);
     }
   }, [selectedProposal, loadVotes]);
 
@@ -116,8 +121,9 @@ const Voting = () => {
           wallet.account,
           selectedProposal.id
         );
-        if (result) setSelectedChoice(result.choice);
-        setAlreadyVoted(true);
+        if (result) {
+          setSelectedChoice(result.choice);
+        }
       }
     })();
   }, [selectedProposal, wallet.status]);
@@ -232,12 +238,14 @@ const Voting = () => {
                       <VoteBreakdown
                         choices={selectedProposal.choices}
                         votes={votes}
+                        type={selectedProposal.type}
                       />
                     )}
                     {selectedProposal && wallet.account !== null && votes && (
                       <VotingProposalForm
                         choices={selectedProposal.choices}
                         selectedChoice={selectedChoice}
+                        votingType={selectedProposal.type}
                         setSelectedChoice={handleSetSelecthedChoice}
                         onVotingTimeWindow={onVotingTimeWindow}
                       />
@@ -246,10 +254,9 @@ const Voting = () => {
                       <Button
                         disabled={
                           !selectedProposal ||
-                          !alreadyVoted ||
                           !wallet.account ||
                           !onVotingTimeWindow ||
-                          !votes
+                          !selectedChoice
                         }
                         onClick={handleVote}
                         variant={onVotingTimeWindow ? "primary" : "danger"}

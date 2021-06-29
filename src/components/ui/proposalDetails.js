@@ -13,7 +13,7 @@ import ReactMarkdown from "react-markdown";
 import { useTranslation } from "react-i18next";
 
 import { ProposalContext } from "../../context/proposalContext";
-import { snapshotBaseUrl } from "../../config";
+import { snapthotSpaceUrl } from "../../config";
 
 const ProposalDetails = ({ proposal, setShow }) => {
   const { t } = useTranslation();
@@ -95,7 +95,7 @@ const ProposalDetails = ({ proposal, setShow }) => {
           <a
             rel="noopener noreferrer"
             target="_blank"
-            href={`${snapshotBaseUrl}`}
+            href={`${snapthotSpaceUrl}`}
           >
             {t("see_on_snapshot")}
           </a>

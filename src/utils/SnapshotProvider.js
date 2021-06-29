@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ethers } from "ethers";
 
-import { snapshotGraphqlEndpoint } from "../config";
+import { snapshotBaseEndpoint } from "../config";
 
 const vote = async (wallet, id, choice) => {
   if (wallet.status === "connected") {
@@ -21,7 +21,7 @@ const vote = async (wallet, id, choice) => {
 
     const sig = await provider.getSigner().signMessage(msg);
 
-    const response = await fetch(`https://hub.snapshot.page/api/message`, {
+    const response = await fetch(`${snapshotBaseEndpoint}/api/message`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -39,16 +39,17 @@ const vote = async (wallet, id, choice) => {
 
 const getProposals = async first => {
   const { data } = await axios.post(
-    snapshotGraphqlEndpoint,
+    `${snapshotBaseEndpoint}/graphql`,
     {
       query: `
     query Proposals {
-      proposals(first: ${first}, skip: 0, where: {space_in: ["everipediaiq.eth"], author_in: ["0xaCa39B187352D9805DECEd6E73A3d72ABf86E7A0"]}, orderBy: "created", orderDirection: desc) {
+      proposals(first: ${first}, skip: 0, where: {space_in: ["everipediaiq.eth"], author_in: ["0xaCa39B187352D9805DECEd6E73A3d72ABf86E7A0", "0xAe65930180ef4d86dbD1844275433E9e1d6311ED"]}, orderBy: "created", orderDirection: desc) {
         id
         title
         body
         choices
         start
+        type
         end
         state
       }
@@ -62,7 +63,7 @@ const getProposals = async first => {
 };
 
 const getVoteByVoter = async (address, proposalId) => {
-  const { data } = await axios.post(snapshotGraphqlEndpoint, {
+  const { data } = await axios.post(`${snapshotBaseEndpoint}/graphql`, {
     query: `
     query {
       votes(where: {voter: "${address}", proposal: "${proposalId}"}) {
@@ -76,7 +77,7 @@ const getVoteByVoter = async (address, proposalId) => {
 };
 
 const getVotes = async (id, first) => {
-  const { data } = await axios.post(snapshotGraphqlEndpoint, {
+  const { data } = await axios.post(`${snapshotBaseEndpoint}/graphql`, {
     query: `
     query {
       votes(first: ${first}, skip: 0, where: {proposal: "${id}"}, orderBy: "created", orderDirection: desc) {

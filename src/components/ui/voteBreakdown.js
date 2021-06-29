@@ -15,7 +15,7 @@ const Link = styled.a`
   text-overflow: ellipsis;
 `;
 
-const VoteBreakdown = ({ votes, choices }) => {
+const VoteBreakdown = ({ votes, choices, type }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
@@ -41,8 +41,19 @@ const VoteBreakdown = ({ votes, choices }) => {
                       {`${v.voter.match(/.{1,20}/g)[0]}...`}
                     </Link>
                   </Col>
-                  <Col sm className="text-center">
-                    <strong>{choices[v.choice - 1]}</strong>
+                  <Col sm={4} className="text-center">
+                    {type === "single-choice" && (
+                      <strong>{choices[v.choice - 1]}</strong>
+                    )}
+                    {type === "approval" && (
+                      <ul>
+                        {v.choice.map(c => (
+                          <li key={c}>
+                            {choices[c - 1]} <br />
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </Col>
                   <Col sm className="text-center">
                     {v.power && <span>{v.power.toFixed(2)} IQ</span>}
@@ -70,7 +81,8 @@ const VoteBreakdown = ({ votes, choices }) => {
 
 VoteBreakdown.propTypes = {
   votes: PropTypes.arrayOf(PropTypes.object).isRequired, // eslint-disable-line react/forbid-prop-types
-  choices: PropTypes.arrayOf(PropTypes.string).isRequired
+  choices: PropTypes.arrayOf(PropTypes.string).isRequired,
+  type: PropTypes.string.isRequired
 };
 
 export default VoteBreakdown;
