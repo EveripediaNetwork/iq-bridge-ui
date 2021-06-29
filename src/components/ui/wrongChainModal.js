@@ -11,13 +11,13 @@ const StyledModal = styled(Modal)`
 
 const WrongChainModal = ({ ...props }) => {
   const { t } = useTranslation();
-  const { openWrongChainModal, setOpenWrongChainModal } =
+  const { openWrongChainDialog, setOpenWrongChainDialog } =
     useContext(WrongChainContext);
 
   return (
     <StyledModal
-      show={openWrongChainModal}
-      onHide={() => setOpenWrongChainModal(false)}
+      show={openWrongChainDialog}
+      onHide={() => setOpenWrongChainDialog(false)}
       {...props}
       size="sm"
       aria-labelledby="wrong-chain-modal"

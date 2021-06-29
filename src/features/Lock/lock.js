@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState, useContext } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import {
@@ -14,7 +14,6 @@ import { ArrowDownShort, QuestionCircle } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
 
-import { WrongChainContext } from "../../context/wrongChainContext";
 import LockPeriod from "./lockPeriod";
 import LockHeader from "./lockHeader";
 import Layout from "../../components/layouts/layout";
@@ -55,7 +54,6 @@ const Lock = () => {
   const [lockValue, setLockValue] = useState(7);
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
-  const { setOpenWrongChainModal } = useContext(WrongChainContext);
   const [openTxDetailsDialog, setOpenTxDetailsDialog] = useState(true);
   const [hashes, setHashes] = useState([]);
   const [token1] = useState({
@@ -100,9 +98,6 @@ const Lock = () => {
         setCurrentHiIQ(Number(await getTokensUserBalanceLocked(wallet)));
         setLoadingBalance(false);
       })();
-
-    if (wallet.status === "error" && wallet.account === null)
-      setOpenWrongChainModal(true);
   }, [wallet.status]);
 
   return (

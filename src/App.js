@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { UseWalletProvider } from "use-wallet";
 
@@ -10,7 +10,7 @@ import {
   UALProviderSwitch,
   WalletProvider
 } from "./context/walletProvider/walletProviderFacade";
-import { WrongChainContext } from "./context/wrongChainContext";
+import { WrongChainProvider } from "./context/wrongChainContext";
 import {
   ethChainId,
   fortmaticApiKey,
@@ -27,12 +27,6 @@ const VotingPage = lazy(() => import("./features/Voting/voting"));
 const StatsPage = lazy(() => import("./features/Stats/stats"));
 
 function App() {
-  const [openWrongChainModal, setOpenWrongChainModal] = useState(false);
-
-  const wrongChainCtx = {
-    openWrongChainModal,
-    setOpenWrongChainModal
-  };
   return (
     <ErrorBoundary fallback={<Error />}>
       <Suspense fallback={<Loading />}>
@@ -47,11 +41,11 @@ function App() {
         >
           <UALProviderSwitch>
             <WalletProvider>
-              <WrongChainContext.Provider value={wrongChainCtx}>
+              <WrongChainProvider>
                 <Router>
                   <Routes />
                 </Router>
-              </WrongChainContext.Provider>
+              </WrongChainProvider>
             </WalletProvider>
           </UALProviderSwitch>
         </UseWalletProvider>
