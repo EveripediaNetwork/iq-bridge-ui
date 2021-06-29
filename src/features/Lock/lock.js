@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useState, useContext } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import {
@@ -14,13 +14,13 @@ import { ArrowDownShort, QuestionCircle } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
 
+import { WrongChainContext } from "../../context/wrongChainContext";
 import LockPeriod from "./lockPeriod";
 import LockHeader from "./lockHeader";
 import Layout from "../../components/layouts/layout";
 import SwapContainer from "../../components/ui/swapContainer";
 import CardTitle from "../../components/ui/cardTitle";
 import InfoAlert from "../../components/ui/infoAlert";
-import WrongChainModal from "../../components/ui/wrongChainModal";
 import {
   getTokensUserBalanceLocked,
   increaseAmount,
@@ -55,7 +55,7 @@ const Lock = () => {
   const [lockValue, setLockValue] = useState(7);
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
-  const [openWrongChainModal, setOpenWrongChainModal] = useState(false);
+  const { setOpenWrongChainModal } = useContext(WrongChainContext);
   const [openTxDetailsDialog, setOpenTxDetailsDialog] = useState(true);
   const [hashes, setHashes] = useState([]);
   const [token1] = useState({
@@ -212,10 +212,6 @@ const Lock = () => {
           onHide={() => setOpenTxDetailsDialog(false)}
         />
       )}
-      <WrongChainModal
-        show={openWrongChainModal}
-        onHide={() => setOpenWrongChainModal(false)}
-      />
     </Layout>
   );
 };

@@ -8,13 +8,13 @@ import { useWallet } from "use-wallet";
 
 import { WallerProviderContext as UALContext } from "../context/walletProvider/walletProviderFacade";
 import Layout from "../components/layouts/layout";
-import WrongChainModal from "../components/ui/wrongChainModal";
 import SwapContainer from "../components/ui/swapContainer";
 import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
 import AddressContainer from "../components/ui/addressContainer";
 import { convertTokensTx } from "../utils/EosDataProvider";
 import TxSuccessAlert from "../components/ui/txSuccessAlert";
+import { WrongChainContext } from "../context/wrongChainContext";
 
 const IconWrapper = styled(Button)`
   margin: 15px;
@@ -33,7 +33,7 @@ const Home = () => {
   const wallet = useWallet();
   const authContext = useContext(UALContext);
   const [filled, setFilled] = useState();
-  const [openWrongChainModal, setOpenWrongChainModal] = useState(false);
+  const { setOpenWrongChainModal } = useContext(WrongChainContext);
   const [txData, setTxData] = useState("");
   const [token1, setToken1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
@@ -116,10 +116,6 @@ const Home = () => {
           )}
         </FormProvider>
       </Container>
-      <WrongChainModal
-        show={openWrongChainModal}
-        onHide={() => setOpenWrongChainModal(false)}
-      />
     </Layout>
   );
 };

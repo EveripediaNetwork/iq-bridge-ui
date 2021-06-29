@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from "react";
+import React, { memo, useState, useEffect, useContext } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { Card, Col, Container, Row, Button, Spinner } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
@@ -21,6 +21,7 @@ import VotingProposalForm from "./votingProposalForm";
 import VoteBreakdown from "../../components/ui/voteBreakdown";
 import GenericDialog from "../../components/ui/genericDialog";
 import ProposalDetails from "../../components/ui/proposalDetails";
+import { WrongChainContext } from "../../context/wrongChainContext";
 
 const StyledCard = styled(Card)`
   min-height: 583px;
@@ -38,6 +39,7 @@ const Voting = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
+  const { setOpenWrongChainModal } = useContext(WrongChainContext);
   const [txDone, setTxDone] = useState(false);
   const [proposals, setProposals] = useState();
   const [selectedProposal, setSelectedProposal] = useState();
@@ -121,6 +123,11 @@ const Voting = () => {
       }
     })();
   }, [selectedProposal, wallet.status]);
+
+  useEffect(() => {
+    if (wallet.status === "error" && wallet.account === null)
+      setOpenWrongChainModal(true);
+  }, [wallet.status]);
 
   return (
     <Layout>
