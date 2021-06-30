@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { WrongChainContext } from "../../context/wrongChainContext";
 
 const StyledModal = styled(Modal)`
   padding: 10px;
@@ -10,9 +11,13 @@ const StyledModal = styled(Modal)`
 
 const WrongChainModal = ({ ...props }) => {
   const { t } = useTranslation();
+  const { openWrongChainDialog, setOpenWrongChainDialog } =
+    useContext(WrongChainContext);
 
   return (
     <StyledModal
+      show={openWrongChainDialog}
+      onHide={() => setOpenWrongChainDialog(false)}
       {...props}
       size="sm"
       aria-labelledby="wrong-chain-modal"
