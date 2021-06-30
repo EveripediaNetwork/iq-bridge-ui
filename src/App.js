@@ -11,7 +11,9 @@ import {
   WalletProvider
 } from "./context/walletProvider/walletProviderFacade";
 import { WrongChainProvider } from "./context/wrongChainContext";
+
 import { TransactionProvider } from "./context/transactionContext";
+
 import {
   ethChainId,
   fortmaticApiKey,

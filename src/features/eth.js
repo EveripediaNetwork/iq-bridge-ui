@@ -30,6 +30,7 @@ const Eth = () => {
   const wallet = useWallet();
   const { setHashes, setOpenTxDetails, setTxDone } =
     useContext(TransactionContext);
+
   const [token1, setToken1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "pIQ",
