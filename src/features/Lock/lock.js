@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useContext, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import {
@@ -26,7 +26,7 @@ import {
   lockTokensTx
 } from "../../utils/EthDataProvider/EthDataProvider";
 import InfoSwapCard from "../../components/ui/infoSwapCard";
-import TxDetailsDialog from "../../components/ui/txDetailsDialog";
+import { TransactionContext } from "../../context/transactionContext";
 
 const HeaderText = styled.div`
   background-color: #f7f7f9;
@@ -47,15 +47,14 @@ const Lock = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
-  const [txDone, setTxDone] = useState(false);
+  const { setHashes, setOpenTxDetails, setTxDone } =
+    useContext(TransactionContext);
   const [updatingBalance, setUpdatingBalance] = useState(false);
   const [loadingBalance, setLoadingBalance] = useState(false);
   const [balance, setBalance] = useState();
   const [lockValue, setLockValue] = useState(7);
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
-  const [openTxDetailsDialog, setOpenTxDetailsDialog] = useState(true);
-  const [hashes, setHashes] = useState([]);
   const [token1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "IQ",
@@ -80,7 +79,7 @@ const Lock = () => {
       );
     else setHashes(await lockTokensTx(data.FromAmount, lockValue, wallet));
 
-    setOpenTxDetailsDialog(true);
+    setOpenTxDetails(true);
 
     setUpdatingBalance(true);
 
@@ -183,13 +182,6 @@ const Lock = () => {
               )}
             </Col>
           </Row>
-          {wallet.account && txDone && (
-            <Row>
-              <Col>
-                <InfoAlert text={t("tx_executed")} />
-              </Col>
-            </Row>
-          )}
           {!wallet.account && (
             <Row>
               <Col>
@@ -199,14 +191,6 @@ const Lock = () => {
           )}
         </FormProvider>
       </Container>
-
-      {hashes.length >= 1 && (
-        <TxDetailsDialog
-          show={openTxDetailsDialog}
-          hashes={hashes}
-          onHide={() => setOpenTxDetailsDialog(false)}
-        />
-      )}
     </Layout>
   );
 };

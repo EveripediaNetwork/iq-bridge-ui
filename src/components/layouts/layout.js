@@ -15,10 +15,13 @@ import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
 
 import { WallerProviderContext as UALContext } from "../../context/walletProvider/walletProviderFacade";
+import { TransactionContext } from "../../context/transactionContext";
 import GlobalStyle from "../globalStyles";
 import LanguageSelector from "./LanguageMenu/LanguageSelector";
 import EthereumWalletModal from "../ui/ethereumWalletModal";
 import WrongChainModal from "../ui/wrongChainModal";
+import InfoAlert from "../ui/infoAlert";
+import TxDetailsDialog from "../ui/txDetailsDialog";
 
 const isWalletConnected = () => {
   const val = localStorage.getItem("__WALLET_CONNECTED");
@@ -33,11 +36,13 @@ const StyledButtonsRow = styled(Row)`
 const Layout = ({ children }) => {
   const location = useLocation();
   const authContext = useContext(UALContext);
+  const { txDone } = useContext(TransactionContext);
   const { t, i18n } = useTranslation();
   const LngUrl = `?lng=${i18n.language}`;
   const [ethModalShow, setEthModalShow] = useState(false);
   const connectedId = isWalletConnected();
   const wallet = useWallet();
+
   if (wallet.status === "disconnected" && connectedId != null) {
     wallet.connect(connectedId);
   }
@@ -169,7 +174,15 @@ const Layout = ({ children }) => {
         </Navbar.Collapse>
       </Navbar>
       {children}
+      {wallet.account && txDone && (
+        <Row>
+          <Col>
+            <InfoAlert text={t("tx_executed")} />
+          </Col>
+        </Row>
+      )}
       <WrongChainModal />
+      <TxDetailsDialog />
       <EthereumWalletModal
         show={ethModalShow}
         onHide={() => setEthModalShow(false)}
