@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useContext, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
@@ -12,6 +12,7 @@ import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
 import { reverseIQtoEOSTx } from "../utils/EthDataProvider/EthDataProvider";
 import AddressContainer from "../components/ui/addressContainer";
+import { TransactionContext } from "../context/transactionContext";
 
 // TODO: this is 3-4 times already, time to extract
 const IconWrapper = styled(Button)`
@@ -29,7 +30,7 @@ const ReverseEth = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
-  const [txDone, setTxDone] = useState(false);
+  const { setTxDone } = useContext(TransactionContext);
   const [token1, setToken1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "IQ",
@@ -86,13 +87,6 @@ const ReverseEth = () => {
               </Card>
             </Col>
           </Row>
-          {wallet.account && txDone && (
-            <Row>
-              <Col>
-                <InfoAlert text={t("transactions_broadcasted")} />
-              </Col>
-            </Row>
-          )}
           {!wallet.account && (
             <Row>
               <Col>

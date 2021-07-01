@@ -11,6 +11,9 @@ import {
   WalletProvider
 } from "./context/walletProvider/walletProviderFacade";
 import { WrongChainProvider } from "./context/wrongChainContext";
+
+import { TransactionProvider } from "./context/transactionContext";
+
 import {
   ethChainId,
   fortmaticApiKey,
@@ -42,9 +45,11 @@ function App() {
           <UALProviderSwitch>
             <WalletProvider>
               <WrongChainProvider>
-                <Router>
-                  <Routes />
-                </Router>
+                <TransactionProvider>
+                  <Router>
+                    <Routes />
+                  </Router>
+                </TransactionProvider>
               </WrongChainProvider>
             </WalletProvider>
           </UALProviderSwitch>

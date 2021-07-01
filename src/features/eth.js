@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useContext } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
@@ -6,12 +6,12 @@ import { ArrowDownShort } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
 
-import TxDetailsDialog from "../components/ui/txDetailsDialog";
 import Layout from "../components/layouts/layout";
 import SwapContainer from "../components/ui/swapContainer";
 import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
 import { convertPTokensTx } from "../utils/EthDataProvider/EthDataProvider";
+import { TransactionContext } from "../context/transactionContext";
 
 const IconWrapper = styled(Button)`
   margin: 15px;
@@ -28,9 +28,9 @@ const Eth = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
-  const [txDone, setTxDone] = useState(false);
-  const [openTxDetailsDialog, setOpenTxDetailsDialog] = useState(true);
-  const [hashes, setHashes] = useState([]);
+  const { setHashes, setOpenTxDetails, setTxDone } =
+    useContext(TransactionContext);
+
   const [token1, setToken1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
     name: "pIQ",
@@ -43,14 +43,11 @@ const Eth = () => {
       return;
     }
 
+    setOpenTxDetails(true);
+
     setHashes(await convertPTokensTx(data.FromAmount, wallet));
 
     setTxDone(true);
-  };
-
-  const handleOnDialogHide = () => {
-    setOpenTxDetailsDialog(false);
-    setHashes([]);
   };
 
   return (
@@ -89,20 +86,6 @@ const Eth = () => {
               </Card>
             </Col>
           </Row>
-          {hashes.length >= 1 && (
-            <TxDetailsDialog
-              show={openTxDetailsDialog}
-              hashes={hashes}
-              onHide={handleOnDialogHide}
-            />
-          )}
-          {wallet.account && txDone && (
-            <Row>
-              <Col>
-                <InfoAlert text={t("tx_executed")} />
-              </Col>
-            </Row>
-          )}
           {!wallet.account && (
             <Row>
               <Col>

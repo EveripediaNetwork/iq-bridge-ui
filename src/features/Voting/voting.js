@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from "react";
+import React, { memo, useState, useEffect, useContext } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { Card, Col, Container, Row, Button, Spinner } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
@@ -21,6 +21,7 @@ import VotingProposalForm from "./votingProposalForm";
 import VoteBreakdown from "../../components/ui/voteBreakdown";
 import GenericDialog from "../../components/ui/genericDialog";
 import ProposalDetails from "../../components/ui/proposalDetails";
+import { TransactionContext } from "../../context/transactionContext";
 
 const StyledCard = styled(Card)`
   min-height: 583px;
@@ -38,7 +39,7 @@ const Voting = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
-  const [txDone, setTxDone] = useState(false);
+  const { setTxDone } = useContext(TransactionContext);
   const [proposals, setProposals] = useState();
   const [selectedProposal, setSelectedProposal] = useState();
   const [loadingSelectedProposal, setLoadingSelectedProposal] = useState(false);
@@ -272,13 +273,6 @@ const Voting = () => {
                 </StyledCard>
               </Col>
             </Row>
-            {wallet.account && txDone && (
-              <Row>
-                <Col>
-                  <InfoAlert text={t("confirmed_tx")} />
-                </Col>
-              </Row>
-            )}
             {!wallet.account && (
               <Row>
                 <Col>

@@ -1,19 +1,26 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useContext } from "react";
 import { Modal, Button, Alert, ListGroup } from "react-bootstrap";
 import { Search } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 
 import { ethBasedExplorerUrl } from "../../config";
+import { TransactionContext } from "../../context/transactionContext";
 
-const TxDetailsDialog = ({ hashes, ...props }) => {
+const TxDetailsDialog = () => {
   const { t } = useTranslation();
+  const { openTxDetails, setOpenTxDetails, hashes } =
+    useContext(TransactionContext);
 
   const chunkString = stringToChunk =>
     `${stringToChunk.match(/.{1,20}/g)[0]}...`;
 
   return (
-    <Modal {...props} size="sm" centered>
+    <Modal
+      show={openTxDetails}
+      onHide={() => setOpenTxDetails(false)}
+      size="sm"
+      centered
+    >
       <Modal.Header closeButton className="px-3 py-2">
         <Modal.Title className="font-weight-light">
           {t("transactions")}
@@ -51,10 +58,6 @@ const TxDetailsDialog = ({ hashes, ...props }) => {
       </Modal.Body>
     </Modal>
   );
-};
-
-TxDetailsDialog.propTypes = {
-  hashes: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
 export default TxDetailsDialog;
