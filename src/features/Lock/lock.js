@@ -73,11 +73,13 @@ const Lock = () => {
   const onSubmit = async data => {
     if (!wallet.account) return;
 
-    if (currentHiIQ !== 0)
+    if (currentHiIQ !== 0) {
       setHashes(
         await increaseAmount(data.FromAmount, wallet, handleConfirmation)
       );
-    else setHashes(await lockTokensTx(data.FromAmount, lockValue, wallet));
+    } else {
+      setHashes(await lockTokensTx(data.FromAmount, lockValue, wallet));
+    }
 
     setOpenTxDetails(true);
 

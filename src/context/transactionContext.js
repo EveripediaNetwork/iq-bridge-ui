@@ -11,9 +11,16 @@ export const TransactionContext = createContext({
 });
 
 export const TransactionProvider = ({ children }) => {
-  const setHashes = hashes => {
+  const setHashes = newHashes => {
     // eslint-disable-next-line no-use-before-define
-    setTxState({ ...txState, hashes });
+    const newArr = [...txState.hashes, ...newHashes].slice(-5);
+    // eslint-disable-next-line no-use-before-define
+    setTxState({ ...txState.hashes, hashes: newArr });
+    localStorage.setItem("lastFiveTx", JSON.stringify(newArr));
+
+    // console.log(newArr);
+    // eslint-disable-next-line no-use-before-define
+    // console.log(txState.hashes);
   };
 
   const setOpenTxDetails = open => {
@@ -27,7 +34,7 @@ export const TransactionProvider = ({ children }) => {
   };
 
   const initState = {
-    hashes: [],
+    hashes: JSON.parse(localStorage.getItem("lastFiveTx")) || [],
     setHashes,
     openTxDetails: false,
     setOpenTxDetails,
