@@ -147,9 +147,9 @@ const Layout = ({ children }) => {
           <LanguageSelector className="pr-4" />
           <StyledButtonsRow xs={6} sm={6} md={6}>
             <Col
-              xs={4}
-              sm={4}
-              md={4}
+              xs={6}
+              sm={6}
+              md={6}
               className="mt-2 pr-0 pl-0 d-flex flex-row justify-content-center"
             >
               {authContext.activeUser === null ? (
@@ -168,7 +168,7 @@ const Layout = ({ children }) => {
                 </Button>
               )}
             </Col>
-            <Col xs={4} sm={4} md={4} className="mt-2 pl-0">
+            <Col xs={6} sm={6} md={6} className="mt-2 pl-0">
               {wallet.status !== "connected" ? (
                 <Button
                   onClick={() => {
@@ -181,31 +181,21 @@ const Layout = ({ children }) => {
                   {t("ethereum_wallet")}
                 </Button>
               ) : (
-                <Button
-                  onClick={() => {
-                    wallet.reset();
-                    localStorage.removeItem("__WALLET_CONNECTED");
-                  }}
-                  className="text-capitalize"
-                >
-                  {t("logout")} ETH
-                </Button>
-              )}
-            </Col>
-
-            <Col xs={4} sm={4} md={4} className="mt-2">
-              {wallet.account && (
                 <>
-                  <Button
-                    variant="dark"
-                    onClick={() => setOpenAccountDetails(true)}
-                    className="d-flex flex-row justify-content-center"
-                  >
-                    {IdentIcon()}
-                    <span className="ml-2">
-                      {`${wallet.account.match(/.{1,10}/g)[0]}...`}
-                    </span>
-                  </Button>
+                  {wallet.account && (
+                    <>
+                      <Button
+                        variant="dark"
+                        onClick={() => setOpenAccountDetails(true)}
+                        className="d-flex flex-row justify-content-center"
+                      >
+                        {IdentIcon()}
+                        <span className="ml-2">
+                          {`${wallet.account.match(/.{1,10}/g)[0]}...`}
+                        </span>
+                      </Button>
+                    </>
+                  )}
                 </>
               )}
             </Col>
@@ -226,10 +216,7 @@ const Layout = ({ children }) => {
       />
       <WrongChainModal />
       <TxDetailsDialog />
-      <EthereumWalletModal
-        show={ethModalShow}
-        onHide={() => setEthModalShow(false)}
-      />
+      <EthereumWalletModal show={ethModalShow} setShow={setEthModalShow} />
     </Container>
   );
 };

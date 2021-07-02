@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Modal, Row, Col, Card } from "react-bootstrap";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { useWallet } from "use-wallet";
 import { useTranslation } from "react-i18next";
 
@@ -24,16 +25,24 @@ const StyledWalletSvg = styled(Card.Img)`
   max-width: 45px;
 `;
 
-const EthereumWalletModal = ({ ...otherProps }) => {
+const EthereumWalletModal = ({ show, setShow }) => {
   const { t } = useTranslation();
   const wallet = useWallet();
   const activate = connector => {
     wallet.reset();
     wallet.connect(connector);
   };
+
+  const handleWalletButtonClick = value => {
+    activate(value);
+    localStorage.setItem("__WALLET_CONNECTED", JSON.stringify(value));
+    setShow(false);
+  };
+
   return (
     <Modal
-      {...otherProps}
+      show={show}
+      onHide={() => setShow(false)}
       size="md"
       aria-labelledby="login-modal"
       centered
@@ -51,13 +60,7 @@ const EthereumWalletModal = ({ ...otherProps }) => {
               <StyledWalletCard
                 className="p-2 shadow-sm mx-auto"
                 key="injected"
-                onClick={() => {
-                  activate("injected");
-                  localStorage.setItem(
-                    "__WALLET_CONNECTED",
-                    JSON.stringify("injected")
-                  );
-                }}
+                onClick={() => handleWalletButtonClick("injected")}
               >
                 <div className="d-flex flex-row justify-content-center">
                   <StyledWalletSvg variant="top" src={MetaMaskSvg} />
@@ -71,13 +74,7 @@ const EthereumWalletModal = ({ ...otherProps }) => {
               <StyledWalletCard
                 className="p-2 shadow-sm mx-auto"
                 key="portis"
-                onClick={() => {
-                  activate("portis");
-                  localStorage.setItem(
-                    "__WALLET_CONNECTED",
-                    JSON.stringify("portis")
-                  );
-                }}
+                onClick={() => handleWalletButtonClick("portis")}
               >
                 <div className="d-flex flex-row justify-content-center">
                   <StyledWalletSvg variant="top" src={PortisSvg} />
@@ -95,13 +92,7 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                 className="p-2 shadow-sm mx-auto"
                 key="frame"
                 action
-                onClick={() => {
-                  activate("frame");
-                  localStorage.setItem(
-                    "__WALLET_CONNECTED",
-                    JSON.stringify("frame")
-                  );
-                }}
+                onClick={() => handleWalletButtonClick("frame")}
               >
                 <div className="d-flex flex-row justify-content-center">
                   <StyledWalletSvg variant="top" src={FrameSvg} />
@@ -116,13 +107,7 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                 className="p-2 shadow-sm mx-auto"
                 key="fortmatic"
                 action
-                onClick={() => {
-                  activate("fortmatic");
-                  localStorage.setItem(
-                    "__WALLET_CONNECTED",
-                    JSON.stringify("fortmatic")
-                  );
-                }}
+                onClick={() => handleWalletButtonClick("fortmatic")}
               >
                 <div className="d-flex flex-row justify-content-center">
                   <StyledWalletSvg variant="top" src={FortmaticSvg} />
@@ -139,13 +124,7 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                 className="p-2 shadow-sm mx-auto"
                 key="walletconnect"
                 action
-                onClick={() => {
-                  activate("walletconnect");
-                  localStorage.setItem(
-                    "__WALLET_CONNECTED",
-                    JSON.stringify("walletconnect")
-                  );
-                }}
+                onClick={() => handleWalletButtonClick("walletconnect")}
               >
                 <div className="d-flex flex-row justify-content-center">
                   <StyledWalletSvg variant="top" src={WalletConnectSvg} />
@@ -160,13 +139,7 @@ const EthereumWalletModal = ({ ...otherProps }) => {
                 className="p-2 shadow-sm mx-auto"
                 key="torus"
                 action
-                onClick={() => {
-                  activate("torus");
-                  localStorage.setItem(
-                    "__WALLET_CONNECTED",
-                    JSON.stringify("torus")
-                  );
-                }}
+                onClick={() => handleWalletButtonClick("torus")}
               >
                 <div className="d-flex flex-row justify-content-center">
                   <StyledWalletSvg variant="top" src={TorusSvg} />
@@ -181,6 +154,11 @@ const EthereumWalletModal = ({ ...otherProps }) => {
       </Modal.Body>
     </Modal>
   );
+};
+
+EthereumWalletModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  setShow: PropTypes.func.isRequired
 };
 
 export default EthereumWalletModal;
