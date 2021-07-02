@@ -47,7 +47,7 @@ const Lock = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
-  const { setHashes, setOpenTxDetails, setTxDone } =
+  const { hashes, setHashes, setOpenTxDetails, setTxDone } =
     useContext(TransactionContext);
   const [updatingBalance, setUpdatingBalance] = useState(false);
   const [loadingBalance, setLoadingBalance] = useState(false);
@@ -74,9 +74,10 @@ const Lock = () => {
     if (!wallet.account) return;
 
     if (currentHiIQ !== 0) {
-      setHashes(
-        await increaseAmount(data.FromAmount, wallet, handleConfirmation)
-      );
+      setHashes([
+        ...hashes,
+        ...(await increaseAmount(data.FromAmount, wallet, handleConfirmation))
+      ]);
     } else {
       setHashes(await lockTokensTx(data.FromAmount, lockValue, wallet));
     }

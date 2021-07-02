@@ -22,7 +22,6 @@ import LanguageSelector from "./LanguageMenu/LanguageSelector";
 import EthereumWalletModal from "../ui/ethereumWalletModal";
 import WrongChainModal from "../ui/wrongChainModal";
 import InfoAlert from "../ui/infoAlert";
-import TxDetailsDialog from "../ui/txDetailsDialog";
 import AccountDetailsDialog from "../ui/accountDetailsDialog";
 
 const isWalletConnected = () => {
@@ -215,7 +214,6 @@ const Layout = ({ children }) => {
         setOpenAccountDetails={setOpenAccountDetails}
       />
       <WrongChainModal />
-      <TxDetailsDialog />
       <EthereumWalletModal show={ethModalShow} setShow={setEthModalShow} />
     </Container>
   );

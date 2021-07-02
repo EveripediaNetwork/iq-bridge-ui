@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useWallet } from "use-wallet";
+import { useTranslation } from "react-i18next";
 import { Button, ListGroup, Popover, OverlayTrigger } from "react-bootstrap";
 import {
   BoxArrowUpRight,
@@ -34,13 +35,14 @@ const AccountDetailsDialog = ({
   openAccountDetails,
   setOpenAccountDetails
 }) => {
+  const { t } = useTranslation();
   const wallet = useWallet();
   const [showOverlay, setShowOverlay] = useState(false);
   const { hashes } = useContext(TransactionContext);
 
   const popover = props => (
     <Popover id="copied" {...props}>
-      <Popover.Content>Copied to clipboard</Popover.Content>
+      <Popover.Content>{t("copied_to_clipboard")}</Popover.Content>
     </Popover>
   );
 
@@ -88,7 +90,9 @@ const AccountDetailsDialog = ({
                     variant="link"
                   >
                     <Clipboard />
-                    <StyledSpan className="ml-1">Copy Address</StyledSpan>
+                    <StyledSpan className="ml-1">
+                      {t("copy_address")}
+                    </StyledSpan>
                   </Button>
                 </OverlayTrigger>
                 <Button className="p-0 ml-1" variant="link">
@@ -99,7 +103,7 @@ const AccountDetailsDialog = ({
                   >
                     <BoxArrowUpRight />
                     <StyledSpan className="ml-1">
-                      View on Block Explorer
+                      {t("view_on_block_explorer")}
                     </StyledSpan>
                   </a>
                 </Button>
@@ -108,11 +112,14 @@ const AccountDetailsDialog = ({
               <div className="d-flex flex-row justify-content-center">
                 <Button onClick={handleClickLogout} variant="outline-danger">
                   <BoxArrowLeft />
-                  <span className="ml-1">Logout</span>
+                  <span className="ml-1">{t("logout")}</span>
                 </Button>
               </div>
             </HeaderDetails>
             <AccountDetailsFooter className="shadow mt-2 p-2">
+              <h5 className="text-center text-white font-weight-light">
+                {t("last_transactions")}
+              </h5>
               {hashes && hashes.length > 0 ? (
                 <ListGroup className="bg-transparent" variant="flush">
                   {hashes.map(h => (
@@ -130,7 +137,7 @@ const AccountDetailsDialog = ({
                 </ListGroup>
               ) : (
                 <h6 className="text-white font-weight-light">
-                  Transactions will appear here...
+                  {t("transactions_will_appear_here")}
                 </h6>
               )}
             </AccountDetailsFooter>

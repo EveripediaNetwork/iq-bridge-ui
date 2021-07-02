@@ -192,6 +192,8 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
       .then(() => handleConfirmation("success"))
       .catch(err => handleConfirmation(err));
 
+    console.log(hashes);
+
     return hashes;
   }
 

@@ -66,6 +66,12 @@ export const resources = {
       // ---------------------------------------------------------------
 
       // |||||||||||||||||||| COMPONENTS ||||||||||||||||||||
+      // acountDetailsDialog
+      copied_to_clipboard: "Copied to clipboard!",
+      copy_address: "Copy Address",
+      view_on_block_explorer: "View on Block Explorer",
+      last_transactions: "Last transactions",
+      transactions_will_appear_here: "Transactions will appear here...",
       // ethereumWalletModal
       select_wallet: "Select a wallet",
       // infoSwapCard
@@ -88,10 +94,6 @@ export const resources = {
       votes_breakdown: "Votes Breakdown",
       // swapContainer
       balance: "balance",
-      // txDetailsDialog
-      transactions: "Transactions",
-      txAlert:
-        "Transaction details will be available depeding on how fast the network is",
       // txSuccessAlert
       transaction_executed: "Transaction Executed",
       go_to: "Go to",
@@ -101,7 +103,7 @@ export const resources = {
       wrong_chain_modal_body:
         "Please connect to the appropiate Ethereum Network",
       // layout
-      logout: "logout",
+      logout: "Logout",
       eos_wallet: "EOS Wallet",
       ethereum_wallet: "Ethereum Wallet",
       // languageSeletcor
@@ -177,6 +179,12 @@ export const resources = {
       // ---------------------------------------------------------------
 
       // |||||||||||||||||||| COMPONENTS ||||||||||||||||||||
+      // acountDetailsDialog
+      copied_to_clipboard: "Copied to clipboard!",
+      copy_address: "Copy Address",
+      view_on_block_explorer: "View on Block Explorer",
+      last_transactions: "Last transactions",
+      transactions_will_appear_here: "Transactions will appear here...",
       // ethereumWalletModal
       select_wallet: "지갑 선택",
       // infoSwapCard
@@ -199,9 +207,6 @@ export const resources = {
       votes_breakdown: "투표 내역",
       // swapContainer
       balance: "밸런스",
-      // txDetailsDialog
-      transactions: "업무",
-      txAlert: "네트워크 속도에 따라 거래 세부 정보가 제공됩니다.",
       // txSuccessAlert
       transaction_executed: "거래 실행",
       go_to: "이동",
@@ -287,6 +292,12 @@ export const resources = {
       // ---------------------------------------------------------------
 
       // |||||||||||||||||||| COMPONENTS ||||||||||||||||||||
+      // acountDetailsDialog
+      copied_to_clipboard: "Copied to clipboard!",
+      copy_address: "Copy Address",
+      view_on_block_explorer: "View on Block Explorer",
+      last_transactions: "Last transactions",
+      transactions_will_appear_here: "Transactions will appear here...",
       // ethereumWalletModal
       select_wallet: "选择钱包",
       // infoSwapCard
@@ -309,9 +320,6 @@ export const resources = {
       votes_breakdown: "投票明细",
       // swapContainer
       balance: "平衡",
-      // txDetailsDialog
-      transactions: "交易",
-      txAlert: "交易详情将取决于网络的速度",
       // txSuccessAlert
       transaction_executed: "交易执行",
       go_to: "去",
