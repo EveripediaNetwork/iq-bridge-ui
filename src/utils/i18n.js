@@ -319,7 +319,7 @@ export const resources = {
       // voteBreakdown
       votes_breakdown: "投票明细",
       // swapContainer
-      balance: "平衡",
+      balance: "余额",
       // txSuccessAlert
       transaction_executed: "交易执行",
       go_to: "去",
