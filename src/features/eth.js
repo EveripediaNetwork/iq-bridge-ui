@@ -28,8 +28,7 @@ const Eth = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
-  const { setHashes, setOpenTxDetails, setTxDone } =
-    useContext(TransactionContext);
+  const { setHashes, setTxDone } = useContext(TransactionContext);
 
   const [token1, setToken1] = useState({
     icon: "https://mindswap.finance/tokens/iq.png",
@@ -42,8 +41,6 @@ const Eth = () => {
     if (!wallet.account) {
       return;
     }
-
-    setOpenTxDetails(true);
 
     setHashes(await convertPTokensTx(data.FromAmount, wallet));
 
