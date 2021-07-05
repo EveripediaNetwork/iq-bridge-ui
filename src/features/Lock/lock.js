@@ -47,8 +47,7 @@ const Lock = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
-  const { hashes, setHashes, setOpenTxDetails, setTxDone } =
-    useContext(TransactionContext);
+  const { hashes, setHashes, setTxDone } = useContext(TransactionContext);
   const [updatingBalance, setUpdatingBalance] = useState(false);
   const [loadingBalance, setLoadingBalance] = useState(false);
   const [balance, setBalance] = useState();
@@ -81,8 +80,6 @@ const Lock = () => {
     } else {
       setHashes(await lockTokensTx(data.FromAmount, lockValue, wallet));
     }
-
-    setOpenTxDetails(true);
 
     setUpdatingBalance(true);
 
