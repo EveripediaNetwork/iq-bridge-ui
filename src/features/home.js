@@ -32,7 +32,7 @@ const Home = () => {
   const [filled, setFilled] = useState();
   const [txData, setTxData] = useState("");
   const [token1, setToken1] = useState({
-    icon: "https://mindswap.finance/tokens/iq.png",
+    icon: `${window.location.origin}/tokens/iq.png`,
     name: "IQ",
     precision: 3,
     chain: "EOS"
