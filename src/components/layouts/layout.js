@@ -77,9 +77,6 @@ const Layout = ({ children }) => {
       <GlobalStyle />
       <Navbar expand="lg" className="p-3 font-weight-bold text-capitalize">
         <Navbar.Brand as={Link} to={`/${LngUrl}`}>
-          {/* <span title="iq bridge" role="img" aria-label="brain">
-            🧠
-          </span> */}
           <SwapTokenIcon src={`${window.location.origin}/tokens/iq.png`} />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
