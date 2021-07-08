@@ -175,7 +175,7 @@ const Stats = () => {
                 <DataTitle>{t("total")}</DataTitle>
                 <DataRow>
                   <Icon>
-                    <img alt="IQ" src="/tokens/2930.png" />
+                    <img alt="IQ" src="/tokens/iq.png" />
                   </Icon>
                   <Title>
                     {t("total")} {t("volume")}
@@ -191,7 +191,7 @@ const Stats = () => {
                 </DataRow>
                 <DataRow>
                   <Icon>
-                    <img alt="IQ" src="/tokens/2930.png" />
+                    <img alt="IQ" src="/tokens/iq.png" />
                   </Icon>
                   <Title>
                     {t("total")} {t("holders")}
@@ -209,14 +209,14 @@ const Stats = () => {
                 <DataTitle>HiIQ</DataTitle>
                 <DataRow>
                   <Icon>
-                    <img alt="IQ" src="/tokens/2930.png" />
+                    <img alt="IQ" src="/tokens/iq.png" />
                   </Icon>
                   <Title>HiIQ {t("volume")}</Title>
                   <Value>{showData(data.hiiq?.holders)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
-                    <img alt="IQ" src="/tokens/2930.png" />
+                    <img alt="IQ" src="/tokens/iq.png" />
                   </Icon>
                   <Title>HiIQ {t("holders")}</Title>
                   <Value>{showData(data.hiiq?.volume)}</Value>
