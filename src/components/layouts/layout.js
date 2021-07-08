@@ -34,6 +34,10 @@ const StyledButtonsRow = styled(Row)`
   min-width: 350px;
 `;
 
+const SwapTokenIcon = styled.img`
+  width: 30px;
+`;
+
 const StyledIdenticonContainer = styled.div`
   height: 1rem;
   width: 1rem;
@@ -73,9 +77,10 @@ const Layout = ({ children }) => {
       <GlobalStyle />
       <Navbar expand="lg" className="p-3 font-weight-bold text-capitalize">
         <Navbar.Brand as={Link} to={`/${LngUrl}`}>
-          <span title="iq bridge" role="img" aria-label="brain">
+          {/* <span title="iq bridge" role="img" aria-label="brain">
             🧠
-          </span>
+          </span> */}
+          <SwapTokenIcon src={`${window.location.origin}/tokens/iq.png`} />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

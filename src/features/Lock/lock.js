@@ -55,7 +55,7 @@ const Lock = () => {
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
   const [token1] = useState({
-    icon: "https://mindswap.finance/tokens/iq.png",
+    icon: `${window.location.origin}/tokens/iq.png`,
     name: "IQ",
     precision: 3,
     chain: "Ethereum"

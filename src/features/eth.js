@@ -31,7 +31,7 @@ const Eth = () => {
   const { setHashes, setTxDone } = useContext(TransactionContext);
 
   const [token1, setToken1] = useState({
-    icon: "https://mindswap.finance/tokens/iq.png",
+    icon: `${window.location.origin}/tokens/iq.png`,
     name: "pIQ",
     precision: 3,
     chain: "Ethereum"
