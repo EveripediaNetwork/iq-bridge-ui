@@ -26,6 +26,7 @@ const HomePage = lazy(() => import("./features/home"));
 const EthPage = lazy(() => import("./features/eth"));
 const ReverseEthPage = lazy(() => import("./features/reverseEth"));
 const LockPage = lazy(() => import("./features/Lock/lock"));
+const RewardsPage = lazy(() => import("./features/Rewards/rewards"));
 const VotingPage = lazy(() => import("./features/Voting/voting"));
 const StatsPage = lazy(() => import("./features/Stats/stats"));
 
@@ -66,6 +67,7 @@ const Routes = () => {
       <Route exact path="/" component={HomePage} />
       <Route exact path="/eth" component={EthPage} />
       <Route exact path="/lock" component={LockPage} />
+      <Route exact path="/rewards" component={RewardsPage} />
       <Route exact path="/reverseEth" component={ReverseEthPage} />
       <Route exact path="/voting" component={VotingPage} />
       <Route exact path="/stats" component={StatsPage} />

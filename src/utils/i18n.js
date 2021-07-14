@@ -106,6 +106,7 @@ export const resources = {
       logout: "Logout",
       eos_wallet: "EOS Wallet",
       ethereum_wallet: "Ethereum Wallet",
+      rewards: "Rewards",
       // languageSeletcor
       language: "Language",
       select_a_language: "Select a Language",
@@ -218,6 +219,7 @@ export const resources = {
       logout: "로그 아웃",
       eos_wallet: "EOS 지갑",
       ethereum_wallet: "이더 리움 지갑",
+      rewards: "Rewards",
       // languageSelector
       language: "언어",
       select_a_language: "언어 선택",
@@ -331,6 +333,7 @@ export const resources = {
       logout: "登出",
       eos_wallet: "EOS钱包",
       ethereum_wallet: "以太坊钱包",
+      rewards: "Rewards",
       // languageSelector
       language: "语",
       select_a_language: "选择语言",

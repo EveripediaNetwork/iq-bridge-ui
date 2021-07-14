@@ -4,12 +4,30 @@ import {
   hiIQAddress,
   iqAddress,
   pIQAddress,
-  pMinterAddress
+  pMinterAddress,
+  hiIQRewardsAddress
 } from "../../config";
 import { erc20Abi } from "./erc20.abi";
 import { hiIQAbi } from "./hiIQ.abi";
+import { HiIQRewardsAbi } from "./hiIQRewards.abi";
 import { minterAbi } from "./minter.abi";
 import { ptokenAbi } from "./ptoken.abi";
+
+const earned = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+    const hiIQRewards = new ethers.Contract(
+      hiIQRewardsAddress,
+      HiIQRewardsAbi,
+      provider.getSigner()
+    );
+
+    const balance = await hiIQRewards.earned(wallet.account);
+    return ethers.utils.formatEther(balance);
+  }
+
+  return 0;
+};
 
 const needsApproval = async (provider, erc20, amount, spender, hashes) => {
   const userAddress = await provider.getSigner().getAddress();
@@ -199,6 +217,7 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
 };
 
 export {
+  earned,
   convertPTokensTx,
   getPTokensUserBalance,
   getTokensUserBalance,
