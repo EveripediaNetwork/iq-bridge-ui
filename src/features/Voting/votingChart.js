@@ -9,11 +9,11 @@ import { getScores } from "../../utils/SnapshotProvider";
 
 const VotingChart = ({ choices, votes, loadingVotes }) => {
   const { t } = useTranslation();
+  const { selectedProposal } = useContext(ProposalContext);
   const [votesCount, setVotesCount] = useState([]);
   const [addresses, setAddresses] = useState([]);
   const [colors, setColors] = useState([]);
   const [borderColors, setBorderColors] = useState([]);
-  const { selectedProposal } = useContext(ProposalContext);
 
   const getRandomRGBColor = () => {
     const r = Math.floor(Math.random() * 255);

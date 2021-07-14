@@ -15,6 +15,10 @@ const Link = styled.a`
   text-overflow: ellipsis;
 `;
 
+const StyledUl = styled.ul`
+  list-style-type: none;
+`;
+
 const VoteBreakdown = ({ votes, choices, type }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -46,13 +50,13 @@ const VoteBreakdown = ({ votes, choices, type }) => {
                       <strong>{choices[v.choice - 1]}</strong>
                     )}
                     {type === "approval" && (
-                      <ul>
+                      <StyledUl>
                         {v.choice.map(c => (
                           <li key={c}>
                             {choices[c - 1]} <br />
                           </li>
                         ))}
-                      </ul>
+                      </StyledUl>
                     )}
                   </Col>
                   <Col sm className="text-center">
