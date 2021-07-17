@@ -29,6 +29,22 @@ const earned = async wallet => {
   return 0;
 };
 
+const getYield = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+    const hiIQRewards = new ethers.Contract(
+      hiIQRewardsAddress,
+      HiIQRewardsAbi,
+      provider.getSigner()
+    );
+
+    const yieldResult = await hiIQRewards.getYield();
+    return yieldResult;
+  }
+
+  return 0;
+};
+
 const needsApproval = async (provider, erc20, amount, spender, hashes) => {
   const userAddress = await provider.getSigner().getAddress();
   const allowedTokens = await erc20.allowance(userAddress, spender);
@@ -137,6 +153,25 @@ const reverseIQtoEOSTx = async (amount, wallet, eosAccount) => {
   return false;
 };
 
+const withdraw = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+    const hiIQ = new ethers.Contract(
+      hiIQAddress,
+      hiIQAbi,
+      provider.getSigner()
+    );
+
+    const result = await hiIQ.withdraw({
+      gasLimit: 1000000
+    });
+
+    return result;
+  }
+
+  return false;
+};
+
 const lockTokensTx = async (amount, time, wallet) => {
   const amountParsed = ethers.utils.parseEther(amount).toString();
   const d = new Date();
@@ -200,7 +235,7 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
     );
 
     const result = await hiIQ.increase_amount(amountParsed, {
-      gasLimit: 700000
+      gasLimit: 700000000
     });
 
     hashes.push(result.hash);
@@ -218,10 +253,12 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
 
 export {
   earned,
+  getYield,
   convertPTokensTx,
   getPTokensUserBalance,
   getTokensUserBalance,
   reverseIQtoEOSTx,
+  withdraw,
   lockTokensTx,
   increaseAmount,
   getTokensUserBalanceLocked
