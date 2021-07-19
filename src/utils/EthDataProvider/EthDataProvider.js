@@ -157,6 +157,45 @@ const lockTokensTx = async (amount, time, wallet) => {
   return false;
 };
 
+const withdraw = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+    const hiIQ = new ethers.Contract(
+      hiIQAddress,
+      hiIQAbi,
+      provider.getSigner()
+    );
+
+    const result = await hiIQ.withdraw({
+      gasLimit: 1000000
+    });
+
+    return result;
+  }
+
+  return false;
+};
+
+const getLockedEnd = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+    const hiIQ = new ethers.Contract(
+      hiIQAddress,
+      hiIQAbi,
+      provider.getSigner()
+    );
+
+    const result = await hiIQ.locked__end(wallet.account, {
+      gasLimit: 1000000
+    });
+
+    // eslint-disable-next-line no-underscore-dangle
+    return new Date(parseInt(result._hex, 16) * 1000);
+  }
+
+  return false;
+};
+
 const increaseAmount = async (amount, wallet, handleConfirmation) => {
   const amountParsed = ethers.utils.parseEther(amount).toString();
 
@@ -203,6 +242,8 @@ export {
   getPTokensUserBalance,
   getTokensUserBalance,
   reverseIQtoEOSTx,
+  withdraw,
+  getLockedEnd,
   lockTokensTx,
   increaseAmount,
   getTokensUserBalanceLocked

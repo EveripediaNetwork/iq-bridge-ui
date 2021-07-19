@@ -8,7 +8,8 @@ import {
   Col,
   Container,
   Form,
-  Row
+  Row,
+  Alert
 } from "react-bootstrap";
 import { ArrowDownShort, QuestionCircle } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
@@ -23,6 +24,8 @@ import InfoAlert from "../../components/ui/infoAlert";
 import {
   getTokensUserBalanceLocked,
   increaseAmount,
+  withdraw,
+  getLockedEnd,
   lockTokensTx
 } from "../../utils/EthDataProvider/EthDataProvider";
 import InfoSwapCard from "../../components/ui/infoSwapCard";
@@ -54,6 +57,8 @@ const Lock = () => {
   const [lockValue, setLockValue] = useState(7);
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
+  const [lockEnd, setLockEnd] = useState();
+  const [expired, setExpired] = useState();
   const [token1] = useState({
     icon: `${window.location.origin}/tokens/iq.png`,
     name: "IQ",
@@ -89,6 +94,21 @@ const Lock = () => {
   const handleSetLockValue = lv => {
     setLockValue(lv);
   };
+
+  const handleWithdraw = () => {
+    (async () => {
+      console.log(await withdraw(wallet));
+    })();
+  };
+
+  useEffect(() => {
+    if (currentHiIQ && currentHiIQ > 0)
+      (async () => {
+        const result = await getLockedEnd(wallet);
+        setLockEnd(result);
+        setExpired(new Date().getTime() > result.getTime());
+      })();
+  }, [currentHiIQ]);
 
   useEffect(() => {
     if (wallet.status === "connected" && wallet.ethereum)
@@ -136,6 +156,29 @@ const Lock = () => {
                     </Accordion.Collapse>
                   </Accordion>
                   <br />
+                  <>
+                    {currentHiIQ > 0 && expired === true && (
+                      <div className="text-center p-3">
+                        <Button
+                          onClick={handleWithdraw}
+                          variant="light"
+                          size="md"
+                        >
+                          Withdraw
+                        </Button>
+                      </div>
+                    )}
+                  </>
+                  {lockEnd && expired !== undefined && (
+                    <Alert
+                      className="text-center"
+                      variant={expired ? "danger" : "info"}
+                    >
+                      {expired
+                        ? "Expired"
+                        : `Expiring on ${lockEnd.toLocaleString()}`}
+                    </Alert>
+                  )}
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
                     <SwapContainer
                       token={token1}
