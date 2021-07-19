@@ -153,25 +153,6 @@ const reverseIQtoEOSTx = async (amount, wallet, eosAccount) => {
   return false;
 };
 
-const withdraw = async wallet => {
-  if (wallet.status === "connected") {
-    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-    const hiIQ = new ethers.Contract(
-      hiIQAddress,
-      hiIQAbi,
-      provider.getSigner()
-    );
-
-    const result = await hiIQ.withdraw({
-      gasLimit: 1000000
-    });
-
-    return result;
-  }
-
-  return false;
-};
-
 const lockTokensTx = async (amount, time, wallet) => {
   const amountParsed = ethers.utils.parseEther(amount).toString();
   const d = new Date();
@@ -258,7 +239,6 @@ export {
   getPTokensUserBalance,
   getTokensUserBalance,
   reverseIQtoEOSTx,
-  withdraw,
   lockTokensTx,
   increaseAmount,
   getTokensUserBalanceLocked
