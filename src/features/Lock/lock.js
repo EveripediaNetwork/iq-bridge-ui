@@ -23,7 +23,7 @@ import InfoAlert from "../../components/ui/infoAlert";
 import {
   getTokensUserBalanceLocked,
   increaseAmount,
-  withdraw,
+  // withdraw,
   lockTokensTx
 } from "../../utils/EthDataProvider/EthDataProvider";
 import InfoSwapCard from "../../components/ui/infoSwapCard";
@@ -91,11 +91,11 @@ const Lock = () => {
     setLockValue(lv);
   };
 
-  const handleWithdraw = () => {
-    (async () => {
-      console.log(await withdraw(wallet));
-    })();
-  };
+  // const handleWithdraw = () => {
+  //   (async () => {
+  //     console.log(await withdraw(wallet));
+  //   })();
+  // };
 
   useEffect(() => {
     if (wallet.status === "connected" && wallet.ethereum)
@@ -143,7 +143,7 @@ const Lock = () => {
                     </Accordion.Collapse>
                   </Accordion>
                   <br />
-                  <div className="text-center p-3">
+                  {/* <div className="text-center p-3">
                     <Button
                       onClick={handleWithdraw}
                       variant="success"
@@ -151,7 +151,7 @@ const Lock = () => {
                     >
                       Withdraw
                     </Button>
-                  </div>
+                  </div> */}
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
                     <SwapContainer
                       token={token1}

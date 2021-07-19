@@ -30,6 +30,11 @@ export const resources = {
       // ## lockPeriod
       lock_period: "Lock period (days)",
       value_restriction: "Input value must be between 1 and 1460",
+      // rewards
+      earned: "Earned",
+      claim: "Claim",
+      waiting_network_confirmation: "Waiting for network confirmation...",
+      please_login: "Please login to your wallet",
       // voting
       confirmed_tx: "Transaction confirmed!",
       voting: "voting",
@@ -145,6 +150,11 @@ export const resources = {
       // ## lockPeriod
       lock_period: "잠금 기간 (일)",
       value_restriction: "입력 값은 1에서 1460 사이 여야합니다.",
+      // rewards
+      earned: "Earned",
+      claim: "Claim",
+      waiting_network_confirmation: "Waiting for network confirmation...",
+      please_login: "Please login to your wallet",
       // voting
       confirmed_tx: "거래가 확인되었습니다!",
       voting: "투표",
@@ -259,6 +269,11 @@ export const resources = {
       // ## lockPeriod
       lock_period: "锁定期（天）",
       value_restriction: "输入值必须在 1 到 1460 之间",
+      // rewards
+      earned: "Earned",
+      claim: "Claim",
+      waiting_network_confirmation: "Waiting for network confirmation...",
+      please_login: "Please login to your wallet",
       // voting
       confirmed_tx: "交易确认！",
       voting: "投票",
