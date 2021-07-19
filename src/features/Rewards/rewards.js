@@ -41,7 +41,7 @@ const Rewards = () => {
               <Card.Body>
                 {balance && (
                   <h3 className="text-center">
-                    {t("earned")}: {Number(balance).toFixed(4)} HiIQ
+                    {t("earned")}: {Number(balance).toFixed(4)} IQ
                   </h3>
                 )}
                 {waitingConfirmation && (
