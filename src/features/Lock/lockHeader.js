@@ -33,7 +33,7 @@ const LockHeader = ({
               >
                 <a
                   target="_blank"
-                  href={`${ethBasedExplorerUrl}/token/${hiIQAddress}?a=${wallet.account}`}
+                  href={`${ethBasedExplorerUrl}token/${hiIQAddress}?a=${wallet.account}`}
                   rel="noopener noreferrer"
                 >
                   <BoxArrowUpRight />
