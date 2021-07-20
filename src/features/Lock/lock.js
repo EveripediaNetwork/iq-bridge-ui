@@ -111,7 +111,7 @@ const Lock = () => {
         className="p-2 mt-3 d-flex flex-row justify-content-center flex-wrap"
         fluid
       >
-        <CardDivContainer>
+        <CardDivContainer className="d-flex flex-row flex-wrap align-items-start">
           <FormProvider {...methods}>
             <Col>
               <CardTitle title="IQ Bridge" aria-label="lock" icon="🔒" />
@@ -189,17 +189,15 @@ const Lock = () => {
                   timeLocked={Number(lockValue)}
                 />
               )}
+              {!wallet.account && (
+                <Row>
+                  <Col>
+                    <InfoAlert text={t("login_info_eth_locking")} />
+                  </Col>
+                </Row>
+              )}
             </Col>
-            {!wallet.account && (
-              <Row>
-                <Col>
-                  <InfoAlert text={t("login_info_eth_locking")} />
-                </Col>
-              </Row>
-            )}
           </FormProvider>
-        </CardDivContainer>
-        <CardDivContainer>
           <RewardsPage />
         </CardDivContainer>
       </Container>

@@ -31,8 +31,9 @@ export const resources = {
       lock_period: "Lock period (days)",
       value_restriction: "Input value must be between 1 and 1460",
       // rewards
+      earn_iqs: "Lock IQs and earn rewards!",
       earned: "Earned",
-      claim: "Claim",
+      claim: "Claim Rewards",
       waiting_network_confirmation: "Waiting for network confirmation...",
       please_login: "Please login to your wallet",
       // voting
@@ -151,8 +152,9 @@ export const resources = {
       lock_period: "잠금 기간 (일)",
       value_restriction: "입력 값은 1에서 1460 사이 여야합니다.",
       // rewards
+      earn_iqs: "Lock IQs and earn rewards!",
       earned: "Earned",
-      claim: "Claim",
+      claim: "Claim Rewards",
       waiting_network_confirmation: "Waiting for network confirmation...",
       please_login: "Please login to your wallet",
       // voting
@@ -270,8 +272,9 @@ export const resources = {
       lock_period: "锁定期（天）",
       value_restriction: "输入值必须在 1 到 1460 之间",
       // rewards
+      earn_iqs: "Lock IQs and earn rewards!",
       earned: "Earned",
-      claim: "Claim",
+      claim: "Claim Rewards",
       waiting_network_confirmation: "Waiting for network confirmation...",
       please_login: "Please login to your wallet",
       // voting

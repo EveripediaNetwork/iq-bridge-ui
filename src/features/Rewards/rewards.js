@@ -5,8 +5,6 @@ import { useWallet } from "use-wallet";
 
 import { earned, getYield } from "../../utils/EthDataProvider/EthDataProvider";
 import { TransactionContext } from "../../context/transactionContext";
-import InfoAlert from "../../components/ui/infoAlert";
-import CardTitle from "../../components/ui/cardTitle";
 
 const Rewards = () => {
   const wallet = useWallet();
@@ -31,16 +29,26 @@ const Rewards = () => {
   }, [wallet.status]);
 
   return (
-    <Container className="p-2 mt-3">
+    <Container style={{ width: 360 }} className="pt-5 mt-5">
       <Row>
-        <Col>
-          <CardTitle title="IQ Bridge" aria-label="lock" icon="🤑" />
+        <Col className="pt-2">
           <Card className="mx-auto shadow-sm">
             <Card.Body>
               {balance && (
-                <h3 className="text-center">
-                  {t("earned")}: {Number(balance).toFixed(4)} IQ
-                </h3>
+                <h4 className="text-center">
+                  <span className="font-weight-normal">
+                    {Number(balance).toFixed(4)}
+                  </span>{" "}
+                  IQ{" "}
+                  <span className="font-weight-normal text-lowercase">
+                    {t("earned")}
+                  </span>
+                </h4>
+              )}
+              {!wallet.account && (
+                <h5 className="font-weight-normal text-center">
+                  {t("earn_iqs")}
+                </h5>
               )}
               {waitingConfirmation && (
                 <div className="text-center container d-flex flex-row justify-content-center">
@@ -63,13 +71,6 @@ const Rewards = () => {
           </Card>
         </Col>
       </Row>
-      {!wallet.account && (
-        <Row>
-          <Col>
-            <InfoAlert text={t("please_login")} />
-          </Col>
-        </Row>
-      )}
     </Container>
   );
 };
