@@ -6,7 +6,6 @@ import { useWallet } from "use-wallet";
 import { earned, getYield } from "../../utils/EthDataProvider/EthDataProvider";
 import { TransactionContext } from "../../context/transactionContext";
 import InfoAlert from "../../components/ui/infoAlert";
-import Layout from "../../components/layouts/layout";
 import CardTitle from "../../components/ui/cardTitle";
 
 const Rewards = () => {
@@ -32,48 +31,46 @@ const Rewards = () => {
   }, [wallet.status]);
 
   return (
-    <Layout>
-      <Container className="p-2 mt-3">
+    <Container className="p-2 mt-3">
+      <Row>
+        <Col>
+          <CardTitle title="IQ Bridge" aria-label="lock" icon="🤑" />
+          <Card className="mx-auto shadow-sm">
+            <Card.Body>
+              {balance && (
+                <h3 className="text-center">
+                  {t("earned")}: {Number(balance).toFixed(4)} IQ
+                </h3>
+              )}
+              {waitingConfirmation && (
+                <div className="text-center container d-flex flex-row justify-content-center">
+                  <h6 className="text-center text-muted">
+                    {t("waiting_network_confirmation")}
+                  </h6>
+                </div>
+              )}
+              <Button
+                onClick={handleClaim}
+                disabled={!balance || balance === 0 || waitingConfirmation}
+                variant="primary"
+                className="text-capitalize"
+                size="lg"
+                block
+              >
+                {t("claim")}
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+      {!wallet.account && (
         <Row>
           <Col>
-            <CardTitle title="IQ Bridge" aria-label="lock" icon="🤑" />
-            <Card className="mx-auto shadow-sm">
-              <Card.Body>
-                {balance && (
-                  <h3 className="text-center">
-                    {t("earned")}: {Number(balance).toFixed(4)} IQ
-                  </h3>
-                )}
-                {waitingConfirmation && (
-                  <div className="text-center container d-flex flex-row justify-content-center">
-                    <h6 className="text-center text-muted">
-                      {t("waiting_network_confirmation")}
-                    </h6>
-                  </div>
-                )}
-                <Button
-                  onClick={handleClaim}
-                  disabled={!balance || balance === 0 || waitingConfirmation}
-                  variant="primary"
-                  className="text-capitalize"
-                  size="lg"
-                  block
-                >
-                  {t("claim")}
-                </Button>
-              </Card.Body>
-            </Card>
+            <InfoAlert text={t("please_login")} />
           </Col>
         </Row>
-        {!wallet.account && (
-          <Row>
-            <Col>
-              <InfoAlert text={t("please_login")} />
-            </Col>
-          </Row>
-        )}
-      </Container>
-    </Layout>
+      )}
+    </Container>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { memo, useContext, useEffect, useState } from "react";
+import React, { memo, useContext, useEffect, useState, lazy } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import {
@@ -28,8 +28,14 @@ import {
 import InfoSwapCard from "../../components/ui/infoSwapCard";
 import { TransactionContext } from "../../context/transactionContext";
 
+const RewardsPage = lazy(() => import("../Rewards/rewards"));
+
 const HeaderText = styled.div`
   background-color: #f7f7f9;
+`;
+
+const CardDivContainer = styled.div`
+  min-width: 50%;
 `;
 
 const IconWrapper = styled(Button)`
@@ -101,9 +107,12 @@ const Lock = () => {
 
   return (
     <Layout>
-      <Container className="p-2 mt-3" fluid>
-        <FormProvider {...methods}>
-          <Row>
+      <Container
+        className="p-2 mt-3 d-flex flex-row justify-content-center flex-wrap"
+        fluid
+      >
+        <CardDivContainer>
+          <FormProvider {...methods}>
             <Col>
               <CardTitle title="IQ Bridge" aria-label="lock" icon="🔒" />
               <Card className="mx-auto shadow-sm">
@@ -181,15 +190,18 @@ const Lock = () => {
                 />
               )}
             </Col>
-          </Row>
-          {!wallet.account && (
-            <Row>
-              <Col>
-                <InfoAlert text={t("login_info_eth_locking")} />
-              </Col>
-            </Row>
-          )}
-        </FormProvider>
+            {!wallet.account && (
+              <Row>
+                <Col>
+                  <InfoAlert text={t("login_info_eth_locking")} />
+                </Col>
+              </Row>
+            )}
+          </FormProvider>
+        </CardDivContainer>
+        <CardDivContainer>
+          <RewardsPage />
+        </CardDivContainer>
       </Container>
     </Layout>
   );

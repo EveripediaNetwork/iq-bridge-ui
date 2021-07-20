@@ -128,13 +128,6 @@ const Layout = ({ children }) => {
               {t("LOCK")}
             </Nav.Link>
             <Nav.Link
-              active={location.pathname === "/rewards"}
-              as={Link}
-              to={`/rewards${LngUrl}`}
-            >
-              {t("REWARDS")}
-            </Nav.Link>
-            <Nav.Link
               active={location.pathname === "/voting"}
               as={Link}
               to={`/voting${LngUrl}`}
