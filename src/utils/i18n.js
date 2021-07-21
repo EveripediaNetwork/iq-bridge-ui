@@ -20,6 +20,9 @@ export const resources = {
       lock: "Lock",
       lock_description:
         "The longer you lock your IQ, the more hiIQ you will receive. You can also get additional hiIQ by locking more IQ or extending the lock period. hiIQ decays slowly over your locking period, eventually reaching 1-to-1 with IQ.",
+      withdraw: "Withdraw",
+      expired: "Expired",
+      expiring_on: "Expiring on",
       login_info_eth_locking: "Login on ETH Wallet to lock your tokens",
       confirming_tx: "Confirming transaction...",
       // ## lockHeader
@@ -141,6 +144,9 @@ export const resources = {
       lock: "자물쇠",
       lock_description:
         "IQ를 오래 잠글수록 더 많은 hiIQ를 받게됩니다. 더 많은 IQ를 잠 그거나 잠금 기간을 연장하여 추가 hiIQ를 얻을 수도 있습니다. hiIQ는 잠금 기간 동안 천천히 감소하여 결국 IQ와 1 : 1에 도달합니다.",
+      withdraw: "Withdraw",
+      expired: "Expired",
+      expiring_on: "Expiring on",
       login_info_eth_locking: "토큰을 잠 그려면 ETH 지갑에 로그인하세요.",
       confirming_tx: "거래 확인 중 ...",
       // ## lockHeader
@@ -261,6 +267,9 @@ export const resources = {
       lock: "锁",
       lock_description:
         "锁定 IQ 的时间越长，您获得的 hiIQ 就越多。您还可以通过锁定更多 IQ 或延长锁定期来获得额外的 hiIQ。 hiIQ 在锁定期间缓慢衰减，最终与 IQ 达到 1 比 1。",
+      withdraw: "Withdraw",
+      expired: "Expired",
+      expiring_on: "Expiring on",
       login_info_eth_locking: "登录 ETH 钱包以锁定您的代币",
       confirming_tx: "正在确认交易...",
       // ## lockHeader

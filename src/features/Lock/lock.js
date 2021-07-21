@@ -8,7 +8,8 @@ import {
   Col,
   Container,
   Form,
-  Row
+  Row,
+  Alert
 } from "react-bootstrap";
 import { ArrowDownShort, QuestionCircle } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
@@ -23,6 +24,8 @@ import InfoAlert from "../../components/ui/infoAlert";
 import {
   getTokensUserBalanceLocked,
   increaseAmount,
+  withdraw,
+  getLockedEnd,
   lockTokensTx
 } from "../../utils/EthDataProvider/EthDataProvider";
 import InfoSwapCard from "../../components/ui/infoSwapCard";
@@ -56,10 +59,13 @@ const Lock = () => {
   const { hashes, setHashes, setTxDone } = useContext(TransactionContext);
   const [updatingBalance, setUpdatingBalance] = useState(false);
   const [loadingBalance, setLoadingBalance] = useState(false);
+  const [loadBalance, setLoadBalance] = useState(true);
   const [balance, setBalance] = useState();
   const [lockValue, setLockValue] = useState(7);
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
+  const [lockEnd, setLockEnd] = useState();
+  const [expired, setExpired] = useState();
   const [token1] = useState({
     icon: `${window.location.origin}/tokens/iq.png`,
     name: "IQ",
@@ -96,14 +102,36 @@ const Lock = () => {
     setLockValue(lv);
   };
 
+  const handleWithdraw = () => {
+    (async () => {
+      const result = await withdraw(wallet);
+      if (result) {
+        await result.wait();
+        setLoadBalance(true);
+      }
+    })();
+  };
+
   useEffect(() => {
+    if (currentHiIQ && currentHiIQ > 0)
+      (async () => {
+        const result = await getLockedEnd(wallet);
+        setLockEnd(result);
+        setExpired(new Date().getTime() > result.getTime());
+      })();
+  }, [currentHiIQ]);
+
+  useEffect(() => {
+    if (!loadBalance) return;
+
     if (wallet.status === "connected" && wallet.ethereum)
       (async () => {
         setLoadingBalance(true);
         setCurrentHiIQ(Number(await getTokensUserBalanceLocked(wallet)));
         setLoadingBalance(false);
+        setLoadBalance(false);
       })();
-  }, [wallet.status]);
+  }, [wallet.status, loadBalance]);
 
   return (
     <Layout>
@@ -145,6 +173,29 @@ const Lock = () => {
                     </Accordion.Collapse>
                   </Accordion>
                   <br />
+                  <>
+                    {currentHiIQ > 0 && expired === true && (
+                      <div className="text-center p-3">
+                        <Button
+                          onClick={handleWithdraw}
+                          size="md"
+                          variant="outline-success"
+                        >
+                          {t("withdraw")}
+                        </Button>
+                      </div>
+                    )}
+                  </>
+                  {lockEnd && expired !== undefined && (
+                    <Alert
+                      className="text-center"
+                      variant={expired ? "danger" : "info"}
+                    >
+                      {expired
+                        ? t("expired")
+                        : `${t("expiring_on")} ${lockEnd.toLocaleString()}`}
+                    </Alert>
+                  )}
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
                     <SwapContainer
                       token={token1}
