@@ -30,6 +30,12 @@ export const resources = {
       // ## lockPeriod
       lock_period: "Lock period (days)",
       value_restriction: "Input value must be between 1 and 1460",
+      // rewards
+      earn_iqs: "Lock IQs and earn rewards!",
+      earned: "Earned",
+      claim: "Claim Rewards",
+      waiting_network_confirmation: "Waiting for network confirmation...",
+      please_login: "Please login to your wallet",
       // voting
       confirmed_tx: "Transaction confirmed!",
       voting: "voting",
@@ -106,6 +112,7 @@ export const resources = {
       logout: "Logout",
       eos_wallet: "EOS Wallet",
       ethereum_wallet: "Ethereum Wallet",
+      rewards: "Rewards",
       // languageSeletcor
       language: "Language",
       select_a_language: "Select a Language",
@@ -144,6 +151,12 @@ export const resources = {
       // ## lockPeriod
       lock_period: "잠금 기간 (일)",
       value_restriction: "입력 값은 1에서 1460 사이 여야합니다.",
+      // rewards
+      earn_iqs: "Lock IQs and earn rewards!",
+      earned: "Earned",
+      claim: "Claim Rewards",
+      waiting_network_confirmation: "Waiting for network confirmation...",
+      please_login: "Please login to your wallet",
       // voting
       confirmed_tx: "거래가 확인되었습니다!",
       voting: "투표",
@@ -218,6 +231,7 @@ export const resources = {
       logout: "로그 아웃",
       eos_wallet: "EOS 지갑",
       ethereum_wallet: "이더 리움 지갑",
+      rewards: "Rewards",
       // languageSelector
       language: "언어",
       select_a_language: "언어 선택",
@@ -257,6 +271,12 @@ export const resources = {
       // ## lockPeriod
       lock_period: "锁定期（天）",
       value_restriction: "输入值必须在 1 到 1460 之间",
+      // rewards
+      earn_iqs: "Lock IQs and earn rewards!",
+      earned: "Earned",
+      claim: "Claim Rewards",
+      waiting_network_confirmation: "Waiting for network confirmation...",
+      please_login: "Please login to your wallet",
       // voting
       confirmed_tx: "交易确认！",
       voting: "投票",
@@ -331,6 +351,7 @@ export const resources = {
       logout: "登出",
       eos_wallet: "EOS钱包",
       ethereum_wallet: "以太坊钱包",
+      rewards: "Rewards",
       // languageSelector
       language: "语",
       select_a_language: "选择语言",

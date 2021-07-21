@@ -37,21 +37,18 @@ const Icon = styled.div`
 
   float: left;
   width: 8%;
-}
 `;
 
 const Title = styled.div`
   padding-left: 2px;
   float: left;
   width: 62%;
-}
 `;
 
 const Value = styled.div`
   float: right;
   width: 30%;
   text-align: right;
-}
 `;
 
 const showData = value => {
