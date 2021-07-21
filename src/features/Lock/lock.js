@@ -172,7 +172,7 @@ const Lock = () => {
                           size="md"
                           variant="outline-success"
                         >
-                          Withdraw
+                          {t("withdraw")}
                         </Button>
                       </div>
                     )}
@@ -183,8 +183,8 @@ const Lock = () => {
                       variant={expired ? "danger" : "info"}
                     >
                       {expired
-                        ? "Expired"
-                        : `Expiring on ${lockEnd.toLocaleString()}`}
+                        ? t("expired")
+                        : `${t("expiring_on")} ${lockEnd.toLocaleString()}`}
                     </Alert>
                   )}
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
