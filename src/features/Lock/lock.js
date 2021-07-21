@@ -53,6 +53,7 @@ const Lock = () => {
   const { hashes, setHashes, setTxDone } = useContext(TransactionContext);
   const [updatingBalance, setUpdatingBalance] = useState(false);
   const [loadingBalance, setLoadingBalance] = useState(false);
+  const [loadBalance, setLoadBalance] = useState(true);
   const [balance, setBalance] = useState();
   const [lockValue, setLockValue] = useState(7);
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
@@ -97,7 +98,11 @@ const Lock = () => {
 
   const handleWithdraw = () => {
     (async () => {
-      console.log(await withdraw(wallet));
+      const result = await withdraw(wallet);
+      if (result) {
+        await result.wait();
+        setLoadBalance(true);
+      }
     })();
   };
 
@@ -111,13 +116,16 @@ const Lock = () => {
   }, [currentHiIQ]);
 
   useEffect(() => {
+    if (!loadBalance) return;
+
     if (wallet.status === "connected" && wallet.ethereum)
       (async () => {
         setLoadingBalance(true);
         setCurrentHiIQ(Number(await getTokensUserBalanceLocked(wallet)));
         setLoadingBalance(false);
+        setLoadBalance(false);
       })();
-  }, [wallet.status]);
+  }, [wallet.status, loadBalance]);
 
   return (
     <Layout>
@@ -161,8 +169,8 @@ const Lock = () => {
                       <div className="text-center p-3">
                         <Button
                           onClick={handleWithdraw}
-                          variant="light"
                           size="md"
+                          variant="outline-success"
                         >
                           Withdraw
                         </Button>

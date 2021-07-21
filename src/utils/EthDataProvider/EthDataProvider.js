@@ -167,7 +167,7 @@ const withdraw = async wallet => {
     );
 
     const result = await hiIQ.withdraw({
-      gasLimit: 1000000
+      gasLimit: 75000
     });
 
     return result;
@@ -185,9 +185,7 @@ const getLockedEnd = async wallet => {
       provider.getSigner()
     );
 
-    const result = await hiIQ.locked__end(wallet.account, {
-      gasLimit: 1000000
-    });
+    const result = await hiIQ.locked__end(wallet.account);
 
     // eslint-disable-next-line no-underscore-dangle
     return new Date(parseInt(result._hex, 16) * 1000);
