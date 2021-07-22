@@ -34,7 +34,7 @@ const Rewards = () => {
         <Col className="pt-2">
           <Card className="mx-auto shadow-sm">
             <Card.Body>
-              {balance && (
+              {balance ? (
                 <h4 className="text-center">
                   <span className="font-weight-normal">
                     {Number(balance).toFixed(4)}
@@ -44,7 +44,7 @@ const Rewards = () => {
                     {t("earned")}
                   </span>
                 </h4>
-              )}
+              ) : null}
               {!wallet.account && (
                 <h5 className="font-weight-normal text-center">
                   {t("earn_iqs")}
@@ -59,7 +59,9 @@ const Rewards = () => {
               )}
               <Button
                 onClick={handleClaim}
-                disabled={!balance || balance === 0 || waitingConfirmation}
+                disabled={
+                  !balance || Number(balance) === 0 || waitingConfirmation
+                }
                 variant="primary"
                 className="text-capitalize"
                 size="lg"
