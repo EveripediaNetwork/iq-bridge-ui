@@ -201,7 +201,7 @@ const withdraw = async wallet => {
     );
 
     const result = await hiIQ.withdraw({
-      gasLimit: 75000
+      gasLimit: 800000
     });
 
     return result;
@@ -253,7 +253,7 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
     );
 
     const result = await hiIQ.increase_amount(amountParsed, {
-      gasLimit: 700000000
+      gasLimit: 800000
     });
 
     hashes.push(result.hash);
