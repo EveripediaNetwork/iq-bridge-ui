@@ -116,7 +116,9 @@ const convertPTokensTx = async (amount, wallet) => {
       []
     );
 
-    const result = await pMinter.mint(amountParsed, { gasLimit: 125000 });
+    const result = await pMinter.mint(amountParsed, {
+      gasLimit: await pMinter.estimateGas(amountParsed)
+    });
     hashes.push(result.hash);
 
     return hashes;
@@ -145,7 +147,9 @@ const reverseIQtoEOSTx = async (amount, wallet, eosAccount) => {
     );
     await needsApproval(provider, erc20, amountParsed, pMinterAddress, []);
     await pMinter.burn(amountParsed);
-    await pTokens.redeem(amountParsed, eosAccount, { gasLimit: 50000 });
+    await pTokens.redeem(amountParsed, eosAccount, {
+      gasLimit: await pTokens.estimateGas.redeem(amountParsed, eosAccount)
+    });
 
     return true;
   }
@@ -180,7 +184,10 @@ const lockTokensTx = async (amount, time, wallet) => {
       []
     );
     const result = await hiIQ.create_lock(amountParsed, String(timeParsed), {
-      gasLimit: 800000
+      gasLimit: await hiIQ.estimateGas.create_lock(
+        amountParsed,
+        String(timeParsed)
+      )
     });
 
     hashes.push(result.hash);
@@ -201,7 +208,7 @@ const withdraw = async wallet => {
     );
 
     const result = await hiIQ.withdraw({
-      gasLimit: 800000
+      gasLimit: await hiIQ.estimateGas.withdraw()
     });
 
     return result;
@@ -253,7 +260,7 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
     );
 
     const result = await hiIQ.increase_amount(amountParsed, {
-      gasLimit: 800000
+      gasLimit: await hiIQ.estimateGas.increase_amount(amountParsed)
     });
 
     hashes.push(result.hash);
