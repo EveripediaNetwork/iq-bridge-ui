@@ -117,7 +117,7 @@ const convertPTokensTx = async (amount, wallet) => {
     );
 
     const result = await pMinter.mint(amountParsed, {
-      gasLimit: await pMinter.estimateGas(amountParsed)
+      gasLimit: await pMinter.estimateGas.mint(amountParsed)
     });
     hashes.push(result.hash);
 
