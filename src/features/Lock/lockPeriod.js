@@ -86,7 +86,7 @@ const LockPeriod = ({ wallet, updateParentLockValue }) => {
               value={lockValue}
               min={1}
               max={1460}
-              step={1}
+              step={7}
             />
           </Col>
           <Col className="p-0">

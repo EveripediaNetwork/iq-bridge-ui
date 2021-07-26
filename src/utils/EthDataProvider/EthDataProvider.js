@@ -29,6 +29,39 @@ const earned = async wallet => {
   return 0;
 };
 
+const checkpoint = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+
+    const hiIQRewards = new ethers.Contract(
+      hiIQRewardsAddress,
+      HiIQRewardsAbi,
+      provider.getSigner()
+    );
+
+    await hiIQRewards.checkpoint();
+    return true;
+  }
+
+  return 0;
+};
+
+const checkIfTheUserIsInitialized = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+
+    const hiIQRewards = new ethers.Contract(
+      hiIQRewardsAddress,
+      HiIQRewardsAbi,
+      provider.getSigner()
+    );
+
+    return await hiIQRewards["userIsInitialized(address)"](wallet.account);
+  }
+
+  return 0;
+};
+
 const getYield = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
@@ -228,6 +261,8 @@ const getLockedEnd = async wallet => {
 
     const result = await hiIQ.locked__end(wallet.account);
 
+    console.log(result._hex);
+    console.log("Locked end", parseInt(result._hex, 16) * 1000);
     // eslint-disable-next-line no-underscore-dangle
     return new Date(parseInt(result._hex, 16) * 1000);
   }
@@ -276,8 +311,36 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
   return false;
 };
 
+const increaseUnlockTime = async (wallet, unlockTime) => {
+  if (wallet.status === "connected") {
+    const timeParsed = Math.floor(unlockTime / 1000.0);
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+
+    console.log(timeParsed);
+
+    const hiIQ = new ethers.Contract(
+      hiIQAddress,
+      hiIQAbi,
+      provider.getSigner()
+    );
+
+    console.log(timeParsed);
+    const result = await hiIQ.increase_unlock_time(timeParsed, {
+      gasLimit: await hiIQ.estimateGas.increase_unlock_time(timeParsed)
+    });
+
+    console.log(result);
+
+    return result;
+  }
+
+  return 0;
+};
+
 export {
   earned,
+  checkpoint,
+  checkIfTheUserIsInitialized,
   getYield,
   convertPTokensTx,
   getPTokensUserBalance,
@@ -287,5 +350,6 @@ export {
   getLockedEnd,
   lockTokensTx,
   increaseAmount,
+  increaseUnlockTime,
   getTokensUserBalanceLocked
 };

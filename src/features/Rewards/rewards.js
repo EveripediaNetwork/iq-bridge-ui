@@ -2,9 +2,19 @@ import React, { memo, useContext, useEffect, useState } from "react";
 import { Card, Container, Row, Col, Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
+import styled from "styled-components";
 
-import { earned, getYield } from "../../utils/EthDataProvider/EthDataProvider";
+import {
+  earned,
+  checkpoint,
+  checkIfTheUserIsInitialized,
+  getYield
+} from "../../utils/EthDataProvider/EthDataProvider";
 import { TransactionContext } from "../../context/transactionContext";
+
+const InfoCard = styled(Card)`
+  background-color: rgba(0, 0, 0, 0.5) !important;
+`;
 
 const Rewards = () => {
   const wallet = useWallet();
@@ -25,7 +35,15 @@ const Rewards = () => {
 
   useEffect(() => {
     if (wallet.status === "connected" && wallet.ethereum)
-      (async () => setBalance(await earned(wallet)))();
+      (async () => {
+        const result = await checkIfTheUserIsInitialized(wallet);
+
+        console.log(result);
+
+        if (result === false) await checkpoint(wallet);
+
+        if (result === true) setBalance(await earned(wallet));
+      })();
   }, [wallet.status]);
 
   return (
@@ -71,6 +89,15 @@ const Rewards = () => {
               </Button>
             </Card.Body>
           </Card>
+          <br />
+          <InfoCard className="shadow">
+            <Card.Body>
+              <p className="text-white text-center mb-0">
+                If the user is not initialized in our system we will require you
+                to accept the <strong>checkpoint</strong> contract interaction
+              </p>
+            </Card.Body>
+          </InfoCard>
         </Col>
       </Row>
     </Container>

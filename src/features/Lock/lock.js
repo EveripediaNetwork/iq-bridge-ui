@@ -24,6 +24,8 @@ import InfoAlert from "../../components/ui/infoAlert";
 import {
   getTokensUserBalanceLocked,
   increaseAmount,
+  increaseUnlockTime,
+  checkIfTheUserIsInitialized,
   withdraw,
   getLockedEnd,
   lockTokensTx
@@ -61,7 +63,7 @@ const Lock = () => {
   const [loadingBalance, setLoadingBalance] = useState(false);
   const [loadBalance, setLoadBalance] = useState(true);
   const [balance, setBalance] = useState();
-  const [lockValue, setLockValue] = useState(7);
+  const [lockValue, setLockValue] = useState();
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
   const [lockEnd, setLockEnd] = useState();
@@ -89,6 +91,13 @@ const Lock = () => {
         ...hashes,
         ...(await increaseAmount(data.FromAmount, wallet, handleConfirmation))
       ]);
+
+      const updatedDate = lockEnd;
+      updatedDate.setDate(lockEnd.getDate() + lockValue);
+
+      console.log(updatedDate);
+      console.log(Math.floor(updatedDate.getTime() / 1000.0));
+      await increaseUnlockTime(wallet, updatedDate.getTime());
     } else {
       setHashes(await lockTokensTx(data.FromAmount, lockValue, wallet));
     }
@@ -116,6 +125,7 @@ const Lock = () => {
     if (currentHiIQ && currentHiIQ > 0)
       (async () => {
         const result = await getLockedEnd(wallet);
+        console.log(result);
         setLockEnd(result);
         setExpired(new Date().getTime() > result.getTime());
       })();
@@ -191,9 +201,14 @@ const Lock = () => {
                       className="text-center"
                       variant={expired ? "danger" : "info"}
                     >
-                      {expired
-                        ? t("expired")
-                        : `${t("expiring_on")} ${lockEnd.toLocaleString()}`}
+                      {expired ? (
+                        t("expired")
+                      ) : (
+                        <>
+                          {`${t("expiring_on")} `}
+                          <strong>{`${lockEnd.toDateString()}`}</strong>
+                        </>
+                      )}
                     </Alert>
                   )}
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -219,6 +234,7 @@ const Lock = () => {
                         !wallet.account ||
                         !balance ||
                         balance === 0 ||
+                        !lockValue ||
                         lockValue === 0 ||
                         !filledAmount
                       }
