@@ -141,7 +141,7 @@ export const resources = {
       swap_iq_to_eos: "IQ를 EOS로 스왑",
       transactions_broadcasted: "브로드캐스트된 트랜잭션",
       // lock
-      lock: "자물쇠",
+      lock: "락업",
       lock_description:
         "IQ를 오래 잠글수록 더 많은 hiIQ를 받게됩니다. 더 많은 IQ를 잠 그거나 잠금 기간을 연장하여 추가 hiIQ를 얻을 수도 있습니다. hiIQ는 잠금 기간 동안 천천히 감소하여 결국 IQ와 1 : 1에 도달합니다.",
       withdraw: "Withdraw",
