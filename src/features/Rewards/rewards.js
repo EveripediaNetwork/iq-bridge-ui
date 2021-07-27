@@ -90,9 +90,14 @@ const Rewards = () => {
           <br />
           <InfoCard className="shadow">
             <Card.Body>
-              <p className="text-white text-center mb-0">
-                If the user is not initialized in our system we will require you
-                to accept the <strong>checkpoint</strong> contract interaction
+              <p className="text-white text-left mb-0">
+                We will require you to accept <strong>checkpoint</strong>{" "}
+                contract interaction in the following scenarios:
+                <ul>
+                  <li>The user is not initialized in our system.</li>
+                  <li>More IQ tokens are locked.</li>
+                  <li>Lock time is increased.</li>
+                </ul>
               </p>
             </Card.Body>
           </InfoCard>

@@ -27,6 +27,7 @@ import {
   getTokensUserBalanceLocked,
   increaseAmount,
   increaseUnlockTime,
+  checkpoint,
   withdraw,
   getLockedEnd,
   lockTokensTx
@@ -99,8 +100,11 @@ const Lock = () => {
           ...hashes,
           ...(await increaseAmount(data.FromAmount, wallet, handleConfirmation))
         ]);
+
       if (radioValue === 2) await increaseUnlockTime(wallet, lockEnd.getTime());
     } else setHashes(await lockTokensTx(data.FromAmount, lockValue, wallet));
+
+    await checkpoint(wallet);
 
     if (radioValue === 1) setUpdatingBalance(true);
 
@@ -327,7 +331,7 @@ const Lock = () => {
               )}
             </Col>
           </FormProvider>
-          <RewardsPage />
+          {currentHiIQ && currentHiIQ > 0 && <RewardsPage />}
         </CardDivContainer>
       </Container>
     </Layout>

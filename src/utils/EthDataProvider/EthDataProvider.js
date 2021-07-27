@@ -321,7 +321,7 @@ const increaseUnlockTime = async (wallet, unlockTime) => {
     );
 
     const result = await hiIQ.increase_unlock_time(timeParsed, {
-      gasLimit: await hiIQ.estimateGas.increase_unlock_time(timeParsed)
+      gasLimit: 800000
     });
 
     return result;
