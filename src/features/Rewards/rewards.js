@@ -38,8 +38,6 @@ const Rewards = () => {
       (async () => {
         const result = await checkIfTheUserIsInitialized(wallet);
 
-        console.log(result);
-
         if (result === false) await checkpoint(wallet);
 
         if (result === true) setBalance(await earned(wallet));

@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Form, Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import InputSpinner from "react-bootstrap-input-spinner";
 
 const LockValueInfoContainer = styled.div`
   display: flex;
@@ -24,9 +24,9 @@ const SelectedLockValueText = styled.span`
   text-transform: capitalize;
 `;
 
-const InputLockValue = styled(Form.Control)`
-  :focus {
-    box-shadow: none !important;
+const StyledInputSpinner = styled(InputSpinner)`
+  input-group-append > input.form-control {
+    text-align: center !important;
   }
 `;
 
@@ -36,7 +36,7 @@ const InputErrorText = styled(Form.Text)`
   font-weight: bold;
 `;
 
-const LockPeriod = ({ wallet, updateParentLockValue }) => {
+const LockPeriod = ({ wallet, updateParentLockValue, radioValue }) => {
   const { t } = useTranslation();
   const [lockValue, setLockValue] = useState(7);
   const [validInput, setValidInput] = useState(undefined);
@@ -45,8 +45,8 @@ const LockPeriod = ({ wallet, updateParentLockValue }) => {
 
   useEffect(() => setValidInput(validnum(lockValue)), [lockValue]);
 
-  const handleOnInputLockValue = event => {
-    const value = Number(event.target.value);
+  const handleOnInputLockValue = num => {
+    const value = num * 7; // multiply weeks with days
 
     if (validnum(value)) {
       setLockValue(value);
@@ -60,20 +60,20 @@ const LockPeriod = ({ wallet, updateParentLockValue }) => {
   };
 
   const handleOnSliderChange = value => {
-    setLockValue(value);
-    updateParentLockValue(value);
+    setLockValue(Number(value) * 7); // multiply weeks with days
+    updateParentLockValue(Number(value) * 7); // multiply weeks with days
   };
 
   return (
     <LockValueInfoContainer className="rounded pr-3 pl-3 pt-2 pb-3">
       <div className="d-flex flex-row w-100 justify-content-end">
-        <SelectedLockValueText>{t("lock_period")}</SelectedLockValueText>
+        <SelectedLockValueText>Lock Period (weeks)</SelectedLockValueText>
       </div>
       <Container>
         <Row>
           <Col className="d-flex flex-column justify-content-center" xs={9}>
             <Slider
-              disabled={wallet.account === null}
+              disabled={wallet.account === null || radioValue === 1}
               railStyle={{ backgroundColor: "lightgray", height: 11 }}
               trackStyle={{ height: 14 }}
               handleStyle={{
@@ -83,19 +83,24 @@ const LockPeriod = ({ wallet, updateParentLockValue }) => {
               }}
               onChange={handleOnSliderChange}
               className="mb-3"
-              value={lockValue}
+              // value={lockValue}
               min={1}
-              max={1460}
-              step={7}
+              max={209}
+              step={1}
             />
           </Col>
           <Col className="p-0">
-            <InputLockValue
-              disabled={wallet.account === null}
-              value={lockValue}
-              className="text-center"
-              type="number"
-              onChange={handleOnInputLockValue}
+            <StyledInputSpinner
+              type="real"
+              precision={0}
+              disabled={wallet.account === null || radioValue === 1}
+              max={209}
+              min={1}
+              step={1}
+              onChange={num => handleOnInputLockValue(num)}
+              className="text-right"
+              variant="primary"
+              size="sm"
             />
           </Col>
         </Row>
@@ -115,7 +120,8 @@ const LockPeriod = ({ wallet, updateParentLockValue }) => {
 
 LockPeriod.propTypes = {
   wallet: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  updateParentLockValue: PropTypes.func.isRequired
+  updateParentLockValue: PropTypes.func.isRequired,
+  radioValue: PropTypes.number.isRequired
 };
 
 export default memo(LockPeriod);

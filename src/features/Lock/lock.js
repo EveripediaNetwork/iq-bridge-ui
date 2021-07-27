@@ -9,7 +9,9 @@ import {
   Container,
   Form,
   Row,
-  Alert
+  Alert,
+  ToggleButtonGroup,
+  ToggleButton
 } from "react-bootstrap";
 import { ArrowDownShort, QuestionCircle } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
@@ -25,7 +27,6 @@ import {
   getTokensUserBalanceLocked,
   increaseAmount,
   increaseUnlockTime,
-  checkIfTheUserIsInitialized,
   withdraw,
   getLockedEnd,
   lockTokensTx
@@ -68,6 +69,7 @@ const Lock = () => {
   const [filledAmount, setFilledAmount] = useState();
   const [lockEnd, setLockEnd] = useState();
   const [expired, setExpired] = useState();
+  const [radioValue, setRadioValue] = useState(1);
   const [token1] = useState({
     icon: `${window.location.origin}/tokens/iq.png`,
     name: "IQ",
@@ -83,31 +85,41 @@ const Lock = () => {
     setUpdatingBalance(false);
   };
 
+  const resetValues = () => {
+    setFilledAmount();
+    setLockValue();
+    setBalance();
+  };
+
   const onSubmit = async data => {
     if (!wallet.account) return;
 
     if (currentHiIQ !== 0) {
-      setHashes([
-        ...hashes,
-        ...(await increaseAmount(data.FromAmount, wallet, handleConfirmation))
-      ]);
+      if (radioValue === 1)
+        setHashes([
+          ...hashes,
+          ...(await increaseAmount(data.FromAmount, wallet, handleConfirmation))
+        ]);
+      if (radioValue === 2) await increaseUnlockTime(wallet, lockEnd.getTime());
+    } else setHashes(await lockTokensTx(data.FromAmount, lockValue, wallet));
 
-      const updatedDate = lockEnd;
-      updatedDate.setDate(lockEnd.getDate() + lockValue);
-
-      console.log(updatedDate);
-      console.log(Math.floor(updatedDate.getTime() / 1000.0));
-      await increaseUnlockTime(wallet, updatedDate.getTime());
-    } else {
-      setHashes(await lockTokensTx(data.FromAmount, lockValue, wallet));
-    }
-
-    setUpdatingBalance(true);
+    if (radioValue === 1) setUpdatingBalance(true);
 
     setTxDone(true);
+
+    resetValues();
   };
 
   const handleSetLockValue = lv => {
+    const temp = lockEnd;
+
+    if (!lockValue) temp.setDate(temp.getDate() + lv);
+    else {
+      if (lv < lockValue) temp.setDate(temp.getDate() - (lockValue - lv));
+
+      if (lv > lockValue) temp.setDate(temp.getDate() + (lv - lockValue));
+    }
+    setLockEnd(temp);
     setLockValue(lv);
   };
 
@@ -121,11 +133,15 @@ const Lock = () => {
     })();
   };
 
+  const handleRadioChange = val => {
+    setRadioValue(val);
+    resetValues();
+  };
+
   useEffect(() => {
     if (currentHiIQ && currentHiIQ > 0)
       (async () => {
         const result = await getLockedEnd(wallet);
-        console.log(result);
         setLockEnd(result);
         setExpired(new Date().getTime() > result.getTime());
       })();
@@ -197,22 +213,53 @@ const Lock = () => {
                     )}
                   </>
                   {lockEnd && expired !== undefined && (
-                    <Alert
-                      className="text-center"
-                      variant={expired ? "danger" : "info"}
-                    >
-                      {expired ? (
-                        t("expired")
-                      ) : (
-                        <>
-                          {`${t("expiring_on")} `}
-                          <strong>{`${lockEnd.toDateString()}`}</strong>
-                        </>
+                    <>
+                      <Alert
+                        className="text-center mb-0 w-75 container"
+                        variant={expired ? "danger" : "light"}
+                      >
+                        {expired ? (
+                          t("expired")
+                        ) : (
+                          <>
+                            {`${t("expiring_on")} `}
+                            <strong>{`${lockEnd.toDateString()}`}</strong>
+                          </>
+                        )}
+                      </Alert>
+                      {currentHiIQ > 0 && (
+                        <div className="d-flex flex-row justify-content-center container w-75">
+                          <ToggleButtonGroup
+                            name="group"
+                            className="mb-3 mt-2"
+                            value={radioValue}
+                            onChange={handleRadioChange}
+                            type="radio"
+                          >
+                            <ToggleButton
+                              size="sm"
+                              name="amount"
+                              variant="outline-info"
+                              value={1}
+                            >
+                              Increase amount
+                            </ToggleButton>
+                            <ToggleButton
+                              size="sm"
+                              name="time"
+                              variant="outline-info"
+                              value={2}
+                            >
+                              Increase Lock Time
+                            </ToggleButton>
+                          </ToggleButtonGroup>
+                        </div>
                       )}
-                    </Alert>
+                    </>
                   )}
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
                     <SwapContainer
+                      radioValue={radioValue}
                       token={token1}
                       header={t("from")}
                       setParentBalance={setBalance}
@@ -227,16 +274,26 @@ const Lock = () => {
                     <LockPeriod
                       wallet={wallet}
                       updateParentLockValue={handleSetLockValue}
+                      radioValue={radioValue}
                     />
                     <br />
                     <Button
                       disabled={
                         !wallet.account ||
-                        !balance ||
-                        balance === 0 ||
-                        !lockValue ||
-                        lockValue === 0 ||
-                        !filledAmount
+                        (!balance && radioValue === 1) ||
+                        (balance === 0 && radioValue === 1) ||
+                        (!filledAmount &&
+                          currentHiIQ !== 0 &&
+                          radioValue === 1) ||
+                        (currentHiIQ === 0 && !lockValue) ||
+                        (currentHiIQ === 0 &&
+                          radioValue === 2 &&
+                          lockValue === 0) ||
+                        (currentHiIQ === 0 &&
+                          radioValue === 1 &&
+                          !filledAmount) ||
+                        (currentHiIQ === 0 && balance === 0) ||
+                        (currentHiIQ === 0 && !filledAmount)
                       }
                       variant="primary"
                       className="text-capitalize"
@@ -253,7 +310,13 @@ const Lock = () => {
               {lockValue !== 0 && filledAmount && balance && balance !== 0 && (
                 <InfoSwapCard
                   tokensLocked={Number(filledAmount)}
-                  timeLocked={Number(lockValue)}
+                  timeLocked={
+                    currentHiIQ && lockEnd > 0
+                      ? new Date(
+                          lockEnd.getTime() - new Date().getTime()
+                        ).getDate()
+                      : Number(lockValue)
+                  }
                 />
               )}
               {!wallet.account && (

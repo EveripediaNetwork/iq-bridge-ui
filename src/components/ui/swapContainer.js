@@ -109,7 +109,13 @@ const inputDisabled = (chain, ethWallet, eosWallet) => {
   return false;
 };
 
-const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
+const SwapContainer = ({
+  token,
+  header,
+  setFilled,
+  setParentBalance,
+  radioValue
+}) => {
   const { t } = useTranslation();
   const { register } = useFormContext();
   const swapRef = useRef();
@@ -117,6 +123,10 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
   const wallet = useWallet();
   const [balToken, setBalance] = useState("0");
   const [isValidInput, setIsValidInput] = useState();
+
+  useEffect(() => {
+    swapRef.current.value = 0.0;
+  }, [radioValue]);
 
   useEffect(() => {
     (async () => {
@@ -190,7 +200,10 @@ const SwapContainer = ({ token, header, setFilled, setParentBalance }) => {
             min={0}
             isInvalid={isValidInput === false}
             max={balToken}
-            disabled={inputDisabled(token.chain, wallet, authContext)}
+            disabled={
+              inputDisabled(token.chain, wallet, authContext) ||
+              radioValue === 2
+            }
             name="FromAmount"
             placeholder={token ? `0.${"0".repeat(token.precision)}` : "0.000"}
             onChange={handleOnInputChange}
@@ -226,7 +239,8 @@ SwapContainer.propTypes = {
   token: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   header: PropTypes.string.isRequired,
   setFilled: PropTypes.func,
-  setParentBalance: PropTypes.func
+  setParentBalance: PropTypes.func,
+  radioValue: PropTypes.number.isRequired
 };
 
 SwapContainer.defaultProps = {

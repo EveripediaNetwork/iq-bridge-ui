@@ -56,7 +56,7 @@ const checkIfTheUserIsInitialized = async wallet => {
       provider.getSigner()
     );
 
-    return await hiIQRewards["userIsInitialized(address)"](wallet.account);
+    return hiIQRewards["userIsInitialized(address)"](wallet.account);
   }
 
   return 0;
@@ -261,8 +261,6 @@ const getLockedEnd = async wallet => {
 
     const result = await hiIQ.locked__end(wallet.account);
 
-    console.log(result._hex);
-    console.log("Locked end", parseInt(result._hex, 16) * 1000);
     // eslint-disable-next-line no-underscore-dangle
     return new Date(parseInt(result._hex, 16) * 1000);
   }
@@ -316,20 +314,15 @@ const increaseUnlockTime = async (wallet, unlockTime) => {
     const timeParsed = Math.floor(unlockTime / 1000.0);
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
 
-    console.log(timeParsed);
-
     const hiIQ = new ethers.Contract(
       hiIQAddress,
       hiIQAbi,
       provider.getSigner()
     );
 
-    console.log(timeParsed);
     const result = await hiIQ.increase_unlock_time(timeParsed, {
       gasLimit: await hiIQ.estimateGas.increase_unlock_time(timeParsed)
     });
-
-    console.log(result);
 
     return result;
   }
