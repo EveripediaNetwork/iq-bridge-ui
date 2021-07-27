@@ -158,10 +158,6 @@ const Lock = () => {
       })();
   }, [wallet.status, loadBalance]);
 
-  console.log(radioValue);
-  console.log(currentHiIQ);
-  console.log(balance);
-
   return (
     <Layout>
       <Container
