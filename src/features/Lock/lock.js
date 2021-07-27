@@ -88,7 +88,6 @@ const Lock = () => {
   const resetValues = () => {
     setFilledAmount();
     setLockValue();
-    setBalance();
   };
 
   const onSubmit = async data => {
@@ -158,6 +157,10 @@ const Lock = () => {
         setLoadBalance(false);
       })();
   }, [wallet.status, loadBalance]);
+
+  console.log(radioValue);
+  console.log(currentHiIQ);
+  console.log(balance);
 
   return (
     <Layout>
