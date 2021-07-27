@@ -65,7 +65,7 @@ const Lock = () => {
   const [loadingBalance, setLoadingBalance] = useState(false);
   const [loadBalance, setLoadBalance] = useState(true);
   const [balance, setBalance] = useState();
-  const [lockValue, setLockValue] = useState();
+  const [lockValue, setLockValue] = useState(7);
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
   const [lockEnd, setLockEnd] = useState();
@@ -114,7 +114,7 @@ const Lock = () => {
   };
 
   const handleSetLockValue = lv => {
-    const temp = lockEnd;
+    const temp = lockEnd || new Date();
 
     if (!lockValue) temp.setDate(temp.getDate() + lv);
     else {
@@ -278,6 +278,7 @@ const Lock = () => {
                       wallet={wallet}
                       updateParentLockValue={handleSetLockValue}
                       radioValue={radioValue}
+                      currentHIIQ={currentHiIQ}
                     />
                     <br />
                     <Button

@@ -39,7 +39,9 @@ const checkpoint = async wallet => {
       provider.getSigner()
     );
 
-    await hiIQRewards.checkpoint();
+    await hiIQRewards.checkpoint({
+      gasLimit: hiIQRewards.estimateGas.checkpoint()
+    });
     return true;
   }
 
@@ -71,7 +73,9 @@ const getYield = async wallet => {
       provider.getSigner()
     );
 
-    const yieldResult = await hiIQRewards.getYield();
+    const yieldResult = await hiIQRewards.getYield({
+      gasLimit: 800000
+    });
     return yieldResult;
   }
 
@@ -216,11 +220,14 @@ const lockTokensTx = async (amount, time, wallet) => {
       hiIQAddress,
       []
     );
+
+    const gasLimit = await hiIQ.estimateGas.create_lock(
+      amountParsed,
+      String(timeParsed)
+    );
+
     const result = await hiIQ.create_lock(amountParsed, String(timeParsed), {
-      gasLimit: await hiIQ.estimateGas.create_lock(
-        amountParsed,
-        String(timeParsed)
-      )
+      gasLimit
     });
 
     hashes.push(result.hash);

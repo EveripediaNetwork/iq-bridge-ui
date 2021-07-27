@@ -31,6 +31,7 @@ const Rewards = () => {
     setTxDone(true);
     setWaitingConfirmation(false);
     setBalance(await earned(wallet));
+    await checkpoint(wallet);
   };
 
   useEffect(() => {
@@ -53,7 +54,7 @@ const Rewards = () => {
               {balance ? (
                 <h4 className="text-center">
                   <span className="font-weight-normal">
-                    {Number(balance).toFixed(4)}
+                    {Number(balance).toFixed(6)}
                   </span>{" "}
                   IQ{" "}
                   <span className="font-weight-normal text-lowercase">

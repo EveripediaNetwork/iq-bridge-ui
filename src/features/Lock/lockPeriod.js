@@ -36,7 +36,12 @@ const InputErrorText = styled(Form.Text)`
   font-weight: bold;
 `;
 
-const LockPeriod = ({ wallet, updateParentLockValue, radioValue }) => {
+const LockPeriod = ({
+  wallet,
+  updateParentLockValue,
+  radioValue,
+  currentHIIQ
+}) => {
   const { t } = useTranslation();
   const [lockValue, setLockValue] = useState(7);
   const [validInput, setValidInput] = useState(undefined);
@@ -73,7 +78,10 @@ const LockPeriod = ({ wallet, updateParentLockValue, radioValue }) => {
         <Row>
           <Col className="d-flex flex-column justify-content-center" xs={9}>
             <Slider
-              disabled={wallet.account === null || radioValue === 1}
+              disabled={
+                wallet.account === null ||
+                (radioValue === 1 && currentHIIQ && currentHIIQ !== 0)
+              }
               railStyle={{ backgroundColor: "lightgray", height: 11 }}
               trackStyle={{ height: 14 }}
               handleStyle={{
@@ -83,7 +91,6 @@ const LockPeriod = ({ wallet, updateParentLockValue, radioValue }) => {
               }}
               onChange={handleOnSliderChange}
               className="mb-3"
-              // value={lockValue}
               min={1}
               max={209}
               step={1}
@@ -93,8 +100,12 @@ const LockPeriod = ({ wallet, updateParentLockValue, radioValue }) => {
             <StyledInputSpinner
               type="real"
               precision={0}
-              disabled={wallet.account === null || radioValue === 1}
+              disabled={
+                wallet.account === null ||
+                (radioValue === 1 && currentHIIQ && currentHIIQ !== 0)
+              }
               max={209}
+              value={1}
               min={1}
               step={1}
               onChange={num => handleOnInputLockValue(num)}
@@ -121,7 +132,8 @@ const LockPeriod = ({ wallet, updateParentLockValue, radioValue }) => {
 LockPeriod.propTypes = {
   wallet: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   updateParentLockValue: PropTypes.func.isRequired,
-  radioValue: PropTypes.number.isRequired
+  radioValue: PropTypes.number.isRequired,
+  currentHIIQ: PropTypes.number.isRequired
 };
 
 export default memo(LockPeriod);
