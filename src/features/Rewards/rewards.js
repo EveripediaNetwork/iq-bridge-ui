@@ -91,7 +91,7 @@ const Rewards = () => {
           <br />
           <InfoCard className="shadow">
             <Card.Body>
-              <p className="text-white text-left mb-0">
+              <div className="text-white text-left mb-0">
                 We will require you to accept <strong>checkpoint</strong>{" "}
                 contract interaction in the following scenarios:
                 <ul>
@@ -99,7 +99,7 @@ const Rewards = () => {
                   <li>More IQ tokens are locked.</li>
                   <li>Lock time is increased.</li>
                 </ul>
-              </p>
+              </div>
             </Card.Body>
           </InfoCard>
         </Col>

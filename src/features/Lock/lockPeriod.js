@@ -40,15 +40,24 @@ const LockPeriod = ({
   wallet,
   updateParentLockValue,
   radioValue,
-  currentHIIQ
+  currentHIIQ,
+  maximumLockableTime
 }) => {
   const { t } = useTranslation();
   const [lockValue, setLockValue] = useState(7);
   const [validInput, setValidInput] = useState(undefined);
+  const [remaining, setRemaining] = useState();
 
   const validnum = a => a >= 1 && a <= 1460;
 
   useEffect(() => setValidInput(validnum(lockValue)), [lockValue]);
+
+  useEffect(() => {
+    if (maximumLockableTime) {
+      const weeks = Number(maximumLockableTime / 7).toFixed(0);
+      setRemaining(weeks);
+    }
+  }, [maximumLockableTime]);
 
   const handleOnInputLockValue = num => {
     const value = num * 7; // multiply weeks with days
@@ -66,11 +75,19 @@ const LockPeriod = ({
 
   const handleOnSliderChange = value => {
     setLockValue(Number(value) * 7); // multiply weeks with days
+
     updateParentLockValue(Number(value) * 7); // multiply weeks with days
   };
 
   return (
     <LockValueInfoContainer className="rounded pr-3 pl-3 pt-2 pb-3">
+      {maximumLockableTime && maximumLockableTime > 0 ? (
+        <small className="text-center w-100 p-0 container">
+          You can increase the lock time for a maximun of{" "}
+          <strong>{remaining} weeks</strong>
+        </small>
+      ) : null}
+      <br />
       <div className="d-flex flex-row w-100 justify-content-end">
         <SelectedLockValueText>Lock Period (weeks)</SelectedLockValueText>
       </div>
@@ -92,7 +109,7 @@ const LockPeriod = ({
               onChange={handleOnSliderChange}
               className="mb-3"
               min={1}
-              max={209}
+              max={remaining || 209}
               step={1}
             />
           </Col>
@@ -104,8 +121,7 @@ const LockPeriod = ({
                 wallet.account === null ||
                 (radioValue === 1 && currentHIIQ && currentHIIQ !== 0)
               }
-              max={209}
-              value={1}
+              max={remaining || 209}
               min={1}
               step={1}
               onChange={num => handleOnInputLockValue(num)}
@@ -133,7 +149,8 @@ LockPeriod.propTypes = {
   wallet: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   updateParentLockValue: PropTypes.func.isRequired,
   radioValue: PropTypes.number.isRequired,
-  currentHIIQ: PropTypes.number.isRequired
+  currentHIIQ: PropTypes.number, // eslint-disable-line react/require-default-props
+  maximumLockableTime: PropTypes.number // eslint-disable-line react/require-default-props
 };
 
 export default memo(LockPeriod);

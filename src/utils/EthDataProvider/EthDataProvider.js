@@ -227,7 +227,7 @@ const lockTokensTx = async (amount, time, wallet) => {
     );
 
     const result = await hiIQ.create_lock(amountParsed, String(timeParsed), {
-      gasLimit
+      gasLimit: gasLimit || 800000
     });
 
     hashes.push(result.hash);
@@ -272,6 +272,20 @@ const getLockedEnd = async wallet => {
     return new Date(parseInt(result._hex, 16) * 1000);
   }
 
+  return false;
+};
+
+const getMaximumLockableTime = async (wallet, lockEnd) => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+    const block = await provider.getBlock("latest");
+    const max = new Date((block.timestamp + 4 * 365 * 86400) * 1000);
+
+    const diffTime = Math.abs(max - lockEnd);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays;
+  }
   return false;
 };
 
@@ -350,6 +364,7 @@ export {
   getLockedEnd,
   lockTokensTx,
   increaseAmount,
+  getMaximumLockableTime,
   increaseUnlockTime,
   getTokensUserBalanceLocked
 };

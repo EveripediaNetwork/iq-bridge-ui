@@ -27,6 +27,7 @@ import {
   getTokensUserBalanceLocked,
   increaseAmount,
   increaseUnlockTime,
+  getMaximumLockableTime,
   checkpoint,
   withdraw,
   getLockedEnd,
@@ -69,6 +70,7 @@ const Lock = () => {
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
   const [lockEnd, setLockEnd] = useState();
+  const [maximumLockableTime, setMaximumLockableTime] = useState();
   const [expired, setExpired] = useState();
   const [radioValue, setRadioValue] = useState(1);
   const [token1] = useState({
@@ -114,6 +116,8 @@ const Lock = () => {
   };
 
   const handleSetLockValue = lv => {
+    if (lv === 0) return;
+
     const temp = lockEnd || new Date();
 
     if (!lockValue) temp.setDate(temp.getDate() + lv);
@@ -145,7 +149,9 @@ const Lock = () => {
     if (currentHiIQ && currentHiIQ > 0)
       (async () => {
         const result = await getLockedEnd(wallet);
+
         setLockEnd(result);
+        setMaximumLockableTime(await getMaximumLockableTime(wallet, result));
         setExpired(new Date().getTime() > result.getTime());
       })();
   }, [currentHiIQ]);
@@ -229,6 +235,7 @@ const Lock = () => {
                             <strong>{`${lockEnd.toDateString()}`}</strong>
                           </>
                         )}
+                        <br />
                       </Alert>
                       {currentHiIQ > 0 && (
                         <div className="d-flex flex-row justify-content-center container w-75">
@@ -279,6 +286,7 @@ const Lock = () => {
                       updateParentLockValue={handleSetLockValue}
                       radioValue={radioValue}
                       currentHIIQ={currentHiIQ}
+                      maximumLockableTime={maximumLockableTime}
                     />
                     <br />
                     <Button
