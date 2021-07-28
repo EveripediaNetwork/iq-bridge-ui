@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Button, Form, Row, Col } from "react-bootstrap";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { useFormContext } from "react-hook-form";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
@@ -18,6 +18,16 @@ const SwapContainerWrapper = styled.div`
   border: 1px solid #e0e0e0;
   padding: 10px;
   display: grid;
+  ${props =>
+    props.radioValue === 2 &&
+    css`
+      -webkit-filter: blur(5px);
+      -moz-filter: blur(5px);
+      -o-filter: blur(5px);
+      -ms-filter: blur(5px);
+      filter: blur(5px);
+      background-color: #ccc;
+    `}
 `;
 
 const SwapTokenHeader = styled.div`
@@ -180,7 +190,7 @@ const SwapContainer = ({
   };
 
   return (
-    <SwapContainerWrapper>
+    <SwapContainerWrapper radioValue={radioValue}>
       <SwapTokenHeader className="text-capitalize">
         <SwapBalance>
           <ClickToFillBtn

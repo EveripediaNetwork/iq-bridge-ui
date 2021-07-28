@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Container, Row, Col } from "react-bootstrap";
 // import { useTranslation } from "react-i18next";
 import Slider from "rc-slider";
@@ -14,6 +14,17 @@ const LockValueInfoContainer = styled.div`
   border: 0.4px dashed lightgray;
   align-items: center;
   margin-bottom: 15px;
+  ${props =>
+    props.radioValue === 1 &&
+    props.currentHIIQ > 0 &&
+    css`
+      -webkit-filter: blur(5px);
+      -moz-filter: blur(5px);
+      -o-filter: blur(5px);
+      -ms-filter: blur(5px);
+      filter: blur(5px);
+      background-color: #ccc;
+    `}
 `;
 
 const SelectedLockValueText = styled.span`
@@ -64,7 +75,11 @@ const LockPeriod = ({
   };
 
   return (
-    <LockValueInfoContainer className="rounded pr-3 pl-3 pt-2 pb-3">
+    <LockValueInfoContainer
+      radioValue={radioValue}
+      currentHIIQ={currentHIIQ}
+      className="rounded pr-3 pl-3 pt-2 pb-3"
+    >
       {maximumLockableTime && maximumLockableTime > 0 ? (
         <small className="text-center w-100 p-0 container">
           You can increase the lock time for a maximum of{" "}
@@ -96,7 +111,7 @@ const LockPeriod = ({
               className="mb-3"
               min={1}
               value={lockValue}
-              max={remaining || 209}
+              max={remaining || 208}
               step={1}
             />
           </Col>
@@ -108,7 +123,7 @@ const LockPeriod = ({
                 wallet.account === null ||
                 (radioValue === 1 && currentHIIQ && currentHIIQ !== 0)
               }
-              max={remaining || 209}
+              max={remaining || 208}
               min={1}
               step={1}
               value={lockValue || 0}

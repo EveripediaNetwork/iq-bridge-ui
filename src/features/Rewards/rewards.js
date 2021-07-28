@@ -14,6 +14,8 @@ import { TransactionContext } from "../../context/transactionContext";
 
 const InfoCard = styled(Card)`
   background-color: rgba(0, 0, 0, 0.5) !important;
+  width: 300px;
+  margin: auto;
 `;
 
 const Rewards = () => {
@@ -91,14 +93,25 @@ const Rewards = () => {
           <br />
           <InfoCard className="shadow">
             <Card.Body>
-              <div className="text-white text-left mb-0">
-                We will require you to accept the <strong>checkpoint</strong>{" "}
-                contract interaction in the following scenarios:
-                <ul>
-                  <li>The user is not initialized in our system.</li>
-                  <li>More IQ tokens are locked.</li>
-                  <li>Lock time is increased.</li>
+              <div className="text-white container p-0 text-justify mb-0">
+                <small>
+                  We will require you to accept the <strong>checkpoint</strong>{" "}
+                  contract interaction in the following scenarios:
+                </small>
+                <ul className="mb-0 text-left">
+                  <li>
+                    <small>The user is not initialized in our system.</small>
+                  </li>
+                  <li>
+                    <small>More IQ tokens are locked.</small>
+                  </li>
+                  <li>
+                    <small>Lock time is increased.</small>
+                  </li>
                 </ul>
+                <small>
+                  This operation is used to re-calculate the rewards.
+                </small>
               </div>
             </Card.Body>
           </InfoCard>

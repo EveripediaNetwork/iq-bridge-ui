@@ -204,9 +204,9 @@ const Lock = () => {
                         eventKey="0"
                         className="d-flex flex-row justify-content-center align-middle"
                       >
-                        <Button variant="light">
+                        <div variant="light">
                           <QuestionCircle />
-                        </Button>
+                        </div>
                       </Accordion.Toggle>
                     </div>
                     <Accordion.Collapse eventKey="0">
@@ -332,7 +332,7 @@ const Lock = () => {
                   tokensLocked={Number(filledAmount)}
                   timeLocked={
                     currentHiIQ && lockEnd > 0
-                      ? lockedTimeDiff
+                      ? Number(lockedTimeDiff)
                       : Number(lockValue)
                   }
                 />
