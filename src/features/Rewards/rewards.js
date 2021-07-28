@@ -95,22 +95,22 @@ const Rewards = () => {
             <Card.Body>
               <div className="text-white container p-0 text-justify mb-0">
                 <small>
-                  We will require you to accept the <strong>checkpoint</strong>{" "}
-                  contract interaction in the following scenarios:
+                  {t("required_to_accept")} <strong>{t("checkpoint")}</strong>{" "}
+                  {t("scenarios")}:
                 </small>
                 <ul className="mb-0 text-left">
                   <li>
-                    <small>The user is not initialized in our system.</small>
+                    <small>{t("user_is_not_initialized")}</small>
                   </li>
                   <li>
-                    <small>More IQ tokens are locked.</small>
+                    <small>{t("more_iq_tokens_locked")}</small>
                   </li>
                   <li>
-                    <small>Lock time is increased.</small>
+                    <small>{t("lock_time_increased")}</small>
                   </li>
                 </ul>
                 <small>
-                  This operation is used to re-calculate the rewards.
+                  {t("This operation is used to re-calculate the rewards.")}
                 </small>
               </div>
             </Card.Body>

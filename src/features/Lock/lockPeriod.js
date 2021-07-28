@@ -2,7 +2,7 @@ import React, { memo, useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
 import { Container, Row, Col } from "react-bootstrap";
-// import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import InputSpinner from "react-bootstrap-input-spinner";
@@ -48,7 +48,7 @@ const LockPeriod = ({
   currentHIIQ,
   maximumLockableTime
 }) => {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
   const [lockValue, setLockValue] = useState();
   const [remaining, setRemaining] = useState();
   const inputRef = useRef();
@@ -82,15 +82,16 @@ const LockPeriod = ({
     >
       {maximumLockableTime && maximumLockableTime > 0 ? (
         <small className="text-center w-100 p-0 container">
-          You can increase the lock time for a maximum of{" "}
+          {t("value_restriction")}{" "}
           <strong>
-            {!lockValue ? remaining : remaining - lockValue} weeks
+            {!lockValue ? remaining : remaining - lockValue}
+            {t("weeks")}
           </strong>
         </small>
       ) : null}
       <br />
       <div className="d-flex flex-row w-100 justify-content-end">
-        <SelectedLockValueText>Lock Period (weeks)</SelectedLockValueText>
+        <SelectedLockValueText>{t("lock_period")}</SelectedLockValueText>
       </div>
       <Container>
         <Row>
