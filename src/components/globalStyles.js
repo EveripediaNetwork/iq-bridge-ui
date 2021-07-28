@@ -10,6 +10,12 @@ background: linear-gradient(0deg, rgba(45,132,253,1) 0%, rgba(222,237,237,1) 100
 
   background-attachment: fixed;
  }
+
+ div.input-group > input.form-control {
+  text-align: center !important;
+  font-weight: bold;
+}
+
  
  .card {
     max-width: 450px;

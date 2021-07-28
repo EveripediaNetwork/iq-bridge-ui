@@ -92,7 +92,7 @@ const Rewards = () => {
           <InfoCard className="shadow">
             <Card.Body>
               <div className="text-white text-left mb-0">
-                We will require you to accept <strong>checkpoint</strong>{" "}
+                We will require you to accept the <strong>checkpoint</strong>{" "}
                 contract interaction in the following scenarios:
                 <ul>
                   <li>The user is not initialized in our system.</li>
