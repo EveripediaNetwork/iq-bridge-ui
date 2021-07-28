@@ -109,7 +109,10 @@ const Lock = () => {
 
     await checkpoint(wallet);
 
-    if (radioValue === 1) setUpdatingBalance(true);
+    if (radioValue === 1) {
+      setUpdatingBalance(true);
+      setLoadBalance(true);
+    }
 
     setTxDone(true);
 

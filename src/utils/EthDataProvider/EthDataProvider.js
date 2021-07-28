@@ -221,13 +221,8 @@ const lockTokensTx = async (amount, time, wallet) => {
       []
     );
 
-    const gasLimit = await hiIQ.estimateGas.create_lock(
-      amountParsed,
-      String(timeParsed)
-    );
-
     const result = await hiIQ.create_lock(amountParsed, String(timeParsed), {
-      gasLimit: gasLimit || 800000
+      gasLimit: 800000
     });
 
     hashes.push(result.hash);

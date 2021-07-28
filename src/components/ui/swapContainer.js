@@ -135,7 +135,9 @@ const SwapContainer = ({
   const [isValidInput, setIsValidInput] = useState();
 
   useEffect(() => {
-    swapRef.current.value = 0.0;
+    swapRef.current.placeholder = token
+      ? `0.${"0".repeat(token.precision)}`
+      : "0.000";
   }, [radioValue]);
 
   useEffect(() => {
