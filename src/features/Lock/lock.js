@@ -67,6 +67,7 @@ const Lock = () => {
   const [loadBalance, setLoadBalance] = useState(true);
   const [balance, setBalance] = useState();
   const [lockValue, setLockValue] = useState(7);
+  const [lockedTimeDiff, setLockedTimeDiff] = useState();
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
   const [lockEnd, setLockEnd] = useState();
@@ -145,6 +146,12 @@ const Lock = () => {
     resetValues();
   };
 
+  const calculateDatesDiff = (date1, date2) => {
+    const diffInMs = date1 - date2;
+    const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+    return diffInDays.toFixed(0);
+  };
+
   useEffect(() => {
     if (currentHiIQ && currentHiIQ > 0)
       (async () => {
@@ -152,6 +159,7 @@ const Lock = () => {
 
         setLockEnd(result);
         setMaximumLockableTime(await getMaximumLockableTime(wallet, result));
+        setLockedTimeDiff(calculateDatesDiff(result, new Date()));
         setExpired(new Date().getTime() > result.getTime());
       })();
   }, [currentHiIQ]);
@@ -324,9 +332,7 @@ const Lock = () => {
                   tokensLocked={Number(filledAmount)}
                   timeLocked={
                     currentHiIQ && lockEnd > 0
-                      ? new Date(
-                          lockEnd.getTime() - new Date().getTime()
-                        ).getDate()
+                      ? lockedTimeDiff
                       : Number(lockValue)
                   }
                 />

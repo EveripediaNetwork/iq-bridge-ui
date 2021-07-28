@@ -1,8 +1,8 @@
-import React, { memo, useState, useEffect } from "react";
+import React, { memo, useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Form, Container, Row, Col } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
+import { Container, Row, Col } from "react-bootstrap";
+// import { useTranslation } from "react-i18next";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import InputSpinner from "react-bootstrap-input-spinner";
@@ -30,12 +30,6 @@ const StyledInputSpinner = styled(InputSpinner)`
   }
 `;
 
-const InputErrorText = styled(Form.Text)`
-  color: red;
-  font-style: italic;
-  font-weight: bold;
-`;
-
 const LockPeriod = ({
   wallet,
   updateParentLockValue,
@@ -43,14 +37,10 @@ const LockPeriod = ({
   currentHIIQ,
   maximumLockableTime
 }) => {
-  const { t } = useTranslation();
-  const [lockValue, setLockValue] = useState(7);
-  const [validInput, setValidInput] = useState(undefined);
+  // const { t } = useTranslation();
+  const [lockValue, setLockValue] = useState();
   const [remaining, setRemaining] = useState();
-
-  const validnum = a => a >= 1 && a <= 1460;
-
-  useEffect(() => setValidInput(validnum(lockValue)), [lockValue]);
+  const inputRef = useRef();
 
   useEffect(() => {
     if (maximumLockableTime) {
@@ -62,19 +52,13 @@ const LockPeriod = ({
   const handleOnInputLockValue = num => {
     const value = num * 7; // multiply weeks with days
 
-    if (validnum(value)) {
-      setLockValue(value);
-      updateParentLockValue(value);
-      setValidInput(true);
-    } else {
-      setLockValue(0);
-      updateParentLockValue(0);
-      setValidInput(false);
-    }
+    setLockValue(num);
+    updateParentLockValue(value);
   };
 
   const handleOnSliderChange = value => {
-    setLockValue(Number(value) * 7); // multiply weeks with days
+    setLockValue(value);
+    inputRef.current.state.value = value;
 
     updateParentLockValue(Number(value) * 7); // multiply weeks with days
   };
@@ -83,8 +67,10 @@ const LockPeriod = ({
     <LockValueInfoContainer className="rounded pr-3 pl-3 pt-2 pb-3">
       {maximumLockableTime && maximumLockableTime > 0 ? (
         <small className="text-center w-100 p-0 container">
-          You can increase the lock time for a maximun of{" "}
-          <strong>{remaining} weeks</strong>
+          You can increase the lock time for a maximum of{" "}
+          <strong>
+            {!lockValue ? remaining : remaining - lockValue} weeks
+          </strong>
         </small>
       ) : null}
       <br />
@@ -109,6 +95,7 @@ const LockPeriod = ({
               onChange={handleOnSliderChange}
               className="mb-3"
               min={1}
+              value={lockValue}
               max={remaining || 209}
               step={1}
             />
@@ -124,6 +111,10 @@ const LockPeriod = ({
               max={remaining || 209}
               min={1}
               step={1}
+              value={lockValue || 0}
+              ref={e => {
+                inputRef.current = e;
+              }}
               onChange={num => handleOnInputLockValue(num)}
               className="text-right"
               variant="primary"
@@ -131,15 +122,6 @@ const LockPeriod = ({
             />
           </Col>
         </Row>
-        {validInput && validInput === false && (
-          <Row>
-            <Col className="d-flex flex-column justify-content-center">
-              <InputErrorText className="text-center">
-                {t("value_restriction")}
-              </InputErrorText>
-            </Col>
-          </Row>
-        )}
       </Container>
     </LockValueInfoContainer>
   );
