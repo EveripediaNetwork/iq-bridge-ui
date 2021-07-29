@@ -90,12 +90,18 @@ const LockPeriod = ({
         </small>
       ) : null}
       <br />
-      <div className="d-flex flex-row w-100 justify-content-end">
+      <div className="d-flex flex-row w-100 justify-content-center">
         <SelectedLockValueText>{t("lock_period")}</SelectedLockValueText>
       </div>
       <Container>
-        <Row>
-          <Col className="d-flex flex-column justify-content-center" xs={9}>
+        <Row className="d-flex flex-row justify-content-center align-items-between flex-wrap">
+          <Col
+            className="d-flex flex-column justify-content-center mt-2"
+            xs={12}
+            sm={12}
+            md={7}
+            lg={7}
+          >
             <Slider
               disabled={
                 wallet.account === null ||
@@ -109,14 +115,20 @@ const LockPeriod = ({
                 width: 22
               }}
               onChange={handleOnSliderChange}
-              className="mb-3"
               min={1}
               value={lockValue}
               max={remaining || 208}
               step={1}
             />
           </Col>
-          <Col className="p-0">
+          <Col
+            style={{ minWidth: 100 }}
+            xs={12}
+            sm={12}
+            md={3}
+            lg={3}
+            className="mt-2 p-0"
+          >
             <StyledInputSpinner
               type="real"
               precision={0}
@@ -132,7 +144,7 @@ const LockPeriod = ({
                 inputRef.current = e;
               }}
               onChange={num => handleOnInputLockValue(num)}
-              className="text-right"
+              className="text-right min-w-100 w-100"
               variant="primary"
               size="sm"
             />

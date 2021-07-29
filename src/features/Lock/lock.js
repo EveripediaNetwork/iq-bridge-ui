@@ -47,7 +47,8 @@ const CardDivContainer = styled.div`
 `;
 
 const IconWrapper = styled(Button)`
-  margin: 15px;
+  height: 30px;
+  max-height: 30px;
   color: rgb(86, 90, 105);
   text-align: center;
   border: none;
@@ -55,6 +56,10 @@ const IconWrapper = styled(Button)`
   font: inherit;
   color: inherit;
   background: none;
+`;
+
+const StyledToggleButton = styled(ToggleButton)`
+  min-width: 135px;
 `;
 
 const Lock = () => {
@@ -235,7 +240,7 @@ const Lock = () => {
                   {lockEnd && expired !== undefined && (
                     <>
                       <Alert
-                        className="text-center mb-0 w-75 container"
+                        className="text-center mb-0 w-75 mt-0 p-0 container"
                         variant={expired ? "danger" : "light"}
                       >
                         {expired ? (
@@ -249,32 +254,30 @@ const Lock = () => {
                         <br />
                       </Alert>
                       {currentHiIQ > 0 && (
-                        <div className="d-flex flex-row justify-content-center container w-75">
-                          <ToggleButtonGroup
-                            name="group"
-                            className="mb-3 mt-2"
-                            value={radioValue}
-                            onChange={handleRadioChange}
-                            type="radio"
+                        <ToggleButtonGroup
+                          name="group"
+                          className="mb-3 mt-2 d-flex flex-row flex-wrap justify-content-center container w-75"
+                          value={radioValue}
+                          onChange={handleRadioChange}
+                          type="radio"
+                        >
+                          <StyledToggleButton
+                            size="sm"
+                            name="amount"
+                            variant="outline-info"
+                            value={1}
                           >
-                            <ToggleButton
-                              size="sm"
-                              name="amount"
-                              variant="outline-info"
-                              value={1}
-                            >
-                              Increase amount
-                            </ToggleButton>
-                            <ToggleButton
-                              size="sm"
-                              name="time"
-                              variant="outline-info"
-                              value={2}
-                            >
-                              Increase Lock Time
-                            </ToggleButton>
-                          </ToggleButtonGroup>
-                        </div>
+                            Increase amount
+                          </StyledToggleButton>
+                          <StyledToggleButton
+                            size="sm"
+                            name="time"
+                            variant="outline-info"
+                            value={2}
+                          >
+                            Increase Lock Time
+                          </StyledToggleButton>
+                        </ToggleButtonGroup>
                       )}
                     </>
                   )}
