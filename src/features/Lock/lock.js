@@ -352,7 +352,7 @@ const Lock = () => {
               )}
             </Col>
           </FormProvider>
-          {currentHiIQ && currentHiIQ > 0 && <RewardsPage />}
+          {currentHiIQ && currentHiIQ > 0 ? <RewardsPage /> : null}
         </CardDivContainer>
       </Container>
     </Layout>

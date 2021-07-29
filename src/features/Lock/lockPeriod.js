@@ -96,7 +96,7 @@ const LockPeriod = ({
       <Container>
         <Row className="d-flex flex-row justify-content-center align-items-between flex-wrap">
           <Col
-            className="d-flex flex-column justify-content-center mt-2"
+            className="d-flex flex-column justify-content-center mt-3"
             xs={12}
             sm={12}
             md={7}
@@ -127,7 +127,7 @@ const LockPeriod = ({
             sm={12}
             md={3}
             lg={3}
-            className="mt-2 p-0"
+            className="mt-3 p-0"
           >
             <StyledInputSpinner
               type="real"
