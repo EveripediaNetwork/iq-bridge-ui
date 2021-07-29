@@ -87,9 +87,8 @@ const Lock = () => {
   });
 
   const handleConfirmation = async result => {
-    if (result === "success") {
-      setCurrentHiIQ(await getTokensUserBalanceLocked(wallet));
-    }
+    if (result === "success")
+      setCurrentHiIQ(Number(await getTokensUserBalanceLocked(wallet)));
 
     setUpdatingBalance(false);
   };
@@ -177,6 +176,7 @@ const Lock = () => {
 
     if (wallet.status === "connected" && wallet.ethereum)
       (async () => {
+        console.log(loadBalance);
         setLoadingBalance(true);
         setCurrentHiIQ(Number(await getTokensUserBalanceLocked(wallet)));
         setLoadingBalance(false);
@@ -352,7 +352,9 @@ const Lock = () => {
               )}
             </Col>
           </FormProvider>
-          {currentHiIQ && currentHiIQ > 0 ? <RewardsPage /> : null}
+          {currentHiIQ && currentHiIQ > 0 ? (
+            <RewardsPage setLoadBalance={val => setLoadBalance(val)} />
+          ) : null}
         </CardDivContainer>
       </Container>
     </Layout>

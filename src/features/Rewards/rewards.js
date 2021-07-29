@@ -3,6 +3,7 @@ import { Card, Container, Row, Col, Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 import {
   earned,
@@ -18,7 +19,7 @@ const InfoCard = styled(Card)`
   margin: auto;
 `;
 
-const Rewards = () => {
+const Rewards = ({ setLoadBalance }) => {
   const wallet = useWallet();
   const { t } = useTranslation();
   const [balance, setBalance] = useState();
@@ -33,7 +34,7 @@ const Rewards = () => {
     setTxDone(true);
     setWaitingConfirmation(false);
     setBalance(await earned(wallet));
-    await checkpoint(wallet);
+    setLoadBalance(true);
   };
 
   useEffect(() => {
@@ -119,6 +120,10 @@ const Rewards = () => {
       </Row>
     </Container>
   );
+};
+
+Rewards.propTypes = {
+  setLoadBalance: PropTypes.func.isRequired
 };
 
 export default memo(Rewards);

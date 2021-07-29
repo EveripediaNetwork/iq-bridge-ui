@@ -13,6 +13,11 @@ import { HiIQRewardsAbi } from "./hiIQRewards.abi";
 import { minterAbi } from "./minter.abi";
 import { ptokenAbi } from "./ptoken.abi";
 
+const addGasLimitBuffer = value =>
+  value
+    .mul(ethers.BigNumber.from(10000 + 2000))
+    .div(ethers.BigNumber.from(10000));
+
 const earned = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
@@ -40,7 +45,7 @@ const checkpoint = async wallet => {
     );
 
     await hiIQRewards.checkpoint({
-      gasLimit: hiIQRewards.estimateGas.checkpoint()
+      gasLimit: addGasLimitBuffer(await hiIQRewards.estimateGas.checkpoint())
     });
     return true;
   }
@@ -74,7 +79,7 @@ const getYield = async wallet => {
     );
 
     const yieldResult = await hiIQRewards.getYield({
-      gasLimit: 800000
+      gasLimit: addGasLimitBuffer(await hiIQRewards.estimateGas.getYield())
     });
     return yieldResult;
   }
@@ -154,7 +159,7 @@ const convertPTokensTx = async (amount, wallet) => {
     );
 
     const result = await pMinter.mint(amountParsed, {
-      gasLimit: await pMinter.estimateGas(amountParsed)
+      gasLimit: addGasLimitBuffer(await pMinter.estimateGas(amountParsed))
     });
     hashes.push(result.hash);
 
@@ -185,7 +190,9 @@ const reverseIQtoEOSTx = async (amount, wallet, eosAccount) => {
     await needsApproval(provider, erc20, amountParsed, pMinterAddress, []);
     await pMinter.burn(amountParsed);
     await pTokens.redeem(amountParsed, eosAccount, {
-      gasLimit: await pTokens.estimateGas.redeem(amountParsed, eosAccount)
+      gasLimit: addGasLimitBuffer(
+        await pTokens.estimateGas.redeem(amountParsed, eosAccount)
+      )
     });
 
     return true;
@@ -222,7 +229,9 @@ const lockTokensTx = async (amount, time, wallet) => {
     );
 
     const result = await hiIQ.create_lock(amountParsed, String(timeParsed), {
-      gasLimit: 800000
+      gasLimit: addGasLimitBuffer(
+        await hiIQ.estimateGas.create_lock(amountParsed, String(timeParsed))
+      )
     });
 
     hashes.push(result.hash);
@@ -243,7 +252,7 @@ const withdraw = async wallet => {
     );
 
     const result = await hiIQ.withdraw({
-      gasLimit: await hiIQ.estimateGas.withdraw()
+      gasLimit: addGasLimitBuffer(await hiIQ.estimateGas.withdraw())
     });
 
     return result;
@@ -309,7 +318,9 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
     );
 
     const result = await hiIQ.increase_amount(amountParsed, {
-      gasLimit: await hiIQ.estimateGas.increase_amount(amountParsed)
+      gasLimit: addGasLimitBuffer(
+        await hiIQ.estimateGas.increase_amount(amountParsed)
+      )
     });
 
     hashes.push(result.hash);
@@ -337,7 +348,9 @@ const increaseUnlockTime = async (wallet, unlockTime) => {
     );
 
     const result = await hiIQ.increase_unlock_time(timeParsed, {
-      gasLimit: 800000
+      gasLimit: addGasLimitBuffer(
+        await hiIQ.estimateGas.increase_unlock_time(timeParsed)
+      )
     });
 
     return result;
