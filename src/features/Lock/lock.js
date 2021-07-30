@@ -347,7 +347,7 @@ const Lock = () => {
               {lockValue && lockValue !== 0 && radioValue === 2 && (
                 <InfoSwapCard
                   tokensLocked={Number(currentHiIQ)}
-                  timeLocked={Number(lockValue) + Number(lockedTimeDiff)}
+                  timeLocked={Number(lockValue)}
                 />
               )}
               {!wallet.account && (
