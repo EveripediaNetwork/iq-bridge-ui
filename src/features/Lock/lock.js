@@ -71,7 +71,7 @@ const Lock = () => {
   const [loadingBalance, setLoadingBalance] = useState(false);
   const [loadBalance, setLoadBalance] = useState(true);
   const [balance, setBalance] = useState();
-  const [lockValue, setLockValue] = useState(7);
+  const [lockValue, setLockValue] = useState();
   const [lockedTimeDiff, setLockedTimeDiff] = useState();
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
@@ -176,7 +176,6 @@ const Lock = () => {
 
     if (wallet.status === "connected" && wallet.ethereum)
       (async () => {
-        console.log(loadBalance);
         setLoadingBalance(true);
         setCurrentHiIQ(Number(await getTokensUserBalanceLocked(wallet)));
         setLoadingBalance(false);
@@ -312,6 +311,7 @@ const Lock = () => {
                           currentHiIQ !== 0 &&
                           radioValue === 1) ||
                         (currentHiIQ === 0 && !lockValue) ||
+                        (!lockValue && radioValue === 2) ||
                         (currentHiIQ === 0 &&
                           radioValue === 2 &&
                           lockValue === 0) ||

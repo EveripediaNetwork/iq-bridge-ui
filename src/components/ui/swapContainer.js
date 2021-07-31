@@ -220,7 +220,7 @@ const SwapContainer = ({
             placeholder={token ? `0.${"0".repeat(token.precision)}` : "0.000"}
             onChange={handleOnInputChange}
             ref={e => {
-              register(e, { required: true });
+              register(e, { required: false });
               swapRef.current = e;
             }}
           />

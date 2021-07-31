@@ -1,6 +1,7 @@
 import React, { memo, useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import styled, { css } from "styled-components";
+import { useFormContext } from "react-hook-form";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import Slider from "rc-slider";
@@ -49,6 +50,7 @@ const LockPeriod = ({
   maximumLockableTime
 }) => {
   const { t } = useTranslation();
+  const { register } = useFormContext();
   const [lockValue, setLockValue] = useState();
   const [remaining, setRemaining] = useState();
   const inputRef = useRef();
@@ -114,8 +116,10 @@ const LockPeriod = ({
                 height: 22,
                 width: 22
               }}
+              ref={e => {
+                register(e, { required: false });
+              }}
               onChange={handleOnSliderChange}
-              min={1}
               value={lockValue}
               max={remaining || 208}
               step={1}
@@ -137,10 +141,11 @@ const LockPeriod = ({
                 (radioValue === 1 && currentHIIQ && currentHIIQ !== 0)
               }
               max={remaining || 208}
-              min={1}
               step={1}
               value={lockValue || 0}
               ref={e => {
+                register(e, { required: false });
+
                 inputRef.current = e;
               }}
               onChange={num => handleOnInputLockValue(num)}
