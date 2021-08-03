@@ -1,11 +1,12 @@
-import React, { memo, useState, useEffect } from "react";
+import React, { memo, useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
-import { Form, Container, Row, Col } from "react-bootstrap";
+import styled, { css } from "styled-components";
+import { useFormContext } from "react-hook-form";
+import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import InputSpinner from "react-bootstrap-input-spinner";
 
 const LockValueInfoContainer = styled.div`
   display: flex;
@@ -14,6 +15,17 @@ const LockValueInfoContainer = styled.div`
   border: 0.4px dashed lightgray;
   align-items: center;
   margin-bottom: 15px;
+  ${props =>
+    props.radioValue === 1 &&
+    props.currentHIIQ > 0 &&
+    css`
+      -webkit-filter: blur(5px);
+      -moz-filter: blur(5px);
+      -o-filter: blur(5px);
+      -ms-filter: blur(5px);
+      filter: blur(5px);
+      background-color: #ccc;
+    `}
 `;
 
 const SelectedLockValueText = styled.span`
@@ -24,56 +36,79 @@ const SelectedLockValueText = styled.span`
   text-transform: capitalize;
 `;
 
-const InputLockValue = styled(Form.Control)`
-  :focus {
-    box-shadow: none !important;
+const StyledInputSpinner = styled(InputSpinner)`
+  input-group-append > input.form-control {
+    text-align: center !important;
   }
 `;
 
-const InputErrorText = styled(Form.Text)`
-  color: red;
-  font-style: italic;
-  font-weight: bold;
-`;
-
-const LockPeriod = ({ wallet, updateParentLockValue }) => {
+const LockPeriod = ({
+  wallet,
+  updateParentLockValue,
+  radioValue,
+  currentHIIQ,
+  maximumLockableTime
+}) => {
   const { t } = useTranslation();
-  const [lockValue, setLockValue] = useState(7);
-  const [validInput, setValidInput] = useState(undefined);
+  const { register } = useFormContext();
+  const [lockValue, setLockValue] = useState();
+  const [remaining, setRemaining] = useState();
+  const inputRef = useRef();
 
-  const validnum = a => a >= 1 && a <= 1460;
-
-  useEffect(() => setValidInput(validnum(lockValue)), [lockValue]);
-
-  const handleOnInputLockValue = event => {
-    const value = Number(event.target.value);
-
-    if (validnum(value)) {
-      setLockValue(value);
-      updateParentLockValue(value);
-      setValidInput(true);
-    } else {
-      setLockValue(0);
-      updateParentLockValue(0);
-      setValidInput(false);
+  useEffect(() => {
+    if (maximumLockableTime) {
+      const weeks = Number(maximumLockableTime / 7).toFixed(0);
+      setRemaining(weeks);
     }
+  }, [maximumLockableTime]);
+
+  const handleOnInputLockValue = num => {
+    const value = num * 7; // multiply weeks with days
+
+    setLockValue(num);
+    updateParentLockValue(value);
   };
 
   const handleOnSliderChange = value => {
     setLockValue(value);
-    updateParentLockValue(value);
+    inputRef.current.state.value = value;
+
+    updateParentLockValue(Number(value) * 7); // multiply weeks with days
   };
 
   return (
-    <LockValueInfoContainer className="rounded pr-3 pl-3 pt-2 pb-3">
-      <div className="d-flex flex-row w-100 justify-content-end">
+    <LockValueInfoContainer
+      radioValue={radioValue}
+      currentHIIQ={currentHIIQ}
+      className="rounded pr-3 pl-3 pt-2 pb-3"
+    >
+      {maximumLockableTime && maximumLockableTime > 0 ? (
+        <small className="text-center w-100 p-0 container">
+          {t("value_restriction")}{" "}
+          <strong>
+            {!lockValue ? remaining : remaining - lockValue}
+            {t("weeks")}
+          </strong>
+        </small>
+      ) : null}
+      <br />
+      <div className="d-flex flex-row w-100 justify-content-center">
         <SelectedLockValueText>{t("lock_period")}</SelectedLockValueText>
       </div>
       <Container>
-        <Row>
-          <Col className="d-flex flex-column justify-content-center" xs={9}>
+        <Row className="d-flex flex-row justify-content-center align-items-between flex-wrap">
+          <Col
+            className="d-flex flex-column justify-content-center mt-3"
+            xs={12}
+            sm={12}
+            md={7}
+            lg={7}
+          >
             <Slider
-              disabled={wallet.account === null}
+              disabled={
+                wallet.account === null ||
+                (radioValue === 1 && currentHIIQ && currentHIIQ !== 0)
+              }
               railStyle={{ backgroundColor: "lightgray", height: 11 }}
               trackStyle={{ height: 14 }}
               handleStyle={{
@@ -81,33 +116,45 @@ const LockPeriod = ({ wallet, updateParentLockValue }) => {
                 height: 22,
                 width: 22
               }}
+              ref={e => {
+                register(e, { required: false });
+              }}
               onChange={handleOnSliderChange}
-              className="mb-3"
               value={lockValue}
-              min={1}
-              max={1460}
+              max={remaining || 208}
               step={1}
             />
           </Col>
-          <Col className="p-0">
-            <InputLockValue
-              disabled={wallet.account === null}
-              value={lockValue}
-              className="text-center"
-              type="number"
-              onChange={handleOnInputLockValue}
+          <Col
+            style={{ minWidth: 100 }}
+            xs={12}
+            sm={12}
+            md={3}
+            lg={3}
+            className="mt-3 p-0"
+          >
+            <StyledInputSpinner
+              type="real"
+              precision={0}
+              disabled={
+                wallet.account === null ||
+                (radioValue === 1 && currentHIIQ && currentHIIQ !== 0)
+              }
+              max={remaining || 208}
+              step={1}
+              value={lockValue || 0}
+              ref={e => {
+                register(e, { required: false });
+
+                inputRef.current = e;
+              }}
+              onChange={num => handleOnInputLockValue(num)}
+              className="text-right min-w-100 w-100"
+              variant="primary"
+              size="sm"
             />
           </Col>
         </Row>
-        {validInput && validInput === false && (
-          <Row>
-            <Col className="d-flex flex-column justify-content-center">
-              <InputErrorText className="text-center">
-                {t("value_restriction")}
-              </InputErrorText>
-            </Col>
-          </Row>
-        )}
       </Container>
     </LockValueInfoContainer>
   );
@@ -115,7 +162,10 @@ const LockPeriod = ({ wallet, updateParentLockValue }) => {
 
 LockPeriod.propTypes = {
   wallet: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  updateParentLockValue: PropTypes.func.isRequired
+  updateParentLockValue: PropTypes.func.isRequired,
+  radioValue: PropTypes.number.isRequired,
+  currentHIIQ: PropTypes.number, // eslint-disable-line react/require-default-props
+  maximumLockableTime: PropTypes.number // eslint-disable-line react/require-default-props
 };
 
 export default memo(LockPeriod);

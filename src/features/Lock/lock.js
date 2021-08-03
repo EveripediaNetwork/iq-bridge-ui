@@ -1,4 +1,4 @@
-import React, { memo, useContext, useEffect, useState, lazy } from "react";
+import React, { memo, useContext, useEffect, useState /* lazy */ } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import {
@@ -9,7 +9,9 @@ import {
   Container,
   Form,
   Row,
-  Alert
+  Alert,
+  ToggleButtonGroup,
+  ToggleButton
 } from "react-bootstrap";
 import { ArrowDownShort, QuestionCircle } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
@@ -24,6 +26,9 @@ import InfoAlert from "../../components/ui/infoAlert";
 import {
   getTokensUserBalanceLocked,
   increaseAmount,
+  increaseUnlockTime,
+  getMaximumLockableTime,
+  checkpoint,
   withdraw,
   getLockedEnd,
   lockTokensTx
@@ -31,7 +36,7 @@ import {
 import InfoSwapCard from "../../components/ui/infoSwapCard";
 import { TransactionContext } from "../../context/transactionContext";
 
-const RewardsPage = lazy(() => import("../Rewards/rewards"));
+// const RewardsPage = lazy(() => import("../Rewards/rewards"));
 
 const HeaderText = styled.div`
   background-color: #f7f7f9;
@@ -42,7 +47,8 @@ const CardDivContainer = styled.div`
 `;
 
 const IconWrapper = styled(Button)`
-  margin: 15px;
+  height: 30px;
+  max-height: 30px;
   color: rgb(86, 90, 105);
   text-align: center;
   border: none;
@@ -50,6 +56,10 @@ const IconWrapper = styled(Button)`
   font: inherit;
   color: inherit;
   background: none;
+`;
+
+const StyledToggleButton = styled(ToggleButton)`
+  min-width: 135px;
 `;
 
 const Lock = () => {
@@ -61,11 +71,14 @@ const Lock = () => {
   const [loadingBalance, setLoadingBalance] = useState(false);
   const [loadBalance, setLoadBalance] = useState(true);
   const [balance, setBalance] = useState();
-  const [lockValue, setLockValue] = useState(7);
+  const [lockValue, setLockValue] = useState();
+  const [lockedTimeDiff, setLockedTimeDiff] = useState();
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
   const [lockEnd, setLockEnd] = useState();
+  const [maximumLockableTime, setMaximumLockableTime] = useState();
   const [expired, setExpired] = useState();
+  const [radioValue, setRadioValue] = useState(1);
   const [token1] = useState({
     icon: `${window.location.origin}/tokens/iq.png`,
     name: "IQ",
@@ -74,31 +87,54 @@ const Lock = () => {
   });
 
   const handleConfirmation = async result => {
-    if (result === "success") {
-      setCurrentHiIQ(await getTokensUserBalanceLocked(wallet));
-    }
+    if (result === "success")
+      setCurrentHiIQ(Number(await getTokensUserBalanceLocked(wallet)));
 
     setUpdatingBalance(false);
+  };
+
+  const resetValues = () => {
+    setFilledAmount();
+    setLockValue();
   };
 
   const onSubmit = async data => {
     if (!wallet.account) return;
 
     if (currentHiIQ !== 0) {
-      setHashes([
-        ...hashes,
-        ...(await increaseAmount(data.FromAmount, wallet, handleConfirmation))
-      ]);
-    } else {
-      setHashes(await lockTokensTx(data.FromAmount, lockValue, wallet));
+      if (radioValue === 1)
+        setHashes([
+          ...hashes,
+          ...(await increaseAmount(data.FromAmount, wallet, handleConfirmation))
+        ]);
+
+      if (radioValue === 2) await increaseUnlockTime(wallet, lockEnd.getTime());
+    } else setHashes(await lockTokensTx(data.FromAmount, lockValue, wallet));
+
+    await checkpoint(wallet);
+
+    if (radioValue === 1) {
+      setUpdatingBalance(true);
+      setLoadBalance(true);
     }
 
-    setUpdatingBalance(true);
-
     setTxDone(true);
+
+    resetValues();
   };
 
   const handleSetLockValue = lv => {
+    if (lv === 0) return;
+
+    const temp = lockEnd || new Date();
+
+    if (!lockValue) temp.setDate(temp.getDate() + lv);
+    else {
+      if (lv < lockValue) temp.setDate(temp.getDate() - (lockValue - lv));
+
+      if (lv > lockValue) temp.setDate(temp.getDate() + (lv - lockValue));
+    }
+    setLockEnd(temp);
     setLockValue(lv);
   };
 
@@ -112,11 +148,25 @@ const Lock = () => {
     })();
   };
 
+  const handleRadioChange = val => {
+    setRadioValue(val);
+    resetValues();
+  };
+
+  const calculateDatesDiff = (date1, date2) => {
+    const diffInMs = date1 - date2;
+    const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+    return diffInDays.toFixed(0);
+  };
+
   useEffect(() => {
     if (currentHiIQ && currentHiIQ > 0)
       (async () => {
         const result = await getLockedEnd(wallet);
+
         setLockEnd(result);
+        setMaximumLockableTime(await getMaximumLockableTime(wallet, result));
+        setLockedTimeDiff(calculateDatesDiff(result, new Date()));
         setExpired(new Date().getTime() > result.getTime());
       })();
   }, [currentHiIQ]);
@@ -161,9 +211,9 @@ const Lock = () => {
                         eventKey="0"
                         className="d-flex flex-row justify-content-center align-middle"
                       >
-                        <Button variant="light">
+                        <div variant="light">
                           <QuestionCircle />
-                        </Button>
+                        </div>
                       </Accordion.Toggle>
                     </div>
                     <Accordion.Collapse eventKey="0">
@@ -187,17 +237,52 @@ const Lock = () => {
                     )}
                   </>
                   {lockEnd && expired !== undefined && (
-                    <Alert
-                      className="text-center"
-                      variant={expired ? "danger" : "info"}
-                    >
-                      {expired
-                        ? t("expired")
-                        : `${t("expiring_on")} ${lockEnd.toLocaleString()}`}
-                    </Alert>
+                    <>
+                      <Alert
+                        className="text-center mb-0 w-75 mt-0 p-0 container"
+                        variant={expired ? "danger" : "light"}
+                      >
+                        {expired ? (
+                          t("expired")
+                        ) : (
+                          <>
+                            {`${t("expiring_on")} `}
+                            <strong>{`${lockEnd.toDateString()}`}</strong>
+                          </>
+                        )}
+                        <br />
+                      </Alert>
+                      {currentHiIQ > 0 && (
+                        <ToggleButtonGroup
+                          name="group"
+                          className="mb-3 mt-2 d-flex flex-row flex-wrap justify-content-center container w-75"
+                          value={radioValue}
+                          onChange={handleRadioChange}
+                          type="radio"
+                        >
+                          <StyledToggleButton
+                            size="sm"
+                            name="amount"
+                            variant="outline-info"
+                            value={1}
+                          >
+                            Increase amount
+                          </StyledToggleButton>
+                          <StyledToggleButton
+                            size="sm"
+                            name="time"
+                            variant="outline-info"
+                            value={2}
+                          >
+                            Increase Lock Time
+                          </StyledToggleButton>
+                        </ToggleButtonGroup>
+                      )}
+                    </>
                   )}
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
                     <SwapContainer
+                      radioValue={radioValue}
                       token={token1}
                       header={t("from")}
                       setParentBalance={setBalance}
@@ -212,15 +297,29 @@ const Lock = () => {
                     <LockPeriod
                       wallet={wallet}
                       updateParentLockValue={handleSetLockValue}
+                      radioValue={radioValue}
+                      currentHIIQ={currentHiIQ}
+                      maximumLockableTime={maximumLockableTime}
                     />
                     <br />
                     <Button
                       disabled={
                         !wallet.account ||
-                        !balance ||
-                        balance === 0 ||
-                        lockValue === 0 ||
-                        !filledAmount
+                        (!balance && radioValue === 1) ||
+                        (balance === 0 && radioValue === 1) ||
+                        (!filledAmount &&
+                          currentHiIQ !== 0 &&
+                          radioValue === 1) ||
+                        (currentHiIQ === 0 && !lockValue) ||
+                        (!lockValue && radioValue === 2) ||
+                        (currentHiIQ === 0 &&
+                          radioValue === 2 &&
+                          lockValue === 0) ||
+                        (currentHiIQ === 0 &&
+                          radioValue === 1 &&
+                          !filledAmount) ||
+                        (currentHiIQ === 0 && balance === 0) ||
+                        (currentHiIQ === 0 && !filledAmount)
                       }
                       variant="primary"
                       className="text-capitalize"
@@ -237,6 +336,17 @@ const Lock = () => {
               {lockValue !== 0 && filledAmount && balance && balance !== 0 && (
                 <InfoSwapCard
                   tokensLocked={Number(filledAmount)}
+                  timeLocked={
+                    currentHiIQ && lockEnd > 0
+                      ? Number(lockedTimeDiff)
+                      : Number(lockValue)
+                  }
+                />
+              )}
+
+              {lockValue && lockValue !== 0 && radioValue === 2 && (
+                <InfoSwapCard
+                  tokensLocked={Number(currentHiIQ)}
                   timeLocked={Number(lockValue)}
                 />
               )}
@@ -249,7 +359,9 @@ const Lock = () => {
               )}
             </Col>
           </FormProvider>
-          <RewardsPage />
+          {/* {currentHiIQ && currentHiIQ > 0 ? (
+            <RewardsPage setLoadBalance={val => setLoadBalance(val)} />
+          ) : null} */}
         </CardDivContainer>
       </Container>
     </Layout>

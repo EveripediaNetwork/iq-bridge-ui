@@ -2,11 +2,24 @@ import React, { memo, useContext, useEffect, useState } from "react";
 import { Card, Container, Row, Col, Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
+import styled from "styled-components";
+import PropTypes from "prop-types";
 
-import { earned, getYield } from "../../utils/EthDataProvider/EthDataProvider";
+import {
+  earned,
+  checkpoint,
+  checkIfTheUserIsInitialized,
+  getYield
+} from "../../utils/EthDataProvider/EthDataProvider";
 import { TransactionContext } from "../../context/transactionContext";
 
-const Rewards = () => {
+const InfoCard = styled(Card)`
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  width: 300px;
+  margin: auto;
+`;
+
+const Rewards = ({ setLoadBalance }) => {
   const wallet = useWallet();
   const { t } = useTranslation();
   const [balance, setBalance] = useState();
@@ -21,11 +34,18 @@ const Rewards = () => {
     setTxDone(true);
     setWaitingConfirmation(false);
     setBalance(await earned(wallet));
+    setLoadBalance(true);
   };
 
   useEffect(() => {
     if (wallet.status === "connected" && wallet.ethereum)
-      (async () => setBalance(await earned(wallet)))();
+      (async () => {
+        const result = await checkIfTheUserIsInitialized(wallet);
+
+        if (result === false) await checkpoint(wallet);
+
+        if (result === true) setBalance(await earned(wallet));
+      })();
   }, [wallet.status]);
 
   return (
@@ -37,7 +57,7 @@ const Rewards = () => {
               {balance ? (
                 <h4 className="text-center">
                   <span className="font-weight-normal">
-                    {Number(balance).toFixed(4)}
+                    {Number(balance).toFixed(6)}
                   </span>{" "}
                   IQ{" "}
                   <span className="font-weight-normal text-lowercase">
@@ -71,10 +91,39 @@ const Rewards = () => {
               </Button>
             </Card.Body>
           </Card>
+          <br />
+          <InfoCard className="shadow">
+            <Card.Body>
+              <div className="text-white container p-0 text-justify mb-0">
+                <small>
+                  {t("required_to_accept")} <strong>{t("checkpoint")}</strong>{" "}
+                  {t("scenarios")}:
+                </small>
+                <ul className="mb-0 text-left">
+                  <li>
+                    <small>{t("user_is_not_initialized")}</small>
+                  </li>
+                  <li>
+                    <small>{t("more_iq_tokens_locked")}</small>
+                  </li>
+                  <li>
+                    <small>{t("lock_time_increased")}</small>
+                  </li>
+                </ul>
+                <small>
+                  {t("This operation is used to re-calculate the rewards.")}
+                </small>
+              </div>
+            </Card.Body>
+          </InfoCard>
         </Col>
       </Row>
     </Container>
   );
+};
+
+Rewards.propTypes = {
+  setLoadBalance: PropTypes.func.isRequired
 };
 
 export default memo(Rewards);
