@@ -124,7 +124,10 @@ const Lock = () => {
   };
 
   const handleSetLockValue = lv => {
-    if (lv === 0) return;
+    if (lv === 0) {
+      setLockValue(0);
+      return;
+    }
 
     const temp = lockEnd || new Date();
 
@@ -334,26 +337,26 @@ const Lock = () => {
               </Card>
 
               {lockValue &&
-                lockValue !== 0 &&
-                filledAmount &&
-                balance &&
-                balance !== 0 && (
-                  <InfoSwapCard
-                    tokensLocked={Number(filledAmount)}
-                    timeLocked={
-                      currentHiIQ && lockEnd > 0
-                        ? Number(lockedTimeDiff)
-                        : Number(lockValue)
-                    }
-                  />
-                )}
+              lockValue !== 0 &&
+              filledAmount &&
+              balance &&
+              balance !== 0 ? (
+                <InfoSwapCard
+                  tokensLocked={Number(filledAmount)}
+                  timeLocked={
+                    currentHiIQ && lockEnd > 0
+                      ? Number(lockedTimeDiff)
+                      : Number(lockValue)
+                  }
+                />
+              ) : null}
 
-              {lockValue && lockValue !== 0 && radioValue === 2 && (
+              {lockValue && lockValue !== 0 && radioValue === 2 ? (
                 <InfoSwapCard
                   tokensLocked={Number(currentHiIQ)}
                   timeLocked={Number(lockValue)}
                 />
-              )}
+              ) : null}
               {!wallet.account && (
                 <Row>
                   <Col>
