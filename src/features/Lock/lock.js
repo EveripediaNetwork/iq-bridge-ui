@@ -333,16 +333,20 @@ const Lock = () => {
                 </Card.Body>
               </Card>
 
-              {lockValue !== 0 && filledAmount && balance && balance !== 0 && (
-                <InfoSwapCard
-                  tokensLocked={Number(filledAmount)}
-                  timeLocked={
-                    currentHiIQ && lockEnd > 0
-                      ? Number(lockedTimeDiff)
-                      : Number(lockValue)
-                  }
-                />
-              )}
+              {lockValue &&
+                lockValue !== 0 &&
+                filledAmount &&
+                balance &&
+                balance !== 0 && (
+                  <InfoSwapCard
+                    tokensLocked={Number(filledAmount)}
+                    timeLocked={
+                      currentHiIQ && lockEnd > 0
+                        ? Number(lockedTimeDiff)
+                        : Number(lockValue)
+                    }
+                  />
+                )}
 
               {lockValue && lockValue !== 0 && radioValue === 2 && (
                 <InfoSwapCard
