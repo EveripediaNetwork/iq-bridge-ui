@@ -159,7 +159,7 @@ const Lock = () => {
   const calculateDatesDiff = (date1, date2) => {
     const diffInMs = date1 - date2;
     const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
-    return diffInDays.toFixed(0);
+    return diffInDays.toFixed(0) - 1;
   };
 
   useEffect(() => {
@@ -302,7 +302,7 @@ const Lock = () => {
                       updateParentLockValue={handleSetLockValue}
                       radioValue={radioValue}
                       currentHIIQ={currentHiIQ}
-                      maximumLockableTime={maximumLockableTime}
+                      maximumLockableTime={maximumLockableTime - 1}
                     />
                     <br />
                     <Button
