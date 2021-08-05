@@ -209,14 +209,14 @@ const Stats = () => {
                     <img alt="IQ" src="/tokens/iq.png" />
                   </Icon>
                   <Title>HiIQ {t("volume")}</Title>
-                  <Value>{showData(data.hiiq?.holders)}</Value>
+                  <Value>{showData(data.hiiq?.volume)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="IQ" src="/tokens/iq.png" />
                   </Icon>
                   <Title>HiIQ {t("holders")}</Title>
-                  <Value>{showData(data.hiiq?.volume)}</Value>
+                  <Value>{showData(data.hiiq?.holders)}</Value>
                 </DataRow>
 
                 <DataTitle>{t("apps")}</DataTitle>

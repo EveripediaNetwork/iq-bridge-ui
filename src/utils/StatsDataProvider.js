@@ -30,19 +30,22 @@ const getVolume = async () => {
   );
   const data = await response.json();
   const ethVolume = data.token.totalSupply;
-  const maticVolume = data.holders.filter(
+  const maticVolume = data.holders.find(
     h => h.address === "0x40ec5b33f54e0e8a33a975908c5ba1c14e5bbbdf"
   );
-  const bscVolume = data.holders.filter(
+  const bscVolume = data.holders.find(
     h => h.address === "0x533e3c0e6b48010873b947bddc4721b1bdff9648"
   );
+
+  const maticBalance = maticVolume?.balance ?? 0;
+  const bscBalance = bscVolume?.balance ?? 0;
 
   return {
     volume: {
       eos: eosVolume - ethVolume / 10e17,
-      eth: (ethVolume - maticVolume[0].balance - bscVolume[0].balance) / 10e17,
-      matic: maticVolume[0].balance / 10e17,
-      bsc: bscVolume[0].balance / 10e17
+      eth: (ethVolume - maticBalance - bscBalance) / 10e17,
+      matic: maticBalance / 10e17,
+      bsc: bscBalance / 10e17
     }
   };
 };
@@ -54,7 +57,7 @@ const getHiIQ = async () => {
   const data = await response.json();
   return {
     hiiq: {
-      holders: data.token?.holdersCount || 0,
+      holders: data.pager?.holders?.total || data.token?.holdersCount || 0,
       volume: parseInt(data.token?.totalSupply, 10) / 10e17 || 0
     }
   };
