@@ -201,7 +201,7 @@ const reverseIQtoEOSTx = async (amount, wallet, eosAccount) => {
   return false;
 };
 
-const lockTokensTx = async (amount, time, wallet) => {
+const lockTokensTx = async (amount, time, wallet, handleConfirmation) => {
   const amountParsed = ethers.utils.parseEther(amount).toString();
   const d = new Date();
   d.setDate(d.getDate() + time);
@@ -228,13 +228,18 @@ const lockTokensTx = async (amount, time, wallet) => {
       []
     );
 
-    const result = await hiIQ.create_lock(amountParsed, String(timeParsed), {
-      gasLimit: addGasLimitBuffer(
-        await hiIQ.estimateGas.create_lock(amountParsed, String(timeParsed))
-      )
-    });
+    if (hashes) {
+      const result = await hiIQ.create_lock(amountParsed, String(timeParsed), {
+        gasLimit: 800000
+      });
 
-    hashes.push(result.hash);
+      provider
+        .waitForTransaction(result.hash)
+        .then(() => handleConfirmation("success"))
+        .catch(err => handleConfirmation(err));
+
+      hashes.push(result.hash);
+    }
 
     return hashes;
   }
@@ -336,7 +341,7 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
   return false;
 };
 
-const increaseUnlockTime = async (wallet, unlockTime) => {
+const increaseUnlockTime = async (wallet, unlockTime, handleConfirmation) => {
   if (wallet.status === "connected") {
     const timeParsed = Math.floor(unlockTime / 1000.0);
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
@@ -352,6 +357,11 @@ const increaseUnlockTime = async (wallet, unlockTime) => {
         await hiIQ.estimateGas.increase_unlock_time(timeParsed)
       )
     });
+
+    provider
+      .waitForTransaction(result.hash)
+      .then(() => handleConfirmation("success"))
+      .catch(err => handleConfirmation(err));
 
     return result;
   }
