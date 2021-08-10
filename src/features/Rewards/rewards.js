@@ -9,7 +9,9 @@ import {
   earned,
   checkpoint,
   checkIfTheUserIsInitialized,
-  getYield
+  getYield,
+  getHiIQAt,
+  claim
 } from "../../utils/EthDataProvider/EthDataProvider";
 import { TransactionContext } from "../../context/transactionContext";
 
@@ -27,13 +29,16 @@ const Rewards = ({ setLoadBalance }) => {
   const { setTxDone, setHashes } = useContext(TransactionContext);
 
   const handleClaim = async () => {
-    const yieldResult = await getYield(wallet);
+    //const yieldResult = await getYield(wallet);
+    const claimResult = await claim(wallet);
     setWaitingConfirmation(true);
-    await yieldResult.wait();
-    setHashes([yieldResult.hash]);
+    await claimResult.wait();
+    console.log(claimResult);
+    setHashes([claimResult.hash]);
     setTxDone(true);
     setWaitingConfirmation(false);
-    setBalance(await earned(wallet));
+    // setBalance(await earned(wallet));
+    setBalance(await getHiIQAt(wallet));
     setLoadBalance(true);
   };
 
@@ -44,7 +49,10 @@ const Rewards = ({ setLoadBalance }) => {
 
         if (result === false) await checkpoint(wallet);
 
-        if (result === true) setBalance(await earned(wallet));
+        if (result === true) {
+          setBalance(await getHiIQAt(wallet));
+          // setBalance(await earned(wallet));
+        }
       })();
   }, [wallet.status]);
 

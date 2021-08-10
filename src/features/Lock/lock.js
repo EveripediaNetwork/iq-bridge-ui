@@ -1,4 +1,4 @@
-import React, { memo, useContext, useEffect, useState /* lazy */ } from "react";
+import React, { memo, useContext, useEffect, useState, lazy } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import {
@@ -36,7 +36,7 @@ import {
 import InfoSwapCard from "../../components/ui/infoSwapCard";
 import { TransactionContext } from "../../context/transactionContext";
 
-// const RewardsPage = lazy(() => import("../Rewards/rewards"));
+const RewardsPage = lazy(() => import("../Rewards/rewards"));
 
 const HeaderText = styled.div`
   background-color: #f7f7f9;
@@ -366,9 +366,9 @@ const Lock = () => {
               )}
             </Col>
           </FormProvider>
-          {/* {currentHiIQ && currentHiIQ > 0 ? (
+          {currentHiIQ && currentHiIQ > 0 ? (
             <RewardsPage setLoadBalance={val => setLoadBalance(val)} />
-          ) : null} */}
+          ) : null}
         </CardDivContainer>
       </Container>
     </Layout>

@@ -38,6 +38,7 @@ const earned = async wallet => {
 
 const getHiIQAt = async wallet => {
   if (wallet.status === "connected") {
+    const timeParsed = Math.floor(new Date().getTime() / 1000.0);
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
 
     const feeDistributor = new ethers.Contract(
@@ -45,6 +46,38 @@ const getHiIQAt = async wallet => {
       feeDistributorAbi,
       provider.getSigner()
     );
+
+    const result = await feeDistributor.hiIQForAt(wallet.account, timeParsed, {
+      gasLimit: addGasLimitBuffer(
+        await feeDistributor.estimateGas.hiIQForAt(wallet.account, timeParsed)
+      )
+    });
+
+    console.log(result);
+
+    return parseInt(result._hex, 16);
+  }
+
+  return 0;
+};
+
+const claim = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+
+    const feeDistributor = new ethers.Contract(
+      feeDistributorAddress,
+      feeDistributorAbi,
+      provider.getSigner()
+    );
+
+    const result = await feeDistributor.claim(wallet.account, {
+      gasLimit: addGasLimitBuffer(
+        await feeDistributor.estimateGas.claim(wallet.account)
+      )
+    });
+
+    return result;
   }
 
   return 0;
@@ -377,6 +410,8 @@ const increaseUnlockTime = async (wallet, unlockTime) => {
 
 export {
   earned,
+  getHiIQAt,
+  claim,
   checkpoint,
   checkIfTheUserIsInitialized,
   getYield,
