@@ -71,7 +71,7 @@ const LockPeriod = ({
 
   const handleOnSliderChange = value => {
     setLockValue(value);
-    inputRef.current.state.value = value;
+    if (inputRef && inputRef.current) inputRef.current.state.value = value;
 
     updateParentLockValue(Number(value) * 7); // multiply weeks with days
   };

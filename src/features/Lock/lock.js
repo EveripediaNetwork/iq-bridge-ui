@@ -28,7 +28,6 @@ import {
   increaseAmount,
   increaseUnlockTime,
   getMaximumLockableTime,
-  checkpoint,
   withdraw,
   getLockedEnd,
   lockTokensTx
@@ -68,7 +67,6 @@ const Lock = () => {
   const wallet = useWallet();
   const { hashes, setHashes, setTxDone } = useContext(TransactionContext);
   const [updatingBalance, setUpdatingBalance] = useState(false);
-  const [loadingBalance, setLoadingBalance] = useState(false);
   const [loadBalance, setLoadBalance] = useState(true);
   const [balance, setBalance] = useState();
   const [lockValue, setLockValue] = useState();
@@ -87,10 +85,9 @@ const Lock = () => {
   });
 
   const handleConfirmation = async result => {
-    if (result === "success")
-      setCurrentHiIQ(Number(await getTokensUserBalanceLocked(wallet)));
-
-    setUpdatingBalance(false);
+    if (result === "success") {
+      setLoadBalance(true);
+    }
   };
 
   const resetValues = () => {
@@ -101,6 +98,9 @@ const Lock = () => {
   const onSubmit = async data => {
     if (!wallet.account) return;
 
+    // setLoadBalance(false);
+    setUpdatingBalance(true);
+
     if (currentHiIQ !== 0) {
       if (radioValue === 1)
         setHashes([
@@ -108,13 +108,17 @@ const Lock = () => {
           ...(await increaseAmount(data.FromAmount, wallet, handleConfirmation))
         ]);
 
-      if (radioValue === 2) await increaseUnlockTime(wallet, lockEnd.getTime());
-    } else setHashes(await lockTokensTx(data.FromAmount, lockValue, wallet));
-
-    await checkpoint(wallet);
-
-    if (radioValue === 1) {
-      setUpdatingBalance(true);
+      if (radioValue === 2)
+        await increaseUnlockTime(wallet, lockEnd.getTime(), handleConfirmation);
+    } else {
+      setHashes(
+        await lockTokensTx(
+          data.FromAmount,
+          lockValue,
+          wallet,
+          handleConfirmation
+        )
+      );
       setLoadBalance(true);
     }
 
@@ -168,21 +172,25 @@ const Lock = () => {
         const result = await getLockedEnd(wallet);
 
         setLockEnd(result);
-        setMaximumLockableTime(await getMaximumLockableTime(wallet, result));
+        setMaximumLockableTime(
+          (await getMaximumLockableTime(wallet, result)) - 1
+        );
         setLockedTimeDiff(calculateDatesDiff(result, new Date()));
         setExpired(new Date().getTime() > result.getTime());
       })();
   }, [currentHiIQ]);
 
   useEffect(() => {
-    if (!loadBalance) return;
+    if (loadBalance === false) return;
+
+    setUpdatingBalance(true);
 
     if (wallet.status === "connected" && wallet.ethereum)
       (async () => {
-        setLoadingBalance(true);
         setCurrentHiIQ(Number(await getTokensUserBalanceLocked(wallet)));
-        setLoadingBalance(false);
+        // setLoadingBalance(false);
         setLoadBalance(false);
+        setUpdatingBalance(false);
       })();
   }, [wallet.status, loadBalance]);
 
@@ -205,7 +213,7 @@ const Lock = () => {
                           wallet={wallet}
                           currentHiIQ={currentHiIQ}
                           updatingBalance={updatingBalance}
-                          loadingBalance={loadingBalance}
+                          // loadingBalance={loadingBalance}
                         />
                       )}
                       <Accordion.Toggle
