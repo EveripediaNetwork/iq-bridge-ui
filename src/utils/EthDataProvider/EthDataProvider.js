@@ -18,6 +18,37 @@ const addGasLimitBuffer = value =>
     .mul(ethers.BigNumber.from(10000 + 2000))
     .div(ethers.BigNumber.from(10000));
 
+const getStats = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+
+    const hiIQ = new ethers.Contract(
+      hiIQAddress,
+      hiIQAbi,
+      provider.getSigner()
+    );
+
+    const erc20 = new ethers.Contract(
+      iqAddress,
+      erc20Abi,
+      provider.getSigner()
+    );
+
+    const supplyResult = await hiIQ["totalSupply()"]();
+
+    const totalValueLockedResult = await erc20["balanceOf(address)"](
+      hiIQAddress
+    );
+
+    return {
+      supply: ethers.utils.formatEther(supplyResult),
+      tvl: ethers.utils.formatEther(totalValueLockedResult)
+    };
+  }
+
+  return 0;
+};
+
 const earned = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
@@ -370,6 +401,7 @@ const increaseUnlockTime = async (wallet, unlockTime, handleConfirmation) => {
 };
 
 export {
+  getStats,
   earned,
   checkpoint,
   checkIfTheUserIsInitialized,

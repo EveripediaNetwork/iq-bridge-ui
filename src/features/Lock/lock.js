@@ -1,4 +1,4 @@
-import React, { memo, useContext, useEffect, useState /* lazy */ } from "react";
+import React, { memo, useContext, useEffect, useState, lazy } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import {
@@ -34,6 +34,8 @@ import {
 } from "../../utils/EthDataProvider/EthDataProvider";
 import InfoSwapCard from "../../components/ui/infoSwapCard";
 import { TransactionContext } from "../../context/transactionContext";
+
+const LockStats = lazy(() => import("./lockStats"));
 
 // const RewardsPage = lazy(() => import("../Rewards/rewards"));
 
@@ -200,7 +202,8 @@ const Lock = () => {
         className="p-2 mt-3 d-flex flex-row justify-content-center flex-wrap"
         fluid
       >
-        <CardDivContainer className="d-flex flex-row flex-wrap align-items-start">
+        <CardDivContainer className="d-flex flex-row flex-wrap align-items-center">
+          {wallet && <LockStats wallet={wallet} hiIQBalance={currentHiIQ} />}
           <FormProvider {...methods}>
             <Col>
               <CardTitle title="IQ Bridge" aria-label="lock" icon="🔒" />
@@ -213,7 +216,6 @@ const Lock = () => {
                           wallet={wallet}
                           currentHiIQ={currentHiIQ}
                           updatingBalance={updatingBalance}
-                          // loadingBalance={loadingBalance}
                         />
                       )}
                       <Accordion.Toggle
