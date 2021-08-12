@@ -203,7 +203,7 @@ const Lock = () => {
         fluid
       >
         <CardDivContainer className="d-flex flex-row flex-wrap align-items-center">
-          {wallet.account && (
+          {wallet.account && currentHiIQ && (
             <LockStats wallet={wallet} hiIQBalance={currentHiIQ} />
           )}
           <FormProvider {...methods}>
