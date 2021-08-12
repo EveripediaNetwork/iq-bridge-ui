@@ -24,7 +24,7 @@ const LockStats = ({ wallet, hiIQBalance }) => {
   return (
     <Card style={{ width: 330 }} className="shadow">
       <Card.Body>
-        <h3 className="text-center font-weight-light">Lock stats</h3>
+        <h3 className="text-center font-weight-normal">Lock stats</h3>
         <hr className="shadow" />
         {stats !== undefined ? (
           <div className="container">
@@ -37,15 +37,21 @@ const LockStats = ({ wallet, hiIQBalance }) => {
             ) : null}
             <p className="m-0">
               {" "}
-              <strong>Unclaimed Rewards: </strong>
+              <span>Unclaimed Rewards: </span>
               <span>
-                {7000000 - stats.tvl} <strong>HIIQ</strong>
+                <span className="text-info font-weight-bold">
+                  {7000000 - stats.tvl}
+                </span>{" "}
+                <strong>HIIQ</strong>
               </span>
             </p>
             <p className="m-0">
               {" "}
-              <strong>TVL: </strong>
-              <span>{stats.tvl} IQ</span>
+              <span>TVL: </span>
+              <span>
+                <span className="text-info font-weight-bold">{stats.tvl} </span>
+                <strong>IQ</strong>
+              </span>
             </p>
             {/* <div className="container mt-1 text-center">
               <Button onClick={() => setOpen(true)} size="sm" variant="info">
