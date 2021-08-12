@@ -16,41 +16,53 @@ const LockStats = ({ wallet, hiIQBalance }) => {
           hiIQBalance && hiIQBalance !== 0
             ? Number((hiIQBalance / supply) * 365 * 100).toFixed(2)
             : 0,
+        supply,
         tvl
       });
     })();
   }, [wallet]);
 
   return (
-    <Card style={{ width: 330 }} className="shadow">
-      <Card.Body>
+    <Card style={{ width: 220 }} className="shadow p-1">
+      <Card.Body className="p-1">
         <h3 className="text-center font-weight-normal">Lock stats</h3>
         <hr className="shadow" />
         {stats !== undefined ? (
           <div className="container">
             {stats.apr ? (
-              <p className="m-0">
-                {" "}
-                <strong>Your APR: </strong>
-                <span>{stats.apr}%</span>
-              </p>
+              <>
+                <p className="m-0 text-center">
+                  {" "}
+                  <strong>Your APR</strong>
+                  <br />
+                  <span>{stats.apr}%</span>
+                </p>
+                <hr className="shadow" />
+              </>
             ) : null}
-            <p className="m-0">
+
+            <p className="m-0 text-center">
               {" "}
-              <span>Unclaimed Rewards: </span>
+              <strong>Unclaimed Rewards</strong>
+              <br />
               <span>
-                <span className="text-info font-weight-bold">
-                  {7000000 - stats.tvl}
+                <span className="text-info font-weight-normal">
+                  {Number(stats.supply).toFixed(3)}{" "}
+                  <strong className="text-dark">HIIQ</strong>
                 </span>{" "}
-                <strong>HIIQ</strong>
               </span>
             </p>
-            <p className="m-0">
+            <hr className="shadow" />
+
+            <p className="m-0 text-center">
               {" "}
-              <span>TVL: </span>
+              <strong>TVL</strong>
+              <br />
               <span>
-                <span className="text-info font-weight-bold">{stats.tvl} </span>
-                <strong>IQ</strong>
+                <span className="text-info">
+                  {Number(stats.tvl).toFixed(2)}{" "}
+                  <strong className="text-dark">IQ</strong>
+                </span>
               </span>
             </p>
             {/* <div className="container mt-1 text-center">
