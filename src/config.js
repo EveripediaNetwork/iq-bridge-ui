@@ -15,6 +15,7 @@ module.exports = {
   pIQAddress: process.env.REACT_APP_PIQ_ADDRESS,
   pMinterAddress: process.env.REACT_APP_PMINTER_ADDRESS,
   hiIQRewardsAddress: process.env.REACT_APP_HIIQREWARDS_ADDRESS,
+  feeDistributorAddress: process.env.REACT_APP_FEE_DISTRIBUTOR_ADDRESS,
   fortmaticApiKey: process.env.REACT_APP_FORTMATIC_API_KEY,
   walletConnectRpcUrl: process.env.REACT_APP_WALLET_CONNECT_RPC_URL,
   walletLinkUrl: process.env.REACT_APP_WALLET_LINK_URL,

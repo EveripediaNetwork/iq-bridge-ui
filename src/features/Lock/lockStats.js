@@ -3,14 +3,28 @@ import { Card, Button } from "react-bootstrap";
 import PropTypes from "prop-types";
 import * as Humanize from "humanize-plus";
 
-import { getStats, earned } from "../../utils/EthDataProvider/EthDataProvider";
+import {
+  getStats,
+  getHiIQAt,
+  claim
+} from "../../utils/EthDataProvider/EthDataProvider";
 
 const LockStats = ({ wallet, hiIQBalance }) => {
   const [stats, setStats] = useState();
+  const [isLoadingClaim, setLoadingClaim] = useState(false);
+
+  const handleClaim = async () => {
+    setLoadingClaim(true);
+    const result = await claim(wallet);
+    await result.wait();
+    setLoadingClaim(false);
+  };
+
   useEffect(() => {
     (async () => {
       const { supply, tvl } = await getStats(wallet);
-      const rewards = await earned(wallet);
+      const rewards = await getHiIQAt(wallet);
+
       setStats({
         apr: Number((hiIQBalance / supply) * 365 * 100).toFixed(2),
         rewards,
@@ -65,8 +79,13 @@ const LockStats = ({ wallet, hiIQBalance }) => {
             </p>
             <hr style={{ margin: "4px 0" }} className="shadow" />
             <div className="container mt-4 text-center">
-              <Button size="sm" variant="success">
-                Claim rewards
+              <Button
+                disabled={isLoadingClaim}
+                onClick={handleClaim}
+                size="sm"
+                variant="success"
+              >
+                {!isLoadingClaim ? "Claim rewards" : "Loading..."}
               </Button>
             </div>
           </div>

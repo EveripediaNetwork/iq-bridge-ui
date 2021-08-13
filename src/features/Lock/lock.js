@@ -37,8 +37,6 @@ import { TransactionContext } from "../../context/transactionContext";
 
 const LockStats = lazy(() => import("./lockStats"));
 
-// const RewardsPage = lazy(() => import("../Rewards/rewards"));
-
 const HeaderText = styled.div`
   background-color: #f7f7f9;
 `;
@@ -378,9 +376,6 @@ const Lock = () => {
               )}
             </Col>
           </FormProvider>
-          {/* {currentHiIQ && currentHiIQ > 0 ? (
-            <RewardsPage setLoadBalance={val => setLoadBalance(val)} />
-          ) : null} */}
         </CardDivContainer>
       </Container>
     </Layout>
