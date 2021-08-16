@@ -98,7 +98,6 @@ const Lock = () => {
   const onSubmit = async data => {
     if (!wallet.account) return;
 
-    // setLoadBalance(false);
     setUpdatingBalance(true);
 
     if (currentHiIQ !== 0) {
@@ -188,7 +187,6 @@ const Lock = () => {
     if (wallet.status === "connected" && wallet.ethereum)
       (async () => {
         setCurrentHiIQ(Number(await getTokensUserBalanceLocked(wallet)));
-        // setLoadingBalance(false);
         setLoadBalance(false);
         setUpdatingBalance(false);
       })();

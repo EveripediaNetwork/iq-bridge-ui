@@ -5,12 +5,10 @@ import {
   iqAddress,
   pIQAddress,
   pMinterAddress,
-  feeDistributorAddress,
-  hiIQRewardsAddress
+  feeDistributorAddress
 } from "../../config";
 import { erc20Abi } from "./erc20.abi";
 import { hiIQAbi } from "./hiIQ.abi";
-import { HiIQRewardsAbi } from "./hiIQRewards.abi";
 import { feeDistributorAbi } from "./feeDistributor.abi";
 import { minterAbi } from "./minter.abi";
 import { ptokenAbi } from "./ptoken.abi";
@@ -46,22 +44,6 @@ const getStats = async wallet => {
       supply: ethers.utils.formatEther(supplyResult),
       tvl: ethers.utils.formatEther(totalValueLockedResult)
     };
-  }
-
-  return 0;
-};
-
-const earned = async wallet => {
-  if (wallet.status === "connected") {
-    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-    const hiIQRewards = new ethers.Contract(
-      hiIQRewardsAddress,
-      HiIQRewardsAbi,
-      provider.getSigner()
-    );
-
-    const balance = await hiIQRewards.earned(wallet.account);
-    return ethers.utils.formatEther(balance);
   }
 
   return 0;
@@ -107,59 +89,6 @@ const claim = async wallet => {
     });
 
     return result;
-  }
-
-  return 0;
-};
-
-const checkpoint = async wallet => {
-  if (wallet.status === "connected") {
-    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-
-    const hiIQRewards = new ethers.Contract(
-      hiIQRewardsAddress,
-      HiIQRewardsAbi,
-      provider.getSigner()
-    );
-
-    await hiIQRewards.checkpoint({
-      gasLimit: addGasLimitBuffer(await hiIQRewards.estimateGas.checkpoint())
-    });
-    return true;
-  }
-
-  return 0;
-};
-
-const checkIfTheUserIsInitialized = async wallet => {
-  if (wallet.status === "connected") {
-    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-
-    const hiIQRewards = new ethers.Contract(
-      hiIQRewardsAddress,
-      HiIQRewardsAbi,
-      provider.getSigner()
-    );
-
-    return hiIQRewards["userIsInitialized(address)"](wallet.account);
-  }
-
-  return 0;
-};
-
-const getYield = async wallet => {
-  if (wallet.status === "connected") {
-    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-    const hiIQRewards = new ethers.Contract(
-      hiIQRewardsAddress,
-      HiIQRewardsAbi,
-      provider.getSigner()
-    );
-
-    const yieldResult = await hiIQRewards.getYield({
-      gasLimit: addGasLimitBuffer(await hiIQRewards.estimateGas.getYield())
-    });
-    return yieldResult;
   }
 
   return 0;
@@ -449,12 +378,8 @@ const increaseUnlockTime = async (wallet, unlockTime, handleConfirmation) => {
 
 export {
   getStats,
-  earned,
   getHiIQAt,
   claim,
-  checkpoint,
-  checkIfTheUserIsInitialized,
-  getYield,
   convertPTokensTx,
   getPTokensUserBalance,
   getTokensUserBalance,
