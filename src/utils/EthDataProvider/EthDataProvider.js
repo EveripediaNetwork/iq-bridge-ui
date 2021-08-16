@@ -13,6 +13,13 @@ import { HiIQRewardsAbi } from "./hiIQRewards.abi";
 import { minterAbi } from "./minter.abi";
 import { ptokenAbi } from "./ptoken.abi";
 
+const getProvider = provider => {};
+
+const getHiIQContract = provider => {
+  return new ethers.providers.Web3Provider(provider);
+  const hiIQ = new ethers.Contract(hiIQAddress, hiIQAbi, provider.getSigner());
+};
+
 const addGasLimitBuffer = value =>
   value
     .mul(ethers.BigNumber.from(10000 + 2000))
