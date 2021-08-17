@@ -65,7 +65,7 @@ const Lock = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
-  const { hashes, setHashes, setTxDone } = useContext(TransactionContext);
+  const { hashes, setHashes } = useContext(TransactionContext);
   const [updatingBalance, setUpdatingBalance] = useState(false);
   const [loadBalance, setLoadBalance] = useState(true);
   const [balance, setBalance] = useState();
@@ -120,8 +120,6 @@ const Lock = () => {
       );
       setLoadBalance(true);
     }
-
-    setTxDone(true);
 
     resetValues();
   };
