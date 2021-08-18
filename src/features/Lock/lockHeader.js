@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { BoxArrowUpRight } from "react-bootstrap-icons";
 import { Button } from "react-bootstrap";
 
+import * as Humanize from "humanize-plus";
 import { ethBasedExplorerUrl, hiIQAddress } from "../../config";
 
 const LockHeader = ({ wallet, currentHiIQ, updatingBalance }) => {
@@ -17,7 +18,7 @@ const LockHeader = ({ wallet, currentHiIQ, updatingBalance }) => {
             <div className="mx-auto d-flex flex-row align-content-center justify-content-center w-75">
               <h3 className="font-weight-normal m-0 d-flex flex-column justify-content-center text-center">
                 {updatingBalance === false ? (
-                  <>{Number(currentHiIQ).toFixed(2)} hiIQ</>
+                  <>{Humanize.intComma(Number(currentHiIQ).toFixed(2))} hiIQ</>
                 ) : (
                   <>{t("updating_balance")}</>
                 )}

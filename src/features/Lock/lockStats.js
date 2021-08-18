@@ -5,8 +5,9 @@ import * as Humanize from "humanize-plus";
 
 import {
   getStats,
-  getHiIQAt,
-  claim
+  getRewardsForTimeCursor,
+  claim,
+  getFeeDistributorCursor
 } from "../../utils/EthDataProvider/EthDataProvider";
 
 const LockStats = ({ wallet, hiIQBalance }) => {
@@ -23,9 +24,12 @@ const LockStats = ({ wallet, hiIQBalance }) => {
   useEffect(() => {
     (async () => {
       const { supply, tvl } = await getStats(wallet);
-      const rewards = await getHiIQAt(wallet);
+      const timeCursor = await getFeeDistributorCursor(wallet);
+      const prevTimeCursor = timeCursor.sub(604800); // one week before
+      const rewards = await getRewardsForTimeCursor(wallet, prevTimeCursor);
 
       setStats({
+        timeCursor,
         apr: Number((hiIQBalance / supply) * 365 * 100).toFixed(2),
         rewards,
         tvl
@@ -44,7 +48,7 @@ const LockStats = ({ wallet, hiIQBalance }) => {
               <>
                 <p className="m-0 text-center">
                   {" "}
-                  <strong>Your APR</strong>
+                  <strong>Current APR</strong>
                   <br />
                   <span>{stats.apr}%</span>
                 </p>
@@ -64,7 +68,22 @@ const LockStats = ({ wallet, hiIQBalance }) => {
               </span>
             </p>
 
-            <hr style={{ margin: "4px 0" }} className="shadow" />
+            <hr className="shadow" />
+
+            <p className="m-0 text-center">
+              {" "}
+              <strong>Next Distribution</strong>
+              <br />
+              <span>
+                <span className="text-info font-weight-normal">
+                  {`${new Date(
+                    stats.timeCursor.toString() * 1000
+                  ).toDateString()}`}
+                </span>{" "}
+              </span>
+            </p>
+
+            <hr className="shadow" />
 
             <p className="m-0 text-center">
               {" "}
@@ -77,7 +96,8 @@ const LockStats = ({ wallet, hiIQBalance }) => {
                 </span>{" "}
               </span>
             </p>
-            <hr style={{ margin: "4px 0" }} className="shadow" />
+            <hr className="shadow m-0 mt-4" />
+
             <div className="container mt-4 text-center">
               <Button
                 disabled={isLoadingClaim}

@@ -49,24 +49,37 @@ const getStats = async wallet => {
   return 0;
 };
 
-const getHiIQAt = async wallet => {
+const getFeeDistributorCursor = async wallet => {
+  const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+
   if (wallet.status === "connected") {
-    const timeParsed = Math.floor(new Date().getTime() / 1000.0);
+    const feeDistributor = new ethers.Contract(
+      feeDistributorAddress,
+      feeDistributorAbi,
+      provider
+    );
+
+    return feeDistributor.timeCursor();
+  }
+
+  return 0;
+};
+
+const getRewardsForTimeCursor = async (wallet, timeCursor) => {
+  if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
 
     const feeDistributor = new ethers.Contract(
       feeDistributorAddress,
       feeDistributorAbi,
-      provider.getSigner()
+      provider
     );
 
-    const result = await feeDistributor.hiIQForAt(wallet.account, timeParsed, {
-      gasLimit: addGasLimitBuffer(
-        await feeDistributor.estimateGas.hiIQForAt(wallet.account, timeParsed)
-      )
-    });
-
-    return ethers.utils.formatEther(result);
+    const result = await feeDistributor.hiIQForAt(wallet.account, timeCursor);
+    const result2 = await feeDistributor.hiIQSupply(timeCursor);
+    const result3 = await feeDistributor.tokensPerWeek(timeCursor);
+    const data = result.mul(result3).div(result2); // TODO: needs more analysis
+    return ethers.utils.formatEther(data);
   }
 
   return 0;
@@ -378,7 +391,7 @@ const increaseUnlockTime = async (wallet, unlockTime, handleConfirmation) => {
 
 export {
   getStats,
-  getHiIQAt,
+  getRewardsForTimeCursor,
   claim,
   convertPTokensTx,
   getPTokensUserBalance,
@@ -390,5 +403,6 @@ export {
   increaseAmount,
   getMaximumLockableTime,
   increaseUnlockTime,
-  getTokensUserBalanceLocked
+  getTokensUserBalanceLocked,
+  getFeeDistributorCursor
 };
