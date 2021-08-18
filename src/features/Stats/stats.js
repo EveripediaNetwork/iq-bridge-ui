@@ -175,7 +175,7 @@ const Stats = () => {
                 </DataRow>
 
                 <DataTitle className="d-flex flex-row justify-content-between">
-                  {t("volume")}
+                  {t("circulating supply")}
                   <span className="font-weight-bold">
                     {totals && totals.volume > 0 ? (
                       <>{showData(totals.volume)}</>
@@ -186,28 +186,28 @@ const Stats = () => {
                   <Icon>
                     <img alt="EOS" src="/tokens/1765.png" />
                   </Icon>
-                  <Title>EOS {t("volume")}</Title>
+                  <Title>EOS {t("circulating supply")}</Title>
                   <Value>{showData(data.volume?.eos)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="ethereum" src="/tokens/1027.png" />
                   </Icon>
-                  <Title>Ethereum {t("volume")}</Title>
+                  <Title>Ethereum {t("circulating supply")}</Title>
                   <Value>{showData(data.volume?.eth)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="polygon" src="/tokens/3890.png" />
                   </Icon>
-                  <Title>Polygon {t("volume")}</Title>
+                  <Title>Polygon {t("circulating supply")}</Title>
                   <Value>{showData(data.volume?.matic)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="BSC" src="/tokens/1839.png" />
                   </Icon>
-                  <Title>BSC {t("volume")}</Title>
+                  <Title>BSC {t("circulating supply")}</Title>
                   <Value>{showData(data.volume?.bsc)}</Value>
                 </DataRow>
                 <DataTitle>HiIQ</DataTitle>
@@ -215,7 +215,7 @@ const Stats = () => {
                   <Icon>
                     <img alt="IQ" src="/tokens/iq.png" />
                   </Icon>
-                  <Title>HiIQ {t("volume")}</Title>
+                  <Title>HiIQ {t("circulating supply")}</Title>
                   <Value>{showData(data.hiiq?.volume)}</Value>
                 </DataRow>
                 <DataRow>
