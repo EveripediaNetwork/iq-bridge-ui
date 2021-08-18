@@ -64,7 +64,7 @@ const StyledToggleButton = styled(ToggleButton)`
 const StyledDescriptionDiv = styled.div`
   border: 1px dashed gray;
   border-radius: 5px;
-  max-width: 270px;
+  max-width: fit-content;
   margin: auto;
   padding: 7px;
   border-color: #388afc;
@@ -72,13 +72,14 @@ const StyledDescriptionDiv = styled.div`
 
 const StyledSpan = styled.span`
   letter-spacing: -0.5px;
+  font-size: 14px;
 `;
 
 const IQIcon = styled.img`
-  width: 15px;
+  width: 20px;
 
   @media (max-width: 768px) {
-    width: 10px;
+    width: 15px;
   }
 `;
 const Lock = () => {
