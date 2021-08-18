@@ -38,7 +38,7 @@ const LockStats = ({ wallet, hiIQBalance }) => {
   }, [wallet]);
 
   return (
-    <Card style={{ width: 220 }} className="shadow p-1">
+    <Card style={{ width: 220 }} className="shadow m-auto p-1">
       <Card.Body className="p-1">
         <h3 className="text-center font-weight-normal">Rewards</h3>
         <hr className="shadow" />

@@ -196,12 +196,12 @@ const Lock = () => {
         className="p-2 mt-3 d-flex flex-row justify-content-center flex-wrap"
         fluid
       >
-        <CardDivContainer className="d-flex flex-row flex-wrap align-items-center">
+        <CardDivContainer className="d-flex flex-row flex-wrap-reverse align-items-center">
           {wallet.account && currentHiIQ ? (
             <LockStats wallet={wallet} hiIQBalance={currentHiIQ} />
           ) : null}
           <FormProvider {...methods}>
-            <Col>
+            <Col className="mb-3">
               <CardTitle title="IQ Bridge" aria-label="lock" icon="🔒" />
               <Card className="mx-auto shadow-sm">
                 <Card.Body>
