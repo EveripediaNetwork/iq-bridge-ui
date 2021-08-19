@@ -197,7 +197,7 @@ const Lock = () => {
         fluid
       >
         <CardDivContainer className="d-flex flex-row flex-wrap-reverse align-items-center">
-          {wallet.account && currentHiIQ ? (
+          {wallet.account ? (
             <LockStats wallet={wallet} hiIQBalance={currentHiIQ} />
           ) : null}
           <FormProvider {...methods}>
