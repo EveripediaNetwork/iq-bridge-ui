@@ -88,9 +88,7 @@ const claim = async wallet => {
     );
 
     const result = await feeDistributor.claim(wallet.account, {
-      gasLimit: addGasLimitBuffer(
-        await feeDistributor.estimateGas.claim(wallet.account)
-      )
+      gasLimit: 800000
     });
 
     return result;
