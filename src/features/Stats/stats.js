@@ -65,20 +65,45 @@ const Stats = () => {
   const { t } = useTranslation();
   // TODO: add translations
   const [data, setData] = useState({});
+  const [totals, setTotals] = useState({});
+
+  const getMappedValue = object => {
+    let val = 0;
+    // eslint-disable-next-line array-callback-return
+    Object.values(object).map(h => {
+      val += Number(h);
+    });
+
+    return val;
+  };
+
   useEffect(() => {
     async function run() {
       const holders = await getTokenHolders();
       setData(prevState => {
         return { ...prevState, ...holders };
       });
+
+      setTotals(prev => ({
+        ...prev,
+        holders: getMappedValue(holders.holders)
+      }));
+
       const volume = await getVolume();
       setData(prevState => {
         return { ...prevState, ...volume };
       });
+
+      setTotals(prev => ({
+        ...prev,
+        volume: getMappedValue(volume.volume)
+      }));
+
       const hiiq = await getHiIQ();
       setData(prevState => {
         return { ...prevState, ...hiiq };
       });
+
       const lp = await getLPs();
       setData(prevState => {
         return { ...prevState, ...lp };
@@ -95,6 +120,7 @@ const Stats = () => {
 
     run();
   }, []);
+
   return (
     <Layout>
       <Container className="p-2 mt-3" fluid>
@@ -109,7 +135,16 @@ const Stats = () => {
             />
             <Card className="mx-auto shadow-sm">
               <Card.Body>
-                <DataTitle>{t("holders")}</DataTitle>
+                <DataTitle className="d-flex flex-row justify-content-between">
+                  {t("holders")}
+
+                  <span className="font-weight-bold">
+                    {totals.holders > 0 ? (
+                      <>{showData(totals.holders)}</>
+                    ) : null}
+                  </span>
+                </DataTitle>
+
                 <DataRow>
                   <Icon>
                     <img alt="EOS" src="/tokens/1765.png" />
@@ -139,76 +174,48 @@ const Stats = () => {
                   <Value>{showData(data.holders?.bsc)}</Value>
                 </DataRow>
 
-                <DataTitle>{t("volume")}</DataTitle>
+                <DataTitle className="d-flex flex-row justify-content-between">
+                  {t("circulating supply")}
+                  <span className="font-weight-bold">
+                    {totals && totals.volume > 0 ? (
+                      <>{showData(totals.volume)}</>
+                    ) : null}
+                  </span>
+                </DataTitle>
                 <DataRow>
                   <Icon>
                     <img alt="EOS" src="/tokens/1765.png" />
                   </Icon>
-                  <Title>EOS {t("volume")}</Title>
+                  <Title>EOS {t("circulating supply")}</Title>
                   <Value>{showData(data.volume?.eos)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="ethereum" src="/tokens/1027.png" />
                   </Icon>
-                  <Title>Ethereum {t("volume")}</Title>
+                  <Title>Ethereum {t("circulating supply")}</Title>
                   <Value>{showData(data.volume?.eth)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="polygon" src="/tokens/3890.png" />
                   </Icon>
-                  <Title>Polygon {t("volume")}</Title>
+                  <Title>Polygon {t("circulating supply")}</Title>
                   <Value>{showData(data.volume?.matic)}</Value>
                 </DataRow>
                 <DataRow>
                   <Icon>
                     <img alt="BSC" src="/tokens/1839.png" />
                   </Icon>
-                  <Title>BSC {t("volume")}</Title>
+                  <Title>BSC {t("circulating supply")}</Title>
                   <Value>{showData(data.volume?.bsc)}</Value>
                 </DataRow>
-
-                <DataTitle>{t("total")}</DataTitle>
-                <DataRow>
-                  <Icon>
-                    <img alt="IQ" src="/tokens/iq.png" />
-                  </Icon>
-                  <Title>
-                    {t("total")} {t("volume")}
-                  </Title>
-                  <Value>
-                    {showData(
-                      parseInt(data.volume?.eos || 0, 10) +
-                        parseInt(data.volume?.eth || 0, 10) +
-                        parseInt(data.volume?.matic || 0, 10) +
-                        parseInt(data.volume?.bsc || 0, 10)
-                    )}
-                  </Value>
-                </DataRow>
-                <DataRow>
-                  <Icon>
-                    <img alt="IQ" src="/tokens/iq.png" />
-                  </Icon>
-                  <Title>
-                    {t("total")} {t("holders")}
-                  </Title>
-                  <Value>
-                    {showData(
-                      parseInt(data.holders?.eos || 0, 10) +
-                        parseInt(data.holders?.eth || 0, 10) +
-                        parseInt(data.holders?.matic || 0, 10) +
-                        parseInt(data.holders?.bsc || 0, 10)
-                    )}
-                  </Value>
-                </DataRow>
-
                 <DataTitle>HiIQ</DataTitle>
                 <DataRow>
                   <Icon>
                     <img alt="IQ" src="/tokens/iq.png" />
                   </Icon>
-                  <Title>HiIQ {t("volume")}</Title>
+                  <Title>HiIQ {t("circulating supply")}</Title>
                   <Value>{showData(data.hiiq?.volume)}</Value>
                 </DataRow>
                 <DataRow>

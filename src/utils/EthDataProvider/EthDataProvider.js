@@ -13,6 +13,18 @@ import { feeDistributorAbi } from "./feeDistributor.abi";
 import { minterAbi } from "./minter.abi";
 import { ptokenAbi } from "./ptoken.abi";
 
+const getHiIQContract = provider =>
+  new ethers.Contract(hiIQAddress, hiIQAbi, provider.getSigner());
+
+const getERC20IQContract = provider =>
+  new ethers.Contract(iqAddress, erc20Abi, provider.getSigner());
+
+const getERC20PIQ = provider =>
+  new ethers.Contract(pIQAddress, erc20Abi, provider.getSigner());
+
+const getPMinter = provider =>
+  new ethers.Contract(pMinterAddress, minterAbi, provider.getSigner());
+
 const addGasLimitBuffer = value =>
   value
     .mul(ethers.BigNumber.from(10000 + 2000))
@@ -114,7 +126,7 @@ const needsApproval = async (provider, erc20, amount, spender, hashes) => {
 const getPTokensUserBalance = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-    const erc20 = new ethers.Contract(pIQAddress, erc20Abi, provider);
+    const erc20 = getERC20PIQ(provider);
     const balanc = await erc20.balanceOf(wallet.account);
     return ethers.utils.formatEther(balanc);
   }
@@ -124,7 +136,9 @@ const getPTokensUserBalance = async wallet => {
 const getTokensUserBalance = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-    const erc20 = new ethers.Contract(iqAddress, erc20Abi, provider);
+
+    const erc20 = getERC20IQContract(provider);
+
     const balanc = await erc20.balanceOf(wallet.account);
     return ethers.utils.formatEther(balanc);
   }
@@ -146,16 +160,11 @@ const convertPTokensTx = async (amount, wallet) => {
   const amountParsed = ethers.utils.parseEther(amount).toString();
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-    const erc20 = new ethers.Contract(
-      pIQAddress,
-      erc20Abi,
-      provider.getSigner()
-    );
-    const pMinter = new ethers.Contract(
-      pMinterAddress,
-      minterAbi,
-      provider.getSigner()
-    );
+
+    const erc20 = getERC20PIQ(provider);
+
+    const pMinter = getPMinter(provider);
+
     const hashes = await needsApproval(
       provider,
       erc20,
@@ -178,21 +187,17 @@ const reverseIQtoEOSTx = async (amount, wallet, eosAccount) => {
   const amountParsed = ethers.utils.parseEther(amount).toString();
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-    const erc20 = new ethers.Contract(
-      iqAddress,
-      erc20Abi,
-      provider.getSigner()
-    );
+
+    const erc20 = getERC20IQContract(wallet);
+
     const pTokens = new ethers.Contract(
       pIQAddress,
       ptokenAbi,
       provider.getSigner()
     );
-    const pMinter = new ethers.Contract(
-      pMinterAddress,
-      minterAbi,
-      provider.getSigner()
-    );
+
+    const pMinter = getPMinter(provider);
+
     await needsApproval(provider, erc20, amountParsed, pMinterAddress, []);
     await pMinter.burn(amountParsed);
     await pTokens.redeem(amountParsed, eosAccount, {
@@ -215,16 +220,9 @@ const lockTokensTx = async (amount, time, wallet, handleConfirmation) => {
   const timeParsed = Math.floor(d.getTime() / 1000.0);
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-    const erc20 = new ethers.Contract(
-      iqAddress,
-      erc20Abi,
-      provider.getSigner()
-    );
-    const hiIQ = new ethers.Contract(
-      hiIQAddress,
-      hiIQAbi,
-      provider.getSigner()
-    );
+
+    const erc20 = getERC20IQContract(provider);
+    const hiIQ = getHiIQContract(provider);
 
     const hashes = await needsApproval(
       provider,
@@ -256,11 +254,7 @@ const lockTokensTx = async (amount, time, wallet, handleConfirmation) => {
 const withdraw = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-    const hiIQ = new ethers.Contract(
-      hiIQAddress,
-      hiIQAbi,
-      provider.getSigner()
-    );
+    const hiIQ = getHiIQContract(provider);
 
     const result = await hiIQ.withdraw({
       gasLimit: addGasLimitBuffer(await hiIQ.estimateGas.withdraw())
@@ -275,11 +269,7 @@ const withdraw = async wallet => {
 const getLockedEnd = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-    const hiIQ = new ethers.Contract(
-      hiIQAddress,
-      hiIQAbi,
-      provider.getSigner()
-    );
+    const hiIQ = getHiIQContract(provider);
 
     const result = await hiIQ.locked__end(wallet.account);
 
@@ -309,16 +299,9 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
 
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-    const erc20 = new ethers.Contract(
-      iqAddress,
-      erc20Abi,
-      provider.getSigner()
-    );
-    const hiIQ = new ethers.Contract(
-      hiIQAddress,
-      hiIQAbi,
-      provider.getSigner()
-    );
+    const erc20 = getERC20IQContract(provider);
+
+    const hiIQ = getHiIQContract(provider);
 
     const hashes = await needsApproval(
       provider,
@@ -352,11 +335,7 @@ const increaseUnlockTime = async (wallet, unlockTime, handleConfirmation) => {
     const timeParsed = Math.floor(unlockTime / 1000.0);
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
 
-    const hiIQ = new ethers.Contract(
-      hiIQAddress,
-      hiIQAbi,
-      provider.getSigner()
-    );
+    const hiIQ = getHiIQContract(provider);
 
     const result = await hiIQ.increase_unlock_time(timeParsed, {
       gasLimit: addGasLimitBuffer(
