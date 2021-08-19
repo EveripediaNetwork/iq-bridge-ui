@@ -25,8 +25,7 @@ const LockStats = ({ wallet, hiIQBalance }) => {
     (async () => {
       const { supply, tvl } = await getStats(wallet);
       const timeCursor = await getFeeDistributorCursor(wallet);
-      const prevTimeCursor = timeCursor.sub(604800); // one week before
-      const rewards = await getRewardsForTimeCursor(wallet, prevTimeCursor);
+      const rewards = await getRewardsForTimeCursor(wallet, timeCursor);
 
       setStats({
         timeCursor,
@@ -87,7 +86,7 @@ const LockStats = ({ wallet, hiIQBalance }) => {
 
             <p className="m-0 text-center">
               {" "}
-              <strong>Unclaimed Rewards</strong>
+              <strong>Your Rewards</strong>
               <br />
               <span>
                 <span className="text-info font-weight-normal">

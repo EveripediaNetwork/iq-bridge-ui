@@ -78,11 +78,25 @@ const getRewardsForTimeCursor = async (wallet, timeCursor) => {
       feeDistributorAbi,
       provider
     );
+    let data = ethers.BigNumber.from(0);
+    let time = await feeDistributor.startTime();
+    // TODO: make sure its always 2 weeks
+    while (time.lt(timeCursor.sub(604800 * 2))) {
+      // eslint-disable-next-line no-await-in-loop
+      const result = await feeDistributor.hiIQForAt(wallet.account, time);
+      // eslint-disable-next-line no-await-in-loop
+      const result2 = await feeDistributor.hiIQSupply(time);
+      // eslint-disable-next-line no-await-in-loop
+      const result3 = await feeDistributor.tokensPerWeek(time);
 
-    const result = await feeDistributor.hiIQForAt(wallet.account, timeCursor);
-    const result2 = await feeDistributor.hiIQSupply(timeCursor);
-    const result3 = await feeDistributor.tokensPerWeek(timeCursor);
-    const data = result.mul(result3).div(result2); // TODO: needs more analysis
+      if (result2.gt(0)) {
+        data = data.add(result.mul(result3).div(result2));
+      }
+
+      time = time.add(604800);
+      // console.log(new Date(time.toString() * 1000));
+    }
+
     return ethers.utils.formatEther(data);
   }
 
