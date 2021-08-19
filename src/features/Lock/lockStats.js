@@ -91,7 +91,7 @@ const LockStats = ({ wallet, hiIQBalance }) => {
               <br />
               <span>
                 <span className="text-info font-weight-normal">
-                  {Humanize.intComma(stats.rewards)}{" "}
+                  {Humanize.toFixed(stats.rewards, 4)}{" "}
                   <strong className="text-dark">IQ</strong>
                 </span>{" "}
               </span>
