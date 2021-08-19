@@ -150,7 +150,7 @@ export const resources = {
       // lock
       lock: "락업",
       lock_description:
-        "The longer you lock your IQ, the more hiIQ you will receive. hiIQ decays slowly over your locking period, eventually reaching 1-to-1 with IQ.",
+        "IQ를 오래 잠글수록 더 많은 hiIQ를 받게됩니다. hiIQ는 잠금 기간 동안 천천히 감소하여 결국 IQ와 1 : 1에 도달합니다.",
       withdraw: "Withdraw",
       expired: "Expired",
       expiring_on: "Expiring on",
