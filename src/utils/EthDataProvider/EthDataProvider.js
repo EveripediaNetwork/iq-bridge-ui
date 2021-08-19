@@ -134,11 +134,7 @@ const getTokensUserBalance = async wallet => {
 const getTokensUserBalanceLocked = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-    const hiIQ = new ethers.Contract(
-      hiIQAddress,
-      hiIQAbi,
-      provider.getSigner()
-    );
+    const hiIQ = new ethers.Contract(hiIQAddress, hiIQAbi, provider);
 
     const balanc = await hiIQ["balanceOf(address)"](wallet.account);
     return ethers.utils.formatEther(balanc);
