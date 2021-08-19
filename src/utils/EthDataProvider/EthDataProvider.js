@@ -22,17 +22,9 @@ const getStats = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
 
-    const hiIQ = new ethers.Contract(
-      hiIQAddress,
-      hiIQAbi,
-      provider.getSigner()
-    );
+    const hiIQ = new ethers.Contract(hiIQAddress, hiIQAbi, provider);
 
-    const erc20 = new ethers.Contract(
-      iqAddress,
-      erc20Abi,
-      provider.getSigner()
-    );
+    const erc20 = new ethers.Contract(iqAddress, erc20Abi, provider);
 
     const supplyResult = await hiIQ["totalSupply()"]();
 
