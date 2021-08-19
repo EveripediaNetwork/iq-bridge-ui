@@ -10,7 +10,7 @@ import {
   getFeeDistributorCursor
 } from "../../utils/EthDataProvider/EthDataProvider";
 
-const LockStats = ({ wallet, hiIQBalance = 100 }) => {
+const LockStats = ({ wallet, hiIQBalance }) => {
   const [stats, setStats] = useState();
   const [isLoadingClaim, setLoadingClaim] = useState(false);
 
