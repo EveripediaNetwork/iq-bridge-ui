@@ -61,6 +61,27 @@ const StyledToggleButton = styled(ToggleButton)`
   min-width: 135px;
 `;
 
+const StyledDescriptionDiv = styled.div`
+  border: 1px dashed gray;
+  border-radius: 5px;
+  max-width: fit-content;
+  margin: auto;
+  padding: 7px;
+  border-color: #388afc;
+`;
+
+const StyledSpan = styled.span`
+  letter-spacing: -0.5px;
+  font-size: 14px;
+`;
+
+const IQIcon = styled.img`
+  width: 20px;
+
+  @media (max-width: 768px) {
+    width: 15px;
+  }
+`;
 const Lock = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
@@ -230,6 +251,24 @@ const Lock = () => {
                     <Accordion.Collapse eventKey="0">
                       <HeaderText className="shadow-sm rounded p-3 text-justify m-3 highlight">
                         {t("lock_description")}
+                        <StyledDescriptionDiv className="shadow-sm mt-3 d-flex flex-column align-items-start">
+                          <StyledSpan>
+                            <IQIcon src={token1.icon} /> <strong>1 IQ</strong>{" "}
+                            locked for 4 years ≈ <strong>3.99 HiIQ</strong>
+                          </StyledSpan>
+                          <StyledSpan>
+                            <IQIcon src={token1.icon} /> <strong>1 IQ</strong>{" "}
+                            locked for 3 years ≈ <strong>3.24 HiIQ</strong>
+                          </StyledSpan>
+                          <StyledSpan>
+                            <IQIcon src={token1.icon} /> <strong>1 IQ</strong>{" "}
+                            locked for 2 years ≈ <strong>2.50 HiIQ</strong>
+                          </StyledSpan>
+                          <StyledSpan>
+                            <IQIcon src={token1.icon} /> <strong>1 IQ</strong>{" "}
+                            locked for 1 year ≈ <strong>1.75 HiIQ</strong>
+                          </StyledSpan>
+                        </StyledDescriptionDiv>
                       </HeaderText>
                     </Accordion.Collapse>
                   </Accordion>
