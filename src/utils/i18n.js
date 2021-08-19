@@ -280,7 +280,7 @@ export const resources = {
       // lock
       lock: "锁",
       lock_description:
-        "The longer you lock your IQ, the more hiIQ you will receive. hiIQ decays slowly over your locking period, eventually reaching 1-to-1 with IQ.",
+        "锁定 IQ 的时间越长，您获得的 hiIQ 就越多。hiIQ 在锁定期间缓慢衰减，最终与 IQ 达到 1 比 1。",
       withdraw: "Withdraw",
       expired: "Expired",
       expiring_on: "Expiring on",
