@@ -29,7 +29,7 @@ const LockStats = ({ wallet, hiIQBalance }) => {
 
       setStats({
         timeCursor,
-        apr: Number((hiIQBalance / supply) * 365 * 100).toFixed(2),
+        apr: Number((hiIQBalance / supply) * 365 * 100).toFixed(2), // TODO: calculate APR based in time their stake
         rewards,
         tvl
       });
@@ -99,7 +99,7 @@ const LockStats = ({ wallet, hiIQBalance }) => {
 
             <div className="container mt-4 text-center">
               <Button
-                disabled={isLoadingClaim}
+                disabled={isLoadingClaim || stats.rewards <= 0}
                 onClick={handleClaim}
                 size="sm"
                 variant="success"

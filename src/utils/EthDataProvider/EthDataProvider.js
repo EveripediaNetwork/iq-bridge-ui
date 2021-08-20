@@ -69,6 +69,8 @@ const getFeeDistributorCursor = async wallet => {
   return 0;
 };
 
+const WEEK = 604800;
+
 const getRewardsForTimeCursor = async (wallet, timeCursor) => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
@@ -80,21 +82,29 @@ const getRewardsForTimeCursor = async (wallet, timeCursor) => {
     );
     let data = ethers.BigNumber.from(0);
     let time = await feeDistributor.startTime();
-    // TODO: make sure its always 2 weeks
-    while (time.lt(timeCursor.sub(604800 * 2))) {
-      // eslint-disable-next-line no-await-in-loop
-      const result = await feeDistributor.hiIQForAt(wallet.account, time);
-      // eslint-disable-next-line no-await-in-loop
-      const result2 = await feeDistributor.hiIQSupply(time);
-      // eslint-disable-next-line no-await-in-loop
-      const result3 = await feeDistributor.tokensPerWeek(time);
+    const address = wallet.account; // wallet.account
 
-      if (result2.gt(0)) {
-        data = data.add(result.mul(result3).div(result2));
+    const currentCursor = await feeDistributor.timeCursorOf(address);
+    while (time.lt(timeCursor.sub(WEEK * 2))) {
+      // if user didnt claim
+      if (currentCursor.lt(time)) {
+        // eslint-disable-next-line no-await-in-loop
+        const result = await feeDistributor.hiIQForAt(address, time);
+        if (result.gt(0)) {
+          // eslint-disable-next-line no-await-in-loop
+          const result2 = await feeDistributor.hiIQSupply(time);
+          if (result2.gt(0)) {
+            // eslint-disable-next-line no-await-in-loop
+            const result3 = await feeDistributor.tokensPerWeek(time);
+            data = data.add(result.mul(result3).div(result2));
+          }
+        }
       }
 
-      time = time.add(604800);
+      // console.log(time.toString());
       // console.log(new Date(time.toString() * 1000));
+
+      time = time.add(WEEK);
     }
 
     return ethers.utils.formatEther(data);
