@@ -1,4 +1,4 @@
-import React, { memo, useContext, useEffect, useState /* lazy */ } from "react";
+import React, { memo, useContext, useEffect, useState, lazy } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import {
@@ -35,7 +35,7 @@ import {
 import InfoSwapCard from "../../components/ui/infoSwapCard";
 import { TransactionContext } from "../../context/transactionContext";
 
-// const RewardsPage = lazy(() => import("../Rewards/rewards"));
+const LockStats = lazy(() => import("./lockStats"));
 
 const HeaderText = styled.div`
   background-color: #f7f7f9;
@@ -86,7 +86,7 @@ const Lock = () => {
   const { t } = useTranslation();
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
-  const { hashes, setHashes, setTxDone } = useContext(TransactionContext);
+  const { hashes, setHashes } = useContext(TransactionContext);
   const [updatingBalance, setUpdatingBalance] = useState(false);
   const [loadBalance, setLoadBalance] = useState(true);
   const [balance, setBalance] = useState();
@@ -119,7 +119,6 @@ const Lock = () => {
   const onSubmit = async data => {
     if (!wallet.account) return;
 
-    // setLoadBalance(false);
     setUpdatingBalance(true);
 
     if (currentHiIQ !== 0) {
@@ -142,8 +141,6 @@ const Lock = () => {
       );
       setLoadBalance(true);
     }
-
-    setTxDone(true);
 
     resetValues();
   };
@@ -209,7 +206,6 @@ const Lock = () => {
     if (wallet.status === "connected" && wallet.ethereum)
       (async () => {
         setCurrentHiIQ(Number(await getTokensUserBalanceLocked(wallet)));
-        // setLoadingBalance(false);
         setLoadBalance(false);
         setUpdatingBalance(false);
       })();
@@ -221,9 +217,12 @@ const Lock = () => {
         className="p-2 mt-3 d-flex flex-row justify-content-center flex-wrap"
         fluid
       >
-        <CardDivContainer className="d-flex flex-row flex-wrap align-items-start">
+        <CardDivContainer className="d-flex flex-row flex-wrap-reverse align-items-center">
+          {wallet.account && currentHiIQ > 0 ? (
+            <LockStats wallet={wallet} hiIQBalance={currentHiIQ} />
+          ) : null}
           <FormProvider {...methods}>
-            <Col>
+            <Col className="mb-3">
               <CardTitle title="IQ Bridge" aria-label="lock" icon="🔒" />
               <Card className="mx-auto shadow-sm">
                 <Card.Body>
@@ -234,7 +233,6 @@ const Lock = () => {
                           wallet={wallet}
                           currentHiIQ={currentHiIQ}
                           updatingBalance={updatingBalance}
-                          // loadingBalance={loadingBalance}
                         />
                       )}
                       <Accordion.Toggle
@@ -413,9 +411,6 @@ const Lock = () => {
               )}
             </Col>
           </FormProvider>
-          {/* {currentHiIQ && currentHiIQ > 0 ? (
-            <RewardsPage setLoadBalance={val => setLoadBalance(val)} />
-          ) : null} */}
         </CardDivContainer>
       </Container>
     </Layout>
