@@ -3,6 +3,7 @@ import { Card, Button } from "react-bootstrap";
 import PropTypes from "prop-types";
 import * as Humanize from "humanize-plus";
 
+import { ethers } from "ethers";
 import {
   getStats,
   getRewardsForTimeCursor,
@@ -23,13 +24,16 @@ const LockStats = ({ wallet, hiIQBalance }) => {
 
   useEffect(() => {
     (async () => {
-      const { supply, tvl } = await getStats(wallet);
       const timeCursor = await getFeeDistributorCursor(wallet);
+      const { yourDailyRewards, tvl } = await getStats(wallet, timeCursor);
       const rewards = await getRewardsForTimeCursor(wallet, timeCursor);
-
+      const hiIQBalanceBN = ethers.utils.parseEther(hiIQBalance.toString());
+      const apr = Number(
+        yourDailyRewards.mul(36500).div(hiIQBalanceBN)
+      ).toFixed(2);
       setStats({
         timeCursor,
-        apr: Number((hiIQBalance / supply) * 365 * 100).toFixed(2), // TODO: calculate APR based in time their stake
+        apr, // TODO: calculate APR based in time their stake
         rewards,
         tvl
       });

@@ -13,6 +13,8 @@ import { feeDistributorAbi } from "./feeDistributor.abi";
 import { minterAbi } from "./minter.abi";
 import { ptokenAbi } from "./ptoken.abi";
 
+const WEEK = 604800;
+
 const getHiIQContract = provider =>
   new ethers.Contract(hiIQAddress, hiIQAbi, provider.getSigner());
 
@@ -30,22 +32,35 @@ const addGasLimitBuffer = value =>
     .mul(ethers.BigNumber.from(10000 + 2000))
     .div(ethers.BigNumber.from(10000));
 
-const getStats = async wallet => {
+const getStats = async (wallet, timeCursor) => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-
-    const hiIQ = new ethers.Contract(hiIQAddress, hiIQAbi, provider);
-
     const erc20 = new ethers.Contract(iqAddress, erc20Abi, provider);
 
-    const supplyResult = await hiIQ["totalSupply()"]();
+    const feeDistributor = new ethers.Contract(
+      feeDistributorAddress,
+      feeDistributorAbi,
+      provider
+    );
 
     const totalValueLockedResult = await erc20["balanceOf(address)"](
       hiIQAddress
     );
 
+    const time = timeCursor.sub(WEEK * 2);
+    const yourHiIQ = await feeDistributor.hiIQForAt(wallet.account, time);
+    let data = ethers.BigNumber.from(0);
+    if (yourHiIQ.gt(0)) {
+      const result2 = await feeDistributor.hiIQSupply(time);
+      if (result2.gt(0)) {
+        const result3 = await feeDistributor.tokensPerWeek(time);
+        data = data.add(yourHiIQ.mul(result3).div(result2));
+      }
+    }
+    const yourDailyRewards = data.div(7);
+
     return {
-      supply: ethers.utils.formatEther(supplyResult),
+      yourDailyRewards,
       tvl: ethers.utils.formatEther(totalValueLockedResult)
     };
   }
@@ -68,8 +83,6 @@ const getFeeDistributorCursor = async wallet => {
 
   return 0;
 };
-
-const WEEK = 604800;
 
 const getRewardsForTimeCursor = async (wallet, timeCursor) => {
   if (wallet.status === "connected") {
