@@ -225,7 +225,7 @@ const reverseIQtoEOSTx = async (amount, wallet, eosAccount) => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
 
-    const erc20 = getERC20IQContract(wallet);
+    const erc20 = getERC20IQContract(provider);
 
     const pTokens = new ethers.Contract(
       pIQAddress,
