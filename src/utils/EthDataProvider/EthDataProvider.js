@@ -47,7 +47,7 @@ const getStats = async (wallet, timeCursor) => {
       hiIQAddress
     );
 
-    const time = timeCursor.sub(WEEK * 3);
+    const time = timeCursor.sub(WEEK * 2);
     const yourHiIQ = await feeDistributor.hiIQForAt(wallet.account, time);
     let data = ethers.BigNumber.from(0);
     if (yourHiIQ.gt(0)) {
