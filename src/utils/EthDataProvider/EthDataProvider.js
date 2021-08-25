@@ -95,10 +95,10 @@ const getRewardsForTimeCursor = async (wallet, timeCursor) => {
     );
     let data = ethers.BigNumber.from(0);
     let time = await feeDistributor.startTime();
-    const address = wallet.account; // wallet.account
+    const address = wallet.account;
 
     const currentCursor = await feeDistributor.timeCursorOf(address);
-    while (time.lt(timeCursor.sub(WEEK * 2))) {
+    while (time.lt(timeCursor.sub(WEEK))) {
       // if user didnt claim
       if (currentCursor.lt(time)) {
         // eslint-disable-next-line no-await-in-loop
