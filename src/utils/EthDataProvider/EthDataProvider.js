@@ -250,7 +250,12 @@ const reverseIQtoEOSTx = async (amount, wallet, eosAccount) => {
 };
 
 const lockTokensTx = async (amount, time, wallet, handleConfirmation) => {
-  const amountParsed = ethers.utils.parseEther(amount).toString();
+  let intAmount = amount;
+  intAmount = Math.floor(Number(intAmount));
+  intAmount = intAmount.toString();
+
+  const amountParsed = ethers.utils.parseEther(intAmount).toString();
+
   const d = new Date();
   d.setDate(d.getDate() + time);
 
@@ -332,7 +337,11 @@ const getMaximumLockableTime = async (wallet, lockEnd) => {
 };
 
 const increaseAmount = async (amount, wallet, handleConfirmation) => {
-  const amountParsed = ethers.utils.parseEther(amount).toString();
+  let intAmount = amount;
+  intAmount = Math.floor(Number(intAmount));
+  intAmount = intAmount.toString();
+
+  const amountParsed = ethers.utils.parseEther(intAmount).toString();
 
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);

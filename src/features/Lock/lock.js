@@ -355,6 +355,7 @@ const Lock = () => {
                         !wallet.account ||
                         (!balance && radioValue === 1) ||
                         (balance === 0 && radioValue === 1) ||
+                        filledAmount < 1 ||
                         (!filledAmount &&
                           currentHiIQ !== 0 &&
                           radioValue === 1) ||
