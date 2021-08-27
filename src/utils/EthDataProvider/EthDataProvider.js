@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { CoinGeckoClient } from "../coingecko.api";
 
 import {
   hiIQAddress,
@@ -14,6 +15,7 @@ import { minterAbi } from "./minter.abi";
 import { ptokenAbi } from "./ptoken.abi";
 
 const WEEK = 604800;
+const YEARLY_REWARDS = 365000000;
 
 const getHiIQContract = provider =>
   new ethers.Contract(hiIQAddress, hiIQAbi, provider.getSigner());
@@ -50,10 +52,24 @@ const getStats = async (wallet, timeCursor) => {
     const time = timeCursor.sub(WEEK * 2);
     const yourHiIQ = await feeDistributor.hiIQForAt(wallet.account, time);
     let data = ethers.BigNumber.from(0);
+
+    const result2 = await feeDistributor.hiIQSupply(time);
+    console.log(`SUPPLY: ${ethers.utils.formatEther(result2)}`);
+
+    const result3 = await feeDistributor.tokensPerWeek(time);
+
+    console.log(`TOKENS PER WEEK: ${ethers.utils.formatEther(result3)}`);
+    console.log(
+      `TOTAL VALUE LOCKED RESULT: ${ethers.utils.formatEther(
+        totalValueLockedResult
+      )}`
+    );
+
     if (yourHiIQ.gt(0)) {
       const result2 = await feeDistributor.hiIQSupply(time);
       if (result2.gt(0)) {
         const result3 = await feeDistributor.tokensPerWeek(time);
+
         data = data.add(yourHiIQ.mul(result3).div(result2));
       }
     }
@@ -61,7 +77,8 @@ const getStats = async (wallet, timeCursor) => {
 
     return {
       yourDailyRewards,
-      tvl: ethers.utils.formatEther(totalValueLockedResult)
+      tvl: ethers.utils.formatEther(totalValueLockedResult),
+      apr: (YEARLY_REWARDS / totalValueLockedResult) / (await CoinGeckoClient.coins.)
     };
   }
 
