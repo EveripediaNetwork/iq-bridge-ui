@@ -34,7 +34,8 @@ import {
   getMaximumLockableTime,
   withdraw,
   getLockedEnd,
-  lockTokensTx
+  lockTokensTx,
+  callCheckpoint
 } from "../../utils/EthDataProvider/EthDataProvider";
 import InfoSwapCard from "../../components/ui/infoSwapCard";
 import { TransactionContext } from "../../context/transactionContext";
@@ -146,6 +147,8 @@ const Lock = () => {
       );
       setLoadBalance(true);
     }
+
+    await callCheckpoint(wallet);
 
     resetValues();
   };
@@ -375,7 +378,7 @@ const Lock = () => {
                           (currentHiIQ === 0 && balance === 0) ||
                           (currentHiIQ === 0 && !filledAmount)
                         }
-                        variant="light"
+                        variant="outline-dark"
                         className="text-capitalize w-75 font-weight-bold"
                         type="submit"
                         size="lg"

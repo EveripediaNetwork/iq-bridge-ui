@@ -2,15 +2,13 @@ import React, { memo, useEffect, useState } from "react";
 import { Card, Button } from "react-bootstrap";
 import PropTypes from "prop-types";
 import * as Humanize from "humanize-plus";
-import { ethers } from "ethers";
 import { JournalText } from "react-bootstrap-icons";
 
-import { ethBasedExplorerUrl, feeDistributorAddress } from "../../config";
+import { ethBasedExplorerUrl, hiIQRewardsAddress } from "../../config";
 import {
-  getStats,
-  getRewardsForTimeCursor,
-  claim,
-  getFeeDistributorCursor
+  callCheckpoint,
+  earned,
+  getYield
 } from "../../utils/EthDataProvider/EthDataProvider";
 
 const RewardStats = ({ wallet, hiIQBalance }) => {
@@ -19,26 +17,23 @@ const RewardStats = ({ wallet, hiIQBalance }) => {
 
   const handleClaim = async () => {
     setLoadingClaim(true);
-    const result = await claim(wallet);
+    const result = await getYield(wallet);
     await result.wait();
     setLoadingClaim(false);
+    await callCheckpoint(wallet);
   };
 
   useEffect(() => {
     (async () => {
-      const timeCursor = await getFeeDistributorCursor(wallet);
-      const { yourDailyRewards, tvl, apr } = await getStats(wallet, timeCursor);
-      const rewards = await getRewardsForTimeCursor(wallet, timeCursor);
-      const hiIQBalanceBN = ethers.utils.parseEther(hiIQBalance.toString());
-      console.log(apr);
+      const rewards = await earned(wallet);
+      console.log(rewards);
       // const apr = Number(
       //   yourDailyRewards.mul(36500).div(hiIQBalanceBN)
       // ).toFixed(2);
       setStats({
-        timeCursor,
-        apr, // TODO: calculate APR based in time their stake
-        rewards,
-        tvl
+        // apr, // TODO: calculate APR based in time their stake
+        rewards
+        //tvl
       });
     })();
   }, [wallet]);
@@ -52,7 +47,7 @@ const RewardStats = ({ wallet, hiIQBalance }) => {
             target="_blank"
             rel="noopener noreferrrer"
             className="text-dark ml-2"
-            href={`${ethBasedExplorerUrl}address/${feeDistributorAddress}`}
+            href={`${ethBasedExplorerUrl}address/${hiIQRewardsAddress}`}
           >
             <JournalText size="20px" />
           </a>
@@ -86,7 +81,7 @@ const RewardStats = ({ wallet, hiIQBalance }) => {
 
             <hr className="shadow" />
 
-            <p className="m-0 text-center">
+            {/* <p className="m-0 text-center">
               {" "}
               <strong>Next Distribution</strong>
               <br />
@@ -97,7 +92,7 @@ const RewardStats = ({ wallet, hiIQBalance }) => {
                   ).toDateString()}`}
                 </span>{" "}
               </span>
-            </p>
+            </p> */}
 
             <hr className="shadow" />
 
