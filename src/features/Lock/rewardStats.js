@@ -8,6 +8,7 @@ import { ethBasedExplorerUrl, hiIQRewardsAddress } from "../../config";
 import {
   callCheckpoint,
   earned,
+  getStats,
   getYield
 } from "../../utils/EthDataProvider/EthDataProvider";
 
@@ -27,13 +28,15 @@ const RewardStats = ({ wallet, hiIQBalance }) => {
     (async () => {
       const rewards = await earned(wallet);
       console.log(rewards);
+      const { tvl, apr } = await getStats(wallet);
       // const apr = Number(
       //   yourDailyRewards.mul(36500).div(hiIQBalanceBN)
       // ).toFixed(2);
+      console.log(tvl);
       setStats({
-        // apr, // TODO: calculate APR based in time their stake
-        rewards
-        //tvl
+        apr, // TODO: calculate APR based in time their stake
+        rewards,
+        tvl
       });
     })();
   }, [wallet]);

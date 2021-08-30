@@ -79,63 +79,44 @@ const getYield = async wallet => {
   return 0;
 };
 
-// const getStats = async (wallet, timeCursor) => {
-//   if (wallet.status === "connected") {
-//     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-//     const erc20 = new ethers.Contract(iqAddress, erc20Abi, provider);
+const getStats = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+    const erc20 = new ethers.Contract(iqAddress, erc20Abi, provider);
+    const hiIQRewards = getHiIQRewardsContract(provider, true);
 
-//     const feeDistributor = new ethers.Contract(
-//       feeDistributorAddress,
-//       feeDistributorAbi,
-//       provider
-//     );
+    const totalValueLockedResult = await erc20["balanceOf(address)"](
+      hiIQAddress
+    );
 
-//     const totalValueLockedResult = await erc20["balanceOf(address)"](
-//       hiIQAddress
-//     );
+    const totalhIIQSupply = await hiIQRewards.totalHiIQSupplyStored();
+    const yieldForDurationResult = await hiIQRewards.getYieldForDuration();
 
-//     const time = timeCursor.sub(WEEK * 2);
-//     const yourHiIQ = await feeDistributor.hiIQForAt(wallet.account, time);
-//     let data = ethers.BigNumber.from(0);
+    console.log(`SUPPLY: ${ethers.utils.formatEther(totalhIIQSupply)}`);
 
-//     const result2 = await feeDistributor.hiIQSupply(time);
-//     console.log(`SUPPLY: ${ethers.utils.formatEther(result2)}`);
+    console.log(
+      `TOTAL VALUE LOCKED RESULT: ${ethers.utils.formatEther(
+        totalValueLockedResult
+      )}`
+    );
 
-//     const result3 = await feeDistributor.tokensPerWeek(time);
+    const coinData = await CoinGeckoClient.coins.fetch("everipedia", {});
+    const iqPrice = coinData.data.tickers[7].last;
+    const yieldForDuration = ethers.utils.formatEther(yieldForDurationResult); // TODO: ask this
+    const yieldValueUsd = yieldForDuration * iqPrice;
+    const yearlyYieldDollarValue = yieldValueUsd * STAKING_PERIODS_PER_YEAR;
+    const yearlyYieldPerHiIQ =
+      yearlyYieldDollarValue / ethers.utils.formatEther(totalValueLockedResult);
 
-//     console.log(`TOKENS PER WEEK: ${ethers.utils.formatEther(result3)}`);
-//     console.log(
-//       `TOTAL VALUE LOCKED RESULT: ${ethers.utils.formatEther(
-//         totalValueLockedResult
-//       )}`
-//     );
+    return {
+      // yourDailyRewards,
+      tvl: ethers.utils.formatEther(totalValueLockedResult),
+      apr: (yearlyYieldPerHiIQ / iqPrice) * 100
+    };
+  }
 
-//     if (yourHiIQ.gt(0)) {
-//       const result2 = await feeDistributor.hiIQSupply(time);
-//       if (result2.gt(0)) {
-//         const result3 = await feeDistributor.tokensPerWeek(time);
-
-//         data = data.add(yourHiIQ.mul(result3).div(result2));
-//       }
-//     }
-//     const yourDailyRewards = data.div(7);
-
-//     const coinData = await CoinGeckoClient.coins.fetch("everipedia", {});
-//     const iqPrice = coinData.data.tickers[7].last;
-//     const yieldForDuration = ethers.utils.formatEther(result3); // TODO: ask this
-//     const yieldValueUsd = yieldForDuration * iqPrice;
-//     const yearlyYieldDollarValue = yieldValueUsd * STAKING_PERIODS_PER_YEAR;
-//     const yearlyYieldPerHiIQ = yearlyYieldDollarValue / result2;
-
-//     return {
-//       yourDailyRewards,
-//       tvl: ethers.utils.formatEther(totalValueLockedResult),
-//       apr: (yearlyYieldPerHiIQ / iqPrice) * 100
-//     };
-//   }
-
-//   return 0;
-// };
+  return 0;
+};
 
 const needsApproval = async (provider, erc20, amount, spender, hashes) => {
   const userAddress = await provider.getSigner().getAddress();
@@ -386,6 +367,7 @@ export {
   callCheckpoint,
   earned,
   getYield,
+  getStats,
   convertPTokensTx,
   getPTokensUserBalance,
   getTokensUserBalance,
