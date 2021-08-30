@@ -16,6 +16,7 @@ import { ptokenAbi } from "./ptoken.abi";
 
 const WEEK = 604800;
 const YEARLY_REWARDS = 365000000;
+const STAKING_PERIODS_PER_YEAR = 31536000 / 604800;
 
 const getHiIQContract = provider =>
   new ethers.Contract(hiIQAddress, hiIQAbi, provider.getSigner());
@@ -75,10 +76,17 @@ const getStats = async (wallet, timeCursor) => {
     }
     const yourDailyRewards = data.div(7);
 
+    const coinData = await CoinGeckoClient.coins.fetch("everipedia", {});
+    const iqPrice = coinData.data.tickers[7].last;
+    const yieldForDuration = ethers.utils.formatEther(result3); // TODO: ask this
+    const yieldValueUsd = yieldForDuration * iqPrice;
+    const yearlyYieldDollarValue = yieldValueUsd * STAKING_PERIODS_PER_YEAR;
+    const yearlyYieldPerHiIQ = yearlyYieldDollarValue / result2;
+
     return {
       yourDailyRewards,
       tvl: ethers.utils.formatEther(totalValueLockedResult),
-      apr: (YEARLY_REWARDS / totalValueLockedResult) / (await CoinGeckoClient.coins.)
+      apr: (yearlyYieldPerHiIQ / iqPrice) * 100
     };
   }
 

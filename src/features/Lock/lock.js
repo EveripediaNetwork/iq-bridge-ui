@@ -13,7 +13,11 @@ import {
   ToggleButtonGroup,
   ToggleButton
 } from "react-bootstrap";
-import { ArrowDownShort, QuestionCircle } from "react-bootstrap-icons";
+import {
+  ArrowDownShort,
+  QuestionCircle,
+  JournalText
+} from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
 
@@ -35,8 +39,9 @@ import {
 import InfoSwapCard from "../../components/ui/infoSwapCard";
 import { TransactionContext } from "../../context/transactionContext";
 
-const LockStats = lazy(() => import("./lockStats"));
+import { ethBasedExplorerUrl, hiIQAddress } from "../../config";
 
+const RewardStats = lazy(() => import("./rewardStats"));
 const HeaderText = styled.div`
   background-color: #f7f7f9;
 `;
@@ -219,7 +224,7 @@ const Lock = () => {
       >
         <CardDivContainer className="d-flex flex-row flex-wrap-reverse align-items-center">
           {wallet.account ? (
-            <LockStats wallet={wallet} hiIQBalance={300000} />
+            <RewardStats wallet={wallet} hiIQBalance={300000} />
           ) : null}
           <FormProvider {...methods}>
             <Col className="mb-3">
@@ -350,33 +355,42 @@ const Lock = () => {
                       maximumLockableTime={maximumLockableTime - 1}
                     />
                     <br />
-                    <Button
-                      disabled={
-                        !wallet.account ||
-                        (!balance && radioValue === 1) ||
-                        (balance === 0 && radioValue === 1) ||
-                        (!filledAmount &&
-                          currentHiIQ !== 0 &&
-                          radioValue === 1) ||
-                        (currentHiIQ === 0 && !lockValue) ||
-                        (!lockValue && radioValue === 2) ||
-                        (currentHiIQ === 0 &&
-                          radioValue === 2 &&
-                          lockValue === 0) ||
-                        (currentHiIQ === 0 &&
-                          radioValue === 1 &&
-                          !filledAmount) ||
-                        (currentHiIQ === 0 && balance === 0) ||
-                        (currentHiIQ === 0 && !filledAmount)
-                      }
-                      variant="primary"
-                      className="text-capitalize"
-                      type="submit"
-                      size="lg"
-                      block
-                    >
-                      {t("lock")}
-                    </Button>
+                    <div className="container d-flex flex-row justify-content-center align-items-center">
+                      <Button
+                        disabled={
+                          !wallet.account ||
+                          (!balance && radioValue === 1) ||
+                          (balance === 0 && radioValue === 1) ||
+                          (!filledAmount &&
+                            currentHiIQ !== 0 &&
+                            radioValue === 1) ||
+                          (currentHiIQ === 0 && !lockValue) ||
+                          (!lockValue && radioValue === 2) ||
+                          (currentHiIQ === 0 &&
+                            radioValue === 2 &&
+                            lockValue === 0) ||
+                          (currentHiIQ === 0 &&
+                            radioValue === 1 &&
+                            !filledAmount) ||
+                          (currentHiIQ === 0 && balance === 0) ||
+                          (currentHiIQ === 0 && !filledAmount)
+                        }
+                        variant="light"
+                        className="text-capitalize w-75 font-weight-bold"
+                        type="submit"
+                        size="lg"
+                      >
+                        {t("lock")}
+                      </Button>
+                      <a
+                        target="_blank"
+                        rel="noopener noreferrrer"
+                        className="text-dark ml-2"
+                        href={`${ethBasedExplorerUrl}address/${hiIQAddress}`}
+                      >
+                        <JournalText size="20px" />
+                      </a>
+                    </div>
                   </Form>
                 </Card.Body>
               </Card>

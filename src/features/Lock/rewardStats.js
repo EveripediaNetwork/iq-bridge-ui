@@ -2,8 +2,10 @@ import React, { memo, useEffect, useState } from "react";
 import { Card, Button } from "react-bootstrap";
 import PropTypes from "prop-types";
 import * as Humanize from "humanize-plus";
-
 import { ethers } from "ethers";
+import { JournalText } from "react-bootstrap-icons";
+
+import { ethBasedExplorerUrl, feeDistributorAddress } from "../../config";
 import {
   getStats,
   getRewardsForTimeCursor,
@@ -11,7 +13,7 @@ import {
   getFeeDistributorCursor
 } from "../../utils/EthDataProvider/EthDataProvider";
 
-const LockStats = ({ wallet, hiIQBalance }) => {
+const RewardStats = ({ wallet, hiIQBalance }) => {
   const [stats, setStats] = useState();
   const [isLoadingClaim, setLoadingClaim] = useState(false);
 
@@ -25,12 +27,13 @@ const LockStats = ({ wallet, hiIQBalance }) => {
   useEffect(() => {
     (async () => {
       const timeCursor = await getFeeDistributorCursor(wallet);
-      const { yourDailyRewards, tvl } = await getStats(wallet, timeCursor);
+      const { yourDailyRewards, tvl, apr } = await getStats(wallet, timeCursor);
       const rewards = await getRewardsForTimeCursor(wallet, timeCursor);
       const hiIQBalanceBN = ethers.utils.parseEther(hiIQBalance.toString());
-      const apr = Number(
-        yourDailyRewards.mul(36500).div(hiIQBalanceBN)
-      ).toFixed(2);
+      console.log(apr);
+      // const apr = Number(
+      //   yourDailyRewards.mul(36500).div(hiIQBalanceBN)
+      // ).toFixed(2);
       setStats({
         timeCursor,
         apr, // TODO: calculate APR based in time their stake
@@ -43,7 +46,17 @@ const LockStats = ({ wallet, hiIQBalance }) => {
   return (
     <Card style={{ width: 220 }} className="shadow m-auto p-1">
       <Card.Body className="p-1">
-        <h3 className="text-center font-weight-normal">Rewards</h3>
+        <div className="container d-flex flex-row justify-content-center align-items-center">
+          <h3 className="text-center font-weight-normal mb-0">Rewards</h3>
+          <a
+            target="_blank"
+            rel="noopener noreferrrer"
+            className="text-dark ml-2"
+            href={`${ethBasedExplorerUrl}address/${feeDistributorAddress}`}
+          >
+            <JournalText size="20px" />
+          </a>
+        </div>
         <hr className="shadow" />
         {stats !== undefined ? (
           <div className="container">
@@ -118,9 +131,9 @@ const LockStats = ({ wallet, hiIQBalance }) => {
   );
 };
 
-LockStats.propTypes = {
+RewardStats.propTypes = {
   wallet: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   hiIQBalance: PropTypes.number.isRequired
 };
 
-export default memo(LockStats);
+export default memo(RewardStats);
