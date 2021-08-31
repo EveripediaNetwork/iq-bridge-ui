@@ -90,28 +90,13 @@ const getStats = async wallet => {
     );
 
     const totalhIIQSupply = await hiIQRewards.totalHiIQSupplyStored();
-    const yieldForDurationResult = await hiIQRewards.getYieldForDuration();
-
-    console.log(`SUPPLY: ${ethers.utils.formatEther(totalhIIQSupply)}`);
-
-    console.log(
-      `TOTAL VALUE LOCKED RESULT: ${ethers.utils.formatEther(
-        totalValueLockedResult
-      )}`
-    );
 
     const coinData = await CoinGeckoClient.coins.fetch("everipedia", {});
     const iqPrice = coinData.data.tickers[7].last;
-    const yieldForDuration = ethers.utils.formatEther(yieldForDurationResult); // TODO: ask this
-    const yieldValueUsd = yieldForDuration * iqPrice;
-    const yearlyYieldDollarValue = yieldValueUsd * STAKING_PERIODS_PER_YEAR;
-    const yearlyYieldPerHiIQ =
-      yearlyYieldDollarValue / ethers.utils.formatEther(totalValueLockedResult);
 
     return {
-      // yourDailyRewards,
       tvl: ethers.utils.formatEther(totalValueLockedResult),
-      apr: (yearlyYieldPerHiIQ / iqPrice) * 100
+      apr: Number((365000000 * iqPrice) / totalhIIQSupply).toFixed(4)
     };
   }
 
