@@ -1,126 +1,39 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo } from "react";
 import { Card, Button } from "react-bootstrap";
-import PropTypes from "prop-types";
-import * as Humanize from "humanize-plus";
 
-import { ethers } from "ethers";
-import {
-  getStats,
-  getRewardsForTimeCursor,
-  claim,
-  getFeeDistributorCursor
-} from "../../utils/EthDataProvider/EthDataProvider";
-
-const LockStats = ({ wallet, hiIQBalance }) => {
-  const [stats, setStats] = useState();
-  const [isLoadingClaim, setLoadingClaim] = useState(false);
-
-  const handleClaim = async () => {
-    setLoadingClaim(true);
-    const result = await claim(wallet);
-    await result.wait();
-    setLoadingClaim(false);
-  };
-
-  useEffect(() => {
-    (async () => {
-      const timeCursor = await getFeeDistributorCursor(wallet);
-      const { yourDailyRewards, tvl } = await getStats(wallet, timeCursor);
-      const rewards = await getRewardsForTimeCursor(wallet, timeCursor);
-      const hiIQBalanceBN = ethers.utils.parseEther(hiIQBalance.toString());
-      const apr = Number(
-        yourDailyRewards.mul(36500).div(hiIQBalanceBN)
-      ).toFixed(2);
-      setStats({
-        timeCursor,
-        apr, // TODO: calculate APR based in time their stake
-        rewards,
-        tvl
-      });
-    })();
-  }, [wallet]);
-
+const LockStats = () => {
   return (
     <Card style={{ width: 220 }} className="shadow m-auto p-1">
       <Card.Body className="p-1">
         <h3 className="text-center font-weight-normal">Rewards</h3>
         <hr className="shadow" />
-        {stats !== undefined ? (
-          <div className="container">
-            {stats.apr ? (
-              <>
-                <p className="m-0 text-center">
-                  {" "}
-                  <strong>Current APR</strong>
-                  <br />
-                  <span>{stats.apr}%</span>
-                </p>
-                <hr className="shadow" />
-              </>
-            ) : null}
-
+        <div className="container">
+          <>
             <p className="m-0 text-center">
               {" "}
-              <strong>TVL</strong>
+              <strong>Updating Reward contract...</strong>
               <br />
-              <span>
-                <span className="text-info">
-                  {Humanize.intComma(stats.tvl)}{" "}
-                  <strong className="text-dark">IQ</strong>
-                </span>
-              </span>
             </p>
-
             <hr className="shadow" />
-
-            <p className="m-0 text-center">
-              {" "}
-              <strong>Next Distribution</strong>
+          </>
+          <>
+            <p className="m-0 text-center font-weight-light">
+              Rewards will be distributed to stakers and new contract will be up
+              this week.
               <br />
-              <span>
-                <span className="text-info font-weight-normal">
-                  {`${new Date(
-                    stats.timeCursor.toString() * 1000
-                  ).toDateString()}`}
-                </span>{" "}
-              </span>
             </p>
-
             <hr className="shadow" />
+          </>
 
-            <p className="m-0 text-center">
-              {" "}
-              <strong>Your Rewards</strong>
-              <br />
-              <span>
-                <span className="text-info font-weight-normal">
-                  {Humanize.toFixed(stats.rewards, 4)}{" "}
-                  <strong className="text-dark">IQ</strong>
-                </span>{" "}
-              </span>
-            </p>
-            <hr className="shadow m-0 mt-4" />
-
-            <div className="container mt-4 text-center">
-              <Button
-                disabled={isLoadingClaim || stats.rewards <= 0}
-                onClick={handleClaim}
-                size="sm"
-                variant="success"
-              >
-                {!isLoadingClaim ? "Claim rewards" : "Loading..."}
-              </Button>
-            </div>
+          <div className="container mt-4 text-center">
+            <Button disabled size="sm" variant="success">
+              Claim rewards
+            </Button>
           </div>
-        ) : null}
+        </div>
       </Card.Body>
     </Card>
   );
-};
-
-LockStats.propTypes = {
-  wallet: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  hiIQBalance: PropTypes.number.isRequired
 };
 
 export default memo(LockStats);
