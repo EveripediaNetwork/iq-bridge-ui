@@ -42,7 +42,7 @@ import { TransactionContext } from "../../context/transactionContext";
 
 import { ethBasedExplorerUrl, hiIQAddress } from "../../config";
 
-const RewardStats = lazy(() => import("./rewardStats"));
+const Stats = lazy(() => import("./stats"));
 const HeaderText = styled.div`
   background-color: #f7f7f9;
 `;
@@ -227,7 +227,7 @@ const Lock = () => {
       >
         <CardDivContainer className="d-flex flex-row flex-wrap-reverse align-items-center">
           {wallet.account ? (
-            <RewardStats wallet={wallet} hiIQBalance={300000} />
+            <Stats wallet={wallet} hiIQBalance={300000} />
           ) : null}
           <FormProvider {...methods}>
             <Col className="mb-3">

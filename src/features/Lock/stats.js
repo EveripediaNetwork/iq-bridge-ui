@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from "react";
-import { Card, Button } from "react-bootstrap";
+import { Card, Button, Row, Col } from "react-bootstrap";
 import PropTypes from "prop-types";
 import * as Humanize from "humanize-plus";
 import { JournalText } from "react-bootstrap-icons";
@@ -12,7 +12,9 @@ import {
   getYield
 } from "../../utils/EthDataProvider/EthDataProvider";
 
-const RewardStats = ({ wallet, hiIQBalance }) => {
+import BarChart from "../../components/ui/barChart";
+
+const Stats = ({ wallet, hiIQBalance }) => {
   const [stats, setStats] = useState();
   const [isLoadingClaim, setLoadingClaim] = useState(false);
 
@@ -42,10 +44,10 @@ const RewardStats = ({ wallet, hiIQBalance }) => {
   }, [wallet]);
 
   return (
-    <Card style={{ width: 220 }} className="shadow m-auto p-1">
+    <Card style={{ width: 460 }} className="shadow-sm m-auto p-1">
       <Card.Body className="p-1">
         <div className="container d-flex flex-row justify-content-center align-items-center">
-          <h3 className="text-center font-weight-normal mb-0">Rewards</h3>
+          <h3 className="text-center font-weight-normal mb-0">Stats</h3>
           <a
             target="_blank"
             rel="noopener noreferrrer"
@@ -58,8 +60,11 @@ const RewardStats = ({ wallet, hiIQBalance }) => {
         <hr className="shadow" />
         {stats !== undefined ? (
           <div className="container">
-            {stats.apr ? (
-              <>
+            <Row>
+              <Col lg={9}>
+                <BarChart />
+              </Col>
+              <Col lg={3}>
                 <p className="m-0 text-center">
                   {" "}
                   <strong>Current APR</strong>
@@ -67,24 +72,22 @@ const RewardStats = ({ wallet, hiIQBalance }) => {
                   <span>{stats.apr}%</span>
                 </p>
                 <hr className="shadow" />
-              </>
-            ) : null}
 
-            <p className="m-0 text-center">
-              {" "}
-              <strong>TVL</strong>
-              <br />
-              <span>
-                <span className="text-info">
-                  {Humanize.intComma(stats.tvl)}{" "}
-                  <strong className="text-dark">IQ</strong>
-                </span>
-              </span>
-            </p>
+                <p className="m-0 text-center">
+                  {" "}
+                  <strong>TVL</strong>
+                  <br />
+                  <span>
+                    <span className="text-info">
+                      {Humanize.intComma(stats.tvl)}{" "}
+                      <strong className="text-dark">IQ</strong>
+                    </span>
+                  </span>
+                </p>
 
-            <hr className="shadow" />
+                <hr className="shadow" />
 
-            {/* <p className="m-0 text-center">
+                {/* <p className="m-0 text-center">
               {" "}
               <strong>Next Distribution</strong>
               <br />
@@ -97,31 +100,33 @@ const RewardStats = ({ wallet, hiIQBalance }) => {
               </span>
             </p> */}
 
-            <hr className="shadow" />
+                {/* <hr className="shadow" /> */}
 
-            <p className="m-0 text-center">
-              {" "}
-              <strong>Your Rewards</strong>
-              <br />
-              <span>
-                <span className="text-info font-weight-normal">
-                  {Humanize.toFixed(stats.rewards, 4)}{" "}
-                  <strong className="text-dark">IQ</strong>
-                </span>{" "}
-              </span>
-            </p>
-            <hr className="shadow m-0 mt-4" />
-
-            <div className="container mt-4 text-center">
-              <Button
-                disabled={isLoadingClaim || stats.rewards <= 0}
-                onClick={handleClaim}
-                size="sm"
-                variant="success"
-              >
-                {!isLoadingClaim ? "Claim rewards" : "Loading..."}
-              </Button>
-            </div>
+                <p className="m-0 text-center">
+                  {" "}
+                  <strong>Rewards</strong>
+                  <br />
+                  <span>
+                    <span className="text-info font-weight-normal">
+                      {Humanize.toFixed(stats.rewards, 4)}{" "}
+                      <strong className="text-dark">IQ</strong>
+                    </span>{" "}
+                  </span>
+                </p>
+                <hr className="shadow m-0 mt-4" />
+                <div className="container mt-2 text-center">
+                  <Button
+                    disabled={isLoadingClaim || stats.rewards <= 0}
+                    onClick={handleClaim}
+                    size="sm"
+                    className="shadow-sm"
+                    variant="outline-success"
+                  >
+                    {!isLoadingClaim ? "Claim" : "Loading..."}
+                  </Button>
+                </div>
+              </Col>
+            </Row>
           </div>
         ) : null}
       </Card.Body>
@@ -129,9 +134,9 @@ const RewardStats = ({ wallet, hiIQBalance }) => {
   );
 };
 
-RewardStats.propTypes = {
+Stats.propTypes = {
   wallet: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   hiIQBalance: PropTypes.number.isRequired
 };
 
-export default memo(RewardStats);
+export default memo(Stats);
