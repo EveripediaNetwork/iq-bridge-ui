@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
 import GenericDialog from "./genericDialog";
@@ -26,6 +27,7 @@ const RewardsCalculatorDialog = ({
   hiIQSupply,
   rewardsAcrossLockPeriod
 }) => {
+  const { t } = useTranslation();
   const [inputIQ, setInputIQ] = useState();
   const [years, setYears] = useState();
   const [aprDividedByLockPeriod, setAprDividedByLockPeriod] = useState();
@@ -72,7 +74,7 @@ const RewardsCalculatorDialog = ({
             <div className="mb-2">
               <p className="mb-0 text-center text-uppercase">
                 {" "}
-                supply <br />
+                {t("supply")} <br />
                 <strong>{Number(hiIQSupply).toFixed(0)} hiiq</strong>
               </p>
             </div>
@@ -80,25 +82,25 @@ const RewardsCalculatorDialog = ({
           <StyledFormControl
             type="number"
             onChange={event => setInputIQ(event.target.value)}
-            placeholder="Locked IQ"
+            placeholder={t("locked_iq")}
             className="mb-2"
           />
           <StyledFormControl
             type="number"
             max="4"
             onChange={event => setYears(event.target.value)}
-            placeholder="Years"
+            placeholder={t("years")}
           />
           {inputIQ && years && aprDividedByLockPeriod ? (
             <StyledDivContainer className="shadow-sm">
               <p className="mb-0">
                 {" "}
-                You will get:{" "}
+                {t("you_will_get")}:{" "}
                 <strong>{Number(expectedIQ).toFixed(2)} IQ</strong>
               </p>
               <p className="mb-0">
                 {" "}
-                Expected APR:{" "}
+                {t("expected_apr")}:{" "}
                 <strong>{Number(aprDividedByLockPeriod).toFixed(2)} %</strong>
               </p>
             </StyledDivContainer>

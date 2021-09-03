@@ -1,5 +1,6 @@
 import React, { memo, useEffect, useState, useRef } from "react";
 import { Card, Button, Overlay, Tooltip, Spinner } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import * as Humanize from "humanize-plus";
 
@@ -16,6 +17,7 @@ import {
 import RewardsCalculatorDialog from "../../components/ui/rewardsCalculatorDialog";
 
 const Stats = ({ wallet, lockedAlready }) => {
+  const { t } = useTranslation();
   const [stats, setStats] = useState();
   const [isLoadingClaim, setLoadingClaim] = useState(false);
   const [show, setShow] = useState(false);
@@ -80,7 +82,7 @@ const Stats = ({ wallet, lockedAlready }) => {
     >
       <Card.Body className="p-1">
         <div className="container d-flex flex-row justify-content-center align-items-center">
-          <h3 className="text-center font-weight-normal mb-0">Stats</h3>
+          <h3 className="text-center font-weight-normal mb-0">{t("Stats")}</h3>
           <a
             target="_blank"
             rel="noopener noreferrer"
@@ -100,7 +102,7 @@ const Stats = ({ wallet, lockedAlready }) => {
                 variant="outline-dark"
                 size="sm"
               >
-                Rewards Calculator
+                {t("rewards_calculator")}
                 <Calculator />
               </Button>
             </div>
@@ -128,7 +130,7 @@ const Stats = ({ wallet, lockedAlready }) => {
                     >
                       {props => (
                         <Tooltip {...props}>
-                          This calculation is based on 4 years lock
+                          {t("calculation_based_on_4_years")}
                         </Tooltip>
                       )}
                     </Overlay>
@@ -156,7 +158,7 @@ const Stats = ({ wallet, lockedAlready }) => {
             <hr />
 
             <p className="m-0 text-center">
-              <strong>Next Distribution</strong>
+              <strong>{t("next_distribution")}</strong>
               <br />
               <span>
                 <span className="text-info font-weight-normal">
@@ -169,7 +171,7 @@ const Stats = ({ wallet, lockedAlready }) => {
 
             <p className="m-0 text-center">
               {" "}
-              <strong>Rewards</strong>
+              <strong>{t("rewards")}</strong>
               <br />
               <span>
                 <span className="text-info font-weight-normal">
@@ -182,7 +184,7 @@ const Stats = ({ wallet, lockedAlready }) => {
             <div className="container mt-2 text-center">
               {stats && stats.rewards === 0 ? (
                 <Button size="sm" variant="info" onClick={handleCheckpoint}>
-                  Checkpoint
+                  {t("checkpoint")}
                 </Button>
               ) : (
                 <Button
@@ -192,7 +194,7 @@ const Stats = ({ wallet, lockedAlready }) => {
                   className="shadow-sm"
                   variant="success"
                 >
-                  {!isLoadingClaim ? "Claim" : "Loading..."}
+                  {!isLoadingClaim ? t("claim_rewards") : `${t("loading")}...`}
                 </Button>
               )}
             </div>
