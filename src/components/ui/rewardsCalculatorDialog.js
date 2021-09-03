@@ -44,7 +44,7 @@ const RewardsCalculatorDialog = ({
       const rewardsBasedOnLockPeriod = inputIQ * (1 + 0.75 * years);
 
       const poolRatio =
-        rewardsBasedOnLockPeriod / (200000000 + rewardsBasedOnLockPeriod);
+        rewardsBasedOnLockPeriod / (hiIQSupply + rewardsBasedOnLockPeriod);
 
       const userRewardsAtTheEndOfLockPeriod =
         rewardsAcrossLockPeriod * years * poolRatio;
