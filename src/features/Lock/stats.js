@@ -1,8 +1,9 @@
-import React, { memo, useEffect, useState } from "react";
-import { Card, Button, Row, Col } from "react-bootstrap";
+import React, { memo, useEffect, useState, useRef } from "react";
+import { Card, Button, Row, Col, Overlay, Tooltip } from "react-bootstrap";
 import PropTypes from "prop-types";
 import * as Humanize from "humanize-plus";
-import { JournalText } from "react-bootstrap-icons";
+
+import { QuestionCircle, JournalText, Calculator } from "react-bootstrap-icons";
 
 import { ethBasedExplorerUrl, hiIQRewardsAddress } from "../../config";
 import {
@@ -13,10 +14,14 @@ import {
 } from "../../utils/EthDataProvider/EthDataProvider";
 
 import BarChart from "../../components/ui/barChart";
+import RewardsCalculatorDialog from "../../components/ui/rewardsCalculatorDialog";
 
-const Stats = ({ wallet, hiIQBalance }) => {
+const Stats = ({ wallet, lockend }) => {
   const [stats, setStats] = useState();
   const [isLoadingClaim, setLoadingClaim] = useState(false);
+  const [show, setShow] = useState(false);
+  const [openRewardsCalculator, setOpenRewardsCalculator] = useState(false);
+  const target = useRef(null);
 
   const handleClaim = async () => {
     setLoadingClaim(true);
@@ -30,18 +35,41 @@ const Stats = ({ wallet, hiIQBalance }) => {
     (async () => {
       const rewards = await earned(wallet);
       console.log(rewards);
-      const { tvl, apr } = await getStats(wallet);
-      // const apr = Number(
-      //   yourDailyRewards.mul(36500).div(hiIQBalanceBN)
-      // ).toFixed(2);
-      console.log(tvl);
+      const { tvl, lockedByUser, hiIQSupply, rewardsAcrossLockPeriod } =
+        await getStats(wallet);
+
+      // const date = new Date();
+      const yearsLock = 4; // assuming a 4 year lock
+      // ((lockend.getFullYear() - date.getFullYear()) * 12 +
+      //   (lockend.getMonth() - date.getMonth())) /
+      // 12;
+
+      const rewardsBasedOnLockPeriod = lockedByUser * (1 + 0.75 * yearsLock);
+      const poolRatio =
+        rewardsBasedOnLockPeriod / (hiIQSupply + rewardsBasedOnLockPeriod);
+
+      const userRewardsAtTheEndOfLockPeriod =
+        rewardsAcrossLockPeriod * yearsLock * poolRatio;
+      const userRewardsPlusInitialLock =
+        userRewardsAtTheEndOfLockPeriod + lockedByUser;
+      const aprAcrossLockPeriod = userRewardsPlusInitialLock / lockedByUser;
+      const aprDividedByLockPeriod = (aprAcrossLockPeriod / yearsLock) * 100;
+
       setStats({
-        apr, // TODO: calculate APR based in time their stake
+        apr: aprDividedByLockPeriod,
         rewards,
-        tvl
+        tvl,
+        lockedByUser,
+        hiIQSupply,
+        yearsLock,
+        rewardsBasedOnLockPeriod,
+        poolRatio,
+        rewardsAcrossLockPeriod
       });
     })();
   }, [wallet]);
+
+  console.log(stats);
 
   return (
     <Card style={{ width: 460 }} className="shadow-sm m-auto p-1">
@@ -65,12 +93,45 @@ const Stats = ({ wallet, hiIQBalance }) => {
                 <BarChart />
               </Col>
               <Col lg={3}>
-                <p className="m-0 text-center">
-                  {" "}
-                  <strong>Current APR</strong>
+                <div className="mb-4 mt-2 text-center">
+                  <Button
+                    onClick={() =>
+                      setOpenRewardsCalculator(!openRewardsCalculator)
+                    }
+                    className="shadow-sm"
+                    variant="outline-dark"
+                    size="sm"
+                  >
+                    <small>Rewards Calculator</small>
+                    <Calculator />
+                  </Button>
+                </div>
+                <div className="m-0 text-center">
+                  <div className="d-flex flex-row justify-content-between align-items-center">
+                    <strong>APR</strong>
+                    <Button
+                      variant="light"
+                      size="sm"
+                      ref={target}
+                      onClick={() => setShow(!show)}
+                    >
+                      <QuestionCircle />
+                    </Button>
+                    <Overlay
+                      target={target.current}
+                      show={show}
+                      placement="right"
+                    >
+                      {props => (
+                        <Tooltip {...props}>
+                          This calculation is based on 4 years lock
+                        </Tooltip>
+                      )}
+                    </Overlay>
+                  </div>
                   <br />
-                  <span>{stats.apr}%</span>
-                </p>
+                  <span>{Number(stats.apr).toFixed(2)}%</span>
+                </div>
                 <hr className="shadow" />
 
                 <p className="m-0 text-center">
@@ -130,6 +191,14 @@ const Stats = ({ wallet, hiIQBalance }) => {
           </div>
         ) : null}
       </Card.Body>
+      {stats && stats.hiIQSupply ? (
+        <RewardsCalculatorDialog
+          openRewardsCalculator={openRewardsCalculator}
+          setOpenRewardsCalculator={setOpenRewardsCalculator}
+          hiIQSupply={stats.hiIQSupply}
+          rewardsAcrossLockPeriod={stats.rewardsAcrossLockPeriod}
+        />
+      ) : null}
     </Card>
   );
 };

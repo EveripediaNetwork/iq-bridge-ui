@@ -33,6 +33,10 @@ background: linear-gradient(0deg, rgba(45,132,253,1) 0%, rgba(222,237,237,1) 100
     }
  }
  
+ .tooltip-inner {
+   border-radius: 0px !important;
+ }
+
  html {
   height: 100%;
 }

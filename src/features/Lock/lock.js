@@ -226,8 +226,8 @@ const Lock = () => {
         fluid
       >
         <CardDivContainer className="d-flex flex-row flex-wrap-reverse align-items-center">
-          {wallet.account ? (
-            <Stats wallet={wallet} hiIQBalance={300000} />
+          {wallet.account && lockEnd ? (
+            <Stats lockend={lockEnd} wallet={wallet} hiIQBalance={300000} />
           ) : null}
           <FormProvider {...methods}>
             <Col className="mb-3">
