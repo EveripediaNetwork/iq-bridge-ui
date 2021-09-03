@@ -89,15 +89,21 @@ const getStats = async wallet => {
       hiIQAddress
     );
     const totalhIIQSupply = await hiIQRewards.totalHiIQSupplyStored(); // review this supply
+
     const lockedResult = await hiIQ.locked(wallet.account, {
       gasLimit: 800000
     });
+
+    let periodFinish = await hiIQRewards.periodFinish();
+    periodFinish = new Date(periodFinish * 1000).toDateString();
+    console.log(periodFinish);
 
     return {
       tvl: ethers.utils.formatEther(totalValueLockedResult),
       hiIQSupply: Number(ethers.utils.formatEther(totalhIIQSupply)),
       lockedByUser: Number(ethers.utils.formatEther(lockedResult[0])),
-      rewardsAcrossLockPeriod: TOTAL_REWARDS_ACROSS_LOCK_PERIOD
+      rewardsAcrossLockPeriod: TOTAL_REWARDS_ACROSS_LOCK_PERIOD,
+      periodFinish
     };
   }
 
