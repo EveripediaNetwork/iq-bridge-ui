@@ -92,7 +92,6 @@ const getStats = async wallet => {
     const lockedResult = await hiIQ.locked(wallet.account, {
       gasLimit: 800000
     });
-    console.log(ethers.utils.formatEther(lockedResult[1]));
 
     return {
       tvl: ethers.utils.formatEther(totalValueLockedResult),
