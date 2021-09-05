@@ -85,7 +85,7 @@ const getStats = async wallet => {
     const totalValueLockedResult = await erc20["balanceOf(address)"](
       hiIQAddress
     );
-    const totalhIIQSupply = await hiIQ.totalSupply();
+    const totalhIIQSupply = await hiIQ["totalSupply()"]();
 
     const lockedResult = await hiIQ.locked(wallet.account, {
       gasLimit: 800000
