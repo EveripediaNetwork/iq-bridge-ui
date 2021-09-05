@@ -39,13 +39,8 @@ const Stats = ({ wallet, lockedAlready }) => {
   useEffect(() => {
     (async () => {
       const rewards = await earned(wallet);
-      const {
-        tvl,
-        lockedByUser,
-        hiIQSupply,
-        rewardsAcrossLockPeriod,
-        periodFinish
-      } = await getStats(wallet);
+      const { tvl, lockedByUser, hiIQSupply, rewardsAcrossLockPeriod } =
+        await getStats(wallet);
 
       const yearsLock = 4; // assuming a 4 year lock
 
@@ -69,8 +64,7 @@ const Stats = ({ wallet, lockedAlready }) => {
         yearsLock,
         rewardsBasedOnLockPeriod,
         poolRatio,
-        rewardsAcrossLockPeriod,
-        periodFinish
+        rewardsAcrossLockPeriod
       });
     })();
   }, [wallet, lockedAlready]);
@@ -158,18 +152,6 @@ const Stats = ({ wallet, lockedAlready }) => {
             <hr />
 
             <p className="m-0 text-center">
-              <strong>{t("next_distribution")}</strong>
-              <br />
-              <span>
-                <span className="text-info font-weight-normal">
-                  {stats.periodFinish}
-                </span>{" "}
-              </span>
-            </p>
-
-            <hr />
-
-            <p className="m-0 text-center">
               {" "}
               <strong>{t("rewards")}</strong>
               <br />
@@ -194,7 +176,7 @@ const Stats = ({ wallet, lockedAlready }) => {
                   className="shadow-sm"
                   variant="success"
                 >
-                  {!isLoadingClaim ? t("claim_rewards") : `${t("loading")}...`}
+                  {!isLoadingClaim ? t("claim") : `${t("loading")}...`}
                 </Button>
               )}
             </div>
