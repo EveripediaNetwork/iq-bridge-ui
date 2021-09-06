@@ -25,7 +25,8 @@ const Stats = ({ wallet, lockedAlready }) => {
   const target = useRef(null);
 
   const handleCheckpoint = async () => {
-    await callCheckpoint(wallet);
+    const result = await callCheckpoint(wallet);
+    await result.wait();
   };
 
   const handleClaim = async () => {
@@ -52,6 +53,7 @@ const Stats = ({ wallet, lockedAlready }) => {
         rewardsAcrossLockPeriod * yearsLock * poolRatio;
       const userRewardsPlusInitialLock =
         userRewardsAtTheEndOfLockPeriod + lockedByUser;
+
       const aprAcrossLockPeriod = userRewardsPlusInitialLock / lockedByUser;
       const aprDividedByLockPeriod = (aprAcrossLockPeriod / yearsLock) * 100;
 
@@ -169,9 +171,39 @@ const Stats = ({ wallet, lockedAlready }) => {
             ) : null}
             <div className="container mt-2 text-center">
               {stats && stats.rewards === 0 ? (
-                <Button size="sm" variant="info" onClick={handleCheckpoint}>
-                  {t("checkpoint")}
-                </Button>
+                <div className="d-flex flex-row justify-content-center align-items-center">
+                  <Button
+                    className="mr-2 shadow-sm"
+                    size="sm"
+                    variant="info"
+                    onClick={handleCheckpoint}
+                  >
+                    {t("checkpoint")}
+                  </Button>
+                  <Button
+                    variant="light"
+                    size="sm"
+                    ref={target}
+                    onClick={event => {
+                      event.preventDefault();
+                      setShow(!show);
+                    }}
+                  >
+                    <QuestionCircle />
+                  </Button>
+                  <Overlay
+                    style={{ display: show ? "block" : "none" }}
+                    target={target.current}
+                    show={show}
+                    placement="bottom"
+                  >
+                    {props => (
+                      <Tooltip {...props}>
+                        Necessary to calculate the rewards
+                      </Tooltip>
+                    )}
+                  </Overlay>
+                </div>
               ) : (
                 <Button
                   disabled={isLoadingClaim || stats.rewards <= 0}
