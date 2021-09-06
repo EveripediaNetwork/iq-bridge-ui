@@ -161,7 +161,7 @@ const Stats = ({ wallet, lockedAlready }) => {
                   <br />
                   <span>
                     <span className="text-info font-weight-normal">
-                      {Humanize.toFixed(stats.rewards, 4)}{" "}
+                      {Humanize.toFixed(stats.rewards, 8)}{" "}
                       <strong className="text-dark">IQ</strong>
                     </span>{" "}
                   </span>

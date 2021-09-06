@@ -45,7 +45,7 @@ const callCheckpoint = async wallet => {
 
     const hiIQRewards = getHiIQRewardsContract(provider, true);
 
-    const result = await hiIQRewards.checkpoint({ gasLimit: 800000 });
+    const result = await hiIQRewards.checkpoint();
     return result;
   }
   return 0;
