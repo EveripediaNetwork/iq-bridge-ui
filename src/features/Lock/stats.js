@@ -71,10 +71,10 @@ const Stats = ({ wallet, lockedAlready }) => {
 
   return (
     <Card
-      style={{ width: 260, minHeight: 500 }}
+      style={{ width: 260, minHeight: 450 }}
       className="shadow-sm m-auto p-1"
     >
-      <Card.Body className="p-1">
+      <Card.Body className="p-1 d-flex flex-column justify-content-center">
         <div className="container d-flex flex-row justify-content-center align-items-center">
           <h3 className="text-center font-weight-normal mb-0">{t("Stats")}</h3>
           <a
@@ -88,7 +88,7 @@ const Stats = ({ wallet, lockedAlready }) => {
         </div>
         <hr />
         {stats !== undefined ? (
-          <div className="container">
+          <div className="container d-flex flex-column justify-content-evenly">
             <div className="mb-4 mt-2 text-center">
               <Button
                 onClick={() => setOpenRewardsCalculator(!openRewardsCalculator)}
@@ -151,18 +151,22 @@ const Stats = ({ wallet, lockedAlready }) => {
 
             <hr />
 
-            <p className="m-0 text-center">
-              {" "}
-              <strong>{t("rewards")}</strong>
-              <br />
-              <span>
-                <span className="text-info font-weight-normal">
-                  {Humanize.toFixed(stats.rewards, 4)}{" "}
-                  <strong className="text-dark">IQ</strong>
-                </span>{" "}
-              </span>
-            </p>
-            <hr className="shadow m-0 mt-4" />
+            {stats && stats.rewards > 0 ? (
+              <>
+                <p className="m-0 text-center">
+                  {" "}
+                  <strong>{t("rewards")}</strong>
+                  <br />
+                  <span>
+                    <span className="text-info font-weight-normal">
+                      {Humanize.toFixed(stats.rewards, 4)}{" "}
+                      <strong className="text-dark">IQ</strong>
+                    </span>{" "}
+                  </span>
+                </p>
+                <hr className="shadow m-0 mt-4" />
+              </>
+            ) : null}
             <div className="container mt-2 text-center">
               {stats && stats.rewards === 0 ? (
                 <Button size="sm" variant="info" onClick={handleCheckpoint}>

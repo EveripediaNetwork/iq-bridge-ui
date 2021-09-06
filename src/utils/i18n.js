@@ -39,7 +39,7 @@ export const resources = {
       earned: "Earned",
       claim: "Claim Rewards",
       required_to_accept: "We will require you to accept the",
-      checkpoint: "checkpoint",
+      checkpoint: "Checkpoint",
       scenarios: "contract interaction in the following scenarios",
       user_is_not_initialized: "The user is not initialized in our system.",
       more_iq_tokens_locked: "More IQ tokens are locked.",
