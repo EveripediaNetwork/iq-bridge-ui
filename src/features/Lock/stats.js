@@ -8,7 +8,6 @@ import { QuestionCircle, JournalText, Calculator } from "react-bootstrap-icons";
 
 import { ethBasedExplorerUrl, hiIQRewardsAddress } from "../../config";
 import {
-  callCheckpoint,
   earned,
   getStats,
   getYield
@@ -19,23 +18,25 @@ import RewardsCalculatorDialog from "../../components/ui/rewardsCalculatorDialog
 const Stats = ({ wallet, lockedAlready }) => {
   const { t } = useTranslation();
   const [stats, setStats] = useState();
+  const [earnedRewards, setEarnedRewards] = useState();
   const [isLoadingClaim, setLoadingClaim] = useState(false);
   const [show, setShow] = useState(false);
   const [openRewardsCalculator, setOpenRewardsCalculator] = useState(false);
   const target = useRef(null);
-
-  const handleCheckpoint = async () => {
-    const result = await callCheckpoint(wallet);
-    await result.wait();
-  };
 
   const handleClaim = async () => {
     setLoadingClaim(true);
     const result = await getYield(wallet);
     await result.wait();
     setLoadingClaim(false);
-    handleCheckpoint();
   };
+
+  useEffect(() => {
+    setInterval(async () => {
+      const rewards = await earned(wallet);
+      setEarnedRewards(Number(rewards));
+    }, 5000);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -57,9 +58,10 @@ const Stats = ({ wallet, lockedAlready }) => {
       const aprAcrossLockPeriod = userRewardsPlusInitialLock / lockedByUser;
       const aprDividedByLockPeriod = (aprAcrossLockPeriod / yearsLock) * 100;
 
+      setEarnedRewards(Number(rewards));
+
       setStats({
         apr: aprDividedByLockPeriod,
-        rewards: Number(rewards),
         tvl,
         lockedByUser,
         hiIQSupply,
@@ -153,7 +155,7 @@ const Stats = ({ wallet, lockedAlready }) => {
 
             <hr />
 
-            {stats && stats.rewards > 0 ? (
+            {earnedRewards && earnedRewards > 0 ? (
               <>
                 <p className="m-0 text-center">
                   {" "}
@@ -161,7 +163,7 @@ const Stats = ({ wallet, lockedAlready }) => {
                   <br />
                   <span>
                     <span className="text-info font-weight-normal">
-                      {Humanize.toFixed(stats.rewards, 8)}{" "}
+                      {Humanize.toFixed(earnedRewards, 8)}{" "}
                       <strong className="text-dark">IQ</strong>
                     </span>{" "}
                   </span>
@@ -170,43 +172,9 @@ const Stats = ({ wallet, lockedAlready }) => {
               </>
             ) : null}
             <div className="container mt-2 text-center">
-              {stats && stats.rewards === 0 ? (
-                <div className="d-flex flex-row justify-content-center align-items-center">
-                  <Button
-                    className="mr-2 shadow-sm"
-                    size="sm"
-                    variant="info"
-                    onClick={handleCheckpoint}
-                  >
-                    {t("checkpoint")}
-                  </Button>
-                  <Button
-                    variant="light"
-                    size="sm"
-                    ref={target}
-                    onClick={event => {
-                      event.preventDefault();
-                      setShow(!show);
-                    }}
-                  >
-                    <QuestionCircle />
-                  </Button>
-                  <Overlay
-                    style={{ display: show ? "block" : "none" }}
-                    target={target.current}
-                    show={show}
-                    placement="bottom"
-                  >
-                    {props => (
-                      <Tooltip {...props}>
-                        Necessary to calculate the rewards
-                      </Tooltip>
-                    )}
-                  </Overlay>
-                </div>
-              ) : (
+              {earnedRewards && earnedRewards > 0 ? (
                 <Button
-                  disabled={isLoadingClaim || stats.rewards <= 0}
+                  disabled={isLoadingClaim || earnedRewards <= 0}
                   onClick={handleClaim}
                   size="sm"
                   className="shadow-sm"
@@ -214,7 +182,7 @@ const Stats = ({ wallet, lockedAlready }) => {
                 >
                   {!isLoadingClaim ? t("claim") : `${t("loading")}...`}
                 </Button>
-              )}
+              ) : null}
             </div>
           </div>
         ) : (
