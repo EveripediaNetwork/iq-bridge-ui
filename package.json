@@ -23,6 +23,7 @@
     "react-bootstrap-icons": "^1.0.0",
     "react-bootstrap-input-spinner": "^1.0.2",
     "react-chartjs-2": "^3.0.4",
+    "react-countdown": "^2.3.2",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.9.2",
     "react-i18next": "^11.7.3",

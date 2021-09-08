@@ -3,6 +3,7 @@ import { Card, Button, Overlay, Tooltip, Spinner } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import * as Humanize from "humanize-plus";
+import Countdown from "react-countdown";
 
 import { QuestionCircle, JournalText, Calculator } from "react-bootstrap-icons";
 
@@ -21,8 +22,11 @@ const Stats = ({ wallet, lockedAlready }) => {
   const [earnedRewards, setEarnedRewards] = useState();
   const [isLoadingClaim, setLoadingClaim] = useState(false);
   const [show, setShow] = useState(false);
+  const [animateText, setAnimateText] = useState(false);
+  const [countdown, setCountdown] = useState(Date.now() + 19000);
   const [openRewardsCalculator, setOpenRewardsCalculator] = useState(false);
   const target = useRef(null);
+  const countDownComponentRef = useRef(null);
 
   const handleClaim = async () => {
     setLoadingClaim(true);
@@ -31,12 +35,36 @@ const Stats = ({ wallet, lockedAlready }) => {
     setLoadingClaim(false);
   };
 
+  const renderer = ({ seconds, completed }) => (
+    <div className="d-flex flex-row justify-content-center align-items-center">
+      <span className="font-italic text-muted">
+        {completed ? "Loading rewards..." : <>Retrieving in: {seconds} s</>}
+      </span>
+    </div>
+  );
+
   useEffect(() => {
-    setInterval(async () => {
-      const rewards = await earned(wallet);
-      setEarnedRewards(Number(rewards));
-    }, 5000);
+    setInterval(() => {
+      setAnimateText(true);
+
+      setTimeout(async () => {
+        const rewards = await earned(wallet);
+
+        setEarnedRewards(Number(rewards));
+
+        setCountdown(Date.now() + 19000);
+        countDownComponentRef.current.start();
+      }, 1500);
+    }, 20000);
   }, []);
+
+  useEffect(() => {
+    if (animateText) {
+      setTimeout(() => {
+        setAnimateText(false);
+      }, 1500);
+    }
+  }, [animateText]);
 
   useEffect(() => {
     (async () => {
@@ -162,12 +190,18 @@ const Stats = ({ wallet, lockedAlready }) => {
                   <strong>{t("rewards")}</strong>
                   <br />
                   <span>
-                    <span className="text-info font-weight-normal">
-                      {Humanize.toFixed(earnedRewards, 8)}{" "}
+                    <span className={animateText ? "animate" : ""}>
+                      {Humanize.toFixed(earnedRewards, 18)}{" "}
                       <strong className="text-dark">IQ</strong>
                     </span>{" "}
                   </span>
                 </p>
+                <Countdown
+                  ref={countDownComponentRef}
+                  autoStart
+                  date={countdown}
+                  renderer={renderer}
+                />
                 <hr className="shadow m-0 mt-4" />
               </>
             ) : null}
