@@ -1,39 +1,5 @@
-import React, { memo } from "react";
+import React, { memo, useState, useEffect } from "react";
 import { Bar, Line } from "react-chartjs-2";
-
-const data = {
-  labels: [
-    "<= 15 days",
-    "15 - 30 days",
-    "60 - 90 days",
-    "1 - 2 years",
-    "2 - 3 years",
-    "3 - 4 years"
-  ],
-  datasets: [
-    {
-      label: "Lock Breakdown",
-      data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: [
-        "rgba(23,162,184,1)",
-        "rgba(23,162,184,1)",
-        "rgba(23,162,184,1)",
-        "rgba(23,162,184,1)",
-        "rgba(23,162,184,1)",
-        "rgba(23,162,184,1)"
-      ],
-      borderColor: [
-        "rgba(23,162,184,1)",
-        "rgba(23,162,184,1)",
-        "rgba(23,162,184,1)",
-        "rgba(23,162,184,1)",
-        "rgba(23,162,184,1)",
-        "rgba(23,162,184,1)"
-      ],
-      borderWidth: 1
-    }
-  ]
-};
 
 const options = {
   scales: {
@@ -51,7 +17,7 @@ const lineChartRawData = {
   labels: ["1", "2", "3", "4", "5", "6"],
   datasets: [
     {
-      label: "hiIQ supply",
+      label: "hiIQ volume",
       data: [12, 19, 3, 5, 2, 3],
       fill: false,
       backgroundColor: "rgb(255, 99, 132)",
@@ -73,9 +39,37 @@ const lineChartOptions = {
 };
 
 const BarChart = () => {
+  const [lockBreakdownChartData, setLockBreakdownChartData] = useState();
+
+  const configureLockBreakdownChart = data => {
+    setLockBreakdownChartData({
+      labels: Object.keys(data),
+      datasets: [
+        {
+          label: "Lock breakdown",
+          data: Object.values(data),
+          backgroundColor: Object.keys(data).map(() => "rgba(23,162,184,1)"),
+          borderColor: Object.keys(data).map(() => "rgba(23,162,184,1)"),
+          borderWidth: 1
+        }
+      ]
+    });
+  };
+
+  useEffect(() => {
+    configureLockBreakdownChart({
+      "<= 15 days": 10,
+      "15 - 30 days": 60,
+      "60 - 90 days": 19,
+      "1 - 2 years": 56,
+      "2 - 3 years": 44,
+      "3 - 4 years": 102
+    });
+  }, []);
+
   return (
     <>
-      <Bar data={data} options={options} />
+      <Bar data={lockBreakdownChartData} options={options} />
       <Line data={lineChartRawData} options={lineChartOptions} />
     </>
   );
