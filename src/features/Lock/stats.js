@@ -13,7 +13,7 @@ import {
   getYield
 } from "../../utils/EthDataProvider/EthDataProvider";
 
-import BarChart from "../../components/ui/barChart";
+import StatsCharts from "../../components/ui/statsCharts";
 import RewardsCalculatorDialog from "../../components/ui/rewardsCalculatorDialog";
 
 const Stats = ({ wallet, lockend }) => {
@@ -89,8 +89,11 @@ const Stats = ({ wallet, lockend }) => {
         {stats !== undefined ? (
           <div className="container">
             <Row>
-              <Col lg={9}>
-                <BarChart />
+              <Col
+                className="d-flex flex-column justify-content-center align-items-center"
+                lg={9}
+              >
+                <StatsCharts />
               </Col>
               <Col lg={3}>
                 <div className="mb-4 mt-2 text-center">
