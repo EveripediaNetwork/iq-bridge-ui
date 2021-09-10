@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect } from "react";
 import styled from "styled-components";
-import { Bar } from "react-chartjs-2";
+import { Bar, Doughnut } from "react-chartjs-2";
 import { Card } from "react-bootstrap";
 import { groupBy } from "lodash";
 
@@ -105,68 +105,7 @@ const StatsCharts = () => {
     const d = new Date();
     const date = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`;
 
-    configureVolumeChart([
-      {
-        date,
-        locking_volume: 10000000,
-        unlocking_volume: 7500000
-      },
-      {
-        date,
-        locking_volume: 1000000,
-        unlocking_volume: 5000000
-      },
-      {
-        date,
-        locking_volume: 2300000,
-        unlocking_volume: 4567000
-      },
-      {
-        date,
-        locking_volume: 8902300,
-        unlocking_volume: 5324768
-      },
-      {
-        date,
-        locking_volume: 9875423,
-        unlocking_volume: 15000000
-      },
-      {
-        date,
-        locking_volume: 500000,
-        unlocking_volume: 200000
-      },
-      {
-        date,
-        locking_volume: 876934,
-        unlocking_volume: 0
-      },
-      {
-        date,
-        locking_volume: 25000000,
-        unlocking_volume: 345987
-      },
-      {
-        date,
-        locking_volume: 6700000,
-        unlocking_volume: 12000000
-      },
-      {
-        date,
-        locking_volume: 1123000,
-        unlocking_volume: 14000000
-      },
-      {
-        date,
-        locking_volume: 0,
-        unlocking_volume: 0
-      },
-      {
-        date,
-        locking_volume: 2300000,
-        unlocking_volume: 400000
-      }
-    ]);
+    configureVolumeChart();
   }, []);
 
   return (
@@ -175,7 +114,7 @@ const StatsCharts = () => {
         <Bar data={lockBreakdownChartData} options={options} />
       </StyledCard>
       <StyledCard className="p-2 shadow-sm mb-2">
-        <Bar data={volumeChartData} options={lineChartOptions} />
+        <Doughnut data={volumeChartData} options={lineChartOptions} />
       </StyledCard>
     </StyledContainer>
   );

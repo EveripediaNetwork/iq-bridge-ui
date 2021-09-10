@@ -13,6 +13,7 @@ const getLockBreakdown = async () => {
 };
 
 const getUserBalances = async () => {
+  console.log(new Date().getTimezoneOffset());
   const response = await fetch(
     `${everipediaBaseApiEndpoint}/iq/hiiq/user-balances`
   );
