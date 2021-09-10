@@ -2,31 +2,20 @@ import React, { memo, useState, useEffect } from "react";
 import styled from "styled-components";
 import { Bar, Doughnut } from "react-chartjs-2";
 import { Card } from "react-bootstrap";
-import { groupBy } from "lodash";
+import { groupBy, sortBy, take } from "lodash";
 
 import {
   getLockBreakdown,
   getUserBalances
 } from "../../utils/StatsDataProvider";
+import { ethBasedExplorerUrl } from "../../config";
 
 const options = {
   scales: {
     yAxes: [
       {
         ticks: {
-          beginAtZero: true
-        }
-      }
-    ]
-  }
-};
-
-const lineChartOptions = {
-  scales: {
-    yAxes: [
-      {
-        ticks: {
-          beginAtZero: true
+          beginAtZero: false
         }
       }
     ]
@@ -45,6 +34,7 @@ const StyledCard = styled(Card)`
 const StatsCharts = () => {
   const [lockBreakdownChartData, setLockBreakdownChartData] = useState();
   const [volumeChartData, setVolumeChartData] = useState();
+  const [addresses, setAddresses] = useState([]);
 
   const configureLockBreakdownChart = data => {
     setLockBreakdownChartData({
@@ -61,51 +51,63 @@ const StatsCharts = () => {
     });
   };
 
+  const getRandomRGBColor = () => {
+    const r = Math.floor(Math.random() * 255);
+    const g = Math.floor(Math.random() * 255);
+    const b = Math.floor(Math.random() * 255);
+    return `rgb(${r}, ${g}, ${b}, 0.6)`;
+  };
+
   const configureVolumeChart = data => {
+    console.log(Object.values(data).map(v => Number(v[0].totalIQLocked)));
+    setAddresses(Object.keys(data));
     setVolumeChartData({
-      labels: data.map(d => d.date.toString()),
+      labels: Object.keys(data).map(
+        d => d.substring(1, 5) + "..." + d.substring(d.length - 1, d.length - 5)
+      ),
       datasets: [
         {
           label: "Volume",
-          data: data.map(d => d.locking_volume + d.unlocking_volume),
-          backgroundColor: data.map(d =>
-            d.locking_volume > d.unlocking_volume
-              ? "rgba(40, 201, 83, 1)"
-              : "rgba(201, 45, 40, 1)"
-          ),
-          borderColor: data.map(d =>
-            d.locking_volume > d.unlocking_volume
-              ? "rgba(40, 201, 83, 1)"
-              : "rgba(201, 45, 40, 1)"
-          ),
+          data: Object.values(data).map(v => Number(v[0].totalIQLocked)),
+          backgroundColor: Object.values(data).map(() => getRandomRGBColor()),
+          borderColor: Object.values(data).map(() => getRandomRGBColor()),
           borderWidth: 1
         }
       ]
     });
   };
 
+  const handleOnDoughnutItemClick = index => {
+    console.log(index);
+    if (index !== undefined)
+      return window
+        .open(`${ethBasedExplorerUrl}address/${addresses[index]}`, "_blank")
+        ?.focus();
+  };
+
   useEffect(() => {
     (async () => {
       const { data } = await getLockBreakdown();
 
-      console.log(data);
       let buckets = data.map(l => ({ [l.bucket]: l.totalUserCount }));
       let aux = {};
       buckets = buckets.map(b => {
         aux = { ...aux, ...b };
       });
 
+      delete aux["Unlocked"];
+
       configureLockBreakdownChart(aux);
 
-      const userBalances = await getUserBalances();
+      let userBalances = await getUserBalances();
 
-      console.log(groupBy(userBalances.data, "address"));
+      userBalances = take(
+        sortBy(userBalances.data, v => Number(v.totalIQLocked)).reverse(),
+        10
+      );
+
+      configureVolumeChart(groupBy(userBalances, "address"));
     })();
-
-    const d = new Date();
-    const date = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`;
-
-    configureVolumeChart();
   }, []);
 
   return (
@@ -113,8 +115,15 @@ const StatsCharts = () => {
       <StyledCard className="p-2 shadow-sm mb-2">
         <Bar data={lockBreakdownChartData} options={options} />
       </StyledCard>
-      <StyledCard className="p-2 shadow-sm mb-2">
-        <Doughnut data={volumeChartData} options={lineChartOptions} />
+      <StyledCard className="p-2 shadow-sm mb-2 text-center">
+        <h5>Top 10 stakers</h5>
+        <Doughnut
+          getElementAtEvent={el => {
+            console.log(el);
+            handleOnDoughnutItemClick(el && el[0] ? el[0].index : undefined);
+          }}
+          data={volumeChartData}
+        />
       </StyledCard>
     </StyledContainer>
   );

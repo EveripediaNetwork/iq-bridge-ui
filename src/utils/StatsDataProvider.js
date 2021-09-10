@@ -9,16 +9,18 @@ const getLockBreakdown = async () => {
   const response = await fetch(
     `${everipediaBaseApiEndpoint}/iq/hiiq/lock-summary`
   );
-  return await response.json();
+  return response.json();
 };
 
 const getUserBalances = async () => {
-  console.log(new Date().getTimezoneOffset());
+  const formatYmd = date => date.toISOString().slice(0, 10);
+
+  const d = formatYmd(new Date());
   const response = await fetch(
-    `${everipediaBaseApiEndpoint}/iq/hiiq/user-balances`
+    `${everipediaBaseApiEndpoint}/iq/hiiq/user-balances?start=${d}&end=${d}`
   );
 
-  return await response.json();
+  return response.json();
 };
 
 const getTokenHolders = async () => {
