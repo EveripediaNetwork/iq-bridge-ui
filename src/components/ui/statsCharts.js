@@ -2,6 +2,12 @@ import React, { memo, useState, useEffect } from "react";
 import styled from "styled-components";
 import { Bar } from "react-chartjs-2";
 import { Card } from "react-bootstrap";
+import { groupBy } from "lodash";
+
+import {
+  getLockBreakdown,
+  getUserBalances
+} from "../../utils/StatsDataProvider";
 
 const options = {
   scales: {
@@ -79,14 +85,22 @@ const StatsCharts = () => {
   };
 
   useEffect(() => {
-    configureLockBreakdownChart({
-      "<= 15 days": 10,
-      "15 - 30 days": 60,
-      "60 - 90 days": 19,
-      "1 - 2 years": 56,
-      "2 - 3 years": 44,
-      "3 - 4 years": 102
-    });
+    (async () => {
+      const { data } = await getLockBreakdown();
+
+      console.log(data);
+      let buckets = data.map(l => ({ [l.bucket]: l.totalUserCount }));
+      let aux = {};
+      buckets = buckets.map(b => {
+        aux = { ...aux, ...b };
+      });
+
+      configureLockBreakdownChart(aux);
+
+      const userBalances = await getUserBalances();
+
+      console.log(groupBy(userBalances.data, "address"));
+    })();
 
     const d = new Date();
     const date = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`;

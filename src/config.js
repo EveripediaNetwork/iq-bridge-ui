@@ -1,6 +1,7 @@
 module.exports = {
   env: process.env.NODE_ENV,
   publicURL: process.env.PUBLIC_URL,
+  everipediaBaseApiEndpoint: process.env.REACT_APP_EVERIPEDIA_BASE_API_ENDPOINT,
   appName: process.env.REACT_APP_APP_NAME,
   ChainId: process.env.REACT_APP_CHAIN_ID,
   rpcProtocol: process.env.REACT_APP_RPC_PROTOCOL,

@@ -1,8 +1,24 @@
+import { everipediaBaseApiEndpoint } from "../config";
 // TODO: get apis for hardcoded values
 const eosVolume = 10019699034;
 const twitterFollowers = 118300;
 const maticHolders = 1568;
 const bscHolders = 802;
+
+const getLockBreakdown = async () => {
+  const response = await fetch(
+    `${everipediaBaseApiEndpoint}/iq/hiiq/lock-summary`
+  );
+  return await response.json();
+};
+
+const getUserBalances = async () => {
+  const response = await fetch(
+    `${everipediaBaseApiEndpoint}/iq/hiiq/user-balances`
+  );
+
+  return await response.json();
+};
 
 const getTokenHolders = async () => {
   const response = await fetch(
@@ -142,6 +158,8 @@ const getSocialData = async () => {
 };
 
 export {
+  getLockBreakdown,
+  getUserBalances,
   getTokenHolders,
   getVolume,
   getEpData,
