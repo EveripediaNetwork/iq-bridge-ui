@@ -13,9 +13,7 @@ import { HiIQRewardsAbi } from "./hiIQRewards.abi";
 import { minterAbi } from "./minter.abi";
 import { ptokenAbi } from "./ptoken.abi";
 
-// const WEEK = 604800;
 const TOTAL_REWARDS_ACROSS_LOCK_PERIOD = 1000000 * 365;
-// const STAKING_PERIODS_PER_YEAR = 31536000 / 604800;
 
 const getHiIQContract = provider =>
   new ethers.Contract(hiIQAddress, hiIQAbi, provider.getSigner());
@@ -47,8 +45,8 @@ const callCheckpoint = async wallet => {
 
     const hiIQRewards = getHiIQRewardsContract(provider, true);
 
-    await hiIQRewards.checkpoint({ gasLimit: 800000 });
-    return true;
+    const result = await hiIQRewards.checkpoint();
+    return result;
   }
   return 0;
 };
@@ -82,17 +80,16 @@ const getStats = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
     const erc20 = new ethers.Contract(iqAddress, erc20Abi, provider);
-    const hiIQRewards = getHiIQRewardsContract(provider, true);
     const hiIQ = new ethers.Contract(hiIQAddress, hiIQAbi, provider);
 
     const totalValueLockedResult = await erc20["balanceOf(address)"](
       hiIQAddress
     );
-    const totalhIIQSupply = await hiIQRewards.totalHiIQSupplyStored(); // review this supply
+    const totalhIIQSupply = await hiIQ["totalSupply()"]();
+
     const lockedResult = await hiIQ.locked(wallet.account, {
       gasLimit: 800000
     });
-    console.log(ethers.utils.formatEther(lockedResult[1]));
 
     return {
       tvl: ethers.utils.formatEther(totalValueLockedResult),

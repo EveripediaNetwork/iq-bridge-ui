@@ -1,13 +1,22 @@
 import React, { memo, useEffect, useState, useRef } from "react";
-import { Card, Button, Row, Col, Overlay, Tooltip } from "react-bootstrap";
+import {
+  Card,
+  Button,
+  Overlay,
+  Tooltip,
+  Spinner,
+  Row,
+  Col
+} from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import * as Humanize from "humanize-plus";
+import Countdown from "react-countdown";
 
 import { QuestionCircle, JournalText, Calculator } from "react-bootstrap-icons";
 
 import { ethBasedExplorerUrl, hiIQRewardsAddress } from "../../config";
 import {
-  callCheckpoint,
   earned,
   getStats,
   getYield
@@ -16,33 +25,64 @@ import {
 import StatsCharts from "../../components/ui/statsCharts";
 import RewardsCalculatorDialog from "../../components/ui/rewardsCalculatorDialog";
 
-const Stats = ({ wallet, lockend }) => {
+const Stats = ({ wallet, lockedAlready }) => {
+  const { t } = useTranslation();
   const [stats, setStats] = useState();
+  const [earnedRewards, setEarnedRewards] = useState();
   const [isLoadingClaim, setLoadingClaim] = useState(false);
   const [show, setShow] = useState(false);
+  const [animateText, setAnimateText] = useState(false);
+  const [countdown, setCountdown] = useState(Date.now() + 19000);
   const [openRewardsCalculator, setOpenRewardsCalculator] = useState(false);
   const target = useRef(null);
+  const countDownComponentRef = useRef(null);
 
   const handleClaim = async () => {
     setLoadingClaim(true);
     const result = await getYield(wallet);
     await result.wait();
     setLoadingClaim(false);
-    await callCheckpoint(wallet);
   };
+
+  const renderer = ({ seconds, completed }) => (
+    <div className="d-flex flex-column justify-content-center align-items-center">
+      <hr />
+      <small className="font-italic text-muted text-center">
+        {completed ? "Loading rewards..." : <>Retrieving in: {seconds} s</>}
+      </small>
+    </div>
+  );
+
+  useEffect(() => {
+    setInterval(() => {
+      setAnimateText(true);
+
+      setTimeout(async () => {
+        const rewards = await earned(wallet);
+
+        setEarnedRewards(Number(rewards));
+
+        setCountdown(Date.now() + 19000);
+        countDownComponentRef.current.start();
+      }, 1500);
+    }, 20000);
+  }, []);
+
+  useEffect(() => {
+    if (animateText) {
+      setTimeout(() => {
+        setAnimateText(false);
+      }, 1500);
+    }
+  }, [animateText]);
 
   useEffect(() => {
     (async () => {
       const rewards = await earned(wallet);
-      console.log(rewards);
       const { tvl, lockedByUser, hiIQSupply, rewardsAcrossLockPeriod } =
         await getStats(wallet);
 
-      // const date = new Date();
       const yearsLock = 4; // assuming a 4 year lock
-      // ((lockend.getFullYear() - date.getFullYear()) * 12 +
-      //   (lockend.getMonth() - date.getMonth())) /
-      // 12;
 
       const rewardsBasedOnLockPeriod = lockedByUser * (1 + 0.75 * yearsLock);
       const poolRatio =
@@ -52,12 +92,14 @@ const Stats = ({ wallet, lockend }) => {
         rewardsAcrossLockPeriod * yearsLock * poolRatio;
       const userRewardsPlusInitialLock =
         userRewardsAtTheEndOfLockPeriod + lockedByUser;
+
       const aprAcrossLockPeriod = userRewardsPlusInitialLock / lockedByUser;
       const aprDividedByLockPeriod = (aprAcrossLockPeriod / yearsLock) * 100;
 
+      setEarnedRewards(Number(rewards));
+
       setStats({
         apr: aprDividedByLockPeriod,
-        rewards,
         tvl,
         lockedByUser,
         hiIQSupply,
@@ -67,75 +109,82 @@ const Stats = ({ wallet, lockend }) => {
         rewardsAcrossLockPeriod
       });
     })();
-  }, [wallet]);
-
-  console.log(stats);
+  }, [wallet, lockedAlready]);
 
   return (
-    <Card style={{ width: 460 }} className="shadow-sm m-auto p-1">
-      <Card.Body className="p-1">
+    <Card
+      style={{ width: 500, minHeight: 450 }}
+      className="shadow-sm m-auto p-1"
+    >
+      <Card.Body className="p-3 d-flex flex-column justify-content-center">
         <div className="container d-flex flex-row justify-content-center align-items-center">
-          <h3 className="text-center font-weight-normal mb-0">Stats</h3>
+          <h3 className="text-center font-weight-normal mb-0">{t("Stats")}</h3>
           <a
             target="_blank"
-            rel="noopener noreferrrer"
+            rel="noopener noreferrer"
             className="text-dark ml-2"
             href={`${ethBasedExplorerUrl}address/${hiIQRewardsAddress}`}
           >
             <JournalText size="20px" />
           </a>
         </div>
-        <hr className="shadow" />
-        {stats !== undefined ? (
-          <div className="container">
-            <Row>
-              <Col
-                className="d-flex flex-column justify-content-center align-items-center"
-                lg={9}
-              >
-                <StatsCharts />
-              </Col>
-              <Col lg={3}>
+        <hr />
+        <Row>
+          <Col sm={8} className="p-0 d-flex flex-column justify-content-center">
+            <StatsCharts />
+          </Col>
+          <Col sm={4} className="p-0 d-flex flex-column justify-content-center">
+            {stats !== undefined ? (
+              <div className="container d-flex flex-column justify-content-between">
                 <div className="mb-4 mt-2 text-center">
                   <Button
-                    onClick={() =>
-                      setOpenRewardsCalculator(!openRewardsCalculator)
-                    }
+                    onClick={() => {
+                      setOpenRewardsCalculator(!openRewardsCalculator);
+                    }}
                     className="shadow-sm"
                     variant="outline-dark"
                     size="sm"
                   >
-                    <small>Rewards Calculator</small>
+                    {t("rewards_calculator")}
                     <Calculator />
                   </Button>
                 </div>
-                <div className="m-0 text-center">
-                  <div className="d-flex flex-row justify-content-between align-items-center">
-                    <strong>APR</strong>
-                    <Button
-                      variant="light"
-                      size="sm"
-                      ref={target}
-                      onClick={() => setShow(!show)}
-                    >
-                      <QuestionCircle />
-                    </Button>
-                    <Overlay
-                      target={target.current}
-                      show={show}
-                      placement="right"
-                    >
-                      {props => (
-                        <Tooltip {...props}>
-                          This calculation is based on 4 years lock
-                        </Tooltip>
-                      )}
-                    </Overlay>
-                  </div>
-                  <br />
-                  <span>{Number(stats.apr).toFixed(2)}%</span>
-                </div>
-                <hr className="shadow" />
+                {lockedAlready ? (
+                  <>
+                    <div className="m-0 text-center">
+                      <div className="d-flex flex-row justify-content-center align-items-center">
+                        <strong className="mr-3">APR</strong>
+                        <Button
+                          variant="light"
+                          size="sm"
+                          ref={target}
+                          onClick={event => {
+                            event.preventDefault();
+                            setShow(!show);
+                          }}
+                        >
+                          <QuestionCircle />
+                        </Button>
+                        <Overlay
+                          style={{ display: show ? "block" : "none" }}
+                          target={target.current}
+                          show={show}
+                          placement="bottom"
+                        >
+                          {props => (
+                            <Tooltip {...props}>
+                              {t("calculation_based_on_4_years")}
+                            </Tooltip>
+                          )}
+                        </Overlay>
+                      </div>
+                      <span className="text-info">
+                        {Number(stats.apr).toFixed(2)}%
+                      </span>
+                    </div>
+                    <hr />
+                  </>
+                ) : null}
 
                 <p className="m-0 text-center">
                   {" "}
@@ -149,50 +198,51 @@ const Stats = ({ wallet, lockend }) => {
                   </span>
                 </p>
 
-                <hr className="shadow" />
+                <hr />
 
-                {/* <p className="m-0 text-center">
-              {" "}
-              <strong>Next Distribution</strong>
-              <br />
-              <span>
-                <span className="text-info font-weight-normal">
-                  {`${new Date(
-                    stats.timeCursor.toString() * 1000
-                  ).toDateString()}`}
-                </span>{" "}
-              </span>
-            </p> */}
-
-                {/* <hr className="shadow" /> */}
-
-                <p className="m-0 text-center">
-                  {" "}
-                  <strong>Rewards</strong>
-                  <br />
-                  <span>
-                    <span className="text-info font-weight-normal">
-                      {Humanize.toFixed(stats.rewards, 4)}{" "}
-                      <strong className="text-dark">IQ</strong>
-                    </span>{" "}
-                  </span>
-                </p>
-                <hr className="shadow m-0 mt-4" />
+                {earnedRewards && earnedRewards > 0 ? (
+                  <>
+                    <p className="m-0 text-center">
+                      {" "}
+                      <strong>{t("rewards")}</strong>
+                      <br />
+                      <span>
+                        <span className={animateText ? "animate" : ""}>
+                          {Humanize.toFixed(earnedRewards, 18)}{" "}
+                          <strong className="text-dark">IQ</strong>
+                        </span>{" "}
+                      </span>
+                    </p>
+                    <Countdown
+                      ref={countDownComponentRef}
+                      autoStart
+                      date={countdown}
+                      renderer={renderer}
+                    />
+                    <hr className="shadow m-0 mt-4" />
+                  </>
+                ) : null}
                 <div className="container mt-2 text-center">
-                  <Button
-                    disabled={isLoadingClaim || stats.rewards <= 0}
-                    onClick={handleClaim}
-                    size="sm"
-                    className="shadow-sm"
-                    variant="outline-success"
-                  >
-                    {!isLoadingClaim ? "Claim" : "Loading..."}
-                  </Button>
+                  {earnedRewards && earnedRewards > 0 ? (
+                    <Button
+                      disabled={isLoadingClaim || earnedRewards <= 0}
+                      onClick={handleClaim}
+                      size="sm"
+                      className="shadow-sm"
+                      variant="success"
+                    >
+                      {!isLoadingClaim ? t("claim") : `${t("loading")}...`}
+                    </Button>
+                  ) : null}
                 </div>
-              </Col>
-            </Row>
-          </div>
-        ) : null}
+              </div>
+            ) : (
+              <div className="container h-100 d-flex flex-column justify-content-center align-items-center">
+                <Spinner animation="grow" variant="primary" />
+              </div>
+            )}
+          </Col>
+        </Row>
       </Card.Body>
       {stats && stats.hiIQSupply ? (
         <RewardsCalculatorDialog
@@ -208,7 +258,7 @@ const Stats = ({ wallet, lockend }) => {
 
 Stats.propTypes = {
   wallet: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  hiIQBalance: PropTypes.number.isRequired
+  lockedAlready: PropTypes.bool.isRequired
 };
 
 export default memo(Stats);

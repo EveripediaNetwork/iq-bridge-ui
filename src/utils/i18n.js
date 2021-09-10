@@ -39,7 +39,7 @@ export const resources = {
       earned: "Earned",
       claim: "Claim Rewards",
       required_to_accept: "We will require you to accept the",
-      checkpoint: "checkpoint",
+      checkpoint: "Checkpoint",
       scenarios: "contract interaction in the following scenarios",
       user_is_not_initialized: "The user is not initialized in our system.",
       more_iq_tokens_locked: "More IQ tokens are locked.",
@@ -96,6 +96,17 @@ export const resources = {
       // proposalsModal
       details: "Details",
       current_proposals: "Current Proposals",
+      // rewardsCalculatorDialog
+      supply: "Supply",
+      you_will_get: "You will get",
+      expected_apr: "Expected APR",
+      rewards_calculator: "Rewards Calculator",
+      calculation_based_on_4_years:
+        "This calculation is based on a 4 years lock",
+      years: "Years",
+      next_distribution: "Next Distribution",
+      stats: "Stats",
+      locked_iq: "Locked IQ",
       // proposalDetails
       close_details: "Close details",
       open_details: "Open details",
@@ -170,7 +181,7 @@ export const resources = {
       earned: "Earned",
       claim: "Claim Rewards",
       required_to_accept: "We will require you to accept the",
-      checkpoint: "checkpoint",
+      checkpoint: "Checkpoint",
       scenarios: "contract interaction in the following scenarios",
       user_is_not_initialized: "The user is not initialized in our system.",
       more_iq_tokens_locked: "More IQ tokens are locked.",
@@ -226,6 +237,17 @@ export const resources = {
       // proposalsModal
       details: "세부 정보",
       current_proposals: "현재 제안",
+      // rewardsCalculatorDialog
+      supply: "Supply",
+      you_will_get: "You will get",
+      expected_apr: "Expected APR",
+      rewards_calculator: "Rewards Calculator",
+      calculation_based_on_4_years:
+        "This calculation is based on a 4 years lock",
+      years: "Years",
+      next_distribution: "Next Distribution",
+      stats: "Stats",
+      locked_iq: "Locked IQ",
       // proposalDetails
       close_details: "세부 정보 닫기",
       open_details: "세부 정보 열기",
@@ -356,6 +378,17 @@ export const resources = {
       // proposalsModal
       details: "详情",
       current_proposals: "当前提案",
+      // rewardsCalculatorDialog
+      supply: "Supply",
+      you_will_get: "You will get",
+      expected_apr: "Expected APR",
+      rewards_calculator: "Rewards Calculator",
+      calculation_based_on_4_years:
+        "This calculation is based on a 4 years lock",
+      years: "Years",
+      next_distribution: "Next Distribution",
+      stats: "Stats",
+      locked_iq: "Locked IQ",
       // proposalDetails
       close_details: "关闭详情",
       open_details: "打开详情",

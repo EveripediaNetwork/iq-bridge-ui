@@ -60,6 +60,21 @@ background: linear-gradient(0deg, rgba(45,132,253,1) 0%, rgba(222,237,237,1) 100
    60% { transform: rotate( 0.0deg) }
   100% { transform: rotate( 0.0deg) }
 }
+
+.animate {
+    animation: textAnimation 1s infinite alternate;
+  }
+
+@keyframes textAnimation {
+  0% { color: #000000;  }
+  10% { color: #262626;  }
+  20% { color: #363636;  }
+  30% { color: #404040;  }
+  40% { color: #575555;  }
+  50% { color: #737373;  }
+  60% { color: #a1a1a1;  }
+100% { color: #ffffff;  }
+}
 `;
 
 export default GlobalStyle;

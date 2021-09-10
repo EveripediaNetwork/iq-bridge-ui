@@ -28,7 +28,7 @@ const StyledContainer = styled.div`
 `;
 
 const StyledCard = styled(Card)`
-  border-radius: 3px !important;
+  border-radius: 15px !important;
 `;
 
 const StatsCharts = () => {
@@ -59,11 +59,10 @@ const StatsCharts = () => {
   };
 
   const configureVolumeChart = data => {
-    console.log(Object.values(data).map(v => Number(v[0].totalIQLocked)));
     setAddresses(Object.keys(data));
     setVolumeChartData({
       labels: Object.keys(data).map(
-        d => d.substring(1, 5) + "..." + d.substring(d.length - 1, d.length - 5)
+        d => `${d.substring(1, 5)}...${d.substring(d.length - 1, d.length - 5)}`
       ),
       datasets: [
         {
@@ -78,24 +77,26 @@ const StatsCharts = () => {
   };
 
   const handleOnDoughnutItemClick = index => {
-    console.log(index);
     if (index !== undefined)
       return window
         .open(`${ethBasedExplorerUrl}address/${addresses[index]}`, "_blank")
         ?.focus();
+
+    return null;
   };
 
   useEffect(() => {
     (async () => {
       const { data } = await getLockBreakdown();
 
-      let buckets = data.map(l => ({ [l.bucket]: l.totalUserCount }));
+      const buckets = data.map(l => ({ [l.bucket]: l.totalUserCount }));
       let aux = {};
-      buckets = buckets.map(b => {
+      // eslint-disable-next-line array-callback-return
+      buckets.map(b => {
         aux = { ...aux, ...b };
       });
 
-      delete aux["Unlocked"];
+      delete aux.Unlocked;
 
       configureLockBreakdownChart(aux);
 
@@ -119,7 +120,6 @@ const StatsCharts = () => {
         <h5>Top 10 stakers</h5>
         <Doughnut
           getElementAtEvent={el => {
-            console.log(el);
             handleOnDoughnutItemClick(el && el[0] ? el[0].index : undefined);
           }}
           data={volumeChartData}

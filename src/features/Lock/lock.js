@@ -226,8 +226,11 @@ const Lock = () => {
         fluid
       >
         <CardDivContainer className="d-flex flex-row flex-wrap-reverse align-items-center">
-          {wallet.account && lockEnd ? (
-            <Stats lockend={lockEnd} wallet={wallet} hiIQBalance={300000} />
+          {wallet.account && currentHiIQ ? (
+            <Stats
+              wallet={wallet}
+              lockedAlready={currentHiIQ && currentHiIQ !== 0}
+            />
           ) : null}
           <FormProvider {...methods}>
             <Col className="mb-3">
@@ -387,7 +390,7 @@ const Lock = () => {
                       </Button>
                       <a
                         target="_blank"
-                        rel="noopener noreferrrer"
+                        rel="noopener noreferrer"
                         className="text-dark ml-2"
                         href={`${ethBasedExplorerUrl}address/${hiIQAddress}`}
                       >
