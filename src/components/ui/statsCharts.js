@@ -58,7 +58,7 @@ const StatsCharts = () => {
     return `rgb(${r}, ${g}, ${b}, 0.6)`;
   };
 
-  const configureVolumeChart = data => {
+  const configureTopHoldersChart = data => {
     setAddresses(Object.keys(data));
     setVolumeChartData({
       labels: Object.keys(data).map(
@@ -89,7 +89,7 @@ const StatsCharts = () => {
     (async () => {
       const { data } = await getLockBreakdown();
 
-      const buckets = data.map(l => ({ [l.bucket]: l.totalUserCount }));
+      const buckets = data.map(l => ({ [l.bucket]: l.totalIQLocked }));
       let aux = {};
       // eslint-disable-next-line array-callback-return
       buckets.map(b => {
@@ -107,7 +107,7 @@ const StatsCharts = () => {
         10
       );
 
-      configureVolumeChart(groupBy(userBalances, "address"));
+      configureTopHoldersChart(groupBy(userBalances, "address"));
     })();
   }, []);
 
