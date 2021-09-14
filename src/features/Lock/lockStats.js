@@ -3,7 +3,7 @@ import { Card, Button } from "react-bootstrap";
 
 const LockStats = () => {
   return (
-    <Card style={{ width: 220 }} className="shadow m-auto p-1">
+    <Card style={{ width: 250 }} className="shadow m-auto p-1">
       <Card.Body className="p-1">
         <h3 className="text-center font-weight-normal">Rewards</h3>
         <hr className="shadow" />
@@ -12,6 +12,17 @@ const LockStats = () => {
             <p className="m-0 text-center">
               {" "}
               <strong>Updating Reward contract...</strong>
+              <br />
+            </p>
+            <hr className="shadow" />
+          </>
+          <>
+            <p className="m-0 text-center font-weight-light">
+              <b>Current APR:</b>
+              <br />
+              <b>112%</b> (min. locked time)
+              <br />
+              <b>448%</b> (max. locked time)
               <br />
             </p>
             <hr className="shadow" />

@@ -222,6 +222,13 @@ const Stats = () => {
                   <Icon>
                     <img alt="IQ" src="/tokens/iq.png" />
                   </Icon>
+                  <Title>IQ {t("Locked")}</Title>
+                  <Value>{showData(data.hiiq?.locked)}</Value>
+                </DataRow>
+                <DataRow>
+                  <Icon>
+                    <img alt="IQ" src="/tokens/iq.png" />
+                  </Icon>
                   <Title>HiIQ {t("holders")}</Title>
                   <Value>{showData(data.hiiq?.holders)}</Value>
                 </DataRow>
