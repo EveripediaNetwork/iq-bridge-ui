@@ -135,6 +135,13 @@ const Layout = ({ children }) => {
               {t("VOTING")}
             </Nav.Link>
             <Nav.Link
+              active={location.pathname === "/gauges"}
+              as={Link}
+              to={`/gauges${LngUrl}`}
+            >
+              Gauges
+            </Nav.Link>
+            <Nav.Link
               active={location.pathname === "/stats"}
               as={Link}
               to={`/stats${LngUrl}`}
