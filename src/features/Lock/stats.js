@@ -9,6 +9,7 @@ import { QuestionCircle, JournalText, Calculator } from "react-bootstrap-icons";
 
 import { ethBasedExplorerUrl, hiIQRewardsAddress } from "../../config";
 import {
+  callCheckpoint,
   earned,
   getStats,
   getYield
@@ -24,6 +25,7 @@ const Stats = ({ wallet, lockedAlready }) => {
   const [show, setShow] = useState(false);
   const [animateText, setAnimateText] = useState(false);
   const [countdown, setCountdown] = useState(Date.now() + 19000);
+  const [isCallingCheckpoint, setIsCallingCheckpoint] = useState(false);
   const [openRewardsCalculator, setOpenRewardsCalculator] = useState(false);
   const target = useRef(null);
   const countDownComponentRef = useRef(null);
@@ -43,6 +45,14 @@ const Stats = ({ wallet, lockedAlready }) => {
     </div>
   );
 
+  const handleCallCheckpoint = async () => {
+    setIsCallingCheckpoint(true);
+    const checkpointResult = await callCheckpoint(wallet);
+    await checkpointResult.wait();
+
+    setIsCallingCheckpoint(false);
+  };
+
   useEffect(() => {
     setInterval(() => {
       setAnimateText(true);
@@ -53,7 +63,8 @@ const Stats = ({ wallet, lockedAlready }) => {
         setEarnedRewards(Number(rewards));
 
         setCountdown(Date.now() + 19000);
-        countDownComponentRef.current.start();
+        if (countDownComponentRef && countDownComponentRef.current)
+          countDownComponentRef.current.start();
       }, 1500);
     }, 20000);
   }, []);
@@ -216,7 +227,16 @@ const Stats = ({ wallet, lockedAlready }) => {
                 >
                   {!isLoadingClaim ? t("claim") : `${t("loading")}...`}
                 </Button>
-              ) : null}
+              ) : (
+                <Button
+                  onClick={handleCallCheckpoint}
+                  size="sm"
+                  className="shadow-sm"
+                  variant="warning"
+                >
+                  {isCallingCheckpoint ? "Loading..." : "Checkpoint"}
+                </Button>
+              )}
             </div>
           </div>
         ) : (
