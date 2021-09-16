@@ -63,7 +63,8 @@ const Stats = ({ wallet, lockedAlready }) => {
         setEarnedRewards(Number(rewards));
 
         setCountdown(Date.now() + 19000);
-        countDownComponentRef.current.start();
+        if (countDownComponentRef && countDownComponentRef.current)
+          countDownComponentRef.current.start();
       }, 1500);
     }, 20000);
   }, []);
@@ -208,7 +209,7 @@ const Stats = ({ wallet, lockedAlready }) => {
                       <br />
                       <span>
                         <span className={animateText ? "animate" : ""}>
-                          {Humanize.toFixed(earnedRewards, 18)}{" "}
+                          {Humanize.toFixed(earnedRewards, 4)}{" "}
                           <strong className="text-dark">IQ</strong>
                         </span>{" "}
                       </span>
