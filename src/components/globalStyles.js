@@ -32,6 +32,19 @@ background: linear-gradient(0deg, rgba(45,132,253,1) 0%, rgba(222,237,237,1) 100
         }
     }
  }
+
+ .monospace {
+   font-family: monospace
+ }
+
+ .nav-tabs .nav-link.active {
+   border-color: transparent !important;
+   font-weight: bold
+ }
+
+ .nav-link:hover {
+  border-color: none !important;
+ }
  
  .tooltip-inner {
    border-radius: 0px !important;

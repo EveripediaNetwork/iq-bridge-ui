@@ -5,6 +5,7 @@ import {
   Overlay,
   Tooltip,
   Button,
+  Tabs,
   Tab
 } from "react-bootstrap";
 import { Doughnut } from "react-chartjs-2";
@@ -24,6 +25,7 @@ const StyledCard = styled(Card)`
 
 const StyledButton = styled(Button)`
   box-shadow: 2px 3px 0px 0px rgba(0, 0, 0, 0.26);
+  border-radius: 5px !important;
 `;
 
 const data = {
@@ -56,6 +58,7 @@ const data = {
 const Gauges = () => {
   const elementsRef = useRef([1, 2, 3, 4, 5].map(() => createRef()));
   const [show, setShow] = useState([1, 2, 3, 4, 5].map(() => false));
+  const [keyTab, setKeyTab] = useState("last-week");
 
   const getRandomRGBColor = () => {
     const r = Math.floor(Math.random() * 255);
@@ -70,9 +73,31 @@ const Gauges = () => {
     { value: "vanilla", label: "Vanilla" }
   ];
 
+  const TabBody = () => (
+    <>
+      <Select placeholder="Select a gauge" options={options} className="mt-3" />
+      <hr />
+      <div className="w-100 h-100 d-flex flex-column justify-content-center align-items-center text-center">
+        <StyledButton variant="success mb-2" size="sm">
+          My votes
+        </StyledButton>
+        <h5>Voted this week</h5>
+        <span className="monospace">549,345,433 IQ</span>
+        <span>
+          <span className="monospace font-weight-bold">34%</span> of HiIQ supply
+          voted
+        </span>
+
+        <StyledButton variant="info" className="mt-2" size="sm">
+          <strong>Breakdown</strong>
+        </StyledButton>
+      </div>
+    </>
+  );
+
   return (
     <Layout>
-      <div className="d-flex flex-row flex-wrap justify-content-center h-100 align-items-center">
+      <div className="d-flex flex-row flex-wrap justify-content-center h-75 align-items-center">
         <StyledCard style={{ width: 200 }}>
           <Card.Title>Voting</Card.Title>
           <Card.Body className="p-0 w-100">
@@ -141,9 +166,26 @@ const Gauges = () => {
             <Doughnut data={data} />
           </Card.Body>
         </StyledCard>
-        <StyledCard style={{ width: 200 }}>
+        <StyledCard style={{ width: 330 }}>
           <Card.Title>Voting history</Card.Title>
-          <Card.Body></Card.Body>
+          <Card.Body className="p-0 w-100">
+            <Tabs activeKey={keyTab} onSelect={k => setKeyTab(k)}>
+              <Tab
+                eventKey="last-week"
+                title="Last week"
+                onClick={event => event.preventDefault()}
+              >
+                {TabBody()}
+              </Tab>
+              <Tab
+                eventKey="this-week"
+                title="This week"
+                onClick={event => event.preventDefault()}
+              >
+                {TabBody()}
+              </Tab>
+            </Tabs>
+          </Card.Body>
         </StyledCard>
       </div>
     </Layout>

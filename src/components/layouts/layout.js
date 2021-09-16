@@ -73,7 +73,7 @@ const Layout = ({ children }) => {
   }, [wallet]);
 
   return (
-    <Container className="container-sm">
+    <Container style={{ height: "100vh" }} className="container-sm">
       <GlobalStyle />
       <Navbar expand="lg" className="p-3 font-weight-bold text-capitalize">
         <Navbar.Brand as={Link} to={`/${LngUrl}`}>
