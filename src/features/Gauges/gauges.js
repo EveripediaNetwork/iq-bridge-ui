@@ -1,5 +1,13 @@
 import React, { memo, useRef, createRef, useState } from "react";
-import { Card, ProgressBar, Overlay, Tooltip, Button } from "react-bootstrap";
+import {
+  Card,
+  ProgressBar,
+  Overlay,
+  Tooltip,
+  Button,
+  Tab
+} from "react-bootstrap";
+import { Doughnut } from "react-chartjs-2";
 import styled from "styled-components";
 import Select from "react-select";
 
@@ -17,6 +25,33 @@ const StyledCard = styled(Card)`
 const StyledButton = styled(Button)`
   box-shadow: 2px 3px 0px 0px rgba(0, 0, 0, 0.26);
 `;
+
+const data = {
+  labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+  datasets: [
+    {
+      label: "# of Votes",
+      data: [12, 19, 3, 5, 2, 3],
+      backgroundColor: [
+        "rgba(255, 99, 132, 0.2)",
+        "rgba(54, 162, 235, 0.2)",
+        "rgba(255, 206, 86, 0.2)",
+        "rgba(75, 192, 192, 0.2)",
+        "rgba(153, 102, 255, 0.2)",
+        "rgba(255, 159, 64, 0.2)"
+      ],
+      borderColor: [
+        "rgba(255, 99, 132, 1)",
+        "rgba(54, 162, 235, 1)",
+        "rgba(255, 206, 86, 1)",
+        "rgba(75, 192, 192, 1)",
+        "rgba(153, 102, 255, 1)",
+        "rgba(255, 159, 64, 1)"
+      ],
+      borderWidth: 1
+    }
+  ]
+};
 
 const Gauges = () => {
   const elementsRef = useRef([1, 2, 3, 4, 5].map(() => createRef()));
@@ -79,7 +114,7 @@ const Gauges = () => {
                 ))}
               </ProgressBar>
 
-              <StyledButton variant="primary" size="sm">
+              <StyledButton variant="danger" size="sm">
                 Reset
               </StyledButton>
             </div>
@@ -90,14 +125,21 @@ const Gauges = () => {
               className="mt-3"
             />
             <div className="container text-center mt-3">
-              <StyledButton variant="secondary" size="sm">
-                Submit Vote
+              <StyledButton
+                variant="light"
+                className="text-uppercase"
+                size="sm"
+              >
+                <strong>Submit Vote</strong>
               </StyledButton>
             </div>
           </Card.Body>
         </StyledCard>
         <StyledCard style={{ width: 360 }}>
           <Card.Title>Weight distribution</Card.Title>
+          <Card.Body>
+            <Doughnut data={data} />
+          </Card.Body>
         </StyledCard>
         <StyledCard style={{ width: 200 }}>
           <Card.Title>Voting history</Card.Title>

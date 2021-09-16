@@ -1,8 +1,27 @@
+import { everipediaBaseApiEndpoint } from "../config";
 // TODO: get apis for hardcoded values
 const eosVolume = 10019699034;
 const twitterFollowers = 118300;
 const maticHolders = 1568;
 const bscHolders = 802;
+
+const getLockBreakdown = async () => {
+  const response = await fetch(
+    `${everipediaBaseApiEndpoint}/iq/hiiq/lock-summary`
+  );
+  return response.json();
+};
+
+const getUserBalances = async () => {
+  const formatYmd = date => date.toISOString().slice(0, 10);
+
+  const d = formatYmd(new Date());
+  const response = await fetch(
+    `${everipediaBaseApiEndpoint}/iq/hiiq/user-balances?start=${d}&end=${d}`
+  );
+
+  return response.json();
+};
 
 const getTokenHolders = async () => {
   const response = await fetch(
@@ -26,7 +45,7 @@ const getTokenHolders = async () => {
 
 const getVolume = async () => {
   const response = await fetch(
-    "https://ethplorer.io/service/service.php?data=0x579cea1889991f68acc35ff5c3dd0621ff29b0c9"
+    "https://ethplorer.io/service/service.php?data=0x579cea1889991f68acc35ff5c3dd0621ff29b0c9&page=pageSize=500"
   );
   const data = await response.json();
   const ethVolume = data.token.totalSupply;
@@ -149,6 +168,8 @@ const getSocialData = async () => {
 };
 
 export {
+  getLockBreakdown,
+  getUserBalances,
   getTokenHolders,
   getVolume,
   getEpData,
