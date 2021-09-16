@@ -55,10 +55,17 @@ const getHiIQ = async () => {
     "https://ethplorer.io/service/service.php?data=0x1bf5457ecaa14ff63cc89efd560e251e814e16ba"
   );
   const data = await response.json();
+
+  const response2 = await fetch(
+    "https://api.ethplorer.io/getAddressInfo/0x1bf5457ecaa14ff63cc89efd560e251e814e16ba?apiKey=freekey"
+  );
+  const data2 = await response2.json();
+
   return {
     hiiq: {
       holders: data.pager?.holders?.total || data.token?.holdersCount || 0,
-      volume: parseInt(data.token?.totalSupply, 10) / 10e17 || 0
+      volume: parseInt(data.token?.totalSupply, 10) / 10e17 || 0,
+      locked: parseInt(data2.tokens[0].rawBalance, 10) / 10e17 || 0
     }
   };
 };
