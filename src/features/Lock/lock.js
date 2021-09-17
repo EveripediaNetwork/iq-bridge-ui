@@ -291,63 +291,43 @@ const Lock = () => {
                     </Accordion.Collapse>
                   </Accordion>
                   <br />
-                  <>
-                    {currentHiIQ > 0 && expired === true && (
-                      <div className="text-center p-3">
-                        <Button
-                          onClick={handleWithdraw}
-                          size="md"
-                          variant="outline-success"
-                        >
-                          {t("withdraw")}
-                        </Button>
-                      </div>
-                    )}
-                  </>
-                  {lockEnd && expired !== undefined && (
+                  {currentHiIQ > 0 && (
+                    <ToggleButtonGroup
+                      name="group"
+                      className="mb-3 mt-2 d-flex flex-row flex-wrap justify-content-center container w-75"
+                      value={radioValue}
+                      onChange={handleRadioChange}
+                      type="radio"
+                    >
+                      <StyledToggleButton
+                        size="sm"
+                        name="amount"
+                        variant="outline-info"
+                        value={1}
+                      >
+                        {t("increase_amount")}
+                      </StyledToggleButton>
+                      <StyledToggleButton
+                        size="sm"
+                        name="time"
+                        variant="outline-info"
+                        value={2}
+                      >
+                        {t("increase_lock_time")}
+                      </StyledToggleButton>
+                    </ToggleButtonGroup>
+                  )}
+                  {lockEnd && expired !== undefined && expired === false && (
                     <>
                       <StyledAlert
-                        className={`text-center mb-4 w-75 mt-0 p-0 container ${
-                          expired ? "shadow-sm font-weight-bold" : ""
-                        } `}
-                        variant={expired ? "danger" : "light"}
+                        className="text-center mb-4 w-75 mt-0 p-0 container"
+                        variant="light"
                       >
-                        {expired ? (
-                          t("expired")
-                        ) : (
-                          <>
-                            {`${t("expiring_on")} `}
-                            <strong>{`${lockEnd.toDateString()}`}</strong>
-                          </>
-                        )}
-                        <br />
+                        <>
+                          {`${t("expiring_on")} `}
+                          <strong>{`${lockEnd.toDateString()}`}</strong>
+                        </>
                       </StyledAlert>
-                      {currentHiIQ > 0 && (
-                        <ToggleButtonGroup
-                          name="group"
-                          className="mb-3 mt-2 d-flex flex-row flex-wrap justify-content-center container w-75"
-                          value={radioValue}
-                          onChange={handleRadioChange}
-                          type="radio"
-                        >
-                          <StyledToggleButton
-                            size="sm"
-                            name="amount"
-                            variant="outline-info"
-                            value={1}
-                          >
-                            {t("increase_amount")}
-                          </StyledToggleButton>
-                          <StyledToggleButton
-                            size="sm"
-                            name="time"
-                            variant="outline-info"
-                            value={2}
-                          >
-                            {t("increase_lock_time")}
-                          </StyledToggleButton>
-                        </ToggleButtonGroup>
-                      )}
                     </>
                   )}
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -373,37 +353,45 @@ const Lock = () => {
                     />
                     <br />
                     <div className="container d-flex flex-row justify-content-center align-items-center">
-                      <Button
-                        disabled={
-                          !wallet.account ||
-                          expired ||
-                          (!balance && radioValue === 1) ||
-                          (balance === 0 && radioValue === 1) ||
-                          (!filledAmount &&
-                            currentHiIQ !== 0 &&
-                            radioValue === 1) ||
-                          (currentHiIQ === 0 && !lockValue) ||
-                          (!lockValue && radioValue === 2) ||
-                          (currentHiIQ === 0 &&
-                            radioValue === 2 &&
-                            lockValue === 0) ||
-                          (currentHiIQ === 0 &&
-                            radioValue === 1 &&
-                            !filledAmount) ||
-                          (currentHiIQ === 0 && balance === 0) ||
-                          (currentHiIQ === 0 && !filledAmount)
-                        }
-                        variant="outline-dark"
-                        className="text-capitalize w-75 font-weight-bold"
-                        type="submit"
-                        size="lg"
-                      >
-                        {expired ? (
-                          <small>{t("withdraw_your_iq_tokens_first")}</small>
-                        ) : (
-                          t("lock")
-                        )}
-                      </Button>
+                      {expired && expired === true ? (
+                        <Button
+                          onClick={handleWithdraw}
+                          type="submit"
+                          className="text-capitalize w-75"
+                          size="lg"
+                          variant="outline-success"
+                        >
+                          {t("withdraw")} expired tokens
+                        </Button>
+                      ) : (
+                        <Button
+                          disabled={
+                            !wallet.account ||
+                            (!balance && radioValue === 1) ||
+                            (balance === 0 && radioValue === 1) ||
+                            (!filledAmount &&
+                              currentHiIQ !== 0 &&
+                              radioValue === 1) ||
+                            (currentHiIQ === 0 && !lockValue) ||
+                            (!lockValue && radioValue === 2) ||
+                            (currentHiIQ === 0 &&
+                              radioValue === 2 &&
+                              lockValue === 0) ||
+                            (currentHiIQ === 0 &&
+                              radioValue === 1 &&
+                              !filledAmount) ||
+                            (currentHiIQ === 0 && balance === 0) ||
+                            (currentHiIQ === 0 && !filledAmount)
+                          }
+                          variant="outline-dark"
+                          className="text-capitalize w-75 font-weight-bold"
+                          type="submit"
+                          size="lg"
+                        >
+                          {t("lock")}
+                        </Button>
+                      )}
+
                       <a
                         target="_blank"
                         rel="noopener noreferrer"
