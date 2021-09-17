@@ -74,7 +74,7 @@ const Stats = ({ wallet, lockedAlready }) => {
 
         const result = await CoinGeckoClient.coins.fetch("everipedia", {});
 
-        setRewardsInDollars(Number(rewards) * result.data.tickers[6].last);
+        setRewardsInDollars(Number(rewards) * result.data.tickers[7].last);
 
         setEarnedRewards(Number(rewards));
 
@@ -117,7 +117,7 @@ const Stats = ({ wallet, lockedAlready }) => {
 
       const result = await CoinGeckoClient.coins.fetch("everipedia", {});
 
-      setRewardsInDollars(Number(rewards) * result.data.tickers[6].last);
+      setRewardsInDollars(Number(rewards) * result.data.tickers[7].last);
 
       setEarnedRewards(Number(rewards));
 

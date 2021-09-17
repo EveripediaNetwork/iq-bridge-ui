@@ -39,19 +39,22 @@ const LockHeader = ({ wallet, currentHiIQ, updatingBalance, lockedIQ }) => {
                   </a>
                 </Button>
               </div>
-              <a
-                href={`${ethBasedExplorerUrl}token/${iqAddress}?a=${wallet.account}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2"
-              >
-                <ins>
-                  <span className="monospaced">
-                    {Humanize.intComma(Number(lockedIQ).toFixed(4))}
-                  </span>{" "}
-                  <span>locked IQ</span>
-                </ins>
-              </a>
+              <div className="mt-2">
+                <span className="text-muted">You have locked: </span>
+                <a
+                  href={`${ethBasedExplorerUrl}token/${iqAddress}?a=${wallet.account}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2"
+                >
+                  <ins>
+                    <span className="monospaced">
+                      {Humanize.intComma(Number(lockedIQ).toFixed(4))}
+                    </span>{" "}
+                    <span>IQ</span>
+                  </ins>
+                </a>
+              </div>
             </div>
           ) : (
             <div className="w-75 d-flex flex-column justify-content-center">
@@ -78,7 +81,7 @@ LockHeader.propTypes = {
   wallet: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   currentHiIQ: PropTypes.number.isRequired,
   updatingBalance: PropTypes.bool.isRequired,
-  lockedIQ: PropTypes.number.isRequired
+  lockedIQ: PropTypes.string.isRequired
 };
 
 export default memo(LockHeader);
