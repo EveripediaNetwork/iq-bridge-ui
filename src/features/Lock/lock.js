@@ -81,6 +81,11 @@ const StyledSpan = styled.span`
   font-size: 14px;
 `;
 
+const StyledAlert = styled(Alert)`
+  height: 30px;
+  border-radius: 5px !important;
+`;
+
 const IQIcon = styled.img`
   width: 20px;
 
@@ -263,19 +268,23 @@ const Lock = () => {
                         <StyledDescriptionDiv className="shadow-sm mt-3 d-flex flex-column align-items-start">
                           <StyledSpan>
                             <IQIcon src={token1.icon} /> <strong>1 IQ</strong>{" "}
-                            locked for 4 years ≈ <strong>3.99 HiIQ</strong>
+                            {t("locked_for_4_years")} ≈{" "}
+                            <strong>3.99 HiIQ</strong>
                           </StyledSpan>
                           <StyledSpan>
                             <IQIcon src={token1.icon} /> <strong>1 IQ</strong>{" "}
-                            locked for 3 years ≈ <strong>3.24 HiIQ</strong>
+                            {t("locked_for_3_years")} ≈{" "}
+                            <strong>3.24 HiIQ</strong>
                           </StyledSpan>
                           <StyledSpan>
                             <IQIcon src={token1.icon} /> <strong>1 IQ</strong>{" "}
-                            locked for 2 years ≈ <strong>2.50 HiIQ</strong>
+                            {t("locked_for_2_years")} ≈{" "}
+                            <strong>2.50 HiIQ</strong>
                           </StyledSpan>
                           <StyledSpan>
                             <IQIcon src={token1.icon} /> <strong>1 IQ</strong>{" "}
-                            locked for 1 year ≈ <strong>1.75 HiIQ</strong>
+                            {t("locked_for_1_year")} ≈{" "}
+                            <strong>1.75 HiIQ</strong>
                           </StyledSpan>
                         </StyledDescriptionDiv>
                       </HeaderText>
@@ -297,8 +306,10 @@ const Lock = () => {
                   </>
                   {lockEnd && expired !== undefined && (
                     <>
-                      <Alert
-                        className="text-center mb-0 w-75 mt-0 p-0 container"
+                      <StyledAlert
+                        className={`text-center mb-4 w-75 mt-0 p-0 container ${
+                          expired ? "shadow-sm font-weight-bold" : ""
+                        } `}
                         variant={expired ? "danger" : "light"}
                       >
                         {expired ? (
@@ -310,7 +321,7 @@ const Lock = () => {
                           </>
                         )}
                         <br />
-                      </Alert>
+                      </StyledAlert>
                       {currentHiIQ > 0 && (
                         <ToggleButtonGroup
                           name="group"
@@ -325,7 +336,7 @@ const Lock = () => {
                             variant="outline-info"
                             value={1}
                           >
-                            Increase amount
+                            {t("increase_amount")}
                           </StyledToggleButton>
                           <StyledToggleButton
                             size="sm"
@@ -333,7 +344,7 @@ const Lock = () => {
                             variant="outline-info"
                             value={2}
                           >
-                            Increase Lock Time
+                            {t("increase_lock_time")}
                           </StyledToggleButton>
                         </ToggleButtonGroup>
                       )}
@@ -365,6 +376,7 @@ const Lock = () => {
                       <Button
                         disabled={
                           !wallet.account ||
+                          expired ||
                           (!balance && radioValue === 1) ||
                           (balance === 0 && radioValue === 1) ||
                           (!filledAmount &&
@@ -386,7 +398,11 @@ const Lock = () => {
                         type="submit"
                         size="lg"
                       >
-                        {t("lock")}
+                        {expired ? (
+                          <small>{t("withdraw_your_iq_tokens_first")}</small>
+                        ) : (
+                          t("lock")
+                        )}
                       </Button>
                       <a
                         target="_blank"
