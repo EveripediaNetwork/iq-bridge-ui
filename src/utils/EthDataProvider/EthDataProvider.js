@@ -5,15 +5,15 @@ import {
   iqAddress,
   pIQAddress,
   pMinterAddress,
-  feeDistributorAddress
+  hiIQRewardsAddress
 } from "../../config";
 import { erc20Abi } from "./erc20.abi";
 import { hiIQAbi } from "./hiIQ.abi";
-import { feeDistributorAbi } from "./feeDistributor.abi";
+import { HiIQRewardsAbi } from "./hiIQRewards.abi";
 import { minterAbi } from "./minter.abi";
 import { ptokenAbi } from "./ptoken.abi";
 
-const WEEK = 604800;
+const TOTAL_REWARDS_ACROSS_LOCK_PERIOD = 1000000 * 365;
 
 const getHiIQContract = provider =>
   new ethers.Contract(hiIQAddress, hiIQAbi, provider.getSigner());
@@ -27,120 +27,76 @@ const getERC20PIQ = provider =>
 const getPMinter = provider =>
   new ethers.Contract(pMinterAddress, minterAbi, provider.getSigner());
 
+const getHiIQRewardsContract = (provider, getSigner) =>
+  new ethers.Contract(
+    hiIQRewardsAddress,
+    HiIQRewardsAbi,
+    getSigner ? provider.getSigner() : provider
+  );
+
 const addGasLimitBuffer = value =>
   value
     .mul(ethers.BigNumber.from(10000 + 2000))
     .div(ethers.BigNumber.from(10000));
 
-const getStats = async (wallet, timeCursor) => {
+const callCheckpoint = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+
+    const hiIQRewards = getHiIQRewardsContract(provider, true);
+
+    const result = await hiIQRewards.checkpoint();
+    return result;
+  }
+  return 0;
+};
+
+const earned = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+
+    const hiIQRewards = getHiIQRewardsContract(provider, false);
+    const balance = await hiIQRewards.earned(wallet.account);
+
+    return ethers.utils.formatEther(balance);
+  }
+
+  return 0;
+};
+
+const getYield = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+    const hiIQRewards = getHiIQRewardsContract(provider, true);
+
+    const yieldResult = await hiIQRewards.getYield();
+    return yieldResult;
+  }
+
+  return 0;
+};
+
+const getStats = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
     const erc20 = new ethers.Contract(iqAddress, erc20Abi, provider);
-
-    const feeDistributor = new ethers.Contract(
-      feeDistributorAddress,
-      feeDistributorAbi,
-      provider
-    );
+    const hiIQ = new ethers.Contract(hiIQAddress, hiIQAbi, provider);
 
     const totalValueLockedResult = await erc20["balanceOf(address)"](
       hiIQAddress
     );
+    const totalhIIQSupply = await hiIQ["totalSupply()"]();
 
-    const time = timeCursor.sub(WEEK * 2);
-    const yourHiIQ = await feeDistributor.hiIQForAt(wallet.account, time);
-    let data = ethers.BigNumber.from(0);
-    if (yourHiIQ.gt(0)) {
-      const result2 = await feeDistributor.hiIQSupply(time);
-      if (result2.gt(0)) {
-        const result3 = await feeDistributor.tokensPerWeek(time);
-        data = data.add(yourHiIQ.mul(result3).div(result2));
-      }
-    }
-    const yourDailyRewards = data.div(7);
-
-    return {
-      yourDailyRewards,
-      tvl: ethers.utils.formatEther(totalValueLockedResult)
-    };
-  }
-
-  return 0;
-};
-
-const getFeeDistributorCursor = async wallet => {
-  const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-
-  if (wallet.status === "connected") {
-    const feeDistributor = new ethers.Contract(
-      feeDistributorAddress,
-      feeDistributorAbi,
-      provider
-    );
-
-    return feeDistributor.timeCursor();
-  }
-
-  return 0;
-};
-
-const getRewardsForTimeCursor = async (wallet, timeCursor) => {
-  if (wallet.status === "connected") {
-    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-
-    const feeDistributor = new ethers.Contract(
-      feeDistributorAddress,
-      feeDistributorAbi,
-      provider
-    );
-    let data = ethers.BigNumber.from(0);
-    let time = await feeDistributor.startTime();
-    const address = wallet.account;
-
-    const currentCursor = await feeDistributor.timeCursorOf(address);
-    while (time.lt(timeCursor.sub(WEEK))) {
-      // if user didnt claim
-      if (currentCursor.lt(time)) {
-        // eslint-disable-next-line no-await-in-loop
-        const result = await feeDistributor.hiIQForAt(address, time);
-        if (result.gt(0)) {
-          // eslint-disable-next-line no-await-in-loop
-          const result2 = await feeDistributor.hiIQSupply(time);
-          if (result2.gt(0)) {
-            // eslint-disable-next-line no-await-in-loop
-            const result3 = await feeDistributor.tokensPerWeek(time);
-            data = data.add(result.mul(result3).div(result2));
-          }
-        }
-      }
-
-      // console.log(time.toString());
-      // console.log(new Date(time.toString() * 1000));
-
-      time = time.add(WEEK);
-    }
-
-    return ethers.utils.formatEther(data);
-  }
-
-  return 0;
-};
-
-const claim = async wallet => {
-  if (wallet.status === "connected") {
-    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
-
-    const feeDistributor = new ethers.Contract(
-      feeDistributorAddress,
-      feeDistributorAbi,
-      provider.getSigner()
-    );
-
-    const result = await feeDistributor.claim(wallet.account, {
+    const lockedResult = await hiIQ.locked(wallet.account, {
       gasLimit: 800000
     });
 
-    return result;
+    return {
+      tvl: ethers.utils.formatEther(totalValueLockedResult),
+      hiIQSupply: Number(ethers.utils.formatEther(totalhIIQSupply)),
+      lockedByUser: Number(ethers.utils.formatEther(lockedResult[0])),
+      rewardsAcrossLockPeriod: TOTAL_REWARDS_ACROSS_LOCK_PERIOD
+    };
   }
 
   return 0;
@@ -391,9 +347,10 @@ const increaseUnlockTime = async (wallet, unlockTime, handleConfirmation) => {
 };
 
 export {
+  callCheckpoint,
+  earned,
+  getYield,
   getStats,
-  getRewardsForTimeCursor,
-  claim,
   convertPTokensTx,
   getPTokensUserBalance,
   getTokensUserBalance,
@@ -404,6 +361,5 @@ export {
   increaseAmount,
   getMaximumLockableTime,
   increaseUnlockTime,
-  getTokensUserBalanceLocked,
-  getFeeDistributorCursor
+  getTokensUserBalanceLocked
 };
