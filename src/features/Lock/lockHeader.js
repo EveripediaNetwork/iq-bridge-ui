@@ -5,9 +5,9 @@ import { BoxArrowUpRight } from "react-bootstrap-icons";
 import { Button } from "react-bootstrap";
 
 import * as Humanize from "humanize-plus";
-import { ethBasedExplorerUrl, hiIQAddress } from "../../config";
+import { ethBasedExplorerUrl, hiIQAddress, iqAddress } from "../../config";
 
-const LockHeader = ({ wallet, currentHiIQ, updatingBalance }) => {
+const LockHeader = ({ wallet, currentHiIQ, updatingBalance, lockedIQ }) => {
   const { t } = useTranslation();
 
   return (
@@ -15,26 +15,43 @@ const LockHeader = ({ wallet, currentHiIQ, updatingBalance }) => {
       {wallet.status === "connected" || wallet.status === "connecting" ? (
         <>
           {currentHiIQ && currentHiIQ > 0 ? (
-            <div className="mx-auto d-flex flex-row align-content-center justify-content-center w-75">
-              <h3 className="font-weight-normal m-0 d-flex flex-column justify-content-center text-center">
-                {updatingBalance === false ? (
-                  <>{Humanize.intComma(Number(currentHiIQ).toFixed(2))} hiIQ</>
-                ) : (
-                  <>{t("updating_balance")}</>
-                )}
-              </h3>
-              <Button
-                className="pt-0 d-flex flex-column justify-content-center"
-                variant="link"
-              >
-                <a
-                  target="_blank"
-                  href={`${ethBasedExplorerUrl}token/${hiIQAddress}?a=${wallet.account}`}
-                  rel="noopener noreferrer"
+            <div className="w-100 d-flex flex-column justify-content-between text-center">
+              <div className="mx-auto d-flex flex-row align-content-center justify-content-center w-75">
+                <h3 className="font-weight-normal m-0 d-flex flex-column justify-content-center text-center">
+                  {updatingBalance === false ? (
+                    <>
+                      {Humanize.intComma(Number(currentHiIQ).toFixed(2))} hiIQ
+                    </>
+                  ) : (
+                    <>{t("updating_balance")}</>
+                  )}
+                </h3>
+                <Button
+                  className="pt-0 d-flex flex-column justify-content-center"
+                  variant="link"
                 >
-                  <BoxArrowUpRight />
-                </a>
-              </Button>
+                  <a
+                    target="_blank"
+                    href={`${ethBasedExplorerUrl}token/${hiIQAddress}?a=${wallet.account}`}
+                    rel="noopener noreferrer"
+                  >
+                    <BoxArrowUpRight />
+                  </a>
+                </Button>
+              </div>
+              <a
+                href={`${ethBasedExplorerUrl}token/${iqAddress}?a=${wallet.account}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2"
+              >
+                <ins>
+                  <span className="monospaced">
+                    {Humanize.intComma(Number(lockedIQ).toFixed(4))}
+                  </span>{" "}
+                  <span>locked IQ</span>
+                </ins>
+              </a>
             </div>
           ) : (
             <div className="w-75 d-flex flex-column justify-content-center">
@@ -60,7 +77,8 @@ const LockHeader = ({ wallet, currentHiIQ, updatingBalance }) => {
 LockHeader.propTypes = {
   wallet: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   currentHiIQ: PropTypes.number.isRequired,
-  updatingBalance: PropTypes.bool.isRequired
+  updatingBalance: PropTypes.bool.isRequired,
+  lockedIQ: PropTypes.number.isRequired
 };
 
 export default memo(LockHeader);

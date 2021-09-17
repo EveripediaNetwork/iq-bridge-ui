@@ -102,6 +102,18 @@ const getStats = async wallet => {
   return 0;
 };
 
+const getIQLockedByTheUser = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+    const hiIQ = getHiIQContract(provider);
+    const result = await hiIQ.locked(wallet.account, { gasLimit: 800000 });
+
+    return ethers.utils.formatEther(result[0]);
+  }
+
+  return 0;
+};
+
 const needsApproval = async (provider, erc20, amount, spender, hashes) => {
   const userAddress = await provider.getSigner().getAddress();
   const allowedTokens = await erc20.allowance(userAddress, spender);
@@ -351,6 +363,7 @@ export {
   earned,
   getYield,
   getStats,
+  getIQLockedByTheUser,
   convertPTokensTx,
   getPTokensUserBalance,
   getTokensUserBalance,

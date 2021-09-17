@@ -22,6 +22,7 @@ import {
   getStats,
   getYield
 } from "../../utils/EthDataProvider/EthDataProvider";
+import { CoinGeckoClient } from "../../utils/coingecko";
 
 import StatsCharts from "../../components/ui/statsCharts";
 import RewardsCalculatorDialog from "../../components/ui/rewardsCalculatorDialog";
@@ -30,10 +31,11 @@ const Stats = ({ wallet, lockedAlready }) => {
   const { t } = useTranslation();
   const [stats, setStats] = useState();
   const [earnedRewards, setEarnedRewards] = useState();
+  const [rewardsInDollars, setRewardsInDollars] = useState();
   const [isLoadingClaim, setLoadingClaim] = useState(false);
   const [show, setShow] = useState(false);
   const [animateText, setAnimateText] = useState(false);
-  const [countdown, setCountdown] = useState(Date.now() + 19000);
+  const [countdown, setCountdown] = useState(Date.now() + 25000);
   const [isCallingCheckpoint, setIsCallingCheckpoint] = useState(false);
   const [openRewardsCalculator, setOpenRewardsCalculator] = useState(false);
   const target = useRef(null);
@@ -70,13 +72,19 @@ const Stats = ({ wallet, lockedAlready }) => {
       setTimeout(async () => {
         const rewards = await earned(wallet);
 
+        const result = await CoinGeckoClient.coins.fetch("everipedia", {});
+
+        setRewardsInDollars(Number(rewards) * result.data.tickers[6].last);
+
         setEarnedRewards(Number(rewards));
 
-        setCountdown(Date.now() + 19000);
+        setEarnedRewards(Number(rewards));
+
+        setCountdown(Date.now() + 25000);
         if (countDownComponentRef && countDownComponentRef.current)
           countDownComponentRef.current.start();
       }, 1500);
-    }, 20000);
+    }, 26000);
   }, []);
 
   useEffect(() => {
@@ -106,6 +114,10 @@ const Stats = ({ wallet, lockedAlready }) => {
 
       const aprAcrossLockPeriod = userRewardsPlusInitialLock / lockedByUser;
       const aprDividedByLockPeriod = (aprAcrossLockPeriod / yearsLock) * 100;
+
+      const result = await CoinGeckoClient.coins.fetch("everipedia", {});
+
+      setRewardsInDollars(Number(rewards) * result.data.tickers[6].last);
 
       setEarnedRewards(Number(rewards));
 
@@ -220,6 +232,18 @@ const Stats = ({ wallet, lockedAlready }) => {
                         <span className={animateText ? "animate" : ""}>
                           {Humanize.toFixed(earnedRewards, 4)}{" "}
                           <strong className="text-dark">IQ</strong>
+                        </span>{" "}
+                      </span>
+                    </p>
+                    <hr />
+                    <p className="m-0 text-center">
+                      {" "}
+                      <strong>USD equivalent</strong>
+                      <br />
+                      <span>
+                        <span className={animateText ? "animate" : ""}>
+                          {Humanize.toFixed(rewardsInDollars, 4)}{" "}
+                          <strong className="text-dark">USD</strong>
                         </span>{" "}
                       </span>
                     </p>

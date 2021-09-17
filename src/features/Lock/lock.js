@@ -29,6 +29,7 @@ import CardTitle from "../../components/ui/cardTitle";
 import InfoAlert from "../../components/ui/infoAlert";
 import {
   getTokensUserBalanceLocked,
+  getIQLockedByTheUser,
   increaseAmount,
   increaseUnlockTime,
   getMaximumLockableTime,
@@ -99,6 +100,7 @@ const Lock = () => {
   const [lockValue, setLockValue] = useState();
   const [lockedTimeDiff, setLockedTimeDiff] = useState();
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
+  const [lockedIQ, setLockedIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
   const [lockEnd, setLockEnd] = useState();
   const [maximumLockableTime, setMaximumLockableTime] = useState();
@@ -214,6 +216,7 @@ const Lock = () => {
     if (wallet.status === "connected" && wallet.ethereum)
       (async () => {
         setCurrentHiIQ(Number(await getTokensUserBalanceLocked(wallet)));
+        setLockedIQ(await getIQLockedByTheUser(wallet));
         setLoadBalance(false);
         setUpdatingBalance(false);
       })();
@@ -238,11 +241,12 @@ const Lock = () => {
               <Card className="mx-auto shadow-sm">
                 <Card.Body>
                   <Accordion>
-                    <div className="d-flex flex-row justify-content-end">
-                      {currentHiIQ !== undefined && (
+                    <div className="d-flex flex-row justify-content-center align-items-center">
+                      {currentHiIQ !== undefined && lockedIQ !== undefined && (
                         <LockHeader
                           wallet={wallet}
                           currentHiIQ={currentHiIQ}
+                          lockedIQ={lockedIQ}
                           updatingBalance={updatingBalance}
                         />
                       )}
