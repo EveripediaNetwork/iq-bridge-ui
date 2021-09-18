@@ -45,7 +45,9 @@ const callCheckpoint = async wallet => {
 
     const hiIQRewards = getHiIQRewardsContract(provider, true);
 
-    const result = await hiIQRewards.checkpoint();
+    const result = await hiIQRewards.checkpoint({
+      gasLimit: addGasLimitBuffer(await hiIQRewards.estimateGas.checkpoint())
+    });
     return result;
   }
   return 0;
@@ -106,7 +108,9 @@ const getIQLockedByTheUser = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
     const hiIQ = getHiIQContract(provider);
-    const result = await hiIQ.locked(wallet.account, { gasLimit: 800000 });
+    const result = await hiIQ.locked(wallet.account, {
+      gasLimit: 125000
+    });
 
     return ethers.utils.formatEther(result[0]);
   }
