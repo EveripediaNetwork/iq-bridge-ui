@@ -90,7 +90,7 @@ const getStats = async wallet => {
     const totalhIIQSupply = await hiIQ["totalSupply()"]();
 
     const lockedResult = await hiIQ.locked(wallet.account, {
-      gasLimit: 800000
+      gasLimit: 400000
     });
 
     return {
@@ -251,9 +251,11 @@ const lockTokensTx = async (amount, time, wallet, handleConfirmation) => {
         .catch(err => handleConfirmation(err));
 
       hashes.push(result.hash);
+
+      return { result, hashes };
     }
 
-    return hashes;
+    return { hashes };
   }
 
   return false;
@@ -332,7 +334,7 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
       .then(() => handleConfirmation("success"))
       .catch(err => handleConfirmation(err));
 
-    return hashes;
+    return { result, hashes };
   }
 
   return false;
@@ -346,9 +348,7 @@ const increaseUnlockTime = async (wallet, unlockTime, handleConfirmation) => {
     const hiIQ = getHiIQContract(provider);
 
     const result = await hiIQ.increase_unlock_time(timeParsed, {
-      gasLimit: addGasLimitBuffer(
-        await hiIQ.estimateGas.increase_unlock_time(timeParsed)
-      )
+      gasLimit: 400000
     });
 
     provider
@@ -356,7 +356,7 @@ const increaseUnlockTime = async (wallet, unlockTime, handleConfirmation) => {
       .then(() => handleConfirmation("success"))
       .catch(err => handleConfirmation(err));
 
-    return result;
+    return { result };
   }
 
   return 0;

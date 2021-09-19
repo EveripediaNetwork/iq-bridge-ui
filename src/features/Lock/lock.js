@@ -130,23 +130,36 @@ const Lock = () => {
     setUpdatingBalance(true);
 
     if (currentHiIQ !== 0) {
-      if (radioValue === 1)
-        setHashes([
-          ...hashes,
-          ...(await increaseAmount(data.FromAmount, wallet, handleConfirmation))
-        ]);
-
-      if (radioValue === 2)
-        await increaseUnlockTime(wallet, lockEnd.getTime(), handleConfirmation);
-    } else {
-      setHashes(
-        await lockTokensTx(
+      if (radioValue === 1) {
+        const increaseAmountResult = await increaseAmount(
           data.FromAmount,
-          lockValue,
           wallet,
           handleConfirmation
-        )
+        );
+
+        await increaseAmountResult.result.wait();
+
+        setHashes([...hashes, ...increaseAmountResult.hashes]);
+      }
+
+      if (radioValue === 2) {
+        const increaseUnlockTimeResult = await increaseUnlockTime(
+          wallet,
+          lockEnd.getTime(),
+          handleConfirmation
+        );
+        await increaseUnlockTimeResult.result.wait();
+      }
+    } else {
+      const lockTokensResult = await lockTokensTx(
+        data.FromAmount,
+        lockValue,
+        wallet,
+        handleConfirmation
       );
+      setHashes(...lockTokensResult.hashes);
+
+      await lockTokensResult.result.wait();
       setLoadBalance(true);
     }
 
