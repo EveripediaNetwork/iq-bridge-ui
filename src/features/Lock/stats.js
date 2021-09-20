@@ -15,6 +15,7 @@ import Countdown from "react-countdown";
 
 import { QuestionCircle, JournalText, Calculator } from "react-bootstrap-icons";
 
+import styled from "styled-components";
 import { ethBasedExplorerUrl, hiIQRewardsAddress } from "../../config";
 import {
   callCheckpoint,
@@ -40,6 +41,11 @@ const Stats = ({ wallet, lockedAlready }) => {
   const [openRewardsCalculator, setOpenRewardsCalculator] = useState(false);
   const target = useRef(null);
   const countDownComponentRef = useRef(null);
+
+  const PriceSpan = styled.span`
+    font-size: 12px;
+    color: #aeabab;
+  `;
 
   const handleClaim = async () => {
     setLoadingClaim(true);
@@ -234,18 +240,9 @@ const Stats = ({ wallet, lockedAlready }) => {
                           <strong className="text-dark">IQ</strong>
                         </span>{" "}
                       </span>
-                    </p>
-                    <hr />
-                    <p className="m-0 text-center">
-                      {" "}
-                      <strong>USD equivalent</strong>
-                      <br />
-                      <span>
-                        <span className={animateText ? "animate" : ""}>
-                          {Humanize.toFixed(rewardsInDollars, 4)}{" "}
-                          <strong className="text-dark">USD</strong>
-                        </span>{" "}
-                      </span>
+                      <PriceSpan>
+                        ${Humanize.toFixed(rewardsInDollars, 2)}{" "}
+                      </PriceSpan>
                     </p>
                     <Countdown
                       ref={countDownComponentRef}
