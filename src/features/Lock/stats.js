@@ -236,75 +236,54 @@ const Stats = ({ wallet, lockedAlready }) => {
                     </span>
                   </p>
                   <hr />
-                {earnedRewards && earnedRewards > 0 ? (
-                  <>
-                    <p className="m-0 text-center">
-                      {" "}
-                      <strong>{t("rewards")}</strong>
-                      <br />
-                      <span>
-                        <span className={animateText ? "animate" : ""}>
-                          {Humanize.toFixed(earnedRewards, 4)}{" "}
-                          <strong className="text-dark">IQ</strong>
-                        </span>{" "}
-                      </span>
-                      <PriceSpan>
-                        ${Humanize.toFixed(rewardsInDollars, 2)}{" "}
-                      </PriceSpan>
-                    </p>
-                    <Countdown
-                      ref={countDownComponentRef}
-                      autoStart
-                      date={countdown}
-                      renderer={renderer}
-                    />
-                    <hr className="shadow m-0 mt-4" />
-                  </>
-                ) : null}
-                <div className="container mt-2 text-center">
-                  {earnedRewards && earnedRewards > 0 ? (
-                    <>
-                      <p className="m-0 text-center">
-                        {" "}
-                        <strong>{t("rewards")}</strong>
-                        <br />
-                        <span>
-                          <span className={animateText ? "animate" : ""}>
-                            {Humanize.toFixed(earnedRewards, 4)}{" "}
-                            <strong className="text-dark">IQ</strong>
-                          </span>{" "}
-                        </span>
-                      </p>
-                      <Countdown
-                        ref={countDownComponentRef}
-                        autoStart
-                        date={countdown}
-                        renderer={renderer}
-                      />
-                      <hr className="shadow m-0 mt-4" />
-                    </>
-                  ) : null}
-                  <div className="container mt-2 text-center">
+                  <div className="container p-0 d-flex flex-column mt-2 text-center">
                     {earnedRewards && earnedRewards > 0 ? (
-                      <Button
-                        disabled={isLoadingClaim || earnedRewards <= 0}
-                        onClick={handleClaim}
-                        size="sm"
-                        className="shadow-sm"
-                        variant="success"
-                      >
-                        {!isLoadingClaim ? t("claim") : `${t("loading")}...`}
-                      </Button>
-                    ) : (
-                      <Button
-                        onClick={handleCallCheckpoint}
-                        size="sm"
-                        className="shadow-sm"
-                        variant="warning"
-                      >
-                        {isCallingCheckpoint ? "Loading..." : "Checkpoint"}
-                      </Button>
-                    )}
+                      <>
+                        <p className="m-0 text-center d-flex flex-column">
+                          {" "}
+                          <strong>{t("rewards")}</strong>
+                          <br />
+                          <span>
+                            <span className={animateText ? "animate" : ""}>
+                              {Humanize.toFixed(earnedRewards, 4)}{" "}
+                              <strong className="text-dark">IQ</strong>
+                            </span>{" "}
+                          </span>
+                          <PriceSpan>
+                            ${Humanize.toFixed(rewardsInDollars, 2)}{" "}
+                          </PriceSpan>
+                        </p>
+                        <Countdown
+                          ref={countDownComponentRef}
+                          autoStart
+                          date={countdown}
+                          renderer={renderer}
+                        />
+                        <hr className="shadow m-0 mt-4" />
+                      </>
+                    ) : null}
+                    <div className="container mt-2 text-center">
+                      {earnedRewards && earnedRewards > 0 ? (
+                        <Button
+                          disabled={isLoadingClaim || earnedRewards <= 0}
+                          onClick={handleClaim}
+                          size="sm"
+                          className="shadow-sm"
+                          variant="success"
+                        >
+                          {!isLoadingClaim ? t("claim") : `${t("loading")}...`}
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={handleCallCheckpoint}
+                          size="sm"
+                          className="shadow-sm"
+                          variant="warning"
+                        >
+                          {isCallingCheckpoint ? "Loading..." : "Checkpoint"}
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </div>
               ) : (
