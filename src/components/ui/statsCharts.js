@@ -28,7 +28,7 @@ const StyledContainer = styled.div`
 `;
 
 const StyledCard = styled(Card)`
-  border-radius: 15px !important;
+  border-radius: 3px !important;
 `;
 
 const StatsCharts = () => {

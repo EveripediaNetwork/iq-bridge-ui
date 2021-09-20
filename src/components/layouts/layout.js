@@ -34,6 +34,10 @@ const StyledButtonsRow = styled(Row)`
   min-width: 350px;
 `;
 
+const StyledNavbar = styled(Navbar)`
+  background-color: black;
+`;
+
 const SwapTokenIcon = styled.img`
   width: 30px;
 `;
@@ -75,7 +79,11 @@ const Layout = ({ children }) => {
   return (
     <Container className="container-sm">
       <GlobalStyle />
-      <Navbar expand="lg" className="p-3 font-weight-bold text-capitalize">
+      <StyledNavbar
+        expand="lg"
+        className="p-3 font-weight-bold text-capitalize"
+        variant="dark"
+      >
         <Navbar.Brand as={Link} to={`/${LngUrl}`}>
           <SwapTokenIcon src={`${window.location.origin}/tokens/iq.png`} />
         </Navbar.Brand>
@@ -202,7 +210,7 @@ const Layout = ({ children }) => {
             </Col>
           </StyledButtonsRow>
         </Navbar.Collapse>
-      </Navbar>
+      </StyledNavbar>
       {children}
       {wallet.account && txDone && (
         <Row>

@@ -21,6 +21,7 @@ const NavContainer = styled.div`
 `;
 const LanguageMenuWrapper = styled.span`
   text-align: center;
+  color: white;
 `;
 const ChevronWrapper = styled.span`
   display: inline-block;

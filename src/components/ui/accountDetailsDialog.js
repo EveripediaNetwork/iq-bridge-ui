@@ -19,7 +19,7 @@ const StyledSpan = styled.span`
 `;
 
 const AccountDetailsDiv = styled.div`
-  border-radius: 10px;
+  border-radius: 4px;
 `;
 
 const HeaderDetails = styled.div`
