@@ -9,6 +9,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
     "chart.js": "^3.5.1",
+    "coingecko-api": "^1.0.10",
     "eos-common": "^0.8.0",
     "eosjs": "^21.0.3",
     "ethers": "^5.0.32",

@@ -14,6 +14,7 @@ import * as Humanize from "humanize-plus";
 import Countdown from "react-countdown";
 import { QuestionCircle, JournalText, Calculator } from "react-bootstrap-icons";
 
+import styled from "styled-components";
 import { ethBasedExplorerUrl, hiIQRewardsAddress } from "../../config";
 import {
   callCheckpoint,
@@ -22,6 +23,7 @@ import {
   getYield
 } from "../../utils/EthDataProvider/EthDataProvider";
 import CardTitle from "../../components/ui/cardTitle";
+import { CoinGeckoClient } from "../../utils/coingecko";
 import StatsCharts from "../../components/ui/statsCharts";
 import RewardsCalculatorDialog from "../../components/ui/rewardsCalculatorDialog";
 
@@ -29,14 +31,20 @@ const Stats = ({ wallet, lockedAlready }) => {
   const { t } = useTranslation();
   const [stats, setStats] = useState();
   const [earnedRewards, setEarnedRewards] = useState();
+  const [rewardsInDollars, setRewardsInDollars] = useState();
   const [isLoadingClaim, setLoadingClaim] = useState(false);
   const [show, setShow] = useState(false);
   const [animateText, setAnimateText] = useState(false);
-  const [countdown, setCountdown] = useState(Date.now() + 19000);
+  const [countdown, setCountdown] = useState(Date.now() + 25000);
   const [isCallingCheckpoint, setIsCallingCheckpoint] = useState(false);
   const [openRewardsCalculator, setOpenRewardsCalculator] = useState(false);
   const target = useRef(null);
   const countDownComponentRef = useRef(null);
+
+  const PriceSpan = styled.span`
+    font-size: 12px;
+    color: #aeabab;
+  `;
 
   const handleClaim = async () => {
     setLoadingClaim(true);
@@ -69,13 +77,19 @@ const Stats = ({ wallet, lockedAlready }) => {
       setTimeout(async () => {
         const rewards = await earned(wallet);
 
+        const result = await CoinGeckoClient.coins.fetch("everipedia", {});
+
+        setRewardsInDollars(Number(rewards) * result.data.tickers[7].last);
+
         setEarnedRewards(Number(rewards));
 
-        setCountdown(Date.now() + 19000);
+        setEarnedRewards(Number(rewards));
+
+        setCountdown(Date.now() + 25000);
         if (countDownComponentRef && countDownComponentRef.current)
           countDownComponentRef.current.start();
       }, 1500);
-    }, 20000);
+    }, 26000);
   }, []);
 
   useEffect(() => {
@@ -105,6 +119,10 @@ const Stats = ({ wallet, lockedAlready }) => {
 
       const aprAcrossLockPeriod = userRewardsPlusInitialLock / lockedByUser;
       const aprDividedByLockPeriod = (aprAcrossLockPeriod / yearsLock) * 100;
+
+      const result = await CoinGeckoClient.coins.fetch("everipedia", {});
+
+      setRewardsInDollars(Number(rewards) * result.data.tickers[7].last);
 
       setEarnedRewards(Number(rewards));
 
@@ -218,7 +236,32 @@ const Stats = ({ wallet, lockedAlready }) => {
                     </span>
                   </p>
                   <hr />
-
+                {earnedRewards && earnedRewards > 0 ? (
+                  <>
+                    <p className="m-0 text-center">
+                      {" "}
+                      <strong>{t("rewards")}</strong>
+                      <br />
+                      <span>
+                        <span className={animateText ? "animate" : ""}>
+                          {Humanize.toFixed(earnedRewards, 4)}{" "}
+                          <strong className="text-dark">IQ</strong>
+                        </span>{" "}
+                      </span>
+                      <PriceSpan>
+                        ${Humanize.toFixed(rewardsInDollars, 2)}{" "}
+                      </PriceSpan>
+                    </p>
+                    <Countdown
+                      ref={countDownComponentRef}
+                      autoStart
+                      date={countdown}
+                      renderer={renderer}
+                    />
+                    <hr className="shadow m-0 mt-4" />
+                  </>
+                ) : null}
+                <div className="container mt-2 text-center">
                   {earnedRewards && earnedRewards > 0 ? (
                     <>
                       <p className="m-0 text-center">

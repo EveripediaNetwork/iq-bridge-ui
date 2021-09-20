@@ -29,6 +29,7 @@ import CardTitle from "../../components/ui/cardTitle";
 import InfoAlert from "../../components/ui/infoAlert";
 import {
   getTokensUserBalanceLocked,
+  getIQLockedByTheUser,
   increaseAmount,
   increaseUnlockTime,
   getMaximumLockableTime,
@@ -104,6 +105,7 @@ const Lock = () => {
   const [lockValue, setLockValue] = useState();
   const [lockedTimeDiff, setLockedTimeDiff] = useState();
   const [currentHiIQ, setCurrentHiIQ] = useState(undefined);
+  const [lockedIQ, setLockedIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
   const [lockEnd, setLockEnd] = useState();
   const [maximumLockableTime, setMaximumLockableTime] = useState();
@@ -133,23 +135,36 @@ const Lock = () => {
     setUpdatingBalance(true);
 
     if (currentHiIQ !== 0) {
-      if (radioValue === 1)
-        setHashes([
-          ...hashes,
-          ...(await increaseAmount(data.FromAmount, wallet, handleConfirmation))
-        ]);
-
-      if (radioValue === 2)
-        await increaseUnlockTime(wallet, lockEnd.getTime(), handleConfirmation);
-    } else {
-      setHashes(
-        await lockTokensTx(
+      if (radioValue === 1) {
+        const increaseAmountResult = await increaseAmount(
           data.FromAmount,
-          lockValue,
           wallet,
           handleConfirmation
-        )
+        );
+
+        await increaseAmountResult.result.wait();
+
+        setHashes([...hashes, ...increaseAmountResult.hashes]);
+      }
+
+      if (radioValue === 2) {
+        const increaseUnlockTimeResult = await increaseUnlockTime(
+          wallet,
+          lockEnd.getTime(),
+          handleConfirmation
+        );
+        await increaseUnlockTimeResult.result.wait();
+      }
+    } else {
+      const lockTokensResult = await lockTokensTx(
+        data.FromAmount,
+        lockValue,
+        wallet,
+        handleConfirmation
       );
+      setHashes(...lockTokensResult.hashes);
+
+      await lockTokensResult.result.wait();
       setLoadBalance(true);
     }
 
@@ -219,6 +234,7 @@ const Lock = () => {
     if (wallet.status === "connected" && wallet.ethereum)
       (async () => {
         setCurrentHiIQ(Number(await getTokensUserBalanceLocked(wallet)));
+        setLockedIQ(await getIQLockedByTheUser(wallet));
         setLoadBalance(false);
         setUpdatingBalance(false);
       })();
@@ -243,11 +259,12 @@ const Lock = () => {
               <Card className="mx-auto shadow-sm">
                 <Card.Body>
                   <Accordion>
-                    <div className="d-flex flex-row justify-content-end">
-                      {currentHiIQ !== undefined && (
+                    <div className="d-flex flex-row justify-content-center align-items-center">
+                      {currentHiIQ !== undefined && lockedIQ !== undefined && (
                         <LockHeader
                           wallet={wallet}
                           currentHiIQ={currentHiIQ}
+                          lockedIQ={lockedIQ}
                           updatingBalance={updatingBalance}
                         />
                       )}
