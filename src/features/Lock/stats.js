@@ -12,7 +12,6 @@ import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import * as Humanize from "humanize-plus";
 import Countdown from "react-countdown";
-
 import { QuestionCircle, JournalText, Calculator } from "react-bootstrap-icons";
 
 import styled from "styled-components";
@@ -23,8 +22,8 @@ import {
   getStats,
   getYield
 } from "../../utils/EthDataProvider/EthDataProvider";
+import CardTitle from "../../components/ui/cardTitle";
 import { CoinGeckoClient } from "../../utils/coingecko";
-
 import StatsCharts from "../../components/ui/statsCharts";
 import RewardsCalculatorDialog from "../../components/ui/rewardsCalculatorDialog";
 
@@ -141,158 +140,170 @@ const Stats = ({ wallet, lockedAlready }) => {
   }, [wallet, lockedAlready]);
 
   return (
-    <Card
-      style={{ width: 500, minHeight: 450 }}
-      className="shadow-sm m-auto p-1"
-    >
-      <Card.Body className="p-3 d-flex flex-column justify-content-center">
-        <div className="container d-flex flex-row justify-content-center align-items-center">
-          <h3 className="text-center font-weight-normal mb-0">{t("Stats")}</h3>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-dark ml-2"
-            href={`${ethBasedExplorerUrl}address/${hiIQRewardsAddress}`}
-          >
-            <JournalText size="20px" />
-          </a>
-        </div>
-        <hr />
-        <Row>
-          <Col sm={8} className="p-0 d-flex flex-column justify-content-center">
-            <StatsCharts />
-          </Col>
-          <Col sm={4} className="p-0 d-flex flex-column justify-content-center">
-            {stats !== undefined ? (
-              <div className="container d-flex flex-column justify-content-between">
-                <div className="mb-4 mt-2 text-center">
-                  <Button
-                    onClick={() => {
-                      setOpenRewardsCalculator(!openRewardsCalculator);
-                    }}
-                    className="shadow-sm"
-                    variant="outline-dark"
-                    size="sm"
-                  >
-                    {t("rewards_calculator")}
-                    <Calculator />
-                  </Button>
-                </div>
-                {lockedAlready ? (
-                  <>
-                    <div className="m-0 text-center">
-                      <div className="d-flex flex-row justify-content-center align-items-center">
-                        <strong className="mr-3">APR</strong>
-                        <Button
-                          variant="light"
-                          size="sm"
-                          ref={target}
-                          onClick={event => {
-                            event.preventDefault();
-                            setShow(!show);
-                          }}
-                        >
-                          <QuestionCircle />
-                        </Button>
-                        <Overlay
-                          style={{ display: show ? "block" : "none" }}
-                          target={target.current}
-                          show={show}
-                          placement="bottom"
-                        >
-                          {props => (
-                            <Tooltip {...props}>
-                              {t("calculation_based_on_4_years")}
-                            </Tooltip>
-                          )}
-                        </Overlay>
+    <div className="d-flex flex-column justify-content-center align-items-center">
+      <CardTitle title="Stats" aria-label="lock" icon="📈" />
+      <Card
+        style={{ width: 500, minHeight: 450 }}
+        className="shadow-sm m-auto p-1"
+      >
+        <Card.Body className="p-3 d-flex flex-column justify-content-center">
+          <div className="container d-flex flex-row justify-content-center align-items-center">
+            <h3 className="text-center font-weight-normal mb-0">
+              {t("Stats")}
+            </h3>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-dark ml-2"
+              href={`${ethBasedExplorerUrl}address/${hiIQRewardsAddress}`}
+            >
+              <JournalText size="20px" />
+            </a>
+          </div>
+          <hr />
+          <Row>
+            <Col
+              sm={8}
+              className="p-0 d-flex flex-column justify-content-center"
+            >
+              <StatsCharts />
+            </Col>
+            <Col
+              sm={4}
+              className="p-0 d-flex flex-column justify-content-center"
+            >
+              {stats !== undefined ? (
+                <div className="container d-flex flex-column justify-content-between">
+                  <div className="mb-4 mt-2 text-center">
+                    <Button
+                      onClick={() => {
+                        setOpenRewardsCalculator(!openRewardsCalculator);
+                      }}
+                      className="shadow-sm"
+                      variant="outline-dark"
+                      size="sm"
+                    >
+                      {t("rewards_calculator")}
+                      <Calculator />
+                    </Button>
+                  </div>
+                  {lockedAlready ? (
+                    <>
+                      <div className="m-0 text-center">
+                        <div className="d-flex flex-row justify-content-center align-items-center">
+                          <strong className="mr-3">APR</strong>
+                          <Button
+                            variant="light"
+                            size="sm"
+                            ref={target}
+                            onClick={event => {
+                              event.preventDefault();
+                              setShow(!show);
+                            }}
+                          >
+                            <QuestionCircle />
+                          </Button>
+                          <Overlay
+                            style={{ display: show ? "block" : "none" }}
+                            target={target.current}
+                            show={show}
+                            placement="bottom"
+                          >
+                            {props => (
+                              <Tooltip {...props}>
+                                {t("calculation_based_on_4_years")}
+                              </Tooltip>
+                            )}
+                          </Overlay>
+                        </div>
+                        <span className="text-info">
+                          {Number(stats.apr).toFixed(2)}%
+                        </span>
                       </div>
+                      <hr />
+                    </>
+                  ) : null}
+
+                  <p className="m-0 text-center">
+                    {" "}
+                    <strong>TVL</strong>
+                    <br />
+                    <span>
                       <span className="text-info">
-                        {Number(stats.apr).toFixed(2)}%
+                        {Humanize.intComma(stats.tvl)}{" "}
+                        <strong className="text-dark">IQ</strong>
                       </span>
-                    </div>
-                    <hr />
-                  </>
-                ) : null}
-
-                <p className="m-0 text-center">
-                  {" "}
-                  <strong>TVL</strong>
-                  <br />
-                  <span>
-                    <span className="text-info">
-                      {Humanize.intComma(stats.tvl)}{" "}
-                      <strong className="text-dark">IQ</strong>
                     </span>
-                  </span>
-                </p>
-                <hr />
-
-                {earnedRewards && earnedRewards > 0 ? (
-                  <>
-                    <p className="m-0 text-center">
-                      {" "}
-                      <strong>{t("rewards")}</strong>
-                      <br />
-                      <span>
-                        <span className={animateText ? "animate" : ""}>
-                          {Humanize.toFixed(earnedRewards, 4)}{" "}
-                          <strong className="text-dark">IQ</strong>
-                        </span>{" "}
-                      </span>
-                      <PriceSpan>
-                        ${Humanize.toFixed(rewardsInDollars, 2)}{" "}
-                      </PriceSpan>
-                    </p>
-                    <Countdown
-                      ref={countDownComponentRef}
-                      autoStart
-                      date={countdown}
-                      renderer={renderer}
-                    />
-                    <hr className="shadow m-0 mt-4" />
-                  </>
-                ) : null}
-                <div className="container mt-2 text-center">
-                  {earnedRewards && earnedRewards > 0 ? (
-                    <Button
-                      disabled={isLoadingClaim || earnedRewards <= 0}
-                      onClick={handleClaim}
-                      size="sm"
-                      className="shadow-sm"
-                      variant="success"
-                    >
-                      {!isLoadingClaim ? t("claim") : `${t("loading")}...`}
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={handleCallCheckpoint}
-                      size="sm"
-                      className="shadow-sm"
-                      variant="warning"
-                    >
-                      {isCallingCheckpoint ? "Loading..." : "Checkpoint"}
-                    </Button>
-                  )}
+                  </p>
+                  <hr />
+                  <div className="container p-0 d-flex flex-column mt-2 text-center">
+                    {earnedRewards && earnedRewards > 0 ? (
+                      <>
+                        <p className="m-0 text-center d-flex flex-column">
+                          {" "}
+                          <strong>{t("rewards")}</strong>
+                          <br />
+                          <span>
+                            <span className={animateText ? "animate" : ""}>
+                              {Humanize.toFixed(earnedRewards, 4)}{" "}
+                              <strong className="text-dark">IQ</strong>
+                            </span>{" "}
+                          </span>
+                          <PriceSpan>
+                            ${Humanize.toFixed(rewardsInDollars, 2)}{" "}
+                          </PriceSpan>
+                        </p>
+                        <Countdown
+                          ref={countDownComponentRef}
+                          autoStart
+                          date={countdown}
+                          renderer={renderer}
+                        />
+                        <hr className="shadow m-0 mt-4" />
+                      </>
+                    ) : null}
+                    <div className="container mt-2 text-center">
+                      {earnedRewards && earnedRewards > 0 ? (
+                        <Button
+                          disabled={isLoadingClaim || earnedRewards <= 0}
+                          onClick={handleClaim}
+                          size="sm"
+                          className="shadow-sm"
+                          variant="success"
+                        >
+                          {!isLoadingClaim ? t("claim") : `${t("loading")}...`}
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={handleCallCheckpoint}
+                          size="sm"
+                          className="shadow-sm"
+                          variant="warning"
+                        >
+                          {isCallingCheckpoint ? "Loading..." : "Checkpoint"}
+                        </Button>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="container h-100 d-flex flex-column justify-content-center align-items-center">
-                <Spinner animation="grow" variant="primary" />
-              </div>
-            )}
-          </Col>
-        </Row>
-      </Card.Body>
-      {stats && stats.hiIQSupply ? (
-        <RewardsCalculatorDialog
-          openRewardsCalculator={openRewardsCalculator}
-          setOpenRewardsCalculator={setOpenRewardsCalculator}
-          hiIQSupply={stats.hiIQSupply}
-          rewardsAcrossLockPeriod={stats.rewardsAcrossLockPeriod}
-        />
-      ) : null}
-    </Card>
+              ) : (
+                <div className="container h-100 d-flex flex-column justify-content-center align-items-center">
+                  <Spinner animation="grow" variant="primary" />
+                </div>
+              )}
+            </Col>
+          </Row>
+        </Card.Body>
+        {stats && stats.hiIQSupply ? (
+          <RewardsCalculatorDialog
+            openRewardsCalculator={openRewardsCalculator}
+            setOpenRewardsCalculator={setOpenRewardsCalculator}
+            hiIQSupply={stats.hiIQSupply}
+            rewardsAcrossLockPeriod={stats.rewardsAcrossLockPeriod}
+          />
+        ) : null}
+      </Card>
+    </div>
   );
 };
 
