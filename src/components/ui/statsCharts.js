@@ -29,6 +29,7 @@ const StyledContainer = styled.div`
 
 const StyledCard = styled(Card)`
   border-radius: 15px !important;
+  border: 0.5px dashed lightgray !important;
 `;
 
 const StatsCharts = () => {
@@ -113,10 +114,10 @@ const StatsCharts = () => {
 
   return (
     <StyledContainer>
-      <StyledCard className="p-2 shadow-sm mb-2">
+      <StyledCard className="p-2 mb-2">
         <Bar data={lockBreakdownChartData} options={options} />
       </StyledCard>
-      <StyledCard className="p-2 shadow-sm mb-2 text-center">
+      <StyledCard className="p-2 mb-2 text-center">
         <h5>Top 10 stakers</h5>
         <Doughnut
           getElementAtEvent={el => {
