@@ -45,7 +45,9 @@ const callCheckpoint = async wallet => {
 
     const hiIQRewards = getHiIQRewardsContract(provider, true);
 
-    const result = await hiIQRewards.checkpoint();
+    const result = await hiIQRewards.checkpoint({
+      gasLimit: addGasLimitBuffer(await hiIQRewards.estimateGas.checkpoint())
+    });
     return result;
   }
   return 0;
@@ -88,7 +90,7 @@ const getStats = async wallet => {
     const totalhIIQSupply = await hiIQ["totalSupply()"]();
 
     const lockedResult = await hiIQ.locked(wallet.account, {
-      gasLimit: 800000
+      gasLimit: 400000
     });
 
     return {
@@ -97,6 +99,20 @@ const getStats = async wallet => {
       lockedByUser: Number(ethers.utils.formatEther(lockedResult[0])),
       rewardsAcrossLockPeriod: TOTAL_REWARDS_ACROSS_LOCK_PERIOD
     };
+  }
+
+  return 0;
+};
+
+const getIQLockedByTheUser = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+    const hiIQ = getHiIQContract(provider);
+    const result = await hiIQ.locked(wallet.account, {
+      gasLimit: 125000
+    });
+
+    return ethers.utils.formatEther(result[0]);
   }
 
   return 0;
@@ -235,9 +251,11 @@ const lockTokensTx = async (amount, time, wallet, handleConfirmation) => {
         .catch(err => handleConfirmation(err));
 
       hashes.push(result.hash);
+
+      return { result, hashes };
     }
 
-    return hashes;
+    return { hashes };
   }
 
   return false;
@@ -316,7 +334,7 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
       .then(() => handleConfirmation("success"))
       .catch(err => handleConfirmation(err));
 
-    return hashes;
+    return { result, hashes };
   }
 
   return false;
@@ -330,9 +348,7 @@ const increaseUnlockTime = async (wallet, unlockTime, handleConfirmation) => {
     const hiIQ = getHiIQContract(provider);
 
     const result = await hiIQ.increase_unlock_time(timeParsed, {
-      gasLimit: addGasLimitBuffer(
-        await hiIQ.estimateGas.increase_unlock_time(timeParsed)
-      )
+      gasLimit: 400000
     });
 
     provider
@@ -340,7 +356,7 @@ const increaseUnlockTime = async (wallet, unlockTime, handleConfirmation) => {
       .then(() => handleConfirmation("success"))
       .catch(err => handleConfirmation(err));
 
-    return result;
+    return { result };
   }
 
   return 0;
@@ -351,6 +367,7 @@ export {
   earned,
   getYield,
   getStats,
+  getIQLockedByTheUser,
   convertPTokensTx,
   getPTokensUserBalance,
   getTokensUserBalance,
