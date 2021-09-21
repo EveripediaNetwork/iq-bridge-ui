@@ -26,6 +26,7 @@ import CardTitle from "../../components/ui/cardTitle";
 import { CoinGeckoClient } from "../../utils/coingecko";
 import StatsCharts from "../../components/ui/statsCharts";
 import RewardsCalculatorDialog from "../../components/ui/rewardsCalculatorDialog";
+import EthereumWalletModal from "../../components/ui/ethereumWalletModal";
 
 const Stats = ({ wallet, lockedAlready }) => {
   const { t } = useTranslation();
@@ -33,6 +34,8 @@ const Stats = ({ wallet, lockedAlready }) => {
   const [earnedRewards, setEarnedRewards] = useState();
   const [rewardsInDollars, setRewardsInDollars] = useState();
   const [isLoadingClaim, setLoadingClaim] = useState(false);
+  const [ethModalShow, setEthModalShow] = useState(false);
+  const [isLoadingStats, setIsLoadingStats] = useState(false);
   const [show, setShow] = useState(false);
   const [animateText, setAnimateText] = useState(false);
   const [countdown, setCountdown] = useState(Date.now() + 25000);
@@ -71,6 +74,8 @@ const Stats = ({ wallet, lockedAlready }) => {
   };
 
   useEffect(() => {
+    if (!wallet || wallet.account === null) return;
+
     setInterval(() => {
       setAnimateText(true);
 
@@ -90,7 +95,7 @@ const Stats = ({ wallet, lockedAlready }) => {
           countDownComponentRef.current.start();
       }, 1500);
     }, 26000);
-  }, []);
+  }, [wallet]);
 
   useEffect(() => {
     if (animateText) {
@@ -101,7 +106,10 @@ const Stats = ({ wallet, lockedAlready }) => {
   }, [animateText]);
 
   useEffect(() => {
+    if (!wallet || wallet.account === null) return;
+
     (async () => {
+      setIsLoadingStats(!isLoadingStats);
       const rewards = await earned(wallet);
       const { tvl, lockedByUser, hiIQSupply, rewardsAcrossLockPeriod } =
         await getStats(wallet);
@@ -136,6 +144,7 @@ const Stats = ({ wallet, lockedAlready }) => {
         poolRatio,
         rewardsAcrossLockPeriod
       });
+      setIsLoadingStats(!isLoadingStats);
     })();
   }, [wallet, lockedAlready]);
 
@@ -287,9 +296,26 @@ const Stats = ({ wallet, lockedAlready }) => {
                   </div>
                 </div>
               ) : (
-                <div className="container h-100 d-flex flex-column justify-content-center align-items-center">
-                  <Spinner animation="grow" variant="primary" />
-                </div>
+                <>
+                  {!isLoadingStats ? (
+                    <div className="d-flex flex-column p-4">
+                      <span className="text-center font-italic">
+                        Login to see more stats
+                      </span>
+                      <Button
+                        onClick={() => setEthModalShow(true)}
+                        variant="light"
+                        className="rounded-0 mt-2 font-weight-bold"
+                      >
+                        Login
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="container h-100 d-flex flex-column justify-content-center align-items-center">
+                      <Spinner animation="grow" variant="primary" />
+                    </div>
+                  )}
+                </>
               )}
             </Col>
           </Row>
@@ -303,13 +329,19 @@ const Stats = ({ wallet, lockedAlready }) => {
           />
         ) : null}
       </Card>
+      <EthereumWalletModal show={ethModalShow} setShow={setEthModalShow} />
     </div>
   );
 };
 
+Stats.defaultProps = {
+  wallet: undefined,
+  lockedAlready: false
+};
+
 Stats.propTypes = {
-  wallet: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  lockedAlready: PropTypes.bool.isRequired
+  wallet: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  lockedAlready: PropTypes.bool
 };
 
 export default memo(Stats);
