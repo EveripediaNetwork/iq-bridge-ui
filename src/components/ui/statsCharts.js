@@ -22,6 +22,19 @@ const options = {
   }
 };
 
+const colorsArray = [
+  "rgba(246, 64, 70, 0.9)",
+  "rgba(154, 28, 200, 0.9)",
+  "rgba(68, 204, 42, 0.9)",
+  "rgba(219, 55, 185, 0.9)",
+  "rgba(0, 0, 0, 0.9)",
+  "rgba(49, 250, 236, 0.9)",
+  "rgba(0, 55, 255, 0.9)",
+  "rgba(252, 126, 60, 0.9)",
+  "rgba(222, 253, 61, 0.9)",
+  "rgba(253, 198, 144, 0.9)"
+];
+
 const StyledContainer = styled.div`
   max-width: 450;
   overflow-x: auto;
@@ -52,14 +65,8 @@ const StatsCharts = () => {
     });
   };
 
-  const getRandomRGBColor = () => {
-    const r = Math.floor(Math.random() * 255);
-    const g = Math.floor(Math.random() * 255);
-    const b = Math.floor(Math.random() * 255);
-    return `rgb(${r}, ${g}, ${b}, 0.6)`;
-  };
-
   const configureTopHoldersChart = data => {
+    console.log(data);
     setAddresses(Object.keys(data));
     setVolumeChartData({
       labels: Object.keys(data).map(
@@ -69,8 +76,12 @@ const StatsCharts = () => {
         {
           label: "Volume",
           data: Object.values(data).map(v => Number(v[0].totalIQLocked)),
-          backgroundColor: Object.values(data).map(() => getRandomRGBColor()),
-          borderColor: Object.values(data).map(() => getRandomRGBColor()),
+          backgroundColor: Object.values(data).map(() => {
+            const firstColor = colorsArray[0];
+            colorsArray.shift();
+            return firstColor;
+          }),
+          borderColor: "rgba(0, 0, 0, 1)",
           borderWidth: 1
         }
       ]
