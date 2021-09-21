@@ -82,6 +82,11 @@ const StyledSpan = styled.span`
   font-size: 14px;
 `;
 
+const StyledAlert = styled(Alert)`
+  height: 30px;
+  border-radius: 5px !important;
+`;
+
 const IQIcon = styled.img`
   width: 20px;
 
@@ -280,80 +285,66 @@ const Lock = () => {
                         <StyledDescriptionDiv className="shadow-sm mt-3 d-flex flex-column align-items-start">
                           <StyledSpan>
                             <IQIcon src={token1.icon} /> <strong>1 IQ</strong>{" "}
-                            locked for 4 years ≈ <strong>3.99 HiIQ</strong>
+                            {t("locked_for_4_years")} ≈{" "}
+                            <strong>3.99 HiIQ</strong>
                           </StyledSpan>
                           <StyledSpan>
                             <IQIcon src={token1.icon} /> <strong>1 IQ</strong>{" "}
-                            locked for 3 years ≈ <strong>3.24 HiIQ</strong>
+                            {t("locked_for_3_years")} ≈{" "}
+                            <strong>3.24 HiIQ</strong>
                           </StyledSpan>
                           <StyledSpan>
                             <IQIcon src={token1.icon} /> <strong>1 IQ</strong>{" "}
-                            locked for 2 years ≈ <strong>2.50 HiIQ</strong>
+                            {t("locked_for_2_years")} ≈{" "}
+                            <strong>2.50 HiIQ</strong>
                           </StyledSpan>
                           <StyledSpan>
                             <IQIcon src={token1.icon} /> <strong>1 IQ</strong>{" "}
-                            locked for 1 year ≈ <strong>1.75 HiIQ</strong>
+                            {t("locked_for_1_year")} ≈{" "}
+                            <strong>1.75 HiIQ</strong>
                           </StyledSpan>
                         </StyledDescriptionDiv>
                       </HeaderText>
                     </Accordion.Collapse>
                   </Accordion>
                   <br />
-                  <>
-                    {currentHiIQ > 0 && expired === true && (
-                      <div className="text-center p-3">
-                        <Button
-                          onClick={handleWithdraw}
-                          size="md"
-                          variant="outline-success"
-                        >
-                          {t("withdraw")}
-                        </Button>
-                      </div>
-                    )}
-                  </>
-                  {lockEnd && expired !== undefined && (
-                    <>
-                      <Alert
-                        className="text-center mb-0 w-75 mt-0 p-0 container"
-                        variant={expired ? "danger" : "light"}
+                  {currentHiIQ > 0 && (
+                    <ToggleButtonGroup
+                      name="group"
+                      className="mb-3 mt-2 d-flex flex-row flex-wrap justify-content-center container w-75"
+                      value={radioValue}
+                      onChange={handleRadioChange}
+                      type="radio"
+                    >
+                      <StyledToggleButton
+                        size="sm"
+                        name="amount"
+                        variant="outline-info"
+                        value={1}
                       >
-                        {expired ? (
-                          t("expired")
-                        ) : (
-                          <>
-                            {`${t("expiring_on")} `}
-                            <strong>{`${lockEnd.toDateString()}`}</strong>
-                          </>
-                        )}
-                        <br />
-                      </Alert>
-                      {currentHiIQ > 0 && (
-                        <ToggleButtonGroup
-                          name="group"
-                          className="mb-3 mt-2 d-flex flex-row flex-wrap justify-content-center container w-75"
-                          value={radioValue}
-                          onChange={handleRadioChange}
-                          type="radio"
-                        >
-                          <StyledToggleButton
-                            size="sm"
-                            name="amount"
-                            variant="outline-info"
-                            value={1}
-                          >
-                            Increase amount
-                          </StyledToggleButton>
-                          <StyledToggleButton
-                            size="sm"
-                            name="time"
-                            variant="outline-info"
-                            value={2}
-                          >
-                            Increase Lock Time
-                          </StyledToggleButton>
-                        </ToggleButtonGroup>
-                      )}
+                        {t("increase_amount")}
+                      </StyledToggleButton>
+                      <StyledToggleButton
+                        size="sm"
+                        name="time"
+                        variant="outline-info"
+                        value={2}
+                      >
+                        {t("increase_lock_time")}
+                      </StyledToggleButton>
+                    </ToggleButtonGroup>
+                  )}
+                  {lockEnd && expired !== undefined && expired === false && (
+                    <>
+                      <StyledAlert
+                        className="text-center mb-4 w-75 mt-0 p-0 container"
+                        variant="light"
+                      >
+                        <>
+                          {`${t("expiring_on")} `}
+                          <strong>{`${lockEnd.toDateString()}`}</strong>
+                        </>
+                      </StyledAlert>
                     </>
                   )}
                   <Form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -379,32 +370,45 @@ const Lock = () => {
                     />
                     <br />
                     <div className="container d-flex flex-row justify-content-center align-items-center">
-                      <Button
-                        disabled={
-                          !wallet.account ||
-                          (!balance && radioValue === 1) ||
-                          (balance === 0 && radioValue === 1) ||
-                          (!filledAmount &&
-                            currentHiIQ !== 0 &&
-                            radioValue === 1) ||
-                          (currentHiIQ === 0 && !lockValue) ||
-                          (!lockValue && radioValue === 2) ||
-                          (currentHiIQ === 0 &&
-                            radioValue === 2 &&
-                            lockValue === 0) ||
-                          (currentHiIQ === 0 &&
-                            radioValue === 1 &&
-                            !filledAmount) ||
-                          (currentHiIQ === 0 && balance === 0) ||
-                          (currentHiIQ === 0 && !filledAmount)
-                        }
-                        variant="outline-dark"
-                        className="text-capitalize w-75 font-weight-bold"
-                        type="submit"
-                        size="lg"
-                      >
-                        {t("lock")}
-                      </Button>
+                      {expired && expired === true ? (
+                        <Button
+                          onClick={handleWithdraw}
+                          type="submit"
+                          className="text-capitalize w-75"
+                          size="lg"
+                          variant="outline-success"
+                        >
+                          {t("withdraw")} expired tokens
+                        </Button>
+                      ) : (
+                        <Button
+                          disabled={
+                            !wallet.account ||
+                            (!balance && radioValue === 1) ||
+                            (balance === 0 && radioValue === 1) ||
+                            (!filledAmount &&
+                              currentHiIQ !== 0 &&
+                              radioValue === 1) ||
+                            (currentHiIQ === 0 && !lockValue) ||
+                            (!lockValue && radioValue === 2) ||
+                            (currentHiIQ === 0 &&
+                              radioValue === 2 &&
+                              lockValue === 0) ||
+                            (currentHiIQ === 0 &&
+                              radioValue === 1 &&
+                              !filledAmount) ||
+                            (currentHiIQ === 0 && balance === 0) ||
+                            (currentHiIQ === 0 && !filledAmount)
+                          }
+                          variant="outline-dark"
+                          className="text-capitalize w-75 font-weight-bold"
+                          type="submit"
+                          size="lg"
+                        >
+                          {t("lock")}
+                        </Button>
+                      )}
+
                       <a
                         target="_blank"
                         rel="noopener noreferrer"

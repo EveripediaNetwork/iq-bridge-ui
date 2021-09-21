@@ -1,15 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import {
-  Button,
-  Container,
-  Row,
-  Col,
-  Nav,
-  Navbar,
-  NavDropdown
-} from "react-bootstrap";
+import { Button, Row, Col, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
@@ -36,6 +28,19 @@ const StyledButtonsRow = styled(Row)`
 
 const StyledNavbar = styled(Navbar)`
   background-color: black;
+  font-size: 14px;
+  font-weight: 600;
+`;
+
+const StyledNavLink = styled(Nav.Link)`
+  color: white !important;
+  display: block;
+  padding: 0.5rem 1rem;
+  border-right: 1px solid rgb(58, 58, 58);
+  :hover {
+    color: grey !important;
+    text-decoration: none;
+  }
 `;
 
 const SwapTokenIcon = styled.img`
@@ -77,26 +82,22 @@ const Layout = ({ children }) => {
   }, [wallet]);
 
   return (
-    <Container className="container-sm">
+    <div>
       <GlobalStyle />
-      <StyledNavbar
-        expand="lg"
-        className="p-3 font-weight-bold text-capitalize"
-        variant="dark"
-      >
+      <StyledNavbar expand="lg" variant="dark">
         <Navbar.Brand as={Link} to={`/${LngUrl}`}>
           <SwapTokenIcon src={`${window.location.origin}/tokens/iq.png`} />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
+          <Nav className="ml-auto">
             <NavDropdown
               active={
                 location.pathname === "/" ||
                 location.pathname === "/eth" ||
                 location.pathname === "/reverseEth"
               }
-              title="BRIDGE"
+              title="Bridge"
               id="basic-nav-dropdown"
             >
               <NavDropdown.Item
@@ -128,30 +129,30 @@ const Layout = ({ children }) => {
                 ETH ↔ BSC
               </NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link
+            <StyledNavLink
               active={location.pathname === "/lock"}
               as={Link}
               to={`/lock${LngUrl}`}
             >
-              {t("LOCK")}
-            </Nav.Link>
-            <Nav.Link
+              {t("lock")}
+            </StyledNavLink>
+            <StyledNavLink
               active={location.pathname === "/voting"}
               as={Link}
               to={`/voting${LngUrl}`}
             >
-              {t("VOTING")}
-            </Nav.Link>
-            <Nav.Link
+              {t("voting")}
+            </StyledNavLink>
+            <StyledNavLink
               active={location.pathname === "/stats"}
               as={Link}
               to={`/stats${LngUrl}`}
             >
-              {t("STATS")}
-            </Nav.Link>
-            <Nav.Link href="https://learn.everipedia.org/">
-              {t("LEARN")}
-            </Nav.Link>
+              {t("stats")}
+            </StyledNavLink>
+            <StyledNavLink href="https://learn.everipedia.org/">
+              {t("Learn")}
+            </StyledNavLink>
           </Nav>
           <LanguageSelector className="pr-4" />
           <StyledButtonsRow xs={6} sm={6} md={6}>
@@ -159,7 +160,7 @@ const Layout = ({ children }) => {
               xs={6}
               sm={6}
               md={6}
-              className="mt-2 pr-0 pl-0 d-flex flex-row justify-content-center"
+              className="mt-1 pr-0 pl-0 d-flex flex-row justify-content-center"
             >
               {authContext.activeUser === null ? (
                 <Button
@@ -177,7 +178,7 @@ const Layout = ({ children }) => {
                 </Button>
               )}
             </Col>
-            <Col xs={6} sm={6} md={6} className="mt-2 pl-0">
+            <Col xs={6} sm={6} md={6} className="mt-1 pl-0">
               {wallet.status !== "connected" ? (
                 <Button
                   onClick={() => {
@@ -225,7 +226,7 @@ const Layout = ({ children }) => {
       />
       <WrongChainModal />
       <EthereumWalletModal show={ethModalShow} setShow={setEthModalShow} />
-    </Container>
+    </div>
   );
 };
 

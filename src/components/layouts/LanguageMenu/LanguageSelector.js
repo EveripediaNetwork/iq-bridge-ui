@@ -16,7 +16,8 @@ import { resources } from "../../../utils/i18n";
 import { isDesktop } from "../../../constants/index";
 
 const NavContainer = styled.div`
-  padding-right: 0.75rem;
+  padding-right: 0.3rem;
+  padding-left: 0.5rem;
   cursor: pointer;
 `;
 const LanguageMenuWrapper = styled.span`

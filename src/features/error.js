@@ -8,7 +8,7 @@ const Error = () => {
   const { t } = useTranslation();
   return (
     <Layout>
-      <Container className="p-3 mt-5" fluid>
+      <Container className="mt-5" fluid>
         <Row>
           <Col>{t("error")}!...</Col>
         </Row>

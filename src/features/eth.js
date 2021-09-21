@@ -49,7 +49,7 @@ const Eth = () => {
 
   return (
     <Layout>
-      <Container className="p-2 mt-3" fluid>
+      <Container className="mt-3" fluid>
         <FormProvider {...methods}>
           <Row>
             <Col>
