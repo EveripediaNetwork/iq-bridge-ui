@@ -28,7 +28,7 @@ const StyledContainer = styled.div`
 `;
 
 const StyledCard = styled(Card)`
-  border-radius: 3px !important;
+  border-radius: 5px !important;
   border: 0.5px dashed lightgray !important;
 `;
 
