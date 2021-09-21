@@ -35,7 +35,7 @@ const Stats = ({ wallet, lockedAlready }) => {
   const [rewardsInDollars, setRewardsInDollars] = useState();
   const [isLoadingClaim, setLoadingClaim] = useState(false);
   const [ethModalShow, setEthModalShow] = useState(false);
-  const [isLoadingStats, setIsLoadingStats] = useState(false);
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [show, setShow] = useState(false);
   const [animateText, setAnimateText] = useState(false);
   const [countdown, setCountdown] = useState(Date.now() + 25000);
@@ -74,7 +74,10 @@ const Stats = ({ wallet, lockedAlready }) => {
   };
 
   useEffect(() => {
-    if (!wallet || wallet.account === null) return;
+    if (wallet.status !== "connected") {
+      setIsLoadingStats(false);
+      return;
+    }
 
     setInterval(() => {
       setAnimateText(true);
@@ -106,7 +109,10 @@ const Stats = ({ wallet, lockedAlready }) => {
   }, [animateText]);
 
   useEffect(() => {
-    if (!wallet || wallet.account === null) return;
+    if (wallet.status !== "connected") {
+      setIsLoadingStats(false);
+      return;
+    }
 
     (async () => {
       setIsLoadingStats(!isLoadingStats);
@@ -297,7 +303,7 @@ const Stats = ({ wallet, lockedAlready }) => {
                 </div>
               ) : (
                 <>
-                  {!isLoadingStats ? (
+                  {!isLoadingStats && wallet.status !== "connected" ? (
                     <div className="d-flex flex-column p-4">
                       <span className="text-center font-italic">
                         Login to see more stats
