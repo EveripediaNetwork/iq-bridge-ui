@@ -66,9 +66,9 @@ const earned = async wallet => {
   return 0;
 };
 
-const defaultAPR = async () => {
+const defaultStats = async () => {
   const provider = new ethers.providers.JsonRpcProvider(
-    "https://main-light.eth.linkpool.io/"
+    "https://goerli-light.eth.linkpool.io/"
   ); // TODO: move to .envs
   const erc20 = new ethers.Contract(iqAddress, erc20Abi, provider);
   const hiIQ = new ethers.Contract(hiIQAddress, hiIQAbi, provider);
@@ -395,5 +395,5 @@ export {
   getMaximumLockableTime,
   increaseUnlockTime,
   getTokensUserBalanceLocked,
-  defaultAPR
+  defaultStats
 };

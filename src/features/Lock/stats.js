@@ -21,7 +21,7 @@ import {
   earned,
   getStats,
   getYield,
-  defaultAPR
+  defaultStats
 } from "../../utils/EthDataProvider/EthDataProvider";
 import CardTitle from "../../components/ui/cardTitle";
 import { CoinGeckoClient } from "../../utils/coingecko";
@@ -32,22 +32,19 @@ import EthereumWalletModal from "../../components/ui/ethereumWalletModal";
 const Stats = ({ wallet, lockedAlready }) => {
   const { t } = useTranslation();
   const [stats, setStats] = useState();
-  const [apr, setApr] = useState();
   const [earnedRewards, setEarnedRewards] = useState();
   const [rewardsInDollars, setRewardsInDollars] = useState();
   const [isLoadingClaim, setLoadingClaim] = useState(false);
   const [ethModalShow, setEthModalShow] = useState(false);
-  const [isLoadingStats, setIsLoadingStats] = useState(true);
+  const [isLoadingStats, setIsLoadingStats] = useState();
   const [show, setShow] = useState(false);
   const [showCheckpointOverlay, setShowCheckpointOverlay] = useState(false);
-  const [showBaseAprOverlay, setShowBaseAprOverlay] = useState(false);
   const [animateText, setAnimateText] = useState(false);
   const [countdown, setCountdown] = useState(Date.now() + 25000);
   const [isCallingCheckpoint, setIsCallingCheckpoint] = useState(false);
   const [openRewardsCalculator, setOpenRewardsCalculator] = useState(false);
   const target = useRef(null);
   const checkpointOverlayTarget = useRef(null);
-  const baseAprOverlayTarget = useRef(null);
   const countDownComponentRef = useRef(null);
 
   const PriceSpan = styled.span`
@@ -92,9 +89,52 @@ const Stats = ({ wallet, lockedAlready }) => {
     </Overlay>
   );
 
+  const calculateStats = (
+    tvl,
+    lockedByUser,
+    hiIQSupply,
+    rewardsAcrossLockPeriod
+  ) => {
+    // const rewards = await earned(wallet);
+
+    const yearsLock = 4; // assuming a 4 year lock
+
+    const amountLocked = lockedByUser > 0 ? lockedByUser : 100000;
+
+    const rewardsBasedOnLockPeriod = amountLocked * (1 + 0.75 * yearsLock);
+    const poolRatio =
+      rewardsBasedOnLockPeriod / (hiIQSupply + rewardsBasedOnLockPeriod);
+
+    const userRewardsAtTheEndOfLockPeriod =
+      rewardsAcrossLockPeriod * yearsLock * poolRatio;
+    const userRewardsPlusInitialLock =
+      userRewardsAtTheEndOfLockPeriod + amountLocked;
+
+    const aprAcrossLockPeriod = userRewardsPlusInitialLock / amountLocked;
+    const aprDividedByLockPeriod = (aprAcrossLockPeriod / yearsLock) * 100;
+
+    return {
+      apr: Number(aprDividedByLockPeriod).toFixed(2),
+      tvl,
+      lockedByUser,
+      hiIQSupply,
+      yearsLock,
+      rewardsBasedOnLockPeriod,
+      poolRatio,
+      rewardsAcrossLockPeriod
+    };
+  };
+
+  useEffect(() => {
+    if (animateText) {
+      setTimeout(() => {
+        setAnimateText(false);
+      }, 1500);
+    }
+  }, [animateText]);
+
   useEffect(() => {
     if (wallet.status !== "connected") {
-      setIsLoadingStats(false);
       return;
     }
 
@@ -110,8 +150,6 @@ const Stats = ({ wallet, lockedAlready }) => {
 
         setEarnedRewards(Number(rewards));
 
-        setEarnedRewards(Number(rewards));
-
         setCountdown(Date.now() + 25000);
         if (countDownComponentRef && countDownComponentRef.current)
           countDownComponentRef.current.start();
@@ -120,61 +158,34 @@ const Stats = ({ wallet, lockedAlready }) => {
   }, [wallet]);
 
   useEffect(() => {
-    if (animateText) {
-      setTimeout(() => {
-        setAnimateText(false);
-      }, 1500);
-    }
-  }, [animateText]);
-
-  useEffect(() => {
-    if (wallet.status !== "connected") {
-      setIsLoadingStats(false);
-      return;
-    }
-
     (async () => {
-      setIsLoadingStats(!isLoadingStats);
-      const rewards = await earned(wallet);
-      const { tvl, lockedByUser, hiIQSupply, rewardsAcrossLockPeriod } =
-        await getStats(wallet);
+      if (wallet && wallet.status === "connected") {
+        const rewards = await earned(wallet);
 
-      const aprDefault = await defaultAPR(); // TODO: move to right place (user is not logged). example to get APR without wallet connected: use value for base APR (rename to just APR)
-      console.log(aprDefault);
+        const result = await CoinGeckoClient.coins.fetch("everipedia", {});
 
-      const yearsLock = 4; // assuming a 4 year lock
+        setRewardsInDollars(Number(rewards) * result.data.tickers[7].last);
+        setEarnedRewards(Number(rewards));
 
-      const amountLocked = lockedByUser > 0 ? lockedByUser : 100000;
+        const { tvl, lockedByUser, hiIQSupply, rewardsAcrossLockPeriod } =
+          await getStats(wallet);
 
-      const rewardsBasedOnLockPeriod = amountLocked * (1 + 0.75 * yearsLock);
-      const poolRatio =
-        rewardsBasedOnLockPeriod / (hiIQSupply + rewardsBasedOnLockPeriod);
+        setStats(
+          calculateStats(tvl, lockedByUser, hiIQSupply, rewardsAcrossLockPeriod)
+        );
+      }
 
-      const userRewardsAtTheEndOfLockPeriod =
-        rewardsAcrossLockPeriod * yearsLock * poolRatio;
-      const userRewardsPlusInitialLock =
-        userRewardsAtTheEndOfLockPeriod + amountLocked;
+      if (wallet && wallet.status === "disconnected") {
+        setIsLoadingStats(true);
+        const { tvl, hiIQSupply, rewardsAcrossLockPeriod } =
+          await defaultStats(); // TODO: move to right place (user is not logged). example to get APR without wallet connected: use value for base APR (rename to just APR)
 
-      const aprAcrossLockPeriod = userRewardsPlusInitialLock / amountLocked;
-      const aprDividedByLockPeriod = (aprAcrossLockPeriod / yearsLock) * 100;
-      setApr(aprDividedByLockPeriod);
+        setStats(
+          calculateStats(tvl, undefined, hiIQSupply, rewardsAcrossLockPeriod)
+        );
 
-      const result = await CoinGeckoClient.coins.fetch("everipedia", {});
-
-      setRewardsInDollars(Number(rewards) * result.data.tickers[7].last);
-
-      setEarnedRewards(Number(rewards));
-
-      setStats({
-        tvl,
-        lockedByUser,
-        hiIQSupply,
-        yearsLock,
-        rewardsBasedOnLockPeriod,
-        poolRatio,
-        rewardsAcrossLockPeriod
-      });
-      setIsLoadingStats(!isLoadingStats);
+        setIsLoadingStats(false);
+      }
     })();
   }, [wallet, lockedAlready]);
 
@@ -226,33 +237,31 @@ const Stats = ({ wallet, lockedAlready }) => {
                       <Calculator />
                     </Button>
                   </div>
-                  <>
-                    <div className="m-0 text-center">
-                      <div className="d-flex flex-row justify-content-center align-items-center">
-                        <strong className="mr-3">APR</strong>
-                        <Button
-                          variant="light"
-                          size="sm"
-                          ref={target}
-                          onClick={event => {
-                            event.preventDefault();
-                            setShow(!show);
-                          }}
-                        >
-                          <QuestionCircle />
-                        </Button>
-                        {getOverlay(
-                          show,
-                          target,
-                          t("calculation_based_on_4_years")
-                        )}
-                      </div>
-                      <span className="text-info">
-                        {Number(apr).toFixed(2)}%
-                      </span>
+                  <div className="m-0 text-center">
+                    <div className="d-flex flex-row justify-content-center align-items-center">
+                      <strong className="mr-3">APR</strong>
+                      <Button
+                        variant="light"
+                        size="sm"
+                        ref={target}
+                        onClick={event => {
+                          event.preventDefault();
+                          setShow(!show);
+                        }}
+                      >
+                        <QuestionCircle />
+                      </Button>
+                      {getOverlay(
+                        show,
+                        target,
+                        t("calculation_based_on_4_years")
+                      )}
                     </div>
-                    <hr />
-                  </>
+                    <span className="text-info">
+                      {Number(stats.apr).toFixed(2)}%
+                    </span>
+                  </div>
+                  <hr />
 
                   <p className="m-0 text-center">
                     {" "}
@@ -267,7 +276,9 @@ const Stats = ({ wallet, lockedAlready }) => {
                   </p>
                   <hr />
                   <div className="container p-0 d-flex flex-column mt-2 text-center">
-                    {earnedRewards && earnedRewards > 0 ? (
+                    {earnedRewards &&
+                    earnedRewards > 0 &&
+                    wallet.status === "connected" ? (
                       <>
                         <p className="m-0 text-center d-flex flex-column">
                           {" "}
@@ -293,7 +304,9 @@ const Stats = ({ wallet, lockedAlready }) => {
                       </>
                     ) : null}
                     <div className="container mt-2 text-center">
-                      {earnedRewards && earnedRewards > 0 ? (
+                      {earnedRewards &&
+                      earnedRewards > 0 &&
+                      wallet.status === "connected" ? (
                         <Button
                           disabled={isLoadingClaim || earnedRewards <= 0}
                           onClick={handleClaim}
@@ -303,7 +316,11 @@ const Stats = ({ wallet, lockedAlready }) => {
                         >
                           {!isLoadingClaim ? t("claim") : `${t("loading")}...`}
                         </Button>
-                      ) : (
+                      ) : null}
+
+                      {earnedRewards !== undefined &&
+                      earnedRewards === 0 &&
+                      wallet.status === "connected" ? (
                         <div className="d-flex flex-row justify-content-center align-items-center">
                           <Button
                             onClick={handleCallCheckpoint}
@@ -331,52 +348,30 @@ const Stats = ({ wallet, lockedAlready }) => {
                             "Needed to keep track of the HIIQ supply within our rewards system"
                           )}
                         </div>
-                      )}
+                      ) : null}
                     </div>
                   </div>
                 </div>
-              ) : (
-                <>
-                  {!isLoadingStats && wallet.status !== "connected" ? (
-                    <div className="d-flex flex-column p-4">
-                      <div className="d-flex flex-column justify-content-center align-items-center">
-                        <span className="text-center">Base APR: 100%</span>
-                        <Button
-                          variant="light"
-                          size="sm"
-                          className="ml-2 mb-4"
-                          ref={baseAprOverlayTarget}
-                          onClick={event => {
-                            event.preventDefault();
-                            setShowBaseAprOverlay(!showBaseAprOverlay);
-                          }}
-                        >
-                          <QuestionCircle />
-                        </Button>
-                        {getOverlay(
-                          showBaseAprOverlay,
-                          baseAprOverlayTarget,
-                          "i.e: if you lock 1Q for 1 year you will get 1Q in return"
-                        )}
-                      </div>
-                      <span className="text-center font-italic">
-                        Login to see more stats
-                      </span>
-                      <Button
-                        onClick={() => setEthModalShow(true)}
-                        variant="light"
-                        className="rounded-0 mt-2 font-weight-bold"
-                      >
-                        Login
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="container h-100 d-flex flex-column justify-content-center align-items-center">
-                      <Spinner animation="grow" variant="primary" />
-                    </div>
-                  )}
-                </>
-              )}
+              ) : null}
+              {isLoadingStats === false && wallet.status === "disconnected" ? (
+                <div className="d-flex flex-column p-4">
+                  <span className="text-center font-italic">
+                    Login to see more stats
+                  </span>
+                  <Button
+                    onClick={() => setEthModalShow(true)}
+                    variant="light"
+                    className="rounded-0 mt-2 font-weight-bold"
+                  >
+                    Login
+                  </Button>
+                </div>
+              ) : null}
+              {isLoadingStats && isLoadingStats === true ? (
+                <div className="container h-100 d-flex flex-column justify-content-center align-items-center">
+                  <Spinner animation="grow" variant="primary" />
+                </div>
+              ) : null}
             </Col>
           </Row>
         </Card.Body>
