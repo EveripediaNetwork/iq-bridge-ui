@@ -37,11 +37,15 @@ const Stats = ({ wallet, lockedAlready }) => {
   const [ethModalShow, setEthModalShow] = useState(false);
   const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [show, setShow] = useState(false);
+  const [showCheckpointOverlay, setShowCheckpointOverlay] = useState(false);
+  const [showBaseAprOverlay, setShowBaseAprOverlay] = useState(false);
   const [animateText, setAnimateText] = useState(false);
   const [countdown, setCountdown] = useState(Date.now() + 25000);
   const [isCallingCheckpoint, setIsCallingCheckpoint] = useState(false);
   const [openRewardsCalculator, setOpenRewardsCalculator] = useState(false);
   const target = useRef(null);
+  const checkpointOverlayTarget = useRef(null);
+  const baseAprOverlayTarget = useRef(null);
   const countDownComponentRef = useRef(null);
 
   const PriceSpan = styled.span`
@@ -72,6 +76,19 @@ const Stats = ({ wallet, lockedAlready }) => {
 
     setIsCallingCheckpoint(false);
   };
+
+  const getOverlay = (showOverlay, overlayTarget, tooltipText) => (
+    <Overlay
+      style={{
+        display: showOverlay ? "block" : "none"
+      }}
+      target={overlayTarget.current}
+      show={showOverlay}
+      placement="bottom"
+    >
+      {props => <Tooltip {...props}>{tooltipText}</Tooltip>}
+    </Overlay>
+  );
 
   useEffect(() => {
     if (wallet.status !== "connected") {
@@ -218,18 +235,11 @@ const Stats = ({ wallet, lockedAlready }) => {
                           >
                             <QuestionCircle />
                           </Button>
-                          <Overlay
-                            style={{ display: show ? "block" : "none" }}
-                            target={target.current}
-                            show={show}
-                            placement="bottom"
-                          >
-                            {props => (
-                              <Tooltip {...props}>
-                                {t("calculation_based_on_4_years")}
-                              </Tooltip>
-                            )}
-                          </Overlay>
+                          {getOverlay(
+                            show,
+                            target,
+                            t("calculation_based_on_4_years")
+                          )}
                         </div>
                         <span className="text-info">
                           {Number(stats.apr).toFixed(2)}%
@@ -289,14 +299,33 @@ const Stats = ({ wallet, lockedAlready }) => {
                           {!isLoadingClaim ? t("claim") : `${t("loading")}...`}
                         </Button>
                       ) : (
-                        <Button
-                          onClick={handleCallCheckpoint}
-                          size="sm"
-                          className="shadow-sm"
-                          variant="warning"
-                        >
-                          {isCallingCheckpoint ? "Loading..." : "Checkpoint"}
-                        </Button>
+                        <div className="d-flex flex-row justify-content-center align-items-center">
+                          <Button
+                            onClick={handleCallCheckpoint}
+                            size="sm"
+                            className="shadow-sm"
+                            variant="warning"
+                          >
+                            {isCallingCheckpoint ? "Loading..." : "Checkpoint"}
+                          </Button>
+                          <Button
+                            variant="light"
+                            size="sm"
+                            className="ml-2"
+                            ref={checkpointOverlayTarget}
+                            onClick={event => {
+                              event.preventDefault();
+                              setShowCheckpointOverlay(!showCheckpointOverlay);
+                            }}
+                          >
+                            <QuestionCircle />
+                          </Button>
+                          {getOverlay(
+                            showCheckpointOverlay,
+                            checkpointOverlayTarget,
+                            "Needed to keep track of the HIIQ supply within our rewards system"
+                          )}
+                        </div>
                       )}
                     </div>
                   </div>
@@ -305,6 +334,26 @@ const Stats = ({ wallet, lockedAlready }) => {
                 <>
                   {!isLoadingStats && wallet.status !== "connected" ? (
                     <div className="d-flex flex-column p-4">
+                      <div className="d-flex flex-column justify-content-center align-items-center">
+                        <span className="text-center">Base APR: 100%</span>
+                        <Button
+                          variant="light"
+                          size="sm"
+                          className="ml-2 mb-4"
+                          ref={baseAprOverlayTarget}
+                          onClick={event => {
+                            event.preventDefault();
+                            setShowBaseAprOverlay(!showBaseAprOverlay);
+                          }}
+                        >
+                          <QuestionCircle />
+                        </Button>
+                        {getOverlay(
+                          showBaseAprOverlay,
+                          baseAprOverlayTarget,
+                          "i.e: if you lock 1Q for 1 year you will get 1Q in return"
+                        )}
+                      </div>
                       <span className="text-center font-italic">
                         Login to see more stats
                       </span>
