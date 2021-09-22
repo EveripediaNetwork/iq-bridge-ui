@@ -66,6 +66,22 @@ const earned = async wallet => {
   return 0;
 };
 
+const defaultAPR = async () => {
+  const provider = new ethers.providers.JsonRpcProvider(
+    "https://main-light.eth.linkpool.io/"
+  ); // TODO: move to .envs
+  const erc20 = new ethers.Contract(iqAddress, erc20Abi, provider);
+  const hiIQ = new ethers.Contract(hiIQAddress, hiIQAbi, provider);
+
+  const totalValueLockedResult = await erc20["balanceOf(address)"](hiIQAddress);
+  const totalhIIQSupply = await hiIQ["totalSupply()"]();
+  return {
+    tvl: ethers.utils.formatEther(totalValueLockedResult),
+    hiIQSupply: Number(ethers.utils.formatEther(totalhIIQSupply)),
+    rewardsAcrossLockPeriod: TOTAL_REWARDS_ACROSS_LOCK_PERIOD
+  };
+};
+
 const getYield = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
@@ -378,5 +394,6 @@ export {
   increaseAmount,
   getMaximumLockableTime,
   increaseUnlockTime,
-  getTokensUserBalanceLocked
+  getTokensUserBalanceLocked,
+  defaultAPR
 };

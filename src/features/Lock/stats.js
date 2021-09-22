@@ -20,7 +20,8 @@ import {
   callCheckpoint,
   earned,
   getStats,
-  getYield
+  getYield,
+  defaultAPR
 } from "../../utils/EthDataProvider/EthDataProvider";
 import CardTitle from "../../components/ui/cardTitle";
 import { CoinGeckoClient } from "../../utils/coingecko";
@@ -31,6 +32,7 @@ import EthereumWalletModal from "../../components/ui/ethereumWalletModal";
 const Stats = ({ wallet, lockedAlready }) => {
   const { t } = useTranslation();
   const [stats, setStats] = useState();
+  const [apr, setApr] = useState();
   const [earnedRewards, setEarnedRewards] = useState();
   const [rewardsInDollars, setRewardsInDollars] = useState();
   const [isLoadingClaim, setLoadingClaim] = useState(false);
@@ -137,19 +139,25 @@ const Stats = ({ wallet, lockedAlready }) => {
       const { tvl, lockedByUser, hiIQSupply, rewardsAcrossLockPeriod } =
         await getStats(wallet);
 
+      const aprDefault = await defaultAPR(); // TODO: move to right place (user is not logged). example to get APR without wallet connected: use value for base APR (rename to just APR)
+      console.log(aprDefault);
+
       const yearsLock = 4; // assuming a 4 year lock
 
-      const rewardsBasedOnLockPeriod = lockedByUser * (1 + 0.75 * yearsLock);
+      const amountLocked = lockedByUser > 0 ? lockedByUser : 100000;
+
+      const rewardsBasedOnLockPeriod = amountLocked * (1 + 0.75 * yearsLock);
       const poolRatio =
         rewardsBasedOnLockPeriod / (hiIQSupply + rewardsBasedOnLockPeriod);
 
       const userRewardsAtTheEndOfLockPeriod =
         rewardsAcrossLockPeriod * yearsLock * poolRatio;
       const userRewardsPlusInitialLock =
-        userRewardsAtTheEndOfLockPeriod + lockedByUser;
+        userRewardsAtTheEndOfLockPeriod + amountLocked;
 
-      const aprAcrossLockPeriod = userRewardsPlusInitialLock / lockedByUser;
+      const aprAcrossLockPeriod = userRewardsPlusInitialLock / amountLocked;
       const aprDividedByLockPeriod = (aprAcrossLockPeriod / yearsLock) * 100;
+      setApr(aprDividedByLockPeriod);
 
       const result = await CoinGeckoClient.coins.fetch("everipedia", {});
 
@@ -158,7 +166,6 @@ const Stats = ({ wallet, lockedAlready }) => {
       setEarnedRewards(Number(rewards));
 
       setStats({
-        apr: aprDividedByLockPeriod,
         tvl,
         lockedByUser,
         hiIQSupply,
@@ -219,35 +226,33 @@ const Stats = ({ wallet, lockedAlready }) => {
                       <Calculator />
                     </Button>
                   </div>
-                  {lockedAlready ? (
-                    <>
-                      <div className="m-0 text-center">
-                        <div className="d-flex flex-row justify-content-center align-items-center">
-                          <strong className="mr-3">APR</strong>
-                          <Button
-                            variant="light"
-                            size="sm"
-                            ref={target}
-                            onClick={event => {
-                              event.preventDefault();
-                              setShow(!show);
-                            }}
-                          >
-                            <QuestionCircle />
-                          </Button>
-                          {getOverlay(
-                            show,
-                            target,
-                            t("calculation_based_on_4_years")
-                          )}
-                        </div>
-                        <span className="text-info">
-                          {Number(stats.apr).toFixed(2)}%
-                        </span>
+                  <>
+                    <div className="m-0 text-center">
+                      <div className="d-flex flex-row justify-content-center align-items-center">
+                        <strong className="mr-3">APR</strong>
+                        <Button
+                          variant="light"
+                          size="sm"
+                          ref={target}
+                          onClick={event => {
+                            event.preventDefault();
+                            setShow(!show);
+                          }}
+                        >
+                          <QuestionCircle />
+                        </Button>
+                        {getOverlay(
+                          show,
+                          target,
+                          t("calculation_based_on_4_years")
+                        )}
                       </div>
-                      <hr />
-                    </>
-                  ) : null}
+                      <span className="text-info">
+                        {Number(apr).toFixed(2)}%
+                      </span>
+                    </div>
+                    <hr />
+                  </>
 
                   <p className="m-0 text-center">
                     {" "}
