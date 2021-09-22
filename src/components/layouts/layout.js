@@ -30,6 +30,7 @@ const StyledNavbar = styled(Navbar)`
   background-color: black;
   font-size: 14px;
   font-weight: 600;
+  padding: 0.5rem 1.5rem !important;
 `;
 
 const StyledNavLink = styled(Nav.Link)`
@@ -52,6 +53,22 @@ const StyledIdenticonContainer = styled.div`
   width: 1rem;
   border-radius: 2.125rem;
   background-color: transparent;
+`;
+
+const Footer = styled.footer`
+  margin-left: 300px;
+  margin-right: 300px;
+  margin-top: 50px;
+  padding: 30px;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  text-align: center;
+  font-style: normal;
+  color: rgb(108, 108, 108);
 `;
 
 const Layout = ({ children }) => {
@@ -86,7 +103,8 @@ const Layout = ({ children }) => {
       <GlobalStyle />
       <StyledNavbar expand="lg" variant="dark">
         <Navbar.Brand as={Link} to={`/${LngUrl}`}>
-          <SwapTokenIcon src={`${window.location.origin}/tokens/iq.png`} />
+          <SwapTokenIcon src={`${window.location.origin}/tokens/iq.png`} />{" "}
+          <span>IQ Network</span>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -226,6 +244,7 @@ const Layout = ({ children }) => {
       />
       <WrongChainModal />
       <EthereumWalletModal show={ethModalShow} setShow={setEthModalShow} />
+      <Footer>the foooter - 2021 Everipedia International</Footer>
     </div>
   );
 };
