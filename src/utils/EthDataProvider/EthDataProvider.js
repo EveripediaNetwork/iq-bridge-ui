@@ -5,7 +5,8 @@ import {
   iqAddress,
   pIQAddress,
   pMinterAddress,
-  hiIQRewardsAddress
+  hiIQRewardsAddress,
+  jsonRPCNodeLink
 } from "../../config";
 import { erc20Abi } from "./erc20.abi";
 import { hiIQAbi } from "./hiIQ.abi";
@@ -67,9 +68,7 @@ const earned = async wallet => {
 };
 
 const defaultStats = async () => {
-  const provider = new ethers.providers.JsonRpcProvider(
-    "https://goerli-light.eth.linkpool.io/"
-  ); // TODO: move to .envs
+  const provider = new ethers.providers.JsonRpcProvider(jsonRPCNodeLink);
   const erc20 = new ethers.Contract(iqAddress, erc20Abi, provider);
   const hiIQ = new ethers.Contract(hiIQAddress, hiIQAbi, provider);
 
