@@ -318,7 +318,8 @@ const Stats = ({ wallet, lockedAlready }) => {
                         </Button>
                       ) : null}
 
-                      {earnedRewards !== undefined &&
+                      {lockedAlready &&
+                      earnedRewards !== undefined &&
                       earnedRewards === 0 &&
                       wallet.status === "connected" ? (
                         <div className="d-flex flex-row justify-content-center align-items-center">
