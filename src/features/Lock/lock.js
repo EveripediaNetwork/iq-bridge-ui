@@ -247,12 +247,10 @@ const Lock = () => {
         fluid
       >
         <CardDivContainer className="d-flex flex-row flex-wrap-reverse align-items-center">
-          {wallet.account && currentHiIQ ? (
-            <Stats
-              wallet={wallet}
-              lockedAlready={currentHiIQ && currentHiIQ !== 0}
-            />
-          ) : null}
+          <Stats
+            wallet={wallet}
+            lockedAlready={currentHiIQ && currentHiIQ !== 0}
+          />
           <FormProvider {...methods}>
             <Col className="mb-3">
               <CardTitle title="IQ Bridge" aria-label="lock" icon="🔒" />
