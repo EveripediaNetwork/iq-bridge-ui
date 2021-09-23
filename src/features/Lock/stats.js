@@ -95,8 +95,6 @@ const Stats = ({ wallet, lockedAlready }) => {
     hiIQSupply,
     rewardsAcrossLockPeriod
   ) => {
-    // const rewards = await earned(wallet);
-
     const yearsLock = 4; // assuming a 4 year lock
 
     const amountLocked = lockedByUser > 0 ? lockedByUser : 100000;
