@@ -181,12 +181,17 @@ const SwapContainer = ({
     if (Number.isNaN(value) || value < 0 || value > balToken) {
       setIsValidInput(false);
       setFilled(undefined);
+      setParentBalance(undefined);
       return;
     }
 
     setIsValidInput(true);
 
-    if (value === 0) return;
+    if (value === 0) {
+      setFilled(undefined);
+      setParentBalance(undefined);
+      return;
+    }
 
     setFilled(value);
   };
