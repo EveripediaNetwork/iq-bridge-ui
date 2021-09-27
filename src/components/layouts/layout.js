@@ -168,7 +168,7 @@ const Layout = ({ children }) => {
             >
               {t("stats")}
             </StyledNavLink>
-            <StyledNavLink href="https://learn.everipedia.org/">
+            <StyledNavLink href="https://learn.everipedia.org/" target="_blank">
               {t("Learn")}
             </StyledNavLink>
           </Nav>
