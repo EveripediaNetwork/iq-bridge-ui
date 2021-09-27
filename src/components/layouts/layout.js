@@ -244,7 +244,6 @@ const Layout = ({ children }) => {
       />
       <WrongChainModal />
       <EthereumWalletModal show={ethModalShow} setShow={setEthModalShow} />
-      <Footer>the foooter - 2021 Everipedia International</Footer>
     </div>
   );
 };
