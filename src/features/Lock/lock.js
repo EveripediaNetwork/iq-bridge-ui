@@ -447,11 +447,11 @@ const Lock = () => {
                 />
               ) : null}
 
-              {lockEnd && filledAmount && diffDays ? (
+              {lockEnd && filledAmount && diffDays && lockedIQ ? (
                 <InfoSwapCard
                   timeLockedDescription="Current unlock time (days)"
                   balanceDescription="Expected hiIQ (includes current)"
-                  tokensLocked={Number(currentHiIQ) + Number(filledAmount)}
+                  tokensLocked={Number(lockedIQ) + Number(filledAmount)}
                   timeLocked={Number(diffDays)}
                 />
               ) : null}
