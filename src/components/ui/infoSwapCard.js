@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { Card } from "react-bootstrap";
 import PropTypes from "prop-types";
-import { useTranslation } from "react-i18next";
 
 const SubCard = styled(Card)`
   max-width: 400px;
@@ -40,20 +39,23 @@ const SwapInfo = styled.div`
   }
 `;
 
-const InfoSwapCard = ({ timeLocked, tokensLocked }) => {
-  const { t } = useTranslation();
-
+const InfoSwapCard = ({
+  timeLockedDescription,
+  balanceDescription,
+  timeLocked,
+  tokensLocked
+}) => {
   return (
     <SubCard className="mx-auto shadow-sm rounded-bottom">
       <Card.Body>
         <SwapInfo>
           <div className="infoLine">
-            <div>{t("time_locked")}</div>
+            <div>{timeLockedDescription}</div>
             <div className="font-weight-bold">{timeLocked}</div>
           </div>
           <StyledDivider />
           <div className="infoLine">
-            <div>{t("new_hiiq_balance")}</div>
+            <div>{balanceDescription}</div>
             <div>
               <strong>
                 {Number(
@@ -70,6 +72,8 @@ const InfoSwapCard = ({ timeLocked, tokensLocked }) => {
 };
 
 InfoSwapCard.propTypes = {
+  timeLockedDescription: PropTypes.string.isRequired,
+  balanceDescription: PropTypes.string.isRequired,
   timeLocked: PropTypes.number.isRequired,
   tokensLocked: PropTypes.number.isRequired
 };
