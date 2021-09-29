@@ -25,6 +25,7 @@
     "react-bootstrap-input-spinner": "^1.0.2",
     "react-chartjs-2": "^3.0.4",
     "react-countdown": "^2.3.2",
+    "react-data-table-component": "^7.3.1",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.9.2",
     "react-i18next": "^11.7.3",

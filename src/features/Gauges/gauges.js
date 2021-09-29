@@ -13,6 +13,7 @@ import styled from "styled-components";
 import Select from "react-select";
 
 import Layout from "../../components/layouts/layout";
+import GaugesVotesBreakdownDialog from "../../components/ui/gaugesVotesBreakdownDialog";
 
 const StyledCard = styled(Card)`
   padding: 10px;
@@ -58,6 +59,7 @@ const data = {
 const Gauges = () => {
   const elementsRef = useRef([1, 2, 3, 4, 5].map(() => createRef()));
   const [show, setShow] = useState([1, 2, 3, 4, 5].map(() => false));
+  const [showVotesBreakdown, setShowVotesBreakdown] = useState(false);
   const [keyTab, setKeyTab] = useState("last-week");
 
   const getRandomRGBColor = () => {
@@ -68,9 +70,9 @@ const Gauges = () => {
   };
 
   const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" }
+    { value: "polygon-hiiq", label: "polygon-hiiq" },
+    { value: "usdc-hiiq", label: "frax-iq" },
+    { value: "iq-editing-rewards", label: "iq-editing-rewards" }
   ];
 
   const TabBody = () => (
@@ -88,7 +90,12 @@ const Gauges = () => {
           voted
         </span>
 
-        <StyledButton variant="info" className="mt-2" size="sm">
+        <StyledButton
+          onClick={() => setShowVotesBreakdown(!showVotesBreakdown)}
+          variant="info"
+          className="mt-2"
+          size="sm"
+        >
           <strong>Breakdown</strong>
         </StyledButton>
       </div>
@@ -188,6 +195,10 @@ const Gauges = () => {
           </Card.Body>
         </StyledCard>
       </div>
+      <GaugesVotesBreakdownDialog
+        show={showVotesBreakdown}
+        setShow={setShowVotesBreakdown}
+      />
     </Layout>
   );
 };
