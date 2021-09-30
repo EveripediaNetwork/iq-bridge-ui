@@ -141,13 +141,14 @@ const Stats = ({ wallet, lockedAlready }) => {
 
       setTimeout(async () => {
         const rewards = await earned(wallet);
-
-        const result = await CoinGeckoClient.coins.fetch("everipedia", {});
-
-        setRewardsInDollars(Number(rewards) * result.data.tickers[7].last);
+        try {
+          const result = await CoinGeckoClient.coins.fetch("everipedia", {});
+          setRewardsInDollars(Number(rewards) * result.data.tickers[7].last);
+        } catch (err) {
+          console.error(err);
+        }
 
         setEarnedRewards(Number(rewards));
-
         setCountdown(Date.now() + 25000);
         if (countDownComponentRef && countDownComponentRef.current)
           countDownComponentRef.current.start();
@@ -160,9 +161,13 @@ const Stats = ({ wallet, lockedAlready }) => {
       if (wallet && wallet.status === "connected") {
         const rewards = await earned(wallet);
 
-        const result = await CoinGeckoClient.coins.fetch("everipedia", {});
+        try {
+          const result = await CoinGeckoClient.coins.fetch("everipedia", {});
+          setRewardsInDollars(Number(rewards) * result.data.tickers[7].last);
+        } catch (err) {
+          console.error(err);
+        }
 
-        setRewardsInDollars(Number(rewards) * result.data.tickers[7].last);
         setEarnedRewards(Number(rewards));
 
         const { tvl, lockedByUser, hiIQSupply, rewardsAcrossLockPeriod } =

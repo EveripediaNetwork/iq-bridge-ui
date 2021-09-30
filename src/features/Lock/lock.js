@@ -175,15 +175,11 @@ const Lock = () => {
   };
 
   const handleSetLockValue = lv => {
-    if (expired === undefined) return;
-
     const temp = lockEnd || new Date();
-
     if (lv === 0) {
       setLockValue(0);
       temp.setDate(temp.getDate() - 7);
       setLockEnd(temp);
-
       return;
     }
 
@@ -219,6 +215,21 @@ const Lock = () => {
     return diffInDays.toFixed(0) - 1;
   };
 
+  const buttonIsDisabled = () => {
+    return (
+      !wallet.account ||
+      (!balance && radioValue === 1) ||
+      (balance === 0 && radioValue === 1) ||
+      (!filledAmount && currentHiIQ !== 0 && radioValue === 1) ||
+      (!lockValue && radioValue === 2) ||
+      (currentHiIQ === 0 && !lockValue) ||
+      (currentHiIQ === 0 && radioValue === 2 && lockValue === 0) ||
+      (currentHiIQ === 0 && radioValue === 1 && !filledAmount) ||
+      (currentHiIQ === 0 && balance === 0) ||
+      (currentHiIQ === 0 && !filledAmount)
+    );
+  };
+
   useEffect(() => {
     if (currentHiIQ && currentHiIQ > 0)
       (async () => {
@@ -250,13 +261,13 @@ const Lock = () => {
   }, [wallet.status, loadBalance]);
 
   useEffect(() => {
-    if (filledAmount) {
+    if (filledAmount && lockEnd && currentHiIQ && currentHiIQ > 0) {
       const days = Number(
         (lockEnd.getTime() - new Date().getTime()) / (1000 * 3600 * 24)
       ).toFixed();
       setDiffDays(days);
     }
-  }, [filledAmount, lockEnd]);
+  }, [filledAmount, lockEnd, currentHiIQ]);
 
   return (
     <Layout>
@@ -398,24 +409,7 @@ const Lock = () => {
                         </Button>
                       ) : (
                         <Button
-                          disabled={
-                            !wallet.account ||
-                            (!balance && radioValue === 1) ||
-                            (balance === 0 && radioValue === 1) ||
-                            (!filledAmount &&
-                              currentHiIQ !== 0 &&
-                              radioValue === 1) ||
-                            (currentHiIQ === 0 && !lockValue) ||
-                            (!lockValue && radioValue === 2) ||
-                            (currentHiIQ === 0 &&
-                              radioValue === 2 &&
-                              lockValue === 0) ||
-                            (currentHiIQ === 0 &&
-                              radioValue === 1 &&
-                              !filledAmount) ||
-                            (currentHiIQ === 0 && balance === 0) ||
-                            (currentHiIQ === 0 && !filledAmount)
-                          }
+                          disabled={buttonIsDisabled}
                           variant="outline-dark"
                           className="text-capitalize w-75 font-weight-bold"
                           type="submit"
