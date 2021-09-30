@@ -108,7 +108,6 @@ const Lock = () => {
   const [lockedIQ, setLockedIQ] = useState(undefined);
   const [filledAmount, setFilledAmount] = useState();
   const [lockEnd, setLockEnd] = useState();
-  const [diffDays, setDiffDays] = useState();
   const [maximumLockableTime, setMaximumLockableTime] = useState();
   const [expired, setExpired] = useState();
   const [radioValue, setRadioValue] = useState(1);
@@ -248,15 +247,6 @@ const Lock = () => {
         setUpdatingBalance(false);
       })();
   }, [wallet.status, loadBalance]);
-
-  useEffect(() => {
-    if (filledAmount) {
-      const days = Number(
-        (lockEnd.getTime() - new Date().getTime()) / (1000 * 3600 * 24)
-      ).toFixed();
-      setDiffDays(days);
-    }
-  }, [filledAmount, lockEnd]);
 
   return (
     <Layout>
@@ -444,8 +434,6 @@ const Lock = () => {
               balance &&
               balance !== 0 ? (
                 <InfoSwapCard
-                  timeLockedDescription={t("time_locked")}
-                  balanceDescription={t("new_hiiq_balance")}
                   tokensLocked={Number(filledAmount)}
                   timeLocked={
                     currentHiIQ && lockEnd > 0
@@ -455,19 +443,8 @@ const Lock = () => {
                 />
               ) : null}
 
-              {lockEnd && filledAmount && diffDays && lockedIQ ? (
-                <InfoSwapCard
-                  timeLockedDescription="Current unlock time (days)"
-                  balanceDescription="Expected hiIQ (includes current)"
-                  tokensLocked={Number(lockedIQ) + Number(filledAmount)}
-                  timeLocked={Number(diffDays)}
-                />
-              ) : null}
-
               {lockValue && lockValue !== 0 && radioValue === 2 ? (
                 <InfoSwapCard
-                  timeLockedDescription={t("time_locked")}
-                  balanceDescription={t("new_hiiq_balance")}
                   tokensLocked={Number(currentHiIQ)}
                   timeLocked={Number(lockValue)}
                 />
