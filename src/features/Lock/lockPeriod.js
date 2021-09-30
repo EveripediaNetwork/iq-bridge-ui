@@ -56,6 +56,10 @@ const LockPeriod = ({
   const inputRef = useRef();
 
   useEffect(() => {
+    setLockValue(0);
+
+    if (inputRef && inputRef.current) inputRef.current.state.value = 0;
+
     if (maximumLockableTime) {
       const weeks = Number(maximumLockableTime / 7).toFixed(0);
       setRemaining(weeks);
@@ -69,11 +73,16 @@ const LockPeriod = ({
     updateParentLockValue(value);
   };
 
-  const handleOnSliderChange = value => {
-    setLockValue(value);
-    if (inputRef && inputRef.current) inputRef.current.state.value = value;
+  const handleOnSliderChange = num => {
+    const value = num * 7; // multiply weeks with days
 
-    updateParentLockValue(Number(value) * 7); // multiply weeks with days
+    if (lockValue > num && lockValue - num > 1 && num !== 0)
+      updateParentLockValue(value + (lockValue - num) * 7);
+    else updateParentLockValue(value);
+
+    if (inputRef && inputRef.current) inputRef.current.state.value = num;
+
+    setLockValue(num);
   };
 
   return (

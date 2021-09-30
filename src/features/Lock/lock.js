@@ -175,12 +175,17 @@ const Lock = () => {
   };
 
   const handleSetLockValue = lv => {
-    if (lv === 0) {
-      setLockValue(0);
-      return;
-    }
+    if (expired === undefined) return;
 
     const temp = lockEnd || new Date();
+
+    if (lv === 0) {
+      setLockValue(0);
+      temp.setDate(temp.getDate() - 7);
+      setLockEnd(temp);
+
+      return;
+    }
 
     if (!lockValue) temp.setDate(temp.getDate() + lv);
     else {
@@ -188,6 +193,7 @@ const Lock = () => {
 
       if (lv > lockValue) temp.setDate(temp.getDate() + (lv - lockValue));
     }
+
     setLockEnd(temp);
     setLockValue(lv);
   };
@@ -219,9 +225,13 @@ const Lock = () => {
         const result = await getLockedEnd(wallet);
 
         setLockEnd(result);
-        setMaximumLockableTime(
-          (await getMaximumLockableTime(wallet, result)) - 1
+
+        const maximumLockableTimeResult = await getMaximumLockableTime(
+          wallet,
+          result
         );
+
+        setMaximumLockableTime(maximumLockableTimeResult);
         setLockedTimeDiff(calculateDatesDiff(result, new Date()));
         setExpired(new Date().getTime() > result.getTime());
       })();
@@ -371,10 +381,10 @@ const Lock = () => {
                     <br />
                     <LockPeriod
                       wallet={wallet}
-                      updateParentLockValue={handleSetLockValue}
+                      updateParentLockValue={lv => handleSetLockValue(lv)}
                       radioValue={radioValue}
                       currentHIIQ={currentHiIQ}
-                      maximumLockableTime={maximumLockableTime - 1}
+                      maximumLockableTime={maximumLockableTime}
                     />
                     <br />
                     <div className="container d-flex flex-row justify-content-center align-items-center">
