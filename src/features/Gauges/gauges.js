@@ -210,11 +210,7 @@ const Gauges = () => {
                   height: 22,
                   width: 22
                 }}
-                onChange={event => {
-                  // event.preventDefault();
-                  console.log(event);
-                  setWeight(event);
-                }}
+                onChange={setWeight}
                 min={0}
                 max={100}
               />
