@@ -11,6 +11,7 @@ const CardLinks = styled(Card)`
 
   a {
     font-size: 60px;
+
     :hover {
       text-decoration: none;
     }
@@ -32,21 +33,22 @@ const Init = () => {
                   (link) for the technical specs.
                   <br />
                   <br />
-                  Bridge your token from all chains IQ circulates on using our
-                  bridge UI. IQ is multichain.
+                  <Link to="/bridge">Bridge</Link> your token from all chains IQ
+                  circulates on using our bridge UI. IQ is multichain.
                   <br />
                   <br />
-                  IQ is a DeFi token that can be staked for hiIQ (link to locked
-                  tab) to earn rewards+yield. NFT giveaways to hiIQ stakers and
-                  new features soon.
+                  IQ is a DeFi token that can be{" "}
+                  <Link to="/lock">staked for hiIQ</Link> to earn rewards+yield.
+                  NFT giveaways to hiIQ stakers and new features soon.
                   <br />
                   <br />
-                  Check the stats page for a comprehensive, global look at IQ
-                  holders, market capitalization, and more.
+                  Check the <Link to="/stats">stats</Link> page for a
+                  comprehensive, global look at IQ holders, market
+                  capitalization, and more.
                   <br />
                   <br />
-                  Other features such as voting for new staking features coming
-                  soon!
+                  Other features such as <Link to="/voting">voting</Link> for
+                  new staking features coming soon!
                 </p>
               </Card.Body>
             </Card>
