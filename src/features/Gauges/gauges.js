@@ -6,11 +6,16 @@ import {
   Tooltip,
   Button,
   Tabs,
-  Tab
+  Tab,
+  ListGroup,
+  ListGroupItem
 } from "react-bootstrap";
 import { Doughnut } from "react-chartjs-2";
+import { Check } from "react-bootstrap-icons";
 import styled from "styled-components";
 import Select from "react-select";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
 
 import Layout from "../../components/layouts/layout";
 import GaugesVotesBreakdownDialog from "../../components/ui/gaugesVotesBreakdownDialog";
@@ -27,6 +32,27 @@ const StyledCard = styled(Card)`
 const StyledButton = styled(Button)`
   box-shadow: 2px 3px 0px 0px rgba(0, 0, 0, 0.26);
   border-radius: 5px !important;
+`;
+
+const StyledListGroup = styled(ListGroup)`
+  height: 180px !important;
+  border-radius: 5px !important;
+  max-height: 180px !important;
+`;
+
+const StyledListGroupItem = styled(ListGroupItem)`
+  padding: 8px !important;
+
+  &.active {
+    background-color: white !important;
+    color: black !important;
+  }
+`;
+
+const StyledCheckIcon = styled(Check)`
+  color: #28a745;
+  width: 30px;
+  height: 30px;
 `;
 
 const data = {
@@ -61,6 +87,13 @@ const Gauges = () => {
   const [show, setShow] = useState([1, 2, 3, 4, 5].map(() => false));
   const [showVotesBreakdown, setShowVotesBreakdown] = useState(false);
   const [keyTab, setKeyTab] = useState("last-week");
+  const [weight, setWeight] = useState(0);
+  const [gauges] = useState([
+    "polygon-hiiq",
+    "usdc-hiiq",
+    "iq-editing-rewards"
+  ]);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const getRandomRGBColor = () => {
     const r = Math.floor(Math.random() * 255);
@@ -105,13 +138,18 @@ const Gauges = () => {
   return (
     <Layout>
       <div className="d-flex flex-row flex-wrap justify-content-center h-75 align-items-center">
-        <StyledCard style={{ width: 200 }}>
+        <StyledCard style={{ width: 277 }}>
+          <Card.Title>Weight distribution</Card.Title>
+          <Card.Body>
+            <Doughnut data={data} style={{ width: 277 }} />
+          </Card.Body>
+        </StyledCard>
+        <StyledCard style={{ width: 300, height: 400 }}>
           <Card.Title>Voting</Card.Title>
-          <Card.Body className="p-0 w-100">
+          <Card.Body className="p-0 w-100 d-flex flex-column justify-content-center">
             <p className="text-left mb-1">
               Vote weight: <strong>56%</strong>
             </p>
-            <hr />
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p className="text-center font-weight-bold mb-1">% used</p>
               <ProgressBar
@@ -146,31 +184,47 @@ const Gauges = () => {
                 ))}
               </ProgressBar>
 
-              <StyledButton variant="danger" size="sm">
+              <Button variant="danger" size="sm">
                 Reset
-              </StyledButton>
+              </Button>
             </div>
-            <hr />
-            <Select
-              placeholder="Select a gauge"
-              options={options}
-              className="mt-3"
-            />
+            <StyledListGroup className="d-flex flex-column justify-content-center">
+              {gauges.map((g, index) => (
+                <StyledListGroupItem
+                  onClick={() => setActiveIndex(index)}
+                  className="d-flex flex-row justify-content-between"
+                  action
+                  href={`#link${index}`}
+                >
+                  {g}
+                  {index === activeIndex ? <StyledCheckIcon /> : null}
+                </StyledListGroupItem>
+              ))}
+            </StyledListGroup>
+            <div className="d-flex flex-row justify-content-between pl-3 pr-3">
+              <Slider
+                trackStyle={{ height: 14 }}
+                railStyle={{ backgroundColor: "lightgray", height: 11 }}
+                handleStyle={{
+                  borderColor: "black",
+                  height: 22,
+                  width: 22
+                }}
+                onChange={event => {
+                  // event.preventDefault();
+                  console.log(event);
+                  setWeight(event);
+                }}
+                min={0}
+                max={100}
+              />
+              <span className="font-weight-bold ml-3">{weight}%</span>
+            </div>
             <div className="container text-center mt-3">
-              <StyledButton
-                variant="light"
-                className="text-uppercase"
-                size="sm"
-              >
+              <Button variant="primary" className="text-uppercase" size="sm">
                 <strong>Submit Vote</strong>
-              </StyledButton>
+              </Button>
             </div>
-          </Card.Body>
-        </StyledCard>
-        <StyledCard style={{ width: 360 }}>
-          <Card.Title>Weight distribution</Card.Title>
-          <Card.Body>
-            <Doughnut data={data} />
           </Card.Body>
         </StyledCard>
         <StyledCard style={{ width: 330 }}>
