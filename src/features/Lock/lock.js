@@ -226,10 +226,8 @@ const Lock = () => {
 
         setLockEnd(result);
 
-        const maximumLockableTimeResult = await getMaximumLockableTime(
-          wallet,
-          result
-        );
+        const maximumLockableTimeResult =
+          (await getMaximumLockableTime(wallet, result)) - 1;
 
         setMaximumLockableTime(maximumLockableTimeResult);
         setLockedTimeDiff(calculateDatesDiff(result, new Date()));
