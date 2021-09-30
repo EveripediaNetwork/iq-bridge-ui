@@ -55,22 +55,6 @@ const StyledIdenticonContainer = styled.div`
   background-color: transparent;
 `;
 
-const Footer = styled.footer`
-  margin-left: 300px;
-  margin-right: 300px;
-  margin-top: 50px;
-  padding: 30px;
-  border-top: 1px solid lightgray;
-  border-bottom: 1px solid lightgray;
-
-  font-family: "Open Sans", sans-serif;
-  font-weight: 400;
-  font-size: 12px;
-  text-align: center;
-  font-style: normal;
-  color: rgb(108, 108, 108);
-`;
-
 const Layout = ({ children }) => {
   const location = useLocation();
   const authContext = useContext(UALContext);
@@ -98,20 +82,29 @@ const Layout = ({ children }) => {
     }
   }, [wallet]);
 
+  console.log(location.pathname);
+
   return (
     <div>
       <GlobalStyle />
       <StyledNavbar expand="lg" variant="dark">
         <Navbar.Brand as={Link} to={`/${LngUrl}`}>
           <SwapTokenIcon src={`${window.location.origin}/tokens/iq.png`} />{" "}
-          <span>IQ Network</span>
+          <span>IQ Dashboard</span>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
+            <StyledNavLink
+              active={location.pathname === "/"}
+              as={Link}
+              to={`/${LngUrl}`}
+            >
+              {t("Home")}
+            </StyledNavLink>
             <NavDropdown
               active={
-                location.pathname === "/" ||
+                location.pathname === "/bridge" ||
                 location.pathname === "/eth" ||
                 location.pathname === "/reverseEth"
               }
@@ -119,9 +112,9 @@ const Layout = ({ children }) => {
               id="basic-nav-dropdown"
             >
               <NavDropdown.Item
-                active={location.pathname === "/"}
+                active={location.pathname === "/bridge"}
                 as={Link}
-                to={`/${LngUrl}`}
+                to={`/bridge${LngUrl}`}
               >
                 EOS → pIQ
               </NavDropdown.Item>
