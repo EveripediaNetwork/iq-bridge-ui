@@ -257,7 +257,7 @@ const lockTokensTx = async (amount, time, wallet, handleConfirmation) => {
 
     if (hashes) {
       const result = await hiIQ.create_lock(amountParsed, String(timeParsed), {
-        gasLimit: 800000
+        gasLimit: 500000
       });
 
       provider
