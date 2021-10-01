@@ -1,15 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import {
-  Button,
-  Container,
-  Row,
-  Col,
-  Nav,
-  Navbar,
-  NavDropdown
-} from "react-bootstrap";
+import { Button, Row, Col, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
@@ -34,6 +26,35 @@ const StyledButtonsRow = styled(Row)`
   min-width: 350px;
 `;
 
+const StyledNavbar = styled(Navbar)`
+  background-color: black;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0.5rem 1.5rem !important;
+
+  a {
+    color: white !important;
+    :hover {
+      opacity: 0.8;
+      text-decoration: none;
+    }
+  }
+
+  a.dropdown-item {
+    color: black !important;
+  }
+
+  a[active] {
+    color: rgb(237, 214, 0) !important;
+  }
+`;
+
+const StyledNavLink = styled(Nav.Link)`
+  display: block;
+  padding: 0.5rem 1rem;
+  border-right: 1px solid rgb(58, 58, 58);
+`;
+
 const SwapTokenIcon = styled.img`
   width: 30px;
 `;
@@ -43,6 +64,11 @@ const StyledIdenticonContainer = styled.div`
   width: 1rem;
   border-radius: 2.125rem;
   background-color: transparent;
+`;
+
+const ScrollableMain = styled.main`
+  height: calc(100vh - 60px);
+  overflow-y: auto;
 `;
 
 const Layout = ({ children }) => {
@@ -73,77 +99,90 @@ const Layout = ({ children }) => {
   }, [wallet]);
 
   return (
-    <Container className="container-sm">
+    <div>
       <GlobalStyle />
-      <Navbar expand="lg" className="p-3 font-weight-bold text-capitalize">
+      <StyledNavbar expand="lg" variant="dark">
         <Navbar.Brand as={Link} to={`/${LngUrl}`}>
-          <SwapTokenIcon src={`${window.location.origin}/tokens/iq.png`} />
+          <SwapTokenIcon src={`${window.location.origin}/tokens/iq.png`} />{" "}
+          <span>IQ Dashboard</span>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
+          <Nav className="ml-auto">
+            <StyledNavLink
+              active={location.pathname === "/" ? "" : undefined}
+              as={Link}
+              to={`/${LngUrl}`}
+            >
+              {t("Home")}
+            </StyledNavLink>
             <NavDropdown
               active={
-                location.pathname === "/" ||
+                location.pathname === "/bridge" ||
                 location.pathname === "/eth" ||
                 location.pathname === "/reverseEth"
+                  ? ""
+                  : undefined
               }
-              title="BRIDGE"
+              title="Bridge"
               id="basic-nav-dropdown"
             >
               <NavDropdown.Item
-                active={location.pathname === "/"}
+                active={location.pathname === "/bridge" ? "" : undefined}
                 as={Link}
-                to={`/${LngUrl}`}
+                to={`/bridge${LngUrl}`}
               >
                 EOS → pIQ
               </NavDropdown.Item>
               <NavDropdown.Item
-                active={location.pathname === "/eth"}
+                active={location.pathname === "/eth" ? "" : undefined}
                 as={Link}
                 to={`/eth${LngUrl}`}
               >
                 pIQ → IQ
               </NavDropdown.Item>
               <NavDropdown.Item
-                active={location.pathname === "/reverseEth"}
+                active={location.pathname === "/reverseEth" ? "" : undefined}
                 as={Link}
                 to={`/reverseEth${LngUrl}`}
               >
                 ETH → EOS
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="https://wallet.matic.network/">
+              <NavDropdown.Item
+                href="https://wallet.matic.network/"
+                target="_blank"
+              >
                 ETH ↔ Matic
               </NavDropdown.Item>
-              <NavDropdown.Item href="https://multichain.xyz/">
+              <NavDropdown.Item href="https://multichain.xyz/" target="_blank">
                 ETH ↔ BSC
               </NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link
-              active={location.pathname === "/lock"}
+            <StyledNavLink
+              active={location.pathname === "/lock" ? "" : undefined}
               as={Link}
               to={`/lock${LngUrl}`}
             >
-              {t("LOCK")}
-            </Nav.Link>
-            <Nav.Link
-              active={location.pathname === "/voting"}
+              {t("lock")}
+            </StyledNavLink>
+            <StyledNavLink
+              active={location.pathname === "/voting" ? "" : undefined}
               as={Link}
               to={`/voting${LngUrl}`}
             >
-              {t("VOTING")}
-            </Nav.Link>
-            <Nav.Link
-              active={location.pathname === "/stats"}
+              {t("voting")}
+            </StyledNavLink>
+            <StyledNavLink
+              active={location.pathname === "/stats" ? "" : undefined}
               as={Link}
               to={`/stats${LngUrl}`}
             >
-              {t("STATS")}
-            </Nav.Link>
-            <Nav.Link href="https://learn.everipedia.org/">
-              {t("LEARN")}
-            </Nav.Link>
+              {t("stats")}
+            </StyledNavLink>
+            <StyledNavLink href="https://learn.everipedia.org/" target="_blank">
+              {t("Learn")}
+            </StyledNavLink>
           </Nav>
           <LanguageSelector className="pr-4" />
           <StyledButtonsRow xs={6} sm={6} md={6}>
@@ -151,7 +190,7 @@ const Layout = ({ children }) => {
               xs={6}
               sm={6}
               md={6}
-              className="mt-2 pr-0 pl-0 d-flex flex-row justify-content-center"
+              className="mt-1 pr-0 pl-0 d-flex flex-row justify-content-center"
             >
               {authContext.activeUser === null ? (
                 <Button
@@ -169,7 +208,7 @@ const Layout = ({ children }) => {
                 </Button>
               )}
             </Col>
-            <Col xs={6} sm={6} md={6} className="mt-2 pl-0">
+            <Col xs={6} sm={6} md={6} className="mt-1 pl-0">
               {wallet.status !== "connected" ? (
                 <Button
                   onClick={() => {
@@ -202,22 +241,24 @@ const Layout = ({ children }) => {
             </Col>
           </StyledButtonsRow>
         </Navbar.Collapse>
-      </Navbar>
-      {children}
-      {wallet.account && txDone && (
-        <Row>
-          <Col>
-            <InfoAlert text={t("tx_executed")} />
-          </Col>
-        </Row>
-      )}
+      </StyledNavbar>
+      <ScrollableMain>
+        {children}
+        {wallet.account && txDone && (
+          <Row>
+            <Col>
+              <InfoAlert text={t("tx_executed")} />
+            </Col>
+          </Row>
+        )}
+      </ScrollableMain>
       <AccountDetailsDialog
         openAccountDetails={openAccountDetails}
         setOpenAccountDetails={setOpenAccountDetails}
       />
       <WrongChainModal />
       <EthereumWalletModal show={ethModalShow} setShow={setEthModalShow} />
-    </Container>
+    </div>
   );
 };
 

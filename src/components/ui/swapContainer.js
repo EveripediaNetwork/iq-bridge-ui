@@ -14,7 +14,7 @@ import {
 } from "../../utils/EthDataProvider/EthDataProvider";
 
 const SwapContainerWrapper = styled.div`
-  border-radius: 15px;
+  border-radius: 5px;
   border: 1px solid #e0e0e0;
   padding: 10px;
   display: grid;
