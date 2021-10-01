@@ -16,7 +16,7 @@ const LoadingContainer = styled(Container)`
         left: 0;
         opacity: 80%;
         background-color: white;
-        border-radius: 5px;
+        border-radius: 15px;
       `
       : ""}
 `;

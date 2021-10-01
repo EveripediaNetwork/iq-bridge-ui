@@ -6,7 +6,6 @@ import Error from "./features/error";
 import Loading from "./features/loading";
 import ErrorBoundary from "./components/errorBoundary";
 import useGoogleAnalytics from "./hooks/useGoogleAnalytics";
-import { useIframeSync } from "./hooks/useIframeSync";
 import {
   UALProviderSwitch,
   WalletProvider
@@ -23,7 +22,6 @@ import {
   walletLinkUrl
 } from "./config";
 
-const InitPage = lazy(() => import("./features/init"));
 const HomePage = lazy(() => import("./features/home"));
 const EthPage = lazy(() => import("./features/eth"));
 const ReverseEthPage = lazy(() => import("./features/reverseEth"));
@@ -63,11 +61,9 @@ function App() {
 
 const Routes = () => {
   useGoogleAnalytics();
-  useIframeSync();
   return (
     <Switch>
-      <Route exact path="/" component={InitPage} />
-      <Route exact path="/bridge" component={HomePage} />
+      <Route exact path="/" component={HomePage} />
       <Route exact path="/eth" component={EthPage} />
       <Route exact path="/lock" component={LockPage} />
       <Route exact path="/reverseEth" component={ReverseEthPage} />

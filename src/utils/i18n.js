@@ -55,7 +55,7 @@ export const resources = {
       waiting_network_confirmation: "Waiting for network confirmation...",
       // voting
       confirmed_tx: "Transaction confirmed!",
-      voting: "Voting",
+      voting: "voting",
       select_a_proposal: "Select a proposal",
       select_proposal_to_see_details: "Select a proposal to see details",
       vote: "Vote",

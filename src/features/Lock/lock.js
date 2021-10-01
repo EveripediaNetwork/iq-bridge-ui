@@ -42,7 +42,6 @@ import InfoSwapCard from "../../components/ui/infoSwapCard";
 import { TransactionContext } from "../../context/transactionContext";
 
 import { ethBasedExplorerUrl, hiIQAddress } from "../../config";
-import useTitle from "../../hooks/useTitle";
 
 const Stats = lazy(() => import("./stats"));
 const HeaderText = styled.div`
@@ -97,7 +96,6 @@ const IQIcon = styled.img`
 `;
 const Lock = () => {
   const { t } = useTranslation();
-  useTitle("Lock");
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
   const { hashes, setHashes } = useContext(TransactionContext);
@@ -284,7 +282,7 @@ const Lock = () => {
           />
           <FormProvider {...methods}>
             <Col className="mb-3">
-              <CardTitle title="HiIQ Lock" aria-label="lock" icon="🔒" />
+              <CardTitle title="IQ Bridge" aria-label="lock" icon="🔒" />
               <Card className="mx-auto shadow-sm">
                 <Card.Body>
                   <Accordion>

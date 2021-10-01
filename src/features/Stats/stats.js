@@ -14,7 +14,6 @@ import {
   getLPs,
   getVolume
 } from "../../utils/StatsDataProvider";
-import useTitle from "../../hooks/useTitle";
 
 const DataTitle = styled.div`
   font-size: 20px;
@@ -64,7 +63,7 @@ const showData = value => {
 
 const Stats = () => {
   const { t } = useTranslation();
-  useTitle("Stats");
+  // TODO: add translations
   const [data, setData] = useState({});
   const [totals, setTotals] = useState({});
 
@@ -124,7 +123,7 @@ const Stats = () => {
 
   return (
     <Layout>
-      <Container className="mt-3" fluid>
+      <Container className="p-2 mt-3" fluid>
         <Row>
           <Col>
             <CardTitle

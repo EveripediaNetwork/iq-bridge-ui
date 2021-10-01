@@ -11,7 +11,7 @@ const LanguageUnorderedList = styled.div`
   padding: 0.4em 0;
   background-color: #fff;
   border: 0px solid #ebeef5;
-  border-radius: 2px;
+  border-radius: 4px;
   margin-top: 0.25em;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   z-index: 1;

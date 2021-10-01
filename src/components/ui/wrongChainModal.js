@@ -6,7 +6,7 @@ import { WrongChainContext } from "../../context/wrongChainContext";
 
 const StyledModal = styled(Modal)`
   padding: 10px;
-  border-radius: 3px;
+  border-radius: 15px;
 `;
 
 const WrongChainModal = ({ ...props }) => {
