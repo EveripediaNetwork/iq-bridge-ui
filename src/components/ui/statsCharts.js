@@ -66,7 +66,6 @@ const StatsCharts = () => {
   };
 
   const configureTopHoldersChart = data => {
-    console.log(data);
     setAddresses(Object.keys(data));
     setVolumeChartData({
       labels: Object.keys(data).map(

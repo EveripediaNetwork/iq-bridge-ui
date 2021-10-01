@@ -25,5 +25,6 @@ module.exports = {
     process.env.REACT_APP_SNAPSHOT_SPACE_URL ||
     "https://snapshot.org/#/everipediaiq.eth/proposal/",
   snapshotBaseEndpoint:
-    process.env.REACT_APP_SNAPSHOT_BASE_ENDPOINT || "https://hub.snapshot.org"
+    process.env.REACT_APP_SNAPSHOT_BASE_ENDPOINT || "https://hub.snapshot.org",
+  jsonRPCNodeLink: process.env.REACT_APP_JSON_RPC_NODE_LINK
 };

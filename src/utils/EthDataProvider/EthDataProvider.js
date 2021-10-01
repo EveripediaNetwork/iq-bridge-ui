@@ -5,7 +5,8 @@ import {
   iqAddress,
   pIQAddress,
   pMinterAddress,
-  hiIQRewardsAddress
+  hiIQRewardsAddress,
+  jsonRPCNodeLink
 } from "../../config";
 import { erc20Abi } from "./erc20.abi";
 import { hiIQAbi } from "./hiIQ.abi";
@@ -64,6 +65,20 @@ const earned = async wallet => {
   }
 
   return 0;
+};
+
+const defaultStats = async () => {
+  const provider = new ethers.providers.JsonRpcProvider(jsonRPCNodeLink);
+  const erc20 = new ethers.Contract(iqAddress, erc20Abi, provider);
+  const hiIQ = new ethers.Contract(hiIQAddress, hiIQAbi, provider);
+
+  const totalValueLockedResult = await erc20["balanceOf(address)"](hiIQAddress);
+  const totalhIIQSupply = await hiIQ["totalSupply()"]();
+  return {
+    tvl: ethers.utils.formatEther(totalValueLockedResult),
+    hiIQSupply: Number(ethers.utils.formatEther(totalhIIQSupply)),
+    rewardsAcrossLockPeriod: TOTAL_REWARDS_ACROSS_LOCK_PERIOD
+  };
 };
 
 const getYield = async wallet => {
@@ -242,7 +257,7 @@ const lockTokensTx = async (amount, time, wallet, handleConfirmation) => {
 
     if (hashes) {
       const result = await hiIQ.create_lock(amountParsed, String(timeParsed), {
-        gasLimit: 800000
+        gasLimit: 500000
       });
 
       provider
@@ -348,7 +363,7 @@ const increaseUnlockTime = async (wallet, unlockTime, handleConfirmation) => {
     const hiIQ = getHiIQContract(provider);
 
     const result = await hiIQ.increase_unlock_time(timeParsed, {
-      gasLimit: 400000
+      gasLimit: 500000
     });
 
     provider
@@ -378,5 +393,6 @@ export {
   increaseAmount,
   getMaximumLockableTime,
   increaseUnlockTime,
-  getTokensUserBalanceLocked
+  getTokensUserBalanceLocked,
+  defaultStats
 };
