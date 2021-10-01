@@ -29,8 +29,7 @@ const Init = () => {
               <Card.Body>
                 <p>
                   The 🧠 IQ token is a multichain token that powers the
-                  Everipedia ecosystem of dapps and features! Read the docs
-                  (link) for the technical specs.
+                  Everipedia ecosystem of dapps and features! Read the <a href="https://learn.everipedia.org/" target="_blank">docs</a> for the technical specs.
                   <br />
                   <br />
                   <Link to="/bridge">Bridge</Link> your token from all chains IQ
