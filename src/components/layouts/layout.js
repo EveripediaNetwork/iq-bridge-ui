@@ -31,17 +31,28 @@ const StyledNavbar = styled(Navbar)`
   font-size: 14px;
   font-weight: 600;
   padding: 0.5rem 1.5rem !important;
+
+  a {
+    color: white !important;
+    :hover {
+      opacity: 0.8;
+      text-decoration: none;
+    }
+  }
+
+  a.dropdown-item {
+    color: black !important;
+  }
+
+  a[active] {
+    color: rgb(237, 214, 0) !important;
+  }
 `;
 
 const StyledNavLink = styled(Nav.Link)`
-  color: white !important;
   display: block;
   padding: 0.5rem 1rem;
   border-right: 1px solid rgb(58, 58, 58);
-  :hover {
-    color: grey !important;
-    text-decoration: none;
-  }
 `;
 
 const SwapTokenIcon = styled.img`
@@ -53,6 +64,11 @@ const StyledIdenticonContainer = styled.div`
   width: 1rem;
   border-radius: 2.125rem;
   background-color: transparent;
+`;
+
+const ScrollableMain = styled.main`
+  height: calc(100vh - 60px);
+  overflow-y: auto;
 `;
 
 const Layout = ({ children }) => {
@@ -82,8 +98,6 @@ const Layout = ({ children }) => {
     }
   }, [wallet]);
 
-  console.log(location.pathname);
-
   return (
     <div>
       <GlobalStyle />
@@ -96,7 +110,7 @@ const Layout = ({ children }) => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
             <StyledNavLink
-              active={location.pathname === "/"}
+              active={location.pathname === "/" ? "" : undefined}
               as={Link}
               to={`/${LngUrl}`}
             >
@@ -107,55 +121,60 @@ const Layout = ({ children }) => {
                 location.pathname === "/bridge" ||
                 location.pathname === "/eth" ||
                 location.pathname === "/reverseEth"
+                  ? ""
+                  : undefined
               }
               title="Bridge"
               id="basic-nav-dropdown"
             >
               <NavDropdown.Item
-                active={location.pathname === "/bridge"}
+                active={location.pathname === "/bridge" ? "" : undefined}
                 as={Link}
                 to={`/bridge${LngUrl}`}
               >
                 EOS → pIQ
               </NavDropdown.Item>
               <NavDropdown.Item
-                active={location.pathname === "/eth"}
+                active={location.pathname === "/eth" ? "" : undefined}
                 as={Link}
                 to={`/eth${LngUrl}`}
               >
                 pIQ → IQ
               </NavDropdown.Item>
               <NavDropdown.Item
-                active={location.pathname === "/reverseEth"}
+                active={location.pathname === "/reverseEth" ? "" : undefined}
                 as={Link}
                 to={`/reverseEth${LngUrl}`}
               >
                 ETH → EOS
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="https://wallet.matic.network/">
+              <NavDropdown.Item
+                href="https://wallet.matic.network/"
+                target="_blank"
+              >
                 ETH ↔ Matic
               </NavDropdown.Item>
-              <NavDropdown.Item href="https://multichain.xyz/">
+              <NavDropdown.Item href="https://multichain.xyz/" target="_blank">
                 ETH ↔ BSC
               </NavDropdown.Item>
             </NavDropdown>
             <StyledNavLink
-              active={location.pathname === "/lock"}
+              active={location.pathname === "/lock" ? "" : undefined}
               as={Link}
               to={`/lock${LngUrl}`}
             >
               {t("lock")}
             </StyledNavLink>
             <StyledNavLink
-              active={location.pathname === "/voting"}
+              active={location.pathname === "/voting" ? "" : undefined}
               as={Link}
               to={`/voting${LngUrl}`}
             >
               {t("voting")}
             </StyledNavLink>
             <StyledNavLink
-              active={location.pathname === "/stats"}
+              active={location.pathname === "/stats" ? "" : undefined}
               as={Link}
               to={`/stats${LngUrl}`}
             >
@@ -223,14 +242,16 @@ const Layout = ({ children }) => {
           </StyledButtonsRow>
         </Navbar.Collapse>
       </StyledNavbar>
-      {children}
-      {wallet.account && txDone && (
-        <Row>
-          <Col>
-            <InfoAlert text={t("tx_executed")} />
-          </Col>
-        </Row>
-      )}
+      <ScrollableMain>
+        {children}
+        {wallet.account && txDone && (
+          <Row>
+            <Col>
+              <InfoAlert text={t("tx_executed")} />
+            </Col>
+          </Row>
+        )}
+      </ScrollableMain>
       <AccountDetailsDialog
         openAccountDetails={openAccountDetails}
         setOpenAccountDetails={setOpenAccountDetails}

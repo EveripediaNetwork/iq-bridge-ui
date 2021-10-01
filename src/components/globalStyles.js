@@ -6,6 +6,7 @@ const GlobalStyle = createGlobalStyle`
  body {
   font-family: "Open Sans", sans-serif !important;
   min-height: 100%;
+  overflow-y: hidden;
  }
 
  div.input-group > input.form-control {

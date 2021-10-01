@@ -6,6 +6,7 @@ import Error from "./features/error";
 import Loading from "./features/loading";
 import ErrorBoundary from "./components/errorBoundary";
 import useGoogleAnalytics from "./hooks/useGoogleAnalytics";
+import { useIframeSync } from "./hooks/useIframeSync";
 import {
   UALProviderSwitch,
   WalletProvider
@@ -62,6 +63,7 @@ function App() {
 
 const Routes = () => {
   useGoogleAnalytics();
+  useIframeSync();
   return (
     <Switch>
       <Route exact path="/" component={InitPage} />
