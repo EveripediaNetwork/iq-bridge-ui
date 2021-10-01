@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Layout from "../components/layouts/layout";
 import CardTitle from "../components/ui/cardTitle";
+import useTitle from "../hooks/useTitle";
 
 const CardLinks = styled(Card)`
   border: 0px !important;
@@ -19,6 +20,7 @@ const CardLinks = styled(Card)`
 `;
 
 const Init = () => {
+  useTitle("Home");
   return (
     <Layout>
       <Container className="mt-3" fluid>
@@ -29,7 +31,15 @@ const Init = () => {
               <Card.Body>
                 <p>
                   The 🧠 IQ token is a multichain token that powers the
-                  Everipedia ecosystem of dapps and features! Read the <a href="https://learn.everipedia.org/" target="_blank">docs</a> for the technical specs.
+                  Everipedia ecosystem of dapps and features! Read the{" "}
+                  <a
+                    href="https://learn.everipedia.org/"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    docs
+                  </a>{" "}
+                  for the technical specs.
                   <br />
                   <br />
                   <Link to="/bridge">Bridge</Link> your token from all chains IQ

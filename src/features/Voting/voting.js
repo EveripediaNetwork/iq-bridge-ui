@@ -22,6 +22,7 @@ import VoteBreakdown from "../../components/ui/voteBreakdown";
 import GenericDialog from "../../components/ui/genericDialog";
 import ProposalDetails from "../../components/ui/proposalDetails";
 import { TransactionContext } from "../../context/transactionContext";
+import useTitle from "../../hooks/useTitle";
 
 const StyledCard = styled(Card)`
   min-height: 583px;
@@ -37,6 +38,7 @@ const SelectedProposalButton = styled(Button)`
 
 const Voting = () => {
   const { t } = useTranslation();
+  useTitle("Voting");
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
   const { setTxDone } = useContext(TransactionContext);

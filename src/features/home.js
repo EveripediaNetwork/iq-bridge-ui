@@ -13,6 +13,7 @@ import InfoAlert from "../components/ui/infoAlert";
 import AddressContainer from "../components/ui/addressContainer";
 import { convertTokensTx } from "../utils/EosDataProvider";
 import TxSuccessAlert from "../components/ui/txSuccessAlert";
+import useTitle from "../hooks/useTitle";
 
 const IconWrapper = styled(Button)`
   margin: 15px;
@@ -27,6 +28,7 @@ const IconWrapper = styled(Button)`
 
 const Home = () => {
   const { t } = useTranslation();
+  useTitle("Bridge");
   const methods = useForm({ mode: "onChange" });
   const authContext = useContext(UALContext);
   const [filled, setFilled] = useState();

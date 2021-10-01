@@ -12,6 +12,7 @@ import CardTitle from "../components/ui/cardTitle";
 import InfoAlert from "../components/ui/infoAlert";
 import { convertPTokensTx } from "../utils/EthDataProvider/EthDataProvider";
 import { TransactionContext } from "../context/transactionContext";
+import useTitle from "../hooks/useTitle";
 
 const IconWrapper = styled(Button)`
   margin: 15px;
@@ -26,6 +27,7 @@ const IconWrapper = styled(Button)`
 
 const Eth = () => {
   const { t } = useTranslation();
+  useTitle("Bridge");
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
   const { setHashes, setTxDone } = useContext(TransactionContext);
