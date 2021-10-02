@@ -38,19 +38,25 @@ const StyledListGroup = styled(ListGroup)`
   height: 180px !important;
   border-radius: 5px !important;
   max-height: 180px !important;
+  width: 100%;
+  margin: auto;
+  overflow-y: auto;
 `;
 
 const StyledListGroupItem = styled(ListGroupItem)`
-  padding: 8px !important;
+  padding: 5px !important;
+  max-height: 40px !important;
 
   &.active {
-    background-color: white !important;
+    background-color: #d1e6ef !important;
+    max-height: 40px !important;
+
     color: black !important;
   }
 `;
 
 const StyledCheckIcon = styled(Check)`
-  color: #28a745;
+  color: darkgreen;
   width: 30px;
   height: 30px;
 `;
@@ -83,35 +89,51 @@ const data = {
 };
 
 const Gauges = () => {
-  const elementsRef = useRef([1, 2, 3, 4, 5].map(() => createRef()));
-  const [show, setShow] = useState([1, 2, 3, 4, 5].map(() => false));
   const [showVotesBreakdown, setShowVotesBreakdown] = useState(false);
   const [keyTab, setKeyTab] = useState("last-week");
   const [weight, setWeight] = useState(0);
   const [gauges] = useState([
-    "polygon-hiiq",
-    "usdc-hiiq",
-    "iq-editing-rewards"
+    { name: "polygon-hiiq", weight: 37 },
+    { name: "usdc-hiiq", weight: 33.4 },
+    { name: "iq-editing-rewards", weight: 2.6 }
   ]);
+  const elementsRef = useRef(gauges.map(() => createRef()));
+  const [show, setShow] = useState(gauges.map(() => false));
   const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedHistoryGauge, setSelectedHistoryGauge] = useState(0);
 
   const getRandomRGBColor = () => {
     const r = Math.floor(Math.random() * 255);
     const g = Math.floor(Math.random() * 255);
     const b = Math.floor(Math.random() * 255);
-    return `rgba(${r}, ${g}, ${b}, 0.6)`;
+    return `rgba(${r}, ${g}, ${b}, 0.8)`;
   };
 
-  const options = [
-    { value: "polygon-hiiq", label: "polygon-hiiq" },
-    { value: "usdc-hiiq", label: "frax-iq" },
-    { value: "iq-editing-rewards", label: "iq-editing-rewards" }
-  ];
+  const GaugesList = (active, genericActiveIndex) => (
+    <StyledListGroup
+      defaultActiveKey={`link#1`}
+      className="d-flex flex-column justify-content-center"
+    >
+      {gauges.map((g, index) => (
+        <StyledListGroupItem
+          key={g.name}
+          onClick={() => active(index)}
+          className={`d-flex flex-row justify-content-between monospace ${
+            genericActiveIndex === index ? "shadow-sm active" : ""
+          }`}
+          action
+          href={`#link${index}`}
+        >
+          {g.name}
+          {index === genericActiveIndex ? <StyledCheckIcon /> : null}
+        </StyledListGroupItem>
+      ))}
+    </StyledListGroup>
+  );
 
   const TabBody = () => (
     <>
-      <Select placeholder="Select a gauge" options={options} className="mt-3" />
-      <hr />
+      {GaugesList(setSelectedHistoryGauge, selectedHistoryGauge)}
       <div className="w-100 h-100 d-flex flex-column justify-content-center align-items-center text-center">
         <StyledButton variant="success mb-2" size="sm">
           My votes
@@ -144,63 +166,29 @@ const Gauges = () => {
             <Doughnut data={data} style={{ width: 277 }} />
           </Card.Body>
         </StyledCard>
-        <StyledCard style={{ width: 300, height: 400 }}>
+        <StyledCard style={{ width: 300, height: 500 }}>
           <Card.Title>Voting</Card.Title>
           <Card.Body className="p-0 w-100 d-flex flex-column justify-content-center">
-            <p className="text-left mb-1">
-              Vote weight: <strong>56%</strong>
-            </p>
             <div className="d-flex flex-column justify-content-center align-items-center">
-              <p className="text-center font-weight-bold mb-1">% used</p>
-              <ProgressBar
-                style={{ borderRadius: 5, width: "100%", marginBottom: 5 }}
+              <p className="text-center font-weight-bold mb-1">
+                Vote weight used
+              </p>
+              <StyledListGroup
+                variant="flush"
+                className="d-flex flex-column justify-content-center"
               >
-                {[0, 1, 2, 3, 4].map(item => (
-                  <>
-                    <ProgressBar
-                      key={item}
-                      ref={elementsRef.current[item]}
-                      onClick={() => {
-                        console.log("hey");
-                        const aux = show;
-                        aux[item] = !aux[item];
-                        console.log(aux);
-                        setShow(aux);
-                      }}
-                      style={{
-                        backgroundColor: getRandomRGBColor(),
-                        width: "100%",
-                        borderRadius: 0
-                      }}
-                    />
-                    <Overlay
-                      target={elementsRef.current[item]}
-                      show={show[item]}
-                      placement="bottom"
-                    >
-                      {props => <Tooltip {...props}>iq/frax pool</Tooltip>}
-                    </Overlay>
-                  </>
+                {gauges.map((item, idx) => (
+                  <StyledListGroupItem key={idx + 1} className="monospace">
+                    {item.name}: {item.weight}%
+                  </StyledListGroupItem>
                 ))}
-              </ProgressBar>
+              </StyledListGroup>
 
               <Button variant="danger" size="sm">
                 Reset
               </Button>
             </div>
-            <StyledListGroup className="d-flex flex-column justify-content-center">
-              {gauges.map((g, index) => (
-                <StyledListGroupItem
-                  onClick={() => setActiveIndex(index)}
-                  className="d-flex flex-row justify-content-between"
-                  action
-                  href={`#link${index}`}
-                >
-                  {g}
-                  {index === activeIndex ? <StyledCheckIcon /> : null}
-                </StyledListGroupItem>
-              ))}
-            </StyledListGroup>
+            {GaugesList(setActiveIndex, activeIndex)}
             <div className="d-flex flex-row justify-content-between pl-3 pr-3">
               <Slider
                 trackStyle={{ height: 14 }}
