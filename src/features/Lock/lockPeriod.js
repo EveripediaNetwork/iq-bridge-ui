@@ -46,6 +46,7 @@ const LockPeriod = ({
   wallet,
   updateParentLockValue,
   radioValue,
+  filledAmount,
   currentHIIQ,
   maximumLockableTime
 }) => {
@@ -61,8 +62,10 @@ const LockPeriod = ({
     if (inputRef && inputRef.current) inputRef.current.state.value = 0;
 
     if (maximumLockableTime) {
-      const weeks = Number(maximumLockableTime / 7).toFixed(0);
-      setRemaining(weeks);
+      const weeks = Number(maximumLockableTime / 7);
+
+      if (weeks < 1) setRemaining(0);
+      else setRemaining(Number(weeks).toFixed());
     }
   }, [maximumLockableTime]);
 
@@ -116,7 +119,9 @@ const LockPeriod = ({
             <Slider
               disabled={
                 wallet.account === null ||
-                (radioValue === 1 && currentHIIQ && currentHIIQ !== 0)
+                (radioValue === 1 && currentHIIQ && currentHIIQ !== 0) ||
+                (radioValue === 1 && (!filledAmount || filledAmount === 0)) ||
+                remaining === 0
               }
               railStyle={{ backgroundColor: "lightgray", height: 11 }}
               trackStyle={{ height: 14 }}
@@ -147,9 +152,12 @@ const LockPeriod = ({
               precision={0}
               disabled={
                 wallet.account === null ||
-                (radioValue === 1 && currentHIIQ && currentHIIQ !== 0)
+                (radioValue === 1 && currentHIIQ && currentHIIQ !== 0) ||
+                (radioValue === 1 && (!filledAmount || filledAmount === 0)) ||
+                remaining === 0
               }
               max={remaining || 208}
+              min={0}
               step={1}
               value={lockValue || 0}
               ref={e => {
@@ -173,6 +181,7 @@ LockPeriod.propTypes = {
   wallet: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   updateParentLockValue: PropTypes.func.isRequired,
   radioValue: PropTypes.number.isRequired,
+  filledAmount: PropTypes.number.isRequired,
   currentHIIQ: PropTypes.number, // eslint-disable-line react/require-default-props
   maximumLockableTime: PropTypes.number // eslint-disable-line react/require-default-props
 };
