@@ -337,9 +337,7 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
     );
 
     const result = await hiIQ.increase_amount(amountParsed, {
-      gasLimit: addGasLimitBuffer(
-        await hiIQ.estimateGas.increase_amount(amountParsed)
-      )
+      gasLimit: 500000
     });
 
     hashes.push(result.hash);

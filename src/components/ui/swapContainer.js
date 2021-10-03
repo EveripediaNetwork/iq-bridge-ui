@@ -160,7 +160,8 @@ const SwapContainer = ({
         wallet.account &&
         token.name === "IQ"
       ) {
-        const balance = Number(await getTokensUserBalance(wallet));
+        let balance = Number(await getTokensUserBalance(wallet));
+        balance = Number(balance.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
         setBalance(balance);
         setParentBalance(balance);
       }
@@ -178,7 +179,7 @@ const SwapContainer = ({
     let { value } = event.target;
     value = Number(value);
 
-    if (Number.isNaN(value) || value < 0 || value > balToken) {
+    if (Number.isNaN(value) || value > Number(balToken)) {
       setIsValidInput(false);
       setFilled(undefined);
       setParentBalance(undefined);
@@ -194,6 +195,7 @@ const SwapContainer = ({
     }
 
     setFilled(value);
+    setParentBalance(value);
   };
 
   return (

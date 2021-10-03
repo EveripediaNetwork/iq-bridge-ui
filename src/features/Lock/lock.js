@@ -387,7 +387,9 @@ const Lock = () => {
                       radioValue={radioValue}
                       token={token1}
                       header={t("from")}
-                      setParentBalance={setBalance}
+                      setParentBalance={b => {
+                        setBalance(b);
+                      }}
                       setFilled={setFilledAmount}
                     />
                     <div className="d-flex justify-content-center">
@@ -400,7 +402,7 @@ const Lock = () => {
                       wallet={wallet}
                       updateParentLockValue={lv => handleSetLockValue(lv)}
                       radioValue={radioValue}
-                      filledAmount={filledAmount}
+                      filledAmount={Number(filledAmount).toFixed(2)}
                       currentHIIQ={currentHiIQ}
                       maximumLockableTime={maximumLockableTime}
                     />
@@ -458,7 +460,11 @@ const Lock = () => {
                 />
               ) : null}
 
-              {lockEnd && filledAmount && diffDays && lockedIQ ? (
+              {lockEnd &&
+              filledAmount &&
+              Number(filledAmount) > 0 &&
+              diffDays &&
+              lockedIQ ? (
                 <InfoSwapCard
                   timeLockedDescription="Current unlock time (days)"
                   balanceDescription="Expected hiIQ (includes current)"
