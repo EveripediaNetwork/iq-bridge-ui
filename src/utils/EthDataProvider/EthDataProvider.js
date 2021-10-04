@@ -163,8 +163,9 @@ const getTokensUserBalance = async wallet => {
 
     const erc20 = getERC20IQContract(provider);
 
-    const balanc = await erc20.balanceOf(wallet.account);
-    return ethers.utils.formatEther(balanc);
+    let balance = await erc20.balanceOf(wallet.account);
+    balance = Number(ethers.utils.formatEther(balance));
+    return balance > 0.01 ? balance : 0;
   }
   return 0;
 };

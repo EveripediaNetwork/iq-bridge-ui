@@ -178,6 +178,7 @@ const SwapContainer = ({
   const handleOnInputChange = event => {
     let { value } = event.target;
     value = Number(value);
+    value = Number(value.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
 
     if (Number.isNaN(value) || value > Number(balToken)) {
       setIsValidInput(false);
