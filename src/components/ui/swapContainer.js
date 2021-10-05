@@ -12,6 +12,7 @@ import {
   getPTokensUserBalance,
   getTokensUserBalance
 } from "../../utils/EthDataProvider/EthDataProvider";
+import { round } from "../../utils/methods";
 
 const SwapContainerWrapper = styled.div`
   border-radius: 5px;
@@ -177,8 +178,7 @@ const SwapContainer = ({
 
   const handleOnInputChange = event => {
     let { value } = event.target;
-    value = Number(value);
-    value = Number(value.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
+    value = round(Number(value), 2);
 
     if (Number.isNaN(value) || value > Number(balToken)) {
       setIsValidInput(false);

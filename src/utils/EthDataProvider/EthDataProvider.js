@@ -165,6 +165,7 @@ const getTokensUserBalance = async wallet => {
 
     let balance = await erc20.balanceOf(wallet.account);
     balance = Number(ethers.utils.formatEther(balance));
+
     return balance > 0.01 ? balance : 0;
   }
   return 0;
