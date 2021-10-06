@@ -21,6 +21,7 @@ import {
   walletConnectRpcUrl,
   walletLinkUrl
 } from "./config";
+import { GaugesProvider } from "./context/gaugesContext";
 
 const HomePage = lazy(() => import("./features/home"));
 const EthPage = lazy(() => import("./features/eth"));
@@ -69,7 +70,9 @@ const Routes = () => {
       <Route exact path="/lock" component={LockPage} />
       <Route exact path="/reverseEth" component={ReverseEthPage} />
       <Route exact path="/voting" component={VotingPage} />
-      <Route exact path="/gauges" component={GaugesPage} />
+      <GaugesProvider>
+        <Route exact path="/gauges" component={GaugesPage} />
+      </GaugesProvider>
       <Route exact path="/stats" component={StatsPage} />
     </Switch>
   );
