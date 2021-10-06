@@ -220,9 +220,13 @@ const Lock = () => {
   const buttonIsDisabled = () => {
     return (
       !wallet.account ||
+      wallet.account === null ||
+      wallet.status === "disconnected" ||
       (!balance && radioValue === 1) ||
       (balance === 0 && radioValue === 1) ||
-      (!filledAmount && currentHiIQ !== 0 && radioValue === 1) ||
+      ((!filledAmount || filledAmount === 0) &&
+        currentHiIQ !== 0 &&
+        radioValue === 1) ||
       (!lockValue && radioValue === 2) ||
       (currentHiIQ === 0 && !lockValue) ||
       (currentHiIQ === 0 && radioValue === 2 && lockValue === 0) ||
@@ -239,8 +243,10 @@ const Lock = () => {
 
         setLockEnd(result);
 
-        const maximumLockableTimeResult =
-          (await getMaximumLockableTime(wallet, result)) - 1;
+        const maximumLockableTimeResult = await getMaximumLockableTime(
+          wallet,
+          result
+        );
 
         setMaximumLockableTime(maximumLockableTimeResult);
         setLockedTimeDiff(calculateDatesDiff(result, new Date()));
@@ -381,7 +387,9 @@ const Lock = () => {
                       radioValue={radioValue}
                       token={token1}
                       header={t("from")}
-                      setParentBalance={setBalance}
+                      setParentBalance={b => {
+                        setBalance(b);
+                      }}
                       setFilled={setFilledAmount}
                     />
                     <div className="d-flex justify-content-center">
@@ -394,6 +402,7 @@ const Lock = () => {
                       wallet={wallet}
                       updateParentLockValue={lv => handleSetLockValue(lv)}
                       radioValue={radioValue}
+                      filledAmount={Number(filledAmount).toFixed(2)}
                       currentHIIQ={currentHiIQ}
                       maximumLockableTime={maximumLockableTime}
                     />
@@ -411,7 +420,7 @@ const Lock = () => {
                         </Button>
                       ) : (
                         <Button
-                          disabled={buttonIsDisabled}
+                          disabled={buttonIsDisabled()}
                           variant="outline-dark"
                           className="text-capitalize w-75 font-weight-bold"
                           type="submit"
@@ -451,7 +460,11 @@ const Lock = () => {
                 />
               ) : null}
 
-              {lockEnd && filledAmount && diffDays && lockedIQ ? (
+              {lockEnd &&
+              filledAmount &&
+              Number(filledAmount) > 0 &&
+              diffDays &&
+              lockedIQ ? (
                 <InfoSwapCard
                   timeLockedDescription="Current unlock time (days)"
                   balanceDescription="Expected hiIQ (includes current)"

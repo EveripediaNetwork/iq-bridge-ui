@@ -163,8 +163,10 @@ const getTokensUserBalance = async wallet => {
 
     const erc20 = getERC20IQContract(provider);
 
-    const balanc = await erc20.balanceOf(wallet.account);
-    return ethers.utils.formatEther(balanc);
+    let balance = await erc20.balanceOf(wallet.account);
+    balance = Number(ethers.utils.formatEther(balance));
+
+    return balance > 0.01 ? balance : 0;
   }
   return 0;
 };
@@ -337,9 +339,7 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
     );
 
     const result = await hiIQ.increase_amount(amountParsed, {
-      gasLimit: addGasLimitBuffer(
-        await hiIQ.estimateGas.increase_amount(amountParsed)
-      )
+      gasLimit: 500000
     });
 
     hashes.push(result.hash);
