@@ -25,7 +25,7 @@ const LockHeader = ({ wallet, currentHiIQ, updatingBalance, lockedIQ }) => {
                 </h3>
               </div>
               <div className="mt-2">
-                <span className="text-muted">You have locked: </span>
+                <span className="text-muted">{t("you_have_locked")} </span>
                 <span className="monospaced">
                   {Humanize.intComma(Number(lockedIQ).toFixed(4))}
                 </span>{" "}

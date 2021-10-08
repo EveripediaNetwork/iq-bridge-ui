@@ -416,7 +416,7 @@ const Lock = () => {
                           size="lg"
                           variant="outline-success"
                         >
-                          {t("withdraw")} expired tokens
+                          {t("withdraw")} {t("expired_tokens")}
                         </Button>
                       ) : (
                         <Button
