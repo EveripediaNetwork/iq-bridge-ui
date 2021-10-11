@@ -6,6 +6,23 @@ export const resources = {
   en: {
     translation: {
       // |||||||||||||||||||| SECTIONS ||||||||||||||||||||
+      // init
+      iq_description:
+        "The 🧠 IQ token is a multichain token that powers the Everipedia ecosystem of dapps and features! Read the",
+      docs: "docs",
+      for_technical_specs: "for the technical specs.",
+      bridge: "Bridge",
+      bridge_desc:
+        "your token from all chains IQ circulates on, using our bridge UI. IQ is multichain.",
+      iq_defi_token: "IQ is a DeFi token that can be",
+      staked_for_hiiq: "staked for hiIQ",
+      to_earn:
+        " to earn rewards+yield. NFT giveaways to hiIQ stakers and new features soon.",
+      check_the: "Check the ",
+      stats_desc:
+        "page for a comprehensive, global look at IQ holders, market capitalization, and more.",
+      other_feats: "Other features such as ",
+      new_feats_soon: " for new staking features coming soon!",
       // EOS → pIQ
       swap: "Swap",
       login_info_eos: "Login on EOS Wallet to bridge your tokens",
@@ -21,6 +38,7 @@ export const resources = {
       lock_description:
         "The longer you lock your IQ, the more hiIQ you will receive. hiIQ decays slowly over your locking period, eventually reaching 1-to-1 with IQ.",
       withdraw: "Withdraw",
+      expired_tokens: " expired tokens",
       expired: "Expired",
       expiring_on: "Expiring on",
       login_info_eth_locking: "Login on ETH Wallet to lock your tokens",
@@ -37,22 +55,20 @@ export const resources = {
       no_hiiq_tokens_locked: "No hiIQ tokens locked so far",
       loading: "Loading",
       disconnected: "Disconnected",
+      you_have_locked: "You have locked: ",
       // ## lockPeriod
       lock_period: "Lock period (weeks)",
       value_restriction: "You can increase the lock time for a maximum of",
       weeks: " weeks",
-      // rewards
-      earn_iqs: "Lock IQs and earn rewards!",
-      earned: "Earned",
+      // ## lock stats
       claim: "Claim Rewards",
-      required_to_accept: "We will require you to accept the",
       checkpoint: "Checkpoint",
-      scenarios: "contract interaction in the following scenarios",
-      user_is_not_initialized: "The user is not initialized in our system.",
-      more_iq_tokens_locked: "More IQ tokens are locked.",
-      lock_time_increased: "Lock time is increased.",
-      re_calculate: "This operation is used to re-calculate the rewards.",
-      waiting_network_confirmation: "Waiting for network confirmation...",
+      loading_rewards: "Loading rewards...",
+      retrieving_in: "Retrieving in: ",
+      needed_to_keep_track:
+        "Needed to keep track of the HIIQ supply within our rewards system",
+      login_to_see_more_stats: "Login to see more stats",
+      login: "Login",
       // voting
       confirmed_tx: "Transaction confirmed!",
       voting: "Voting",
@@ -155,6 +171,23 @@ export const resources = {
   ko: {
     translation: {
       // |||||||||||||||||||| SECTIONS ||||||||||||||||||||
+      // init
+      iq_description:
+        "The 🧠 IQ token is a multichain token that powers the Everipedia ecosystem of dapps and features! Read the",
+      docs: "docs",
+      for_technical_specs: "for the technical specs.",
+      bridge: "Bridge",
+      bridge_desc:
+        "your token from all chains IQ circulates on, using our bridge UI. IQ is multichain.",
+      iq_defi_token: "IQ is a DeFi token that can be",
+      staked_for_hiiq: "staked for hiIQ",
+      to_earn:
+        " to earn rewards+yield. NFT giveaways to hiIQ stakers and new features soon.",
+      check_the: "Check the ",
+      stats_desc:
+        "page for a comprehensive, global look at IQ holders, market capitalization, and more.",
+      other_feats: "Other features such as ",
+      new_feats_soon: " for new staking features coming soon!",
       // EOS → pIQ
       swap: "스왑",
       login_info_eos: "이오스 지갑에 로그인하여 토큰을 브리지합니다.",
@@ -170,6 +203,7 @@ export const resources = {
       lock_description:
         "IQ를 오래 잠글수록 더 많은 hiIQ를 받게됩니다. hiIQ는 잠금 기간 동안 천천히 감소하여 결국 IQ와 1 : 1에 도달합니다.",
       withdraw: "Withdraw",
+      expired_tokens: " expired tokens",
       expired: "Expired",
       expiring_on: "Expiring on",
       login_info_eth_locking: "토큰을 잠 그려면 ETH 지갑에 로그인하세요.",
@@ -186,22 +220,20 @@ export const resources = {
       no_hiiq_tokens_locked: "지금까지 잠긴 hiIQ 토큰이 없습니다.",
       loading: "로딩 중",
       disconnected: "연결 끊김",
+      you_have_locked: "You have locked: ",
       // ## lockPeriod
       lock_period: "Lock period (weeks)",
       value_restriction: "You can increase the lock time for a maximum of",
       weeks: " weeks",
-      // rewards
-      earn_iqs: "Lock IQs and earn rewards!",
-      earned: "Earned",
+      // ## lock stats
       claim: "Claim Rewards",
-      required_to_accept: "We will require you to accept the",
       checkpoint: "Checkpoint",
-      scenarios: "contract interaction in the following scenarios",
-      user_is_not_initialized: "The user is not initialized in our system.",
-      more_iq_tokens_locked: "More IQ tokens are locked.",
-      lock_time_increased: "Lock time is increased.",
-      re_calculate: "This operation is used to re-calculate the rewards.",
-      waiting_network_confirmation: "Waiting for network confirmation...",
+      loading_rewards: "Loading rewards...",
+      retrieving_in: "Retrieving in: ",
+      needed_to_keep_track:
+        "Needed to keep track of the HIIQ supply within our rewards system",
+      login_to_see_more_stats: "Login to see more stats",
+      login: "Login",
       // voting
       confirmed_tx: "거래가 확인되었습니다!",
       voting: "투표",
@@ -303,6 +335,23 @@ export const resources = {
   zh: {
     translation: {
       // |||||||||||||||||||| SECTIONS ||||||||||||||||||||
+      // init
+      iq_description:
+        "The 🧠 IQ token is a multichain token that powers the Everipedia ecosystem of dapps and features! Read the",
+      docs: "docs",
+      for_technical_specs: "for the technical specs.",
+      bridge: "Bridge",
+      bridge_desc:
+        "your token from all chains IQ circulates on, using our bridge UI. IQ is multichain.",
+      iq_defi_token: "IQ is a DeFi token that can be",
+      staked_for_hiiq: "staked for hiIQ",
+      to_earn:
+        " to earn rewards+yield. NFT giveaways to hiIQ stakers and new features soon.",
+      check_the: "Check the ",
+      stats_desc:
+        "page for a comprehensive, global look at IQ holders, market capitalization, and more.",
+      other_feats: "Other features such as ",
+      new_feats_soon: " for new staking features coming soon!",
       // EOS → pIQ
       swap: "交换",
       login_info_eos: "登录 EOS 钱包以桥接您的代币",
@@ -318,6 +367,7 @@ export const resources = {
       lock_description:
         "锁定 IQ 的时间越长，您获得的 hiIQ 就越多。hiIQ 在锁定期间缓慢衰减，最终与 IQ 达到 1 比 1。",
       withdraw: "Withdraw",
+      expired_tokens: " expired tokens",
       expired: "Expired",
       expiring_on: "Expiring on",
       login_info_eth_locking: "登录 ETH 钱包以锁定您的代币",
@@ -334,22 +384,20 @@ export const resources = {
       no_hiiq_tokens_locked: "到目前为止还没有锁定 hiIQ 代币",
       loading: "加载中",
       disconnected: "Disconnected",
+      you_have_locked: "You have locked: ",
       // ## lockPeriod
       lock_period: "Lock period (weeks)",
       value_restriction: "You can increase the lock time for a maximum of",
       weeks: " weeks",
-      // rewards
-      earn_iqs: "Lock IQs and earn rewards!",
-      earned: "Earned",
+      // ## lock stats
       claim: "Claim Rewards",
-      required_to_accept: "We will require you to accept the",
       checkpoint: "checkpoint",
-      scenarios: "contract interaction in the following scenarios",
-      user_is_not_initialized: "The user is not initialized in our system.",
-      more_iq_tokens_locked: "More IQ tokens are locked.",
-      lock_time_increased: "Lock time is increased.",
-      re_calculate: "This operation is used to re-calculate the rewards.",
-      waiting_network_confirmation: "Waiting for network confirmation...",
+      loading_rewards: "Loading rewards...",
+      retrieving_in: "Retrieving in: ",
+      needed_to_keep_track:
+        "Needed to keep track of the HIIQ supply within our rewards system",
+      login_to_see_more_stats: "Login to see more stats",
+      login: "Login",
       // voting
       confirmed_tx: "交易确认！",
       voting: "投票",
