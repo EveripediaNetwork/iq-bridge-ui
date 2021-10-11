@@ -63,13 +63,7 @@ const Stats = ({ wallet, lockedAlready }) => {
     <div className="d-flex flex-column justify-content-center align-items-center">
       <hr />
       <small className="font-italic text-muted text-center">
-        {completed ? (
-          t("loading_rewards")
-        ) : (
-          <>
-            {t("retrieving_in")} {seconds} s
-          </>
-        )}
+        {completed ? "Loading rewards..." : <>Retrieving in: {seconds} s</>}
       </small>
     </div>
   );
@@ -338,9 +332,7 @@ const Stats = ({ wallet, lockedAlready }) => {
                             className="shadow-sm"
                             variant="warning"
                           >
-                            {isCallingCheckpoint
-                              ? `${t("loading")}...`
-                              : t("checkpoint")}
+                            {isCallingCheckpoint ? "Loading..." : "Checkpoint"}
                           </Button>
                           <Button
                             variant="light"
@@ -357,7 +349,7 @@ const Stats = ({ wallet, lockedAlready }) => {
                           {getOverlay(
                             showCheckpointOverlay,
                             checkpointOverlayTarget,
-                            t("needed_to_keep_track")
+                            "Needed to keep track of the HIIQ supply within our rewards system"
                           )}
                         </div>
                       ) : null}
@@ -368,14 +360,14 @@ const Stats = ({ wallet, lockedAlready }) => {
               {isLoadingStats === false && wallet.status === "disconnected" ? (
                 <div className="d-flex flex-column p-4">
                   <span className="text-center font-italic">
-                    {t("login_to_see_more_stats")}
+                    Login to see more stats
                   </span>
                   <Button
                     onClick={() => setEthModalShow(true)}
                     variant="light"
                     className="rounded-0 mt-2 font-weight-bold"
                   >
-                    {t("login")}
+                    Login
                   </Button>
                 </div>
               ) : null}

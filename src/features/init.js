@@ -2,8 +2,6 @@ import React, { memo } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-
 import Layout from "../components/layouts/layout";
 import CardTitle from "../components/ui/cardTitle";
 import useTitle from "../hooks/useTitle";
@@ -22,9 +20,7 @@ const CardLinks = styled(Card)`
 `;
 
 const Init = () => {
-  const { t } = useTranslation();
   useTitle("Home");
-
   return (
     <Layout>
       <Container className="mt-3" fluid>
@@ -34,32 +30,34 @@ const Init = () => {
             <Card className="mx-auto shadow-sm">
               <Card.Body>
                 <p>
-                  {t("iq_description")}{" "}
+                  The 🧠 IQ token is a multichain token that powers the
+                  Everipedia ecosystem of dapps and features! Read the{" "}
                   <a
                     href="https://learn.everipedia.org/"
                     rel="noreferrer"
                     target="_blank"
                   >
-                    {t("docs")}
+                    docs
                   </a>{" "}
-                  {t("for_technical_specs")}
+                  for the technical specs.
                   <br />
                   <br />
-                  <Link to="/bridge">{t("bridge")}</Link> {t("bridge_desc")}
+                  <Link to="/bridge">Bridge</Link> your token from all chains IQ
+                  circulates on using our bridge UI. IQ is multichain.
                   <br />
                   <br />
-                  {t("iq_defi_token")}{" "}
-                  <Link to="/lock">{t("staked_for_hiiq")}</Link> {t("to_earn")}
+                  IQ is a DeFi token that can be{" "}
+                  <Link to="/lock">staked for hiIQ</Link> to earn rewards+yield.
+                  NFT giveaways to hiIQ stakers and new features soon.
                   <br />
                   <br />
-                  {t("check_the")}{" "}
-                  <Link to="/stats">{String(t("stats")).toLowerCase()}</Link>{" "}
-                  {t("stats_desc")}
+                  Check the <Link to="/stats">stats</Link> page for a
+                  comprehensive, global look at IQ holders, market
+                  capitalization, and more.
                   <br />
                   <br />
-                  {t("other_feats")}
-                  <Link to="/voting">{String(t("voting")).toLowerCase()}</Link>
-                  {t("new_feats_soon")}
+                  Other features such as <Link to="/voting">voting</Link> for
+                  new staking features coming soon!
                 </p>
               </Card.Body>
             </Card>
