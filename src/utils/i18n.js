@@ -42,7 +42,6 @@ export const resources = {
       expired: "Expired",
       expiring_on: "Expiring on",
       login_info_eth_locking: "Login on ETH Wallet to lock your tokens",
-      confirming_tx: "Confirming transaction...",
       locked_for_4_years: "locked for 4 years",
       locked_for_3_years: "locked for 3 years",
       locked_for_2_years: "locked for 2 years",
@@ -70,7 +69,6 @@ export const resources = {
       login_to_see_more_stats: "Login to see more stats",
       login: "Login",
       // voting
-      confirmed_tx: "Transaction confirmed!",
       voting: "Voting",
       select_a_proposal: "Select a proposal",
       select_proposal_to_see_details: "Select a proposal to see details",
@@ -79,8 +77,6 @@ export const resources = {
       no_votes_so_far: "No votes so far",
       // ## votingChart
       loadingVotes: "Loading Votes",
-      // ## votingProposalForm
-      submit_your_vote_deletion: "Submit your vote deletion",
       // stats
       holders: "Holders",
       volume: "volume",
@@ -93,6 +89,7 @@ export const resources = {
       liquidity: "liquidity",
       social: "Social",
       twitter_follower: "Twitter followers",
+      circulating_supply: "Ciculating supply",
       // error
       error: "Error",
       // ---------------------------------------------------------------
@@ -127,7 +124,6 @@ export const resources = {
       calculation_based_on_4_years:
         "This calculation is based on a 4 years lock",
       years: "Years",
-      next_distribution: "Next Distribution",
       stats: "Stats",
       locked_iq: "Locked IQ",
       // proposalDetails
@@ -207,7 +203,6 @@ export const resources = {
       expired: "Expired",
       expiring_on: "Expiring on",
       login_info_eth_locking: "토큰을 잠 그려면 ETH 지갑에 로그인하세요.",
-      confirming_tx: "거래 확인 중 ...",
       locked_for_4_years: "locked for 4 years",
       locked_for_3_years: "locked for 3 years",
       locked_for_2_years: "locked for 2 years",
@@ -235,7 +230,6 @@ export const resources = {
       login_to_see_more_stats: "Login to see more stats",
       login: "Login",
       // voting
-      confirmed_tx: "거래가 확인되었습니다!",
       voting: "투표",
       select_a_proposal: "제안 선택",
       select_proposal_to_see_details: "세부 정보를 보려면 제안을 선택하세요.",
@@ -244,7 +238,6 @@ export const resources = {
       no_votes_so_far: "지금까지 투표가 없습니다.",
       // ## votingChart
       loadingVotes: "투표 로딩중",
-      // ## votingProposalForm
       // stats
       holders: "Holders",
       volume: "volume",
@@ -257,6 +250,7 @@ export const resources = {
       liquidity: "liquidity",
       social: "Social",
       twitter_follower: "Twitter followers",
+      circulating_supply: "Ciculating supply",
       // error
       error: "오류",
       // ---------------------------------------------------------------
@@ -291,7 +285,6 @@ export const resources = {
       calculation_based_on_4_years:
         "This calculation is based on a 4 years lock",
       years: "Years",
-      next_distribution: "Next Distribution",
       stats: "Stats",
       locked_iq: "Locked IQ",
       // proposalDetails
@@ -371,7 +364,6 @@ export const resources = {
       expired: "Expired",
       expiring_on: "Expiring on",
       login_info_eth_locking: "登录 ETH 钱包以锁定您的代币",
-      confirming_tx: "正在确认交易...",
       locked_for_4_years: "locked for 4 years",
       locked_for_3_years: "locked for 3 years",
       locked_for_2_years: "locked for 2 years",
@@ -399,7 +391,6 @@ export const resources = {
       login_to_see_more_stats: "Login to see more stats",
       login: "Login",
       // voting
-      confirmed_tx: "交易确认！",
       voting: "投票",
       select_a_proposal: "选择一个提案",
       select_proposal_to_see_details: "选择一个提案以了解详情",
@@ -408,7 +399,6 @@ export const resources = {
       no_votes_so_far: "暂无投票",
       // ## votingChart
       loadingVotes: "加载投票",
-      // ## votingProposalForm
       // stats
       holders: "Holders",
       volume: "volume",
@@ -421,6 +411,7 @@ export const resources = {
       liquidity: "liquidity",
       social: "Social",
       twitter_follower: "Twitter followers",
+      circulating_supply: "Ciculating supply",
       // error
       error: "错误",
       // ---------------------------------------------------------------
@@ -455,7 +446,6 @@ export const resources = {
       calculation_based_on_4_years:
         "This calculation is based on a 4 years lock",
       years: "Years",
-      next_distribution: "Next Distribution",
       stats: "Stats",
       locked_iq: "Locked IQ",
       // proposalDetails
