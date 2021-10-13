@@ -42,7 +42,6 @@ export const resources = {
       expired: "Expired",
       expiring_on: "Expiring on",
       login_info_eth_locking: "Login on ETH Wallet to lock your tokens",
-      confirming_tx: "Confirming transaction...",
       locked_for_4_years: "locked for 4 years",
       locked_for_3_years: "locked for 3 years",
       locked_for_2_years: "locked for 2 years",
@@ -70,7 +69,6 @@ export const resources = {
       login_to_see_more_stats: "Login to see more stats",
       login: "Login",
       // voting
-      confirmed_tx: "Transaction confirmed!",
       voting: "Voting",
       select_a_proposal: "Select a proposal",
       select_proposal_to_see_details: "Select a proposal to see details",
@@ -79,8 +77,6 @@ export const resources = {
       no_votes_so_far: "No votes so far",
       // ## votingChart
       loadingVotes: "Loading Votes",
-      // ## votingProposalForm
-      submit_your_vote_deletion: "Submit your vote deletion",
       // stats
       holders: "Holders",
       volume: "volume",
@@ -93,6 +89,7 @@ export const resources = {
       liquidity: "liquidity",
       social: "Social",
       twitter_follower: "Twitter followers",
+      circulating_supply: "Ciculating supply",
       // error
       error: "Error",
       // ---------------------------------------------------------------
@@ -127,7 +124,6 @@ export const resources = {
       calculation_based_on_4_years:
         "This calculation is based on a 4 years lock",
       years: "Years",
-      next_distribution: "Next Distribution",
       stats: "Stats",
       locked_iq: "Locked IQ",
       // proposalDetails
@@ -173,21 +169,21 @@ export const resources = {
       // |||||||||||||||||||| SECTIONS ||||||||||||||||||||
       // init
       iq_description:
-        "The 🧠 IQ token is a multichain token that powers the Everipedia ecosystem of dapps and features! Read the",
-      docs: "docs",
-      for_technical_specs: "for the technical specs.",
-      bridge: "Bridge",
+        "🧠IQ토큰은 dapp 및 기능과 에브리피디아의 생태계를 지원하는 멀티체인 토큰입니다!",
+      docs: "문서",
+      for_technical_specs: "기술 사양.",
+      bridge: "브릿지",
       bridge_desc:
-        "your token from all chains IQ circulates on, using our bridge UI. IQ is multichain.",
-      iq_defi_token: "IQ is a DeFi token that can be",
-      staked_for_hiiq: "staked for hiIQ",
+        "당신의 토큰들은 IQ의 토큰은 브리지 UI를 사용하여 순환합니다. IQ토큰은 멀티체인입니다.",
+      iq_defi_token: "IQ토큰 DeFi 토큰입니다.",
+      staked_for_hiiq: "hiIQ을 위해 스테이킹",
       to_earn:
-        " to earn rewards+yield. NFT giveaways to hiIQ stakers and new features soon.",
-      check_the: "Check the ",
+        " 보상 + 이자를 얻으려면. hiIQ 스테이커들을 위해 새로운 기능과 NFT 경품이 곧 출시됩니다.",
+      check_the: "확인해주세요 ",
       stats_desc:
-        "page for a comprehensive, global look at IQ holders, market capitalization, and more.",
-      other_feats: "Other features such as ",
-      new_feats_soon: " for new staking features coming soon!",
+        "IQ토큰 보유자수, 시가 총액, 글로벌한 IQ홀더들 정보와 다른 통계를 보시려면 해당 페이지를 참조하십시오.",
+      other_feats: "다른 기능 ",
+      new_feats_soon: " 새로운 스테이킹 기능이 곧 제공될 예정입니다!",
       // EOS → pIQ
       swap: "스왑",
       login_info_eos: "이오스 지갑에 로그인하여 토큰을 브리지합니다.",
@@ -203,39 +199,37 @@ export const resources = {
       lock_description:
         "IQ를 오래 잠글수록 더 많은 hiIQ를 받게됩니다. hiIQ는 잠금 기간 동안 천천히 감소하여 결국 IQ와 1 : 1에 도달합니다.",
       withdraw: "Withdraw",
-      expired_tokens: " expired tokens",
-      expired: "Expired",
-      expiring_on: "Expiring on",
+      expired_tokens: " 만료된 토큰",
+      expired: "만료",
+      expiring_on: "만료일",
       login_info_eth_locking: "토큰을 잠 그려면 ETH 지갑에 로그인하세요.",
-      confirming_tx: "거래 확인 중 ...",
-      locked_for_4_years: "locked for 4 years",
-      locked_for_3_years: "locked for 3 years",
-      locked_for_2_years: "locked for 2 years",
-      locked_for_1_year: "locked for 1 year",
-      increase_amount: "Increase amount",
-      increase_lock_time: "Increase lock time",
-      withdraw_your_iq_tokens_first: "Withdraw your IQ tokens first",
+      locked_for_4_years: "4년 동안 락업",
+      locked_for_3_years: "3년 동안 락업",
+      locked_for_2_years: "2년 동안 락업",
+      locked_for_1_year: "1년 동안 락업",
+      increase_amount: "수량 추가",
+      increase_lock_time: "락업 시간 추가",
+      withdraw_your_iq_tokens_first: "먼저 IQ토큰을 인출하십시오",
       // ## lockHeader
       updating_balance: "잔액 업데이트 중 ...",
       no_hiiq_tokens_locked: "지금까지 잠긴 hiIQ 토큰이 없습니다.",
       loading: "로딩 중",
       disconnected: "연결 끊김",
-      you_have_locked: "You have locked: ",
+      you_have_locked: "락업한 수량: ",
       // ## lockPeriod
-      lock_period: "Lock period (weeks)",
-      value_restriction: "You can increase the lock time for a maximum of",
-      weeks: " weeks",
+      lock_period: "락업 기간 (주간)",
+      value_restriction: "최대 늘릴 수 있는 락업 기간",
+      weeks: " 주",
       // ## lock stats
-      claim: "Claim Rewards",
-      checkpoint: "Checkpoint",
-      loading_rewards: "Loading rewards...",
-      retrieving_in: "Retrieving in: ",
+      claim: "보상 클레임",
+      checkpoint: "체크포인트",
+      loading_rewards: "보상 로딩중...",
+      retrieving_in: "회수: ",
       needed_to_keep_track:
-        "Needed to keep track of the HIIQ supply within our rewards system",
-      login_to_see_more_stats: "Login to see more stats",
-      login: "Login",
+        "보상 시스템 내에서 HIIQ 공급을 추적하는 데 필요합니다",
+      login_to_see_more_stats: "더 많은 통계를 보려면 로그인하세요.",
+      login: "로그인",
       // voting
-      confirmed_tx: "거래가 확인되었습니다!",
       voting: "투표",
       select_a_proposal: "제안 선택",
       select_proposal_to_see_details: "세부 정보를 보려면 제안을 선택하세요.",
@@ -244,19 +238,19 @@ export const resources = {
       no_votes_so_far: "지금까지 투표가 없습니다.",
       // ## votingChart
       loadingVotes: "투표 로딩중",
-      // ## votingProposalForm
       // stats
-      holders: "Holders",
-      volume: "volume",
-      total: "total",
-      apps: "apps",
-      prediqt_markets: "PredIQt markets",
-      everipedia_articles: "Everipedia articles",
-      everipedia_onchain_edits: "Everipedia Onchain Edits",
-      everipedia_page_views: "Everipedia Page Views",
-      liquidity: "liquidity",
-      social: "Social",
-      twitter_follower: "Twitter followers",
+      holders: "홀더들",
+      volume: "볼륨",
+      total: "총",
+      apps: "앱",
+      prediqt_markets: "PredIQt 예측시장 개수",
+      everipedia_articles: "에브리피디아 위키 페이지 개수",
+      everipedia_onchain_edits: "에브리피디아 온체인 편집수",
+      everipedia_page_views: "에브리피디아 페이지 조회수",
+      liquidity: "유동성",
+      social: "SNS",
+      twitter_follower: "트위터 팔로워수",
+      circulating_supply: "유통 공급량",
       // error
       error: "오류",
       // ---------------------------------------------------------------
@@ -270,11 +264,11 @@ export const resources = {
 
       // |||||||||||||||||||| COMPONENTS ||||||||||||||||||||
       // acountDetailsDialog
-      copied_to_clipboard: "Copied to clipboard!",
-      copy_address: "Copy Address",
-      view_on_block_explorer: "View on Block Explorer",
-      last_transactions: "Last transactions",
-      transactions_will_appear_here: "Transactions will appear here...",
+      copied_to_clipboard: "클립보드에 복사완료!",
+      copy_address: "주소 복사",
+      view_on_block_explorer: "블록익스플로러에서 보기",
+      last_transactions: "최근 트랜잭션 목록",
+      transactions_will_appear_here: "트랜잭션은 여기에 표시됩니다...",
       // ethereumWalletModal
       select_wallet: "지갑 선택",
       // infoSwapCard
@@ -284,16 +278,14 @@ export const resources = {
       details: "세부 정보",
       current_proposals: "현재 제안",
       // rewardsCalculatorDialog
-      supply: "Supply",
-      you_will_get: "You will get",
-      expected_apr: "Expected APR",
-      rewards_calculator: "Rewards Calculator",
-      calculation_based_on_4_years:
-        "This calculation is based on a 4 years lock",
-      years: "Years",
-      next_distribution: "Next Distribution",
-      stats: "Stats",
-      locked_iq: "Locked IQ",
+      supply: "공급",
+      you_will_get: "얻게 됩니다",
+      expected_apr: "예상 APR",
+      rewards_calculator: "보상 계산기",
+      calculation_based_on_4_years: "해당 계산은 4년 락업을 기반한 계산입니다.",
+      years: "년",
+      stats: "통계",
+      locked_iq: "락업된 IQ",
       // proposalDetails
       close_details: "세부 정보 닫기",
       open_details: "세부 정보 열기",
@@ -319,7 +311,7 @@ export const resources = {
       logout: "로그 아웃",
       eos_wallet: "EOS 지갑",
       ethereum_wallet: "이더 리움 지갑",
-      rewards: "Rewards",
+      rewards: "보상",
       // languageSelector
       language: "언어",
       select_a_language: "언어 선택",
@@ -337,21 +329,20 @@ export const resources = {
       // |||||||||||||||||||| SECTIONS ||||||||||||||||||||
       // init
       iq_description:
-        "The 🧠 IQ token is a multichain token that powers the Everipedia ecosystem of dapps and features! Read the",
-      docs: "docs",
-      for_technical_specs: "for the technical specs.",
-      bridge: "Bridge",
+        "🧠IQ代币是一种多链代币，驱动Everipedia的dapps生态和特色！阅读",
+      docs: "文档",
+      for_technical_specs: "以了解技术规格.",
+      bridge: "桥接",
       bridge_desc:
-        "your token from all chains IQ circulates on, using our bridge UI. IQ is multichain.",
-      iq_defi_token: "IQ is a DeFi token that can be",
-      staked_for_hiiq: "staked for hiIQ",
+        "您的代币，通过我们的桥接页面从所有支持IQ流通的区块链进行桥接。IQ是多链架构。",
+      iq_defi_token: "IQ是一个DeFi代币，可以",
+      staked_for_hiiq: "质押为 hiIQ",
       to_earn:
-        " to earn rewards+yield. NFT giveaways to hiIQ stakers and new features soon.",
-      check_the: "Check the ",
-      stats_desc:
-        "page for a comprehensive, global look at IQ holders, market capitalization, and more.",
-      other_feats: "Other features such as ",
-      new_feats_soon: " for new staking features coming soon!",
+        " 以赚取奖励和收益耕种。很快将会给HiIQ质押者发放NFT和上线新功能。",
+      check_the: "查看 ",
+      stats_desc: "统计页面，全面了解，全球IQ持有者，市值以及更多信息。",
+      other_feats: "其他功能，例如 ",
+      new_feats_soon: " 新质押功能很快即将上线！",
       // EOS → pIQ
       swap: "交换",
       login_info_eos: "登录 EOS 钱包以桥接您的代币",
@@ -367,39 +358,36 @@ export const resources = {
       lock_description:
         "锁定 IQ 的时间越长，您获得的 hiIQ 就越多。hiIQ 在锁定期间缓慢衰减，最终与 IQ 达到 1 比 1。",
       withdraw: "Withdraw",
-      expired_tokens: " expired tokens",
-      expired: "Expired",
-      expiring_on: "Expiring on",
+      expired_tokens: " 过期的代币",
+      expired: "过期",
+      expiring_on: "到期日",
       login_info_eth_locking: "登录 ETH 钱包以锁定您的代币",
-      confirming_tx: "正在确认交易...",
-      locked_for_4_years: "locked for 4 years",
-      locked_for_3_years: "locked for 3 years",
-      locked_for_2_years: "locked for 2 years",
-      locked_for_1_year: "locked for 1 year",
-      increase_amount: "Increase amount",
-      increase_lock_time: "Increase lock time",
-      withdraw_your_iq_tokens_first: "Withdraw your IQ tokens first",
+      locked_for_4_years: "锁定 4 年",
+      locked_for_3_years: "锁定 3 年",
+      locked_for_2_years: "锁定 2 年",
+      locked_for_1_year: "锁定 1 年",
+      increase_amount: "增加数量",
+      increase_lock_time: "增加锁定时间",
+      withdraw_your_iq_tokens_first: "先取回您的IQ代币",
       // ## lockHeader
       updating_balance: "正在更新余额...",
       no_hiiq_tokens_locked: "到目前为止还没有锁定 hiIQ 代币",
       loading: "加载中",
       disconnected: "Disconnected",
-      you_have_locked: "You have locked: ",
+      you_have_locked: "您已经锁定：",
       // ## lockPeriod
-      lock_period: "Lock period (weeks)",
-      value_restriction: "You can increase the lock time for a maximum of",
-      weeks: " weeks",
+      lock_period: "锁定时间 (周)",
+      value_restriction: "您可以增加的最大的锁定时间",
+      weeks: " 周",
       // ## lock stats
-      claim: "Claim Rewards",
-      checkpoint: "checkpoint",
-      loading_rewards: "Loading rewards...",
-      retrieving_in: "Retrieving in: ",
-      needed_to_keep_track:
-        "Needed to keep track of the HIIQ supply within our rewards system",
-      login_to_see_more_stats: "Login to see more stats",
-      login: "Login",
+      claim: "申领奖励",
+      checkpoint: "检查点",
+      loading_rewards: "加载奖励...",
+      retrieving_in: "检索中:",
+      needed_to_keep_track: "需要在我们的奖励系统中跟踪HIIQ的供应",
+      login_to_see_more_stats: "登录查看更多数据",
+      login: "登录",
       // voting
-      confirmed_tx: "交易确认！",
       voting: "投票",
       select_a_proposal: "选择一个提案",
       select_proposal_to_see_details: "选择一个提案以了解详情",
@@ -408,19 +396,19 @@ export const resources = {
       no_votes_so_far: "暂无投票",
       // ## votingChart
       loadingVotes: "加载投票",
-      // ## votingProposalForm
       // stats
-      holders: "Holders",
-      volume: "volume",
-      total: "total",
-      apps: "apps",
-      prediqt_markets: "PredIQt markets",
-      everipedia_articles: "Everipedia articles",
-      everipedia_onchain_edits: "Everipedia Onchain Edits",
-      everipedia_page_views: "Everipedia Page Views",
-      liquidity: "liquidity",
-      social: "Social",
-      twitter_follower: "Twitter followers",
+      holders: "持有者",
+      volume: "总量",
+      total: "总计",
+      apps: "应用",
+      prediqt_markets: "PredIQt 市场",
+      everipedia_articles: "Everipedia 文章",
+      everipedia_onchain_edits: "Everipedia 链上编辑",
+      everipedia_page_views: "Everipedia 页面浏览量",
+      liquidity: "流动性",
+      social: "社交媒体",
+      twitter_follower: "社交媒体",
+      circulating_supply: "流通供应",
       // error
       error: "错误",
       // ---------------------------------------------------------------
@@ -429,16 +417,16 @@ export const resources = {
       your_eth_address: "你的以太坊地址",
       from: "从",
       tx_executed: "Tx 已执行",
-      login_info_eth: "Login on ETH Wallet to swap your tokens",
+      login_info_eth: "登录 ETH 钱包以交换您的代币",
       // ---------------------------------------------------------------
 
       // |||||||||||||||||||| COMPONENTS ||||||||||||||||||||
       // acountDetailsDialog
-      copied_to_clipboard: "Copied to clipboard!",
-      copy_address: "Copy Address",
-      view_on_block_explorer: "View on Block Explorer",
-      last_transactions: "Last transactions",
-      transactions_will_appear_here: "Transactions will appear here...",
+      copied_to_clipboard: "复制到剪贴板!",
+      copy_address: "复制地址",
+      view_on_block_explorer: "在区块浏览器上查看",
+      last_transactions: "上一笔交易",
+      transactions_will_appear_here: "交易将出现在这里...",
       // ethereumWalletModal
       select_wallet: "选择钱包",
       // infoSwapCard
@@ -448,16 +436,14 @@ export const resources = {
       details: "详情",
       current_proposals: "当前提案",
       // rewardsCalculatorDialog
-      supply: "Supply",
-      you_will_get: "You will get",
-      expected_apr: "Expected APR",
-      rewards_calculator: "Rewards Calculator",
-      calculation_based_on_4_years:
-        "This calculation is based on a 4 years lock",
-      years: "Years",
-      next_distribution: "Next Distribution",
-      stats: "Stats",
-      locked_iq: "Locked IQ",
+      supply: "供应",
+      you_will_get: "您将获得",
+      expected_apr: "预计APR",
+      rewards_calculator: "奖励计算器",
+      calculation_based_on_4_years: "该计算基于锁定四年的情况",
+      years: "年",
+      stats: "统计数据",
+      locked_iq: "锁定的 IQ",
       // proposalDetails
       close_details: "关闭详情",
       open_details: "打开详情",
