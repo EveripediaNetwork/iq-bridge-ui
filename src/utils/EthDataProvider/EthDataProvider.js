@@ -39,12 +39,6 @@ const addGasLimitBuffer = value =>
     .mul(ethers.BigNumber.from(10000 + 2000))
     .div(ethers.BigNumber.from(10000));
 
-//#region gauges
-
-const getGauges = async wallet => {};
-
-//#endregion
-
 const callCheckpoint = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);

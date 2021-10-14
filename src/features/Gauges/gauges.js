@@ -1,13 +1,20 @@
 import React, { memo, useState, lazy, useContext, useEffect } from "react";
+import { useWallet } from "use-wallet";
 
 import { GaugesContext } from "../../context/gaugesContext";
 import Layout from "../../components/layouts/layout";
+import {
+  getGauges,
+  getUserVotingPower
+} from "../../utils/EthDataProvider/GaugesDataProvider";
 
 const WeightDistribution = lazy(() => import("./weightDistribution"));
 const GaugesVoting = lazy(() => import("./gaugesVoting"));
 const VotingHistory = lazy(() => import("./votingHistory"));
 
 const Gauges = () => {
+  const wallet = useWallet();
+
   const [gauges] = useState([
     { name: "polygon-hiiq", weight: 37 },
     { name: "usdc-hiiq", weight: 33.4 },
@@ -18,6 +25,11 @@ const Gauges = () => {
 
   useEffect(() => {
     if (gauges) setGauges(gauges);
+
+    (async () => {
+      await getGauges();
+      await getUserVotingPower(wallet);
+    })();
   }, []);
 
   return (
