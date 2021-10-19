@@ -13,9 +13,14 @@ const getGauges = async () => {
     "https://3d5d-165-227-192-32.ngrok.io"
   );
 
+  console.log(provider);
+
   const gaugeController = getGaugesContract(provider, false);
 
-  const gauges = await gaugeController.n_gauges({ gasLimit: 500000 });
+  console.log("before");
+  const gauges = await gaugeController.gauges(0);
+
+  console.log("hey");
   console.log(gauges);
   console.log(ethers.utils.formatEther(gauges));
 };
