@@ -3,7 +3,14 @@ import { TokenPocket } from "ual-token-pocket";
 import { Anchor } from "ual-anchor";
 import { MyKey } from "@everipedia/ual-mykey";
 
-import { appName, ChainId, rpcProtocol, rpcHost, rpcPort } from "../config";
+import {
+  appName,
+  ChainId,
+  rpcProtocol,
+  rpcHost,
+  rpcPort,
+  isProd
+} from "../config";
 
 const chain = {
   chainId: ChainId,
@@ -16,7 +23,6 @@ const chain = {
   ]
 };
 
-const scatter = new Scatter([chain], { appName });
 const myKey = new MyKey([chain], { appName });
 
 // use Scatter instead, TP isn't working
@@ -37,7 +43,11 @@ const anchor = new Anchor([chain], {
   requestStatus: false
 });
 
+const supportedAuthenticators = [tokenPocket, anchor, myKey];
+if (isProd) {
+  const scatter = new Scatter([chain], { appName });
+  supportedAuthenticators.push(scatter);
+}
 const supportedChains = [chain];
-const supportedAuthenticators = [scatter, tokenPocket, anchor, myKey];
 
 export { appName, supportedChains, supportedAuthenticators };

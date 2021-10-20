@@ -4,11 +4,9 @@ import "../scss/theme.scss";
 
 const GlobalStyle = createGlobalStyle`
  body {
+  font-family: "Open Sans", sans-serif !important;
   min-height: 100%;
-  background: rgb(45,132,253);
-background: linear-gradient(0deg, rgba(45,132,253,1) 0%, rgba(222,237,237,1) 100%);
-
-  background-attachment: fixed;
+  overflow-y: hidden;
  }
 
  div.input-group > input.form-control {

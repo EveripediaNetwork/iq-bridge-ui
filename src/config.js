@@ -8,7 +8,7 @@ module.exports = {
   rpcHost: process.env.REACT_APP_RPC_HOST,
   rpcPort: process.env.REACT_APP_RPC_PORT,
   everipediaIqContract: process.env.REACT_APP_EVERIPEDIAIQ_CONTRACT,
-  isProd: process.env.REACT_APP_IS_PROD,
+  isProd: process.env.REACT_APP_IS_PROD === "true",
   ethChainId: Number(process.env.REACT_APP_ETH_CHAIN_ID),
   ethBasedExplorerUrl: process.env.REACT_APP_ETH_EXPLORER_URL,
   iqAddress: process.env.REACT_APP_IQ_ADDRESS,
@@ -25,5 +25,6 @@ module.exports = {
     process.env.REACT_APP_SNAPSHOT_SPACE_URL ||
     "https://snapshot.org/#/everipediaiq.eth/proposal/",
   snapshotBaseEndpoint:
-    process.env.REACT_APP_SNAPSHOT_BASE_ENDPOINT || "https://hub.snapshot.page"
+    process.env.REACT_APP_SNAPSHOT_BASE_ENDPOINT || "https://hub.snapshot.org",
+  jsonRPCNodeLink: process.env.REACT_APP_JSON_RPC_NODE_LINK
 };

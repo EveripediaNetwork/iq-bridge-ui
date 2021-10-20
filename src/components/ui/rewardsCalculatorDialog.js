@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
@@ -32,6 +32,8 @@ const RewardsCalculatorDialog = ({
   const [years, setYears] = useState();
   const [aprDividedByLockPeriod, setAprDividedByLockPeriod] = useState();
   const [expectedIQ, setExpectedIQ] = useState();
+  const lockedIQRef = useRef(null);
+  const yearsRef = useRef(null);
 
   const handleOnHide = () => {
     setYears();
@@ -62,6 +64,18 @@ const RewardsCalculatorDialog = ({
     }
   }, [inputIQ, years]);
 
+  const handleLockedIQInput = e => {
+    const value = Number(e.target.value);
+    if (value < 0) lockedIQRef.current.value = "";
+    else setInputIQ(value);
+  };
+
+  const handleYearsInput = e => {
+    const value = Number(e.target.value);
+    if (value < 0 || value > 4) yearsRef.current.value = "";
+    else setYears(value);
+  };
+
   return (
     <GenericDialog
       size="sm"
@@ -81,15 +95,19 @@ const RewardsCalculatorDialog = ({
           ) : null}
           <StyledFormControl
             type="number"
-            onChange={event => setInputIQ(event.target.value)}
+            ref={lockedIQRef}
+            min="0"
+            onChange={handleLockedIQInput}
             placeholder={t("locked_iq")}
             className="mb-2"
           />
           <StyledFormControl
             type="number"
+            min="0"
             max="4"
-            onChange={event => setYears(event.target.value)}
-            placeholder={t("years")}
+            ref={yearsRef}
+            onChange={handleYearsInput}
+            placeholder={`${t("years")} (4 years max)`}
           />
           {inputIQ && years && aprDividedByLockPeriod ? (
             <StyledDivContainer className="shadow-sm">

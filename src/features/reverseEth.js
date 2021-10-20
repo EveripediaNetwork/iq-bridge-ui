@@ -13,6 +13,7 @@ import InfoAlert from "../components/ui/infoAlert";
 import { reverseIQtoEOSTx } from "../utils/EthDataProvider/EthDataProvider";
 import AddressContainer from "../components/ui/addressContainer";
 import { TransactionContext } from "../context/transactionContext";
+import useTitle from "../hooks/useTitle";
 
 // TODO: this is 3-4 times already, time to extract
 const IconWrapper = styled(Button)`
@@ -28,6 +29,7 @@ const IconWrapper = styled(Button)`
 
 const ReverseEth = () => {
   const { t } = useTranslation();
+  useTitle("Bridge");
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
   const { setTxDone } = useContext(TransactionContext);
@@ -48,7 +50,7 @@ const ReverseEth = () => {
 
   return (
     <Layout>
-      <Container className="p-2 mt-3" fluid>
+      <Container className="mt-3" fluid>
         <FormProvider {...methods}>
           <Row>
             <Col>

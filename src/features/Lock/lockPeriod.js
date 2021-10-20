@@ -46,6 +46,7 @@ const LockPeriod = ({
   wallet,
   updateParentLockValue,
   radioValue,
+  filledAmount,
   currentHIIQ,
   maximumLockableTime
 }) => {
@@ -56,9 +57,15 @@ const LockPeriod = ({
   const inputRef = useRef();
 
   useEffect(() => {
+    setLockValue(0);
+
+    if (inputRef && inputRef.current) inputRef.current.state.value = 0;
+
     if (maximumLockableTime) {
-      const weeks = Number(maximumLockableTime / 7).toFixed(0);
-      setRemaining(weeks);
+      const weeks = Number(maximumLockableTime / 7);
+
+      if (weeks < 1) setRemaining(0);
+      else setRemaining(Number(weeks).toFixed());
     }
   }, [maximumLockableTime]);
 
@@ -69,11 +76,16 @@ const LockPeriod = ({
     updateParentLockValue(value);
   };
 
-  const handleOnSliderChange = value => {
-    setLockValue(value);
-    if (inputRef && inputRef.current) inputRef.current.state.value = value;
+  const handleOnSliderChange = num => {
+    const value = num * 7; // multiply weeks with days
 
-    updateParentLockValue(Number(value) * 7); // multiply weeks with days
+    if (lockValue > num && lockValue - num > 1 && num !== 0)
+      updateParentLockValue(value + (lockValue - num) * 7);
+    else updateParentLockValue(value);
+
+    if (inputRef && inputRef.current) inputRef.current.state.value = num;
+
+    setLockValue(num);
   };
 
   return (
@@ -107,7 +119,9 @@ const LockPeriod = ({
             <Slider
               disabled={
                 wallet.account === null ||
-                (radioValue === 1 && currentHIIQ && currentHIIQ !== 0)
+                (radioValue === 1 && currentHIIQ && currentHIIQ !== 0) ||
+                (radioValue === 1 && (!filledAmount || filledAmount === 0)) ||
+                remaining === 0
               }
               railStyle={{ backgroundColor: "lightgray", height: 11 }}
               trackStyle={{ height: 14 }}
@@ -138,9 +152,12 @@ const LockPeriod = ({
               precision={0}
               disabled={
                 wallet.account === null ||
-                (radioValue === 1 && currentHIIQ && currentHIIQ !== 0)
+                (radioValue === 1 && currentHIIQ && currentHIIQ !== 0) ||
+                (radioValue === 1 && (!filledAmount || filledAmount === 0)) ||
+                remaining === 0
               }
               max={remaining || 208}
+              min={0}
               step={1}
               value={lockValue || 0}
               ref={e => {
@@ -164,6 +181,7 @@ LockPeriod.propTypes = {
   wallet: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   updateParentLockValue: PropTypes.func.isRequired,
   radioValue: PropTypes.number.isRequired,
+  filledAmount: PropTypes.number.isRequired,
   currentHIIQ: PropTypes.number, // eslint-disable-line react/require-default-props
   maximumLockableTime: PropTypes.number // eslint-disable-line react/require-default-props
 };

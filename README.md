@@ -17,7 +17,7 @@ yarn
 yarn start
 ```
 
-## Develop using testnet:
+## 🤴 Develop using testnet:
 
 If you want to develop using Goerli, you can uncomment goerli env variables in .env.template. 
 

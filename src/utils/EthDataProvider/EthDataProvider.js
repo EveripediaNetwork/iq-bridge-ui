@@ -5,7 +5,8 @@ import {
   iqAddress,
   pIQAddress,
   pMinterAddress,
-  hiIQRewardsAddress
+  hiIQRewardsAddress,
+  jsonRPCNodeLink
 } from "../../config";
 import { erc20Abi } from "./erc20.abi";
 import { hiIQAbi } from "./hiIQ.abi";
@@ -45,7 +46,9 @@ const callCheckpoint = async wallet => {
 
     const hiIQRewards = getHiIQRewardsContract(provider, true);
 
-    const result = await hiIQRewards.checkpoint();
+    const result = await hiIQRewards.checkpoint({
+      gasLimit: addGasLimitBuffer(await hiIQRewards.estimateGas.checkpoint())
+    });
     return result;
   }
   return 0;
@@ -62,6 +65,20 @@ const earned = async wallet => {
   }
 
   return 0;
+};
+
+const defaultStats = async () => {
+  const provider = new ethers.providers.JsonRpcProvider(jsonRPCNodeLink);
+  const erc20 = new ethers.Contract(iqAddress, erc20Abi, provider);
+  const hiIQ = new ethers.Contract(hiIQAddress, hiIQAbi, provider);
+
+  const totalValueLockedResult = await erc20["balanceOf(address)"](hiIQAddress);
+  const totalhIIQSupply = await hiIQ["totalSupply()"]();
+  return {
+    tvl: ethers.utils.formatEther(totalValueLockedResult),
+    hiIQSupply: Number(ethers.utils.formatEther(totalhIIQSupply)),
+    rewardsAcrossLockPeriod: TOTAL_REWARDS_ACROSS_LOCK_PERIOD
+  };
 };
 
 const getYield = async wallet => {
@@ -88,7 +105,7 @@ const getStats = async wallet => {
     const totalhIIQSupply = await hiIQ["totalSupply()"]();
 
     const lockedResult = await hiIQ.locked(wallet.account, {
-      gasLimit: 800000
+      gasLimit: 400000
     });
 
     return {
@@ -97,6 +114,20 @@ const getStats = async wallet => {
       lockedByUser: Number(ethers.utils.formatEther(lockedResult[0])),
       rewardsAcrossLockPeriod: TOTAL_REWARDS_ACROSS_LOCK_PERIOD
     };
+  }
+
+  return 0;
+};
+
+const getIQLockedByTheUser = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+    const hiIQ = getHiIQContract(provider);
+    const result = await hiIQ.locked(wallet.account, {
+      gasLimit: 125000
+    });
+
+    return ethers.utils.formatEther(result[0]);
   }
 
   return 0;
@@ -132,8 +163,10 @@ const getTokensUserBalance = async wallet => {
 
     const erc20 = getERC20IQContract(provider);
 
-    const balanc = await erc20.balanceOf(wallet.account);
-    return ethers.utils.formatEther(balanc);
+    let balance = await erc20.balanceOf(wallet.account);
+    balance = Number(ethers.utils.formatEther(balance));
+
+    return balance > 0.01 ? balance : 0;
   }
   return 0;
 };
@@ -226,7 +259,7 @@ const lockTokensTx = async (amount, time, wallet, handleConfirmation) => {
 
     if (hashes) {
       const result = await hiIQ.create_lock(amountParsed, String(timeParsed), {
-        gasLimit: 800000
+        gasLimit: 600000
       });
 
       provider
@@ -235,9 +268,11 @@ const lockTokensTx = async (amount, time, wallet, handleConfirmation) => {
         .catch(err => handleConfirmation(err));
 
       hashes.push(result.hash);
+
+      return { result, hashes };
     }
 
-    return hashes;
+    return { hashes };
   }
 
   return false;
@@ -304,9 +339,7 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
     );
 
     const result = await hiIQ.increase_amount(amountParsed, {
-      gasLimit: addGasLimitBuffer(
-        await hiIQ.estimateGas.increase_amount(amountParsed)
-      )
+      gasLimit: 500000
     });
 
     hashes.push(result.hash);
@@ -316,7 +349,7 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
       .then(() => handleConfirmation("success"))
       .catch(err => handleConfirmation(err));
 
-    return hashes;
+    return { result, hashes };
   }
 
   return false;
@@ -330,9 +363,7 @@ const increaseUnlockTime = async (wallet, unlockTime, handleConfirmation) => {
     const hiIQ = getHiIQContract(provider);
 
     const result = await hiIQ.increase_unlock_time(timeParsed, {
-      gasLimit: addGasLimitBuffer(
-        await hiIQ.estimateGas.increase_unlock_time(timeParsed)
-      )
+      gasLimit: 500000
     });
 
     provider
@@ -340,7 +371,7 @@ const increaseUnlockTime = async (wallet, unlockTime, handleConfirmation) => {
       .then(() => handleConfirmation("success"))
       .catch(err => handleConfirmation(err));
 
-    return result;
+    return { result };
   }
 
   return 0;
@@ -351,6 +382,7 @@ export {
   earned,
   getYield,
   getStats,
+  getIQLockedByTheUser,
   convertPTokensTx,
   getPTokensUserBalance,
   getTokensUserBalance,
@@ -361,5 +393,6 @@ export {
   increaseAmount,
   getMaximumLockableTime,
   increaseUnlockTime,
-  getTokensUserBalanceLocked
+  getTokensUserBalanceLocked,
+  defaultStats
 };

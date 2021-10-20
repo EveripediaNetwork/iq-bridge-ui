@@ -12,9 +12,10 @@ import {
   getPTokensUserBalance,
   getTokensUserBalance
 } from "../../utils/EthDataProvider/EthDataProvider";
+import { round } from "../../utils/methods";
 
 const SwapContainerWrapper = styled.div`
-  border-radius: 15px;
+  border-radius: 5px;
   border: 1px solid #e0e0e0;
   padding: 10px;
   display: grid;
@@ -160,7 +161,8 @@ const SwapContainer = ({
         wallet.account &&
         token.name === "IQ"
       ) {
-        const balance = Number(await getTokensUserBalance(wallet));
+        let balance = Number(await getTokensUserBalance(wallet));
+        balance = Number(balance.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]);
         setBalance(balance);
         setParentBalance(balance);
       }
@@ -176,19 +178,25 @@ const SwapContainer = ({
 
   const handleOnInputChange = event => {
     let { value } = event.target;
-    value = Number(value);
+    value = round(Number(value), 2);
 
-    if (Number.isNaN(value) || value < 0 || value > balToken) {
+    if (Number.isNaN(value) || value > Number(balToken)) {
       setIsValidInput(false);
       setFilled(undefined);
+      setParentBalance(undefined);
       return;
     }
 
     setIsValidInput(true);
 
-    if (value === 0) return;
+    if (value === 0) {
+      setFilled(undefined);
+      setParentBalance(undefined);
+      return;
+    }
 
     setFilled(value);
+    setParentBalance(value);
   };
 
   return (
