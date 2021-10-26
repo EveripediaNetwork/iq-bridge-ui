@@ -28,7 +28,7 @@ const Gauges = () => {
 
     (async () => {
       await getGauges();
-      // await getUserVotingPower(wallet);
+      await getUserVotingPower(wallet);
     })();
   }, []);
 
