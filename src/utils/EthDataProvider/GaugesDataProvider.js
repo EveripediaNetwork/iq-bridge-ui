@@ -3,7 +3,7 @@ import { gaugeControllerAbi } from "./gaugeController.abi";
 
 const getGaugesContract = (provider, getSigner) =>
   new ethers.Contract(
-    "0xDC11f7E700A4c898AE5CAddB1082cFfa76512aDD",
+      "0x9786f6d29e1c9129808bbd3d1abc475e8324285d",
     gaugeControllerAbi,
     getSigner ? provider.getSigner() : provider
   );
@@ -18,7 +18,7 @@ const getGauges = async () => {
   const gaugeController = getGaugesContract(provider, false);
 
   console.log("before");
-  const gauges = await gaugeController.gauges(0);
+  const gauges = await gaugeController.gauges(0, {gasLimit: 100000});
 
   console.log("hey");
   console.log(gauges);
@@ -39,10 +39,14 @@ const getUserVotingPower = async wallet => {
 
   const gaugeControllerContract = getGaugesContract(provider, false);
 
+  const powerGas = await gaugeControllerContract.estimateGas.vote_user_power(
+      "0xAe65930180ef4d86dbD1844275433E9e1d6311ED"
+  );
+
   const power = await gaugeControllerContract.vote_user_power(
     "0xAe65930180ef4d86dbD1844275433E9e1d6311ED",
     {
-      gasLimit: 100000
+      gasLimit: powerGas
     }
   );
 
