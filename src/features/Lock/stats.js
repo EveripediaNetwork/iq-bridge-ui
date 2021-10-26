@@ -24,7 +24,6 @@ import {
   defaultStats
 } from "../../utils/EthDataProvider/EthDataProvider";
 import CardTitle from "../../components/ui/cardTitle";
-import { CoinGeckoClient } from "../../utils/coingecko";
 import StatsCharts from "../../components/ui/statsCharts";
 import RewardsCalculatorDialog from "../../components/ui/rewardsCalculatorDialog";
 import EthereumWalletModal from "../../components/ui/ethereumWalletModal";
@@ -148,8 +147,12 @@ const Stats = ({ wallet, lockedAlready }) => {
       setTimeout(async () => {
         const rewards = await earned(wallet);
         try {
-          const result = await CoinGeckoClient.coins.fetch("everipedia", {});
-          setRewardsInDollars(Number(rewards) * result.data.tickers[7].last);
+          const a = await fetch(
+            "https://api.coingecko.com/api/v3/simple/price?ids=everipedia&vs_currencies=usd"
+          );
+          const price = (await a.json()).everipedia.usd;
+
+          setRewardsInDollars(Number(rewards) * price);
         } catch (err) {
           console.error(err);
         }
@@ -168,8 +171,12 @@ const Stats = ({ wallet, lockedAlready }) => {
         const rewards = await earned(wallet);
 
         try {
-          const result = await CoinGeckoClient.coins.fetch("everipedia", {});
-          setRewardsInDollars(Number(rewards) * result.data.tickers[7].last);
+          const a = await fetch(
+            "https://api.coingecko.com/api/v3/simple/price?ids=everipedia&vs_currencies=usd"
+          );
+          const price = (await a.json()).everipedia.usd;
+
+          setRewardsInDollars(Number(rewards) * price);
         } catch (err) {
           console.error(err);
         }
