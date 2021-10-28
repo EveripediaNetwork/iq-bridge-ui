@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { add } from "lodash-es";
 import { gaugeControllerAbi } from "./gaugeController.abi";
 
 const getGaugesContract = (provider, getSigner) =>
@@ -17,15 +18,33 @@ const getGauges = async () => {
 
   const gaugeController = getGaugesContract(provider, false);
 
-  // const gauges = await gaugeController.gauges(0, { gasLimit: 500000 });
+  const gaugesNames = ["IQ/FRAX Uniswap V2"];
   let numberOfGauges = await gaugeController.n_gauges({ gasLimit: 500000 });
   numberOfGauges = Number(numberOfGauges.toString());
 
-  console.log(numberOfGauges);
+  let gauges = [];
 
   for (let i = 0; i < numberOfGauges; i++) {
-    console.log(await gaugeController.gauges(i, { gasLimit: 500000 }));
+    const address = await gaugeController.gauges(i, { gasLimit: 500000 });
+
+    let gaugeWeight = await gaugeController.get_gauge_weight(address, {
+      gasLimit: 400000
+    });
+    console.log(gaugeWeight.toString());
+    gaugeWeight = Number(gaugeWeight.toString());
+
+    console.log(address);
+
+    gauges.unshift({
+      address,
+      name: gaugesNames[i],
+      gaugeWeight
+    });
   }
+
+  console.log(gauges);
+
+  return gauges;
 };
 
 const voteForGauge = async (wallet, time, user, gauge_addr, weight) => {
@@ -42,18 +61,20 @@ const getUserVotingPower = async wallet => {
 
     const gaugeControllerContract = getGaugesContract(provider, false);
 
-    const powerGas = await gaugeControllerContract.estimateGas.vote_user_power(
-      "0xAe65930180ef4d86dbD1844275433E9e1d6311ED"
-    );
+    // const powerGas = await gaugeControllerContract.estimateGas.vote_user_power(
+    //   "0xAe65930180ef4d86dbD1844275433E9e1d6311ED"
+    // );
+
+    console.log("power");
 
     const power = await gaugeControllerContract.vote_user_power(
       "0xAe65930180ef4d86dbD1844275433E9e1d6311ED",
       {
-        gasLimit: powerGas
+        gasLimit: 100000
       }
     );
 
-    console.log(power);
+    return Number(power.toString());
   }
 };
 

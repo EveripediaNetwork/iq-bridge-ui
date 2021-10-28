@@ -14,29 +14,25 @@ const VotingHistory = lazy(() => import("./votingHistory"));
 
 const Gauges = () => {
   const wallet = useWallet();
-
-  const [gauges] = useState([
-    { name: "polygon-hiiq", weight: 37 },
-    { name: "usdc-hiiq", weight: 33.4 },
-    { name: "iq-editing-rewards", weight: 2.6 }
-  ]);
+  const [votingPower, setVotingPower] = useState(0);
 
   const { setGauges } = useContext(GaugesContext);
 
   useEffect(() => {
-    if (gauges) setGauges(gauges);
-
-    (async () => {
-      await getGauges();
-      await getUserVotingPower(wallet);
-    })();
-  }, []);
+    if (wallet.status === "connected") {
+      (async () => {
+        const gaugesResult = await getGauges();
+        setGauges(gaugesResult);
+        setVotingPower(await getUserVotingPower(wallet));
+      })();
+    }
+  }, [wallet.status]);
 
   return (
     <Layout>
       <div className="d-flex flex-row flex-wrap justify-content-center h-75 align-items-center">
         <WeightDistribution />
-        <GaugesVoting />
+        <GaugesVoting votingPower={votingPower} />
         <VotingHistory />
       </div>
     </Layout>

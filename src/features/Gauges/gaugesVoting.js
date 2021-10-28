@@ -1,5 +1,6 @@
 import React, { memo, useContext, useState, lazy } from "react";
 import { Card, Button, ListGroup, ListGroupItem } from "react-bootstrap";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
@@ -38,7 +39,7 @@ const StyledListGroupItem = styled(ListGroupItem)`
   }
 `;
 
-const GaugesVoting = () => {
+const GaugesVoting = ({ votingPower }) => {
   const { gauges } = useContext(GaugesContext);
   const [activeIndex, setActiveIndex] = useState(0);
   const [weight, setWeight] = useState(0);
@@ -48,7 +49,6 @@ const GaugesVoting = () => {
       <Card.Title>Voting</Card.Title>
       <Card.Body className="p-0 w-100 d-flex flex-column justify-content-center">
         <div className="d-flex flex-column justify-content-center align-items-center">
-          <p className="text-center font-weight-bold mb-1">Vote weight used</p>
           <StyledListGroup
             variant="flush"
             className="d-flex flex-column justify-content-center"
@@ -57,7 +57,7 @@ const GaugesVoting = () => {
               gauges.map((item, idx) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <StyledListGroupItem key={idx + 1} className="monospace">
-                  {item.name}: {item.weight}%
+                  {item.name}: {item.gaugeWeight}%
                 </StyledListGroupItem>
               ))}
           </StyledListGroup>
@@ -72,7 +72,7 @@ const GaugesVoting = () => {
         />
         <div className="d-flex flex-column text-center justify-content-center">
           <h5>Weight</h5>
-          <div className="d-flex flex-row justify-content-between pl-3 pr-3">
+          <div className="d-flex flex-column justify-content-between pl-3 pr-3">
             <Slider
               trackStyle={{ height: 14 }}
               railStyle={{ backgroundColor: "lightgray", height: 11 }}
@@ -85,7 +85,9 @@ const GaugesVoting = () => {
               min={0}
               max={100}
             />
-            <span className="font-weight-bold ml-3">{weight}%</span>
+            <span className="font-weight-bold mt-2">
+              {weight}% of {votingPower}
+            </span>
           </div>
         </div>
         <div className="container text-center mt-3">
@@ -96,6 +98,14 @@ const GaugesVoting = () => {
       </Card.Body>
     </StyledCard>
   );
+};
+
+GaugesVoting.propTypes = {
+  votingPower: PropTypes.number
+};
+
+GaugesVoting.defaultProps = {
+  votingPower: 0
 };
 
 export default memo(GaugesVoting);
