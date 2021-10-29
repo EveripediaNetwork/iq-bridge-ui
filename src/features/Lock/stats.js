@@ -21,7 +21,8 @@ import {
   earned,
   getStats,
   getYield,
-  defaultStats
+  defaultStats,
+  checkIfUserIsInitialized
 } from "../../utils/EthDataProvider/EthDataProvider";
 import CardTitle from "../../components/ui/cardTitle";
 import StatsCharts from "../../components/ui/statsCharts";
@@ -42,6 +43,7 @@ const Stats = ({ wallet, lockedAlready }) => {
   const [countdown, setCountdown] = useState(Date.now() + 25000);
   const [isCallingCheckpoint, setIsCallingCheckpoint] = useState(false);
   const [openRewardsCalculator, setOpenRewardsCalculator] = useState(false);
+  const [userIsInitialized, setUserIsInitialzed] = useState(undefined);
   const target = useRef(null);
   const checkpointOverlayTarget = useRef(null);
   const countDownComponentRef = useRef(null);
@@ -168,6 +170,8 @@ const Stats = ({ wallet, lockedAlready }) => {
   useEffect(() => {
     (async () => {
       if (wallet && wallet.status === "connected") {
+        setUserIsInitialzed(await checkIfUserIsInitialized(wallet));
+
         const rewards = await earned(wallet);
 
         try {
@@ -334,10 +338,13 @@ const Stats = ({ wallet, lockedAlready }) => {
                         </Button>
                       ) : null}
 
-                      {lockedAlready &&
-                      earnedRewards !== undefined &&
-                      earnedRewards === 0 &&
-                      wallet.status === "connected" ? (
+                      {(lockedAlready &&
+                        earnedRewards !== undefined &&
+                        earnedRewards === 0 &&
+                        wallet.status === "connected") ||
+                      (userIsInitialized !== undefined &&
+                        userIsInitialized === false) ? (
+                        // eslint-disable-next-line react/jsx-indent
                         <div className="d-flex flex-row justify-content-center align-items-center">
                           <Button
                             onClick={handleCallCheckpoint}
