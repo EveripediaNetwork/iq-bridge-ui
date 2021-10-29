@@ -22,6 +22,7 @@ import {
   walletConnectRpcUrl,
   walletLinkUrl
 } from "./config";
+import { isMetamaskMobileAndIframe } from "./utils/metamaskMobileDetector";
 
 const InitPage = lazy(() => import("./features/init"));
 const HomePage = lazy(() => import("./features/home"));
@@ -32,12 +33,15 @@ const VotingPage = lazy(() => import("./features/Voting/voting"));
 const StatsPage = lazy(() => import("./features/Stats/stats"));
 
 function App() {
+  isMetamaskMobileAndIframe();
   return (
     <ErrorBoundary fallback={<Error />}>
       <Suspense fallback={<Loading />}>
         <UseWalletProvider
           chainId={ethChainId} // 5 GOERLI
           connectors={{
+            frame: {},
+            injected: {},
             fortmatic: { apiKey: fortmaticApiKey },
             portis: { dAppId: portisId },
             walletconnect: { rpcUrl: walletConnectRpcUrl },
