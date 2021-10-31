@@ -14,8 +14,6 @@ const getGauges = async () => {
     "https://3d5d-165-227-192-32.ngrok.io"
   );
 
-  console.log(provider);
-
   const gaugeController = getGaugesContract(provider, false);
 
   const gaugesNames = ["IQ/FRAX Uniswap V2"];
@@ -45,6 +43,24 @@ const getGauges = async () => {
   console.log(gauges);
 
   return gauges;
+};
+
+const getPoints = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.JsonRpcProvider(
+      "https://3d5d-165-227-192-32.ngrok.io"
+    );
+
+    const gaugeController = getGaugesContract(provider, false);
+
+    const result = await gaugeController.points_total(
+      "0x3d7126d1ce1F71Cb0111CF6ff683f55BA8474464"
+    );
+
+    console.log(result);
+  }
+
+  return false;
 };
 
 const voteForGauge = async (wallet, time, user, gauge_addr, weight) => {
@@ -78,4 +94,4 @@ const getUserVotingPower = async wallet => {
   }
 };
 
-export { getGauges, getUserVotingPower };
+export { getGauges, getPoints, getUserVotingPower };

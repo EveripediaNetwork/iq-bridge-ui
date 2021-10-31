@@ -5,6 +5,7 @@ import { GaugesContext } from "../../context/gaugesContext";
 import Layout from "../../components/layouts/layout";
 import {
   getGauges,
+  getPoints,
   getUserVotingPower
 } from "../../utils/EthDataProvider/GaugesDataProvider";
 
@@ -24,6 +25,7 @@ const Gauges = () => {
         const gaugesResult = await getGauges();
         setGauges(gaugesResult);
         setVotingPower(await getUserVotingPower(wallet));
+        await getPoints(wallet);
       })();
     }
   }, [wallet.status]);
