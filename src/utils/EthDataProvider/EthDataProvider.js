@@ -37,7 +37,7 @@ const getHiIQRewardsContract = (provider, getSigner) =>
 
 const addGasLimitBuffer = value =>
   value
-    .mul(ethers.BigNumber.from(10000 + 2000))
+    .mul(ethers.BigNumber.from(10000 + 2500))
     .div(ethers.BigNumber.from(10000));
 
 const callCheckpoint = async wallet => {
