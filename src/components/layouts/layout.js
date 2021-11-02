@@ -167,6 +167,13 @@ const Layout = ({ children }) => {
               {t("lock")}
             </StyledNavLink>
             <StyledNavLink
+              active={location.pathname === "/raffles" ? "" : undefined}
+              as={Link}
+              to={`/raffles${LngUrl}`}
+            >
+              {t("Raffles")}
+            </StyledNavLink>
+            <StyledNavLink
               active={location.pathname === "/voting" ? "" : undefined}
               as={Link}
               to={`/voting${LngUrl}`}
