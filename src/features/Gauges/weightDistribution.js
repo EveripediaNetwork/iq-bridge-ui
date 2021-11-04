@@ -1,7 +1,8 @@
-import React, { memo } from "react";
+import React, { memo, useContext, useState, useEffect } from "react";
 import { Card } from "react-bootstrap";
 import { Doughnut } from "react-chartjs-2";
 import styled from "styled-components";
+import { GaugesContext } from "../../context/gaugesContext";
 
 const StyledCard = styled(Card)`
   padding: 10px;
@@ -12,39 +13,42 @@ const StyledCard = styled(Card)`
   align-items: center;
 `;
 
-const data = {
-  labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-  datasets: [
-    {
-      label: "# of Votes",
-      data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-        "rgba(75, 192, 192, 0.2)",
-        "rgba(153, 102, 255, 0.2)",
-        "rgba(255, 159, 64, 0.2)"
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-        "rgba(153, 102, 255, 1)",
-        "rgba(255, 159, 64, 1)"
-      ],
-      borderWidth: 1
-    }
-  ]
-};
-
 const WeightDistribution = () => {
+  const { gauges } = useContext(GaugesContext);
+  const [data, setData] = useState();
+
+  useEffect(() => {
+    if (gauges !== undefined) {
+      const tmp = {
+        labels: [],
+        datasets: [
+          {
+            label: "",
+            data: [],
+            backgroundColor: [],
+            borderColor: [],
+            borderWidth: 1
+          }
+        ]
+      };
+      const colors = ["rgba(255, 99, 132, 0.2)", "rgba(209, 230, 239, 0.8)"];
+      for (let i = 0; i < gauges.length; i++) {
+        tmp.labels.unshift(gauges[i].name);
+        tmp.datasets[0].data.unshift(gauges[i].gaugeWeight);
+        tmp.datasets[0].backgroundColor.unshift(colors[i]);
+        tmp.datasets[0].borderColor.unshift("rgba(0, 0, 0, 0.8)");
+      }
+
+      setData(tmp);
+    }
+  }, [gauges]);
+
   return (
     <StyledCard style={{ width: 277 }}>
       <Card.Title>Weight distribution</Card.Title>
       <Card.Body className="w-100">
-        <Doughnut data={data} style={{ width: 277 }} />
+        {" "}
+        {data !== undefined && <Doughnut data={data} style={{ width: 277 }} />}
       </Card.Body>
     </StyledCard>
   );

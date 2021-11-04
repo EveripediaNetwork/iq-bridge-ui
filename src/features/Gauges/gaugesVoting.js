@@ -6,6 +6,8 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 
 import { GaugesContext } from "../../context/gaugesContext";
+import { voteForGauge } from "../../utils/EthDataProvider/GaugesDataProvider";
+import { useWallet } from "use-wallet";
 
 const GaugesList = lazy(() => import("./gaugesList"));
 
@@ -19,7 +21,7 @@ const StyledCard = styled(Card)`
 `;
 
 const StyledListGroup = styled(ListGroup)`
-  height: 180px !important;
+  //height: 180px !important;
   border-radius: 5px !important;
   max-height: 180px !important;
   width: 100%;
@@ -43,6 +45,11 @@ const GaugesVoting = ({ votingPower }) => {
   const { gauges } = useContext(GaugesContext);
   const [activeIndex, setActiveIndex] = useState(0);
   const [weight, setWeight] = useState(0);
+  const wallet = useWallet();
+
+  const onSubmitVoteButtonClick = async () => {
+    await voteForGauge(wallet, gauges[activeIndex].address, weight);
+  };
 
   return (
     <StyledCard style={{ width: 300, height: "auto" }}>
@@ -83,15 +90,20 @@ const GaugesVoting = ({ votingPower }) => {
               }}
               onChange={setWeight}
               min={0}
-              max={100}
+              max={votingPower || 100}
             />
             <span className="font-weight-bold mt-2">
-              {weight}% of {votingPower}
+              {weight} of {votingPower}
             </span>
           </div>
         </div>
         <div className="container text-center mt-3">
-          <Button variant="primary" className="text-uppercase" size="sm">
+          <Button
+            onClick={onSubmitVoteButtonClick}
+            variant="primary"
+            className="text-uppercase"
+            size="sm"
+          >
             <strong>Submit Vote</strong>
           </Button>
         </div>

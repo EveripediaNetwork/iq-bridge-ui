@@ -11,7 +11,6 @@ export const gaugeControllerAbi = [
     anonymous: false,
     type: "event"
   },
-  //
   {
     name: "ApplyOwnership",
     inputs: [
@@ -24,7 +23,6 @@ export const gaugeControllerAbi = [
     anonymous: false,
     type: "event"
   },
-  //
   {
     name: "AddType",
     inputs: [
@@ -42,7 +40,6 @@ export const gaugeControllerAbi = [
     anonymous: false,
     type: "event"
   },
-  //
   {
     name: "NewTypeWeight",
     inputs: [
@@ -70,7 +67,6 @@ export const gaugeControllerAbi = [
     anonymous: false,
     type: "event"
   },
-  //
   {
     name: "NewGaugeWeight",
     inputs: [
@@ -98,7 +94,6 @@ export const gaugeControllerAbi = [
     anonymous: false,
     type: "event"
   },
-  //
   {
     name: "VoteForGauge",
     inputs: [
@@ -126,7 +121,6 @@ export const gaugeControllerAbi = [
     anonymous: false,
     type: "event"
   },
-  //
   {
     name: "NewGauge",
     inputs: [
@@ -149,7 +143,6 @@ export const gaugeControllerAbi = [
     anonymous: false,
     type: "event"
   },
-  //
   {
     outputs: [],
     inputs: [
@@ -165,7 +158,6 @@ export const gaugeControllerAbi = [
     stateMutability: "nonpayable",
     type: "constructor"
   },
-  //
   {
     name: "commit_transfer_ownership",
     outputs: [],
@@ -179,7 +171,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 37568
   },
-  //
   {
     name: "apply_transfer_ownership",
     outputs: [],
@@ -188,7 +179,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 38407
   },
-  //
   {
     name: "gauge_types",
     outputs: [
@@ -207,7 +197,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 1687
   },
-  //
   {
     name: "add_gauge",
     outputs: [],
@@ -229,7 +218,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 18123433774
   },
-  //
   {
     name: "checkpoint",
     outputs: [],
@@ -238,7 +226,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 18033775892
   },
-  //
   {
     name: "checkpoint_gauge",
     outputs: [],
@@ -252,7 +239,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 18087670272
   },
-  //
   {
     name: "gauge_relative_weight",
     outputs: [
@@ -270,7 +256,6 @@ export const gaugeControllerAbi = [
     stateMutability: "view",
     type: "function"
   },
-  //
   {
     name: "gauge_relative_weight",
     outputs: [
@@ -292,7 +277,6 @@ export const gaugeControllerAbi = [
     stateMutability: "view",
     type: "function"
   },
-  //
   {
     name: "gauge_relative_weight_write",
     outputs: [
@@ -310,7 +294,6 @@ export const gaugeControllerAbi = [
     stateMutability: "nonpayable",
     type: "function"
   },
-  //
   {
     name: "gauge_relative_weight_write",
     outputs: [
@@ -332,7 +315,6 @@ export const gaugeControllerAbi = [
     stateMutability: "nonpayable",
     type: "function"
   },
-  //
   {
     name: "add_type",
     outputs: [],
@@ -350,7 +332,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 36246441594
   },
-  //
   {
     name: "change_type_weight",
     outputs: [],
@@ -368,7 +349,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 36246292943
   },
-  //
   {
     name: "change_gauge_weight",
     outputs: [],
@@ -386,7 +366,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 36354153634
   },
-  //
   {
     name: "vote_for_gauge_weights",
     outputs: [],
@@ -404,7 +383,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 18142043388
   },
-  //
   {
     name: "get_gauge_weight",
     outputs: [
@@ -423,7 +401,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 2945
   },
-  //
   {
     name: "get_type_weight",
     outputs: [
@@ -442,7 +419,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 2978
   },
-  //
   {
     name: "get_total_weight",
     outputs: [
@@ -456,7 +432,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 2603
   },
-  //
   {
     name: "get_weights_sum_per_type",
     outputs: [
@@ -475,7 +450,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 3110
   },
-  //
   {
     name: "change_global_emission_rate",
     outputs: [],
@@ -489,7 +463,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 36808
   },
-  //
   {
     name: "admin",
     outputs: [
@@ -503,7 +476,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 1781
   },
-  //
   {
     name: "future_admin",
     outputs: [
@@ -517,7 +489,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 1811
   },
-  //
   {
     name: "token",
     outputs: [
@@ -531,7 +502,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 1841
   },
-  //
   {
     name: "voting_escrow",
     outputs: [
@@ -545,7 +515,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 1871
   },
-  //
   {
     name: "n_gauge_types",
     outputs: [
@@ -559,7 +528,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 1901
   },
-  //
   {
     name: "n_gauges",
     outputs: [
@@ -573,7 +541,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 1931
   },
-  //
   {
     name: "gauge_type_names",
     outputs: [
@@ -592,7 +559,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 8659
   },
-  //
   {
     name: "gauges",
     outputs: [
@@ -611,7 +577,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 2100
   },
-  //
   {
     name: "vote_user_slopes",
     outputs: [
@@ -642,7 +607,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 4667
   },
-  //
   {
     name: "vote_user_power",
     outputs: [
@@ -661,7 +625,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 2266
   },
-  //
   {
     name: "last_user_vote",
     outputs: [
@@ -684,7 +647,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 2511
   },
-  //
   {
     name: "points_weight",
     outputs: [
@@ -711,7 +673,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 3675
   },
-  //
   {
     name: "time_weight",
     outputs: [
@@ -730,7 +691,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 2356
   },
-  //
   {
     name: "points_sum",
     outputs: [
@@ -757,7 +717,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 3816
   },
-  //
   {
     name: "time_sum",
     outputs: [
@@ -776,7 +735,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 2310
   },
-  //
   {
     name: "points_total",
     outputs: [
@@ -795,7 +753,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 2346
   },
-  //
   {
     name: "time_total",
     outputs: [
@@ -809,7 +766,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 2261
   },
-  //
   {
     name: "points_type_weight",
     outputs: [
@@ -832,7 +788,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 2702
   },
-  //
   {
     name: "time_type_weight",
     outputs: [
@@ -851,7 +806,6 @@ export const gaugeControllerAbi = [
     type: "function",
     gas: 2430
   },
-  //
   {
     name: "global_emission_rate",
     outputs: [
