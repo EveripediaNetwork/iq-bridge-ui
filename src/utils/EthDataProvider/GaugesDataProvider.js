@@ -66,10 +66,15 @@ const getPoints = async wallet => {
 const voteForGauge = async (wallet, gauge_addr, weight) => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+
+    const signer = new ethers.providers.Web3Provider(
+      wallet.ethereum
+    ).getSigner();
+
     const gaugeControllerContract = new ethers.Contract(
       GAUGE_CONTROLLER_ADDR,
       gaugeControllerAbi,
-      provider.getSigner()
+      signer
     );
 
     console.log(gauge_addr);
