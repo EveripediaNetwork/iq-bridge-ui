@@ -44,7 +44,7 @@ const WeightDistribution = () => {
   }, [gauges]);
 
   return (
-    <StyledCard style={{ width: 277 }}>
+    <StyledCard style={{ width: 350 }}>
       <Card.Title>Weight distribution</Card.Title>
       <Card.Body className="w-100">
         {" "}

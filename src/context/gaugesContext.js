@@ -7,7 +7,8 @@ export const GaugesProvider = ({ children }) => {
   const [gaugesState, setGaugesState] = useState({
     gauges: undefined,
     setGauges: newGauges =>
-      setGaugesState({ ...gaugesState, gauges: newGauges })
+      setGaugesState({ ...gaugesState, gauges: newGauges }),
+    overrideAllGauges: newGauges => setGaugesState({ gauges: newGauges })
   });
 
   return (

@@ -13419,6 +13419,14 @@ react-data-table-component@^7.3.1:
     deepmerge "^4.2.2"
     lodash.orderby "^4.6.0"
 
+react-date-countdown-timer@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-date-countdown-timer/-/react-date-countdown-timer-1.1.0.tgz#cdde8fc8de5430330006949d31a4f7d83b6e66c0"
+  integrity sha512-VoGxLvvR9zdRMiGRnEMTObp2xFzo65+mhOl5Jueio0zZ/7Vc2ntNA5xFsRXy4KMyYR9AGuAWhlEOAfiFmg5sbw==
+  dependencies:
+    prop-types "^15.7.2"
+    react "^16.4.2"
+
 react-dev-utils@^10.2.1:
   version "10.2.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-10.2.1.tgz#f6de325ae25fa4d546d09df4bb1befdc6dd19c19"
@@ -13717,7 +13725,7 @@ react@16.13.0:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
 
-react@^16.13.1:
+react@^16.13.1, react@^16.4.2:
   version "16.14.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.14.0.tgz#94d776ddd0aaa37da3eda8fc5b6b18a4c9a3114d"
   integrity sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==

@@ -1,5 +1,6 @@
-import React, { memo, useContext, useState, lazy } from "react";
-import { Card, Button, ListGroup, ListGroupItem } from "react-bootstrap";
+import React, { memo, useContext, useState, lazy, useEffect } from "react";
+import { Card, Button } from "react-bootstrap";
+import { useWallet } from "use-wallet";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Slider from "rc-slider";
@@ -7,7 +8,6 @@ import "rc-slider/assets/index.css";
 
 import { GaugesContext } from "../../context/gaugesContext";
 import { voteForGauge } from "../../utils/EthDataProvider/GaugesDataProvider";
-import { useWallet } from "use-wallet";
 
 const GaugesList = lazy(() => import("./gaugesList"));
 
@@ -20,30 +20,10 @@ const StyledCard = styled(Card)`
   align-items: center;
 `;
 
-const StyledListGroup = styled(ListGroup)`
-  //height: 180px !important;
-  border-radius: 5px !important;
-  max-height: 180px !important;
-  width: 100%;
-  margin: auto;
-  overflow-y: auto;
-`;
-
-const StyledListGroupItem = styled(ListGroupItem)`
-  padding: 5px !important;
-  max-height: 40px !important;
-
-  &.active {
-    background-color: #d1e6ef !important;
-    max-height: 40px !important;
-
-    color: black !important;
-  }
-`;
-
-const GaugesVoting = ({ votingPower }) => {
+const GaugesVoting = ({ votingPower, updateActiveIndex }) => {
   const { gauges } = useContext(GaugesContext);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
   const [weight, setWeight] = useState(0);
   const wallet = useWallet();
 
@@ -51,34 +31,30 @@ const GaugesVoting = ({ votingPower }) => {
     await voteForGauge(wallet, gauges[activeIndex].address, weight);
   };
 
+  useEffect(() => {
+    if (
+      gauges &&
+      gauges[activeIndex].blockTime &&
+      gauges[activeIndex].nextVotingDate
+    )
+      setSubmitButtonDisabled(
+        gauges[activeIndex].blockTime < gauges[activeIndex].nextVotingDate
+      );
+  }, [gauges, activeIndex]);
+
   return (
     <StyledCard style={{ width: 300, height: "auto" }}>
       <Card.Title>Voting</Card.Title>
       <Card.Body className="p-0 w-100 d-flex flex-column justify-content-center">
-        <div className="d-flex flex-column justify-content-center align-items-center">
-          <StyledListGroup
-            variant="flush"
-            className="d-flex flex-column justify-content-center"
-          >
-            {gauges &&
-              gauges.map((item, idx) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <StyledListGroupItem key={idx + 1} className="monospace">
-                  {item.name}: {item.gaugeWeight}%
-                </StyledListGroupItem>
-              ))}
-          </StyledListGroup>
-
-          <Button variant="danger" size="sm">
-            Reset
-          </Button>
-        </div>
         <GaugesList
           activeIndex={activeIndex}
-          setActiveIndex={activeIdx => setActiveIndex(activeIdx)}
+          setActiveIndex={activeIdx => {
+            setActiveIndex(activeIdx);
+            updateActiveIndex(activeIdx);
+          }}
         />
         <div className="d-flex flex-column text-center justify-content-center">
-          <h5>Weight</h5>
+          <h5>Power to allocate</h5>
           <div className="d-flex flex-column justify-content-between pl-3 pr-3">
             <Slider
               trackStyle={{ height: 14 }}
@@ -99,6 +75,7 @@ const GaugesVoting = ({ votingPower }) => {
         </div>
         <div className="container text-center mt-3">
           <Button
+            disabled={submitButtonDisabled}
             onClick={onSubmitVoteButtonClick}
             variant="primary"
             className="text-uppercase"
@@ -113,7 +90,8 @@ const GaugesVoting = ({ votingPower }) => {
 };
 
 GaugesVoting.propTypes = {
-  votingPower: PropTypes.number
+  votingPower: PropTypes.number,
+  updateActiveIndex: PropTypes.func.isRequired
 };
 
 GaugesVoting.defaultProps = {
