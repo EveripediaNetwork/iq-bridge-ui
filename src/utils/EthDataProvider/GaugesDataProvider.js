@@ -1,16 +1,16 @@
 import { ethers } from "ethers";
 import { gaugeControllerAbi } from "./gaugeController.abi";
 
-const rpcURL = "https://0039-165-227-192-32.eu.ngrok.io";
+const rpcURL = "https://4ea3-165-227-192-32.eu.ngrok.io";
 
-const GAUGE_CONTROLLER_ADDR = "0xc2cd962e53afcdf574b409599a24724efbadb3d4";
-const REWARDS_DIST_ADDR = "0x839055d0fbee415e665dc500dd2af292c0692305";
-const UNI_GAUGE_FRAX_IQ_ADDR = "0x65237882dd5fbb85d865eff3be26ac4e67da87aa";
-const UNI_GAUGE_ETH_IQ_ADDR = "0x2c477a64d2cb9f340e1f72ff76399432559e2199";
+const GAUGE_CONTROLLER_ADDR = "0x2b308cd243074e2f4a709e12c26039acecd4daa7";
+const REWARDS_DIST_ADDR = "0xc2cd962e53afcdf574b409599a24724efbadb3d4";
+const UNI_GAUGE_FRAX_IQ_ADDR = "0x839055d0fbee415e665dc500dd2af292c0692305";
+const UNI_GAUGE_ETH_IQ_ADDR = "0x65237882dd5fbb85d865eff3be26ac4e67da87aa";
 
 const getGaugesContract = (provider, getSigner) =>
   new ethers.Contract(
-    "0xc2cd962e53afcdf574b409599a24724efbadb3d4",
+    GAUGE_CONTROLLER_ADDR,
     gaugeControllerAbi,
     getSigner ? provider.getSigner() : provider
   );
@@ -119,6 +119,38 @@ const getLeftTimeToReVote = async (wallet, gauge_addr) => {
   }
 };
 
+const getVoteUserSlopes = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+    const gaugeControllerContract = getGaugesContract(provider, false);
+
+    const slope = await gaugeControllerContract.vote_user_slopes(
+      wallet.account,
+      UNI_GAUGE_ETH_IQ_ADDR,
+      { gasLimit: 100000 }
+    );
+    console.log(slope);
+    console.log(new Date(Number(slope.end.toString()) * 1000));
+    console.log(slope.power.toString());
+    console.log(slope.slope.toString());
+    console.log(Number(ethers.utils.formatEther(slope.slope)));
+  }
+};
+
+const getGaugeType = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+    const gaugeControllerContract = getGaugesContract(provider, false);
+
+    const types = await gaugeControllerContract.gauge_types(
+      UNI_GAUGE_FRAX_IQ_ADDR,
+      { gasLimit: 500000 }
+    );
+
+    console.log(types.toString());
+  }
+};
+
 const getUserVotingPower = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
@@ -135,8 +167,6 @@ const getUserVotingPower = async wallet => {
       }
     );
 
-    console.log(`POWER: ${power}`);
-
     return Number(power.toString());
   }
 };
@@ -146,5 +176,7 @@ export {
   getPoints,
   voteForGauge,
   getLeftTimeToReVote,
+  getVoteUserSlopes,
+  getGaugeType,
   getUserVotingPower
 };

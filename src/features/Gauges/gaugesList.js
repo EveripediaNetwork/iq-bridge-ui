@@ -70,17 +70,19 @@ const GaugesList = ({ activeIndex, setActiveIndex }) => {
                 <u>Weight</u>
                 <span>{g.gaugeWeight}</span>
               </div>
-              {g.nextVotingDate && g.blockTime && (
-                <div className="d-flex flex-column justify-content-center align-items-center">
-                  <u>Time to revote: </u>
-                  <DateCountdown
-                    mostSignificantFigure="day"
-                    dateTo={g.nextVotingDate}
-                    dateFrom={g.blockTime}
-                    noAnimate
-                  />
-                </div>
-              )}
+              {g.nextVotingDate &&
+                g.blockTime &&
+                g.blockTime < g.nextVotingDate && (
+                  <div className="d-flex flex-column justify-content-center align-items-center">
+                    <u>Time to revote: </u>
+                    <DateCountdown
+                      mostSignificantFigure="day"
+                      dateTo={g.nextVotingDate}
+                      dateFrom={g.blockTime}
+                      noAnimate
+                    />
+                  </div>
+                )}
             </StyledListGroupItem>
           </>
         ))}

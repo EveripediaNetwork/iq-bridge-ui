@@ -5,9 +5,11 @@ import { GaugesContext } from "../../context/gaugesContext";
 import Layout from "../../components/layouts/layout";
 import {
   getGauges,
+  getGaugeType,
   getLeftTimeToReVote,
   getPoints,
-  getUserVotingPower
+  getUserVotingPower,
+  getVoteUserSlopes
 } from "../../utils/EthDataProvider/GaugesDataProvider";
 import { getTokensUserBalance } from "../../utils/EthDataProvider/EthDataProvider";
 
@@ -29,6 +31,8 @@ const Gauges = () => {
         setGauges(gaugesResult);
         // setVotingPower(await getUserVotingPower(wallet));
         setVotingPower(Number((await getTokensUserBalance(wallet)) * 0.01));
+        await getVoteUserSlopes(wallet);
+        await getGaugeType(wallet);
         // await getPoints(wallet);
       })();
     }
@@ -67,7 +71,7 @@ const Gauges = () => {
           updateActiveIndex={setActiveIndex}
           votingPower={votingPower}
         />
-        <VotingHistory />
+        {/* <VotingHistory /> */}
       </div>
     </Layout>
   );

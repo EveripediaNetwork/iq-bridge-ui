@@ -57,6 +57,7 @@ const GaugesVoting = ({ votingPower, updateActiveIndex }) => {
           <h5>Power to allocate</h5>
           <div className="d-flex flex-column justify-content-between pl-3 pr-3">
             <Slider
+              disabled={votingPower === 0}
               trackStyle={{ height: 14 }}
               railStyle={{ backgroundColor: "lightgray", height: 11 }}
               handleStyle={{
@@ -69,13 +70,19 @@ const GaugesVoting = ({ votingPower, updateActiveIndex }) => {
               max={votingPower || 100}
             />
             <span className="font-weight-bold mt-2">
-              {weight} of {votingPower}
+              {votingPower > 0 ? (
+                <>
+                  {weight} of {votingPower}
+                </>
+              ) : (
+                "You have no HiIQ"
+              )}
             </span>
           </div>
         </div>
         <div className="container text-center mt-3">
           <Button
-            disabled={submitButtonDisabled}
+            disabled={votingPower === 0 || submitButtonDisabled}
             onClick={onSubmitVoteButtonClick}
             variant="primary"
             className="text-uppercase"
