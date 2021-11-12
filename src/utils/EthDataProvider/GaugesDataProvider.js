@@ -1,5 +1,7 @@
 import { ethers } from "ethers";
 import { gaugeControllerAbi } from "./gaugeController.abi";
+import { stakingRewardsMultiGaugeAbi } from "./stakingRewardsMultiGauge.abi";
+import { IUniswapV2PairAbi } from "./IUniswapV2Pair.abi";
 
 const rpcURL = "https://4ea3-165-227-192-32.eu.ngrok.io";
 
@@ -8,6 +10,11 @@ const REWARDS_DIST_ADDR = "0xc2cd962e53afcdf574b409599a24724efbadb3d4";
 const UNI_GAUGE_FRAX_IQ_ADDR = "0x839055d0fbee415e665dc500dd2af292c0692305";
 const UNI_GAUGE_ETH_IQ_ADDR = "0x65237882dd5fbb85d865eff3be26ac4e67da87aa";
 
+const UNISWAP_LP_IQ_ETH = "0xef9f994a74cb6ef21c38b13553caa2e3e15f69d0";
+const UNISWAP_LP_IQ_FRAX = "0xd6c783b257e662ca949b441a4fcb08a53fc49914";
+
+const LPAddresses = [UNISWAP_LP_IQ_ETH, UNISWAP_LP_IQ_FRAX];
+
 const getGaugesContract = (provider, getSigner) =>
   new ethers.Contract(
     GAUGE_CONTROLLER_ADDR,
@@ -15,11 +22,25 @@ const getGaugesContract = (provider, getSigner) =>
     getSigner ? provider.getSigner() : provider
   );
 
+const getUniswapGaugeContract = (gaugeToUse, provider, getSigner = false) =>
+  new ethers.Contract(
+    gaugeToUse,
+    stakingRewardsMultiGaugeAbi,
+    getSigner ? provider.getSigner() : provider
+  );
+
+const getIUniswapV2PairContract = (gaugeToUse, provider, getSigner = false) =>
+  new ethers.Contract(
+    gaugeToUse,
+    IUniswapV2PairAbi,
+    getSigner ? provider.getSigner() : provider
+  );
+
 const getGauges = async () => {
   const provider = new ethers.providers.JsonRpcProvider(rpcURL);
   console.log(provider);
   const gaugeController = getGaugesContract(provider, false);
-  const gaugesNames = ["IQ/FRAX Uniswap V2", "ETH/IQ Uniswap V2"];
+  const gaugesNames = ["IQ/FRAX Uniswap V2", "IQ/ETH Uniswap V2"];
 
   let numberOfGauges = await gaugeController.n_gauges({ gasLimit: 500000 });
   numberOfGauges = Number(numberOfGauges.toString());
@@ -31,33 +52,18 @@ const getGauges = async () => {
     let gaugeWeight = await gaugeController.get_gauge_weight(address, {
       gasLimit: 400000
     });
-    // console.log(gaugeWeight.toString());
-    // console.log(ethers.utils.formatEther(gaugeWeight));
 
     gaugeWeight = Number(ethers.utils.formatEther(gaugeWeight)).toFixed(2);
 
     gauges.unshift({
       address,
       name: gaugesNames[i],
-      gaugeWeight
+      gaugeWeight,
+      lpAddress: LPAddresses[i]
     });
   }
 
   return gauges;
-};
-
-const getPoints = async wallet => {
-  if (wallet.status === "connected") {
-    const provider = new ethers.providers.JsonRpcProvider();
-
-    const gaugeController = getGaugesContract(provider, false);
-
-    const result = await gaugeController.points_total(UNI_GAUGE_FRAX_IQ_ADDR);
-
-    console.log(result.toString());
-  }
-
-  return false;
 };
 
 const voteForGauge = async (wallet, gauge_addr, weight) => {
@@ -82,17 +88,7 @@ const voteForGauge = async (wallet, gauge_addr, weight) => {
   }
 };
 
-const getDiffInDays = (date1, date2) => {
-  const diffTime = Math.abs(date1 - date2);
-  console.log(`DIFF TIME ${diffTime}`);
-  console.log(`DIFF TIME ${new Date(diffTime)}`);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-  return diffDays;
-};
-
 const getLeftTimeToReVote = async (wallet, gauge_addr) => {
-  console.log(gauge_addr);
   if (wallet.status === "connected") {
     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
 
@@ -146,8 +142,6 @@ const getGaugeType = async wallet => {
       UNI_GAUGE_FRAX_IQ_ADDR,
       { gasLimit: 500000 }
     );
-
-    console.log(types.toString());
   }
 };
 
@@ -171,12 +165,37 @@ const getUserVotingPower = async wallet => {
   }
 };
 
+// stakingRewardsMultiGauge
+
+const getLpTokenBalance = async (wallet, gauge_addr) => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+
+    const IUniswapV2PairContract = getIUniswapV2PairContract(
+      gauge_addr,
+      provider,
+      true
+    );
+    const gasEstimation = await IUniswapV2PairContract.estimateGas.balanceOf(
+      wallet.account
+    );
+
+    const result = await IUniswapV2PairContract.balanceOf(wallet.account, {
+      gasLimit: gasEstimation
+    });
+
+    console.log(ethers.utils.formatEther(result));
+
+    return Number(ethers.utils.formatEther(result));
+  }
+};
+
 export {
   getGauges,
-  getPoints,
   voteForGauge,
   getLeftTimeToReVote,
   getVoteUserSlopes,
   getGaugeType,
-  getUserVotingPower
+  getUserVotingPower,
+  getLpTokenBalance
 };

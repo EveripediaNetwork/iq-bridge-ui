@@ -1,7 +1,8 @@
 import React, { memo, useContext, useState, useEffect } from "react";
-import { Card } from "react-bootstrap";
+import { Card, Spinner } from "react-bootstrap";
 import { Doughnut } from "react-chartjs-2";
 import styled from "styled-components";
+
 import { GaugesContext } from "../../context/gaugesContext";
 
 const StyledCard = styled(Card)`
@@ -44,11 +45,17 @@ const WeightDistribution = () => {
   }, [gauges]);
 
   return (
-    <StyledCard style={{ width: 350 }}>
+    <StyledCard style={{ width: 350, height: 386 }}>
       <Card.Title>Weight distribution</Card.Title>
       <Card.Body className="w-100">
         {" "}
-        {data !== undefined && <Doughnut data={data} style={{ width: 277 }} />}
+        {data !== undefined ? (
+          <Doughnut data={data} style={{ width: 277 }} />
+        ) : (
+          <div className="container h-100 d-flex flex-column justify-content-center align-items-center">
+            <Spinner animation="grow" variant="primary" />
+          </div>
+        )}
       </Card.Body>
     </StyledCard>
   );

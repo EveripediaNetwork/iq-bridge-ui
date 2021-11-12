@@ -4,10 +4,10 @@ import { useWallet } from "use-wallet";
 import { GaugesContext } from "../../context/gaugesContext";
 import Layout from "../../components/layouts/layout";
 import {
+  getEarnedLpTokens,
   getGauges,
   getGaugeType,
   getLeftTimeToReVote,
-  getPoints,
   getUserVotingPower,
   getVoteUserSlopes
 } from "../../utils/EthDataProvider/GaugesDataProvider";
@@ -15,7 +15,8 @@ import { getTokensUserBalance } from "../../utils/EthDataProvider/EthDataProvide
 
 const WeightDistribution = lazy(() => import("./weightDistribution"));
 const GaugesVoting = lazy(() => import("./gaugesVoting"));
-const VotingHistory = lazy(() => import("./votingHistory"));
+const LPLock = lazy(() => import("./lpLock"));
+// const VotingHistory = lazy(() => import("./votingHistory"));
 
 const Gauges = () => {
   const wallet = useWallet();
@@ -29,11 +30,9 @@ const Gauges = () => {
       (async () => {
         const gaugesResult = await getGauges();
         setGauges(gaugesResult);
-        // setVotingPower(await getUserVotingPower(wallet));
         setVotingPower(Number((await getTokensUserBalance(wallet)) * 0.01));
-        await getVoteUserSlopes(wallet);
-        await getGaugeType(wallet);
-        // await getPoints(wallet);
+        // await getVoteUserSlopes(wallet);
+        // await getGaugeType(wallet);
       })();
     }
   }, [wallet.status]);
@@ -48,6 +47,7 @@ const Gauges = () => {
             wallet,
             gaugeToUpdate.address
           );
+
           gaugeToUpdate.blockTime = blockTime;
           gaugeToUpdate.nextVotingDate = nextVotingDate;
 
@@ -67,10 +67,8 @@ const Gauges = () => {
     <Layout>
       <div className="d-flex flex-row flex-wrap justify-content-center h-75 align-items-center">
         <WeightDistribution />
-        <GaugesVoting
-          updateActiveIndex={setActiveIndex}
-          votingPower={votingPower}
-        />
+        <GaugesVoting votingPower={votingPower} />
+        <LPLock />
         {/* <VotingHistory /> */}
       </div>
     </Layout>

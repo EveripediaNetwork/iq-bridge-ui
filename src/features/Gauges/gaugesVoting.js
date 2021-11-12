@@ -50,7 +50,7 @@ const GaugesVoting = ({ votingPower, updateActiveIndex }) => {
           activeIndex={activeIndex}
           setActiveIndex={activeIdx => {
             setActiveIndex(activeIdx);
-            updateActiveIndex(activeIdx);
+            // updateActiveIndex(activeIdx);
           }}
         />
         <div className="d-flex flex-column text-center justify-content-center">
