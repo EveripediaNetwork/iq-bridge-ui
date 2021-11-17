@@ -9,9 +9,12 @@ import {
 import { Lock } from "react-bootstrap-icons";
 import { useWallet } from "use-wallet";
 import styled from "styled-components";
-
-import { getLpTokenBalance } from "../../utils/EthDataProvider/GaugesDataProvider";
+import {
+  getLpTokenBalance,
+  stakeLockedLP
+} from "../../utils/EthDataProvider/GaugesDataProvider";
 import { GaugesContext } from "../../context/gaugesContext";
+import StyledSlider from "../../components/ui/styledSlider";
 
 const LpTokensInput = styled(Form.Control)`
   :focus {
@@ -29,6 +32,22 @@ const LPLock = () => {
   const { gauges } = useContext(GaugesContext);
   const [selectedGaugeIdx, setSelectedGaugeIdx] = useState(0);
   const [balances, setBalances] = useState([]);
+  const [inputLPTokens, setInputLPTokens] = useState();
+  const [lockTime, setLockTime] = useState();
+
+  const lockLpTokens = async () => {
+    console.log(`SELECTED GAUGE: ${JSON.stringify(gauges[selectedGaugeIdx])}`);
+    console.log(`INPUT LP: ${inputLPTokens}`);
+    console.log(`LOCK TIME: ${lockTime}`);
+
+    await stakeLockedLP(
+      wallet,
+      inputLPTokens,
+      lockTime * 86400,
+      gauges[selectedGaugeIdx].lpAddress,
+      gauges[selectedGaugeIdx].address
+    );
+  };
 
   useEffect(() => {
     if (gauges) {
@@ -38,6 +57,11 @@ const LPLock = () => {
             wallet,
             gauges[i].lpAddress
           );
+
+          console.log(lpBalance);
+          console.log(gauges[i].lpAddress);
+          console.log(gauges[i].address);
+          console.log(gauges[i].name);
 
           setBalances(prev => [...prev, lpBalance]);
         }
@@ -61,6 +85,7 @@ const LPLock = () => {
         {gauges
           ? gauges.map((g, index) => (
               <StyledToggleButton
+                key={index}
                 size="sm"
                 name="amount"
                 variant="outline-primary"
@@ -76,13 +101,28 @@ const LPLock = () => {
         disabled={balances.length === 0 || balances[selectedGaugeIdx] === 0}
         placeholder="0.0"
         className="mb-2 w-75"
+        onChange={event => setInputLPTokens(event.target.value)}
       />
+      <div className="d-flex flex-column justify-content-center align-items-center p-3 w-100">
+        <h6 className="text-center">
+          Lock duration <br /> (min 1 day - max 3 years)
+        </h6>
+        <StyledSlider onChange={setLockTime} min={1} max={1095} />
+      </div>
       <Button
-        disabled={balances.length === 0 || balances[selectedGaugeIdx] === 0}
+        disabled={
+          balances.length === 0 ||
+          balances[selectedGaugeIdx] === 0 ||
+          !gauges ||
+          !inputLPTokens ||
+          inputLPTokens <= 0 ||
+          !lockTime
+        }
         variant="outline-success"
         className="text-capitalize w-25 font-weight-bold shadow-sm"
         type="submit"
         size="sm"
+        onClick={lockLpTokens}
       >
         <Lock />
       </Button>

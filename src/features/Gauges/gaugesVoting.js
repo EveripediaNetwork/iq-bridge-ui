@@ -3,11 +3,10 @@ import { Card, Button } from "react-bootstrap";
 import { useWallet } from "use-wallet";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import Slider from "rc-slider";
-import "rc-slider/assets/index.css";
 
 import { GaugesContext } from "../../context/gaugesContext";
 import { voteForGauge } from "../../utils/EthDataProvider/GaugesDataProvider";
+import StyledSlider from "../../components/ui/styledSlider";
 
 const GaugesList = lazy(() => import("./gaugesList"));
 
@@ -20,7 +19,7 @@ const StyledCard = styled(Card)`
   align-items: center;
 `;
 
-const GaugesVoting = ({ votingPower, updateActiveIndex }) => {
+const GaugesVoting = ({ votingPower }) => {
   const { gauges } = useContext(GaugesContext);
   const [activeIndex, setActiveIndex] = useState(0);
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
@@ -34,6 +33,7 @@ const GaugesVoting = ({ votingPower, updateActiveIndex }) => {
   useEffect(() => {
     if (
       gauges &&
+      gauges.length > 0 &&
       gauges[activeIndex].blockTime &&
       gauges[activeIndex].nextVotingDate
     )
@@ -56,15 +56,8 @@ const GaugesVoting = ({ votingPower, updateActiveIndex }) => {
         <div className="d-flex flex-column text-center justify-content-center">
           <h5>Power to allocate</h5>
           <div className="d-flex flex-column justify-content-between pl-3 pr-3">
-            <Slider
+            <StyledSlider
               disabled={votingPower === 0}
-              trackStyle={{ height: 14 }}
-              railStyle={{ backgroundColor: "lightgray", height: 11 }}
-              handleStyle={{
-                borderColor: "black",
-                height: 22,
-                width: 22
-              }}
               onChange={setWeight}
               min={0}
               max={votingPower || 100}
@@ -97,8 +90,7 @@ const GaugesVoting = ({ votingPower, updateActiveIndex }) => {
 };
 
 GaugesVoting.propTypes = {
-  votingPower: PropTypes.number,
-  updateActiveIndex: PropTypes.func.isRequired
+  votingPower: PropTypes.number
 };
 
 GaugesVoting.defaultProps = {
