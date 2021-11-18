@@ -187,6 +187,7 @@ const stakeLockedLP = async (
 ) => {
   if (wallet.status === "connected") {
     // const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+
     const signer = new ethers.providers.Web3Provider(
       wallet.ethereum
     ).getSigner();
@@ -207,12 +208,6 @@ const stakeLockedLP = async (
       signer
     );
 
-    ethers.BigNumber.from(ethers.utils.parseEther(howManyLPTokens));
-    const parsedAmount = ethers.BigNumber.from(
-      ethers.utils.parseEther(howManyLPTokens)
-    );
-
-    console.log(parsedAmount);
     console.log(howMuchTimeInSeconds);
 
     // const gasEstimation = await uniswapGauge.estimateGas.stakeLocked(
@@ -221,10 +216,24 @@ const stakeLockedLP = async (
     // );
 
     const result = await uniswapGauge.stakeLocked(
-      parsedAmount,
+      howManyLPTokens,
       howMuchTimeInSeconds,
       { gasLimit: 500000 }
     );
+    console.log(await result.wait());
+  }
+};
+
+const getLockedStakes = async (wallet, gauge_addr) => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+    const uniswapGauge = new ethers.Contract(
+      gauge_addr,
+      stakingRewardsMultiGaugeAbi,
+      provider
+    );
+
+    const result = await uniswapGauge.lockedStakesOf(wallet.account);
     console.log(result);
   }
 };
@@ -235,5 +244,6 @@ export {
   getLeftTimeToReVote,
   getUserVotingPower,
   getLpTokenBalance,
-  stakeLockedLP
+  stakeLockedLP,
+  getLockedStakes
 };

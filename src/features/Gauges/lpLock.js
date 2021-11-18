@@ -10,6 +10,7 @@ import { Lock } from "react-bootstrap-icons";
 import { useWallet } from "use-wallet";
 import styled from "styled-components";
 import {
+  getLockedStakes,
   getLpTokenBalance,
   stakeLockedLP
 } from "../../utils/EthDataProvider/GaugesDataProvider";
@@ -58,12 +59,9 @@ const LPLock = () => {
             gauges[i].lpAddress
           );
 
-          console.log(lpBalance);
-          console.log(gauges[i].lpAddress);
-          console.log(gauges[i].address);
-          console.log(gauges[i].name);
-
           setBalances(prev => [...prev, lpBalance]);
+
+          await getLockedStakes(wallet, gauges[i].address);
         }
       })();
     }
@@ -101,7 +99,7 @@ const LPLock = () => {
         disabled={balances.length === 0 || balances[selectedGaugeIdx] === 0}
         placeholder="0.0"
         className="mb-2 w-75"
-        onChange={event => setInputLPTokens(event.target.value)}
+        onChange={event => setInputLPTokens(Number(event.target.value))}
       />
       <div className="d-flex flex-column justify-content-center align-items-center p-3 w-100">
         <h6 className="text-center">
