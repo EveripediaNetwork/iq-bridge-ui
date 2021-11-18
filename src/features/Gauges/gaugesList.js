@@ -19,12 +19,10 @@ const StyledListGroup = styled(ListGroup)`
 
 const StyledListGroupItem = styled(ListGroupItem)`
   padding: 5px !important;
-  //max-height: 40px !important;
   flex-wrap: wrap;
 
   &.active {
     background-color: #d1e6ef !important;
-    // max-height: 40px !important;
 
     color: black !important;
   }

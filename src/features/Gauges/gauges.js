@@ -15,7 +15,7 @@ import { getTokensUserBalance } from "../../utils/EthDataProvider/EthDataProvide
 
 const WeightDistribution = lazy(() => import("./weightDistribution"));
 const GaugesVoting = lazy(() => import("./gaugesVoting"));
-const LPLock = lazy(() => import("./lpLock"));
+const LPLock = lazy(() => import("./LPLock/lpLock"));
 // const VotingHistory = lazy(() => import("./votingHistory"));
 
 const Gauges = () => {

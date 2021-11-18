@@ -3,7 +3,7 @@ import { gaugeControllerAbi } from "./gaugeController.abi";
 import { stakingRewardsMultiGaugeAbi } from "./stakingRewardsMultiGauge.abi";
 import { IUniswapV2PairAbi } from "./IUniswapV2Pair.abi";
 
-const rpcURL = "https://4ea3-165-227-192-32.eu.ngrok.io";
+const rpcURL = "https://5a1e-165-227-192-32.eu.ngrok.io";
 
 const GAUGE_CONTROLLER_ADDR = "0x2b308cd243074e2f4a709e12c26039acecd4daa7";
 const REWARDS_DIST_ADDR = "0xc2cd962e53afcdf574b409599a24724efbadb3d4";
@@ -234,6 +234,34 @@ const getLockedStakes = async (wallet, gauge_addr) => {
     );
 
     const result = await uniswapGauge.lockedStakesOf(wallet.account);
+    return result;
+  }
+};
+
+const getEarned = async (wallet, gauge_addr) => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+    const uniswapGauge = getUniswapGaugeContract(gauge_addr, provider, false);
+
+    const earnedResult = await uniswapGauge.earned(wallet.account);
+    return ethers.utils.formatEther(earnedResult[0].toString());
+  }
+  return 0;
+};
+
+const getReward = async (wallet, gauge_addr) => {
+  if (wallet.status === "connected") {
+    const signer = new ethers.providers.Web3Provider(
+      wallet.ethereum
+    ).getSigner();
+
+    const uniswapGauge = new ethers.Contract(
+      gauge_addr,
+      stakingRewardsMultiGaugeAbi,
+      signer
+    );
+
+    const result = await uniswapGauge.getReward();
     console.log(result);
   }
 };
@@ -245,5 +273,7 @@ export {
   getUserVotingPower,
   getLpTokenBalance,
   stakeLockedLP,
-  getLockedStakes
+  getLockedStakes,
+  getEarned,
+  getReward
 };

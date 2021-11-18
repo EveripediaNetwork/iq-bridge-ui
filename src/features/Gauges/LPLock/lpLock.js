@@ -9,13 +9,16 @@ import {
 import { Lock } from "react-bootstrap-icons";
 import { useWallet } from "use-wallet";
 import styled from "styled-components";
+import { CashCoin } from "react-bootstrap-icons";
+
 import {
   getLockedStakes,
   getLpTokenBalance,
   stakeLockedLP
-} from "../../utils/EthDataProvider/GaugesDataProvider";
-import { GaugesContext } from "../../context/gaugesContext";
-import StyledSlider from "../../components/ui/styledSlider";
+} from "../../../utils/EthDataProvider/GaugesDataProvider";
+import { GaugesContext } from "../../../context/gaugesContext";
+import StyledSlider from "../../../components/ui/styledSlider";
+import LockedStagesList from "./lockedStagesList";
 
 const LpTokensInput = styled(Form.Control)`
   :focus {
@@ -35,6 +38,8 @@ const LPLock = () => {
   const [balances, setBalances] = useState([]);
   const [inputLPTokens, setInputLPTokens] = useState();
   const [lockTime, setLockTime] = useState();
+  const [lockedStakes, setLockedStakes] = useState([]);
+  const [showLockedStakes, setShowLockedStakes] = useState(false);
 
   const lockLpTokens = async () => {
     console.log(`SELECTED GAUGE: ${JSON.stringify(gauges[selectedGaugeIdx])}`);
@@ -50,6 +55,9 @@ const LPLock = () => {
     );
   };
 
+  const handleLockedStakes = (gauge, stakes) =>
+    setLockedStakes(prev => [...prev, { gaugeName: gauge.name, stakes }]);
+
   useEffect(() => {
     if (gauges) {
       (async () => {
@@ -61,7 +69,9 @@ const LPLock = () => {
 
           setBalances(prev => [...prev, lpBalance]);
 
-          await getLockedStakes(wallet, gauges[i].address);
+          const stakes = await getLockedStakes(wallet, gauges[i].address);
+          console.log(stakes);
+          handleLockedStakes(gauges[i], stakes);
         }
       })();
     }
@@ -69,7 +79,7 @@ const LPLock = () => {
 
   return (
     <Card
-      style={{ width: 300 }}
+      style={{ width: 300, height: 430, maxHeight: 430, overflowY: "auto" }}
       className="p-2 d-flex flex-column justify-content-center align-items-center"
     >
       <Card.Title>Lock LP Tokens</Card.Title>
@@ -116,7 +126,7 @@ const LPLock = () => {
           inputLPTokens <= 0 ||
           !lockTime
         }
-        variant="outline-success"
+        variant="success"
         className="text-capitalize w-25 font-weight-bold shadow-sm"
         type="submit"
         size="sm"
@@ -124,6 +134,27 @@ const LPLock = () => {
       >
         <Lock />
       </Button>
+      <br />
+      <Button
+        variant="warning"
+        className="monospace"
+        onClick={() => setShowLockedStakes(true)}
+      >
+        <strong>
+          {" "}
+          Stakes and Rewards <CashCoin className="ml-2" />
+        </strong>
+      </Button>
+      {lockedStakes &&
+      lockedStakes.length > 0 &&
+      lockedStakes[selectedGaugeIdx].stakes !== undefined ? (
+        <LockedStagesList
+          show={showLockedStakes}
+          setShow={setShowLockedStakes}
+          lockedStakes={lockedStakes[selectedGaugeIdx]}
+          gaugeIdx={selectedGaugeIdx}
+        />
+      ) : null}
     </Card>
   );
 };
