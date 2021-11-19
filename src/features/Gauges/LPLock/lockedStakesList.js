@@ -24,7 +24,7 @@ const StyledCard = styled(Card)`
   max-width: 230px;
 `;
 
-const LockedStagesList = ({ lockedStakes, show, setShow, gaugeIdx }) => {
+const LockedStakesList = ({ lockedStakes, show, setShow, gaugeIdx }) => {
   const { gauges } = useContext(GaugesContext);
   const wallet = useWallet();
   const [rewardsAmount, setRewardsAmount] = useState();
@@ -34,7 +34,6 @@ const LockedStagesList = ({ lockedStakes, show, setShow, gaugeIdx }) => {
   };
 
   useEffect(() => {
-    console.log(gaugeIdx);
     if (gaugeIdx)
       (async () =>
         setRewardsAmount(await getEarned(wallet, gauges[gaugeIdx].address)))();
@@ -97,11 +96,11 @@ const LockedStagesList = ({ lockedStakes, show, setShow, gaugeIdx }) => {
   );
 };
 
-LockedStagesList.propTypes = {
+LockedStakesList.propTypes = {
   lockedStakes: PropTypes.object.isRequired,
   show: PropTypes.bool.isRequired,
   setShow: PropTypes.func.isRequired,
   gaugeIdx: PropTypes.number.isRequired
 };
 
-export default LockedStagesList;
+export default LockedStakesList;

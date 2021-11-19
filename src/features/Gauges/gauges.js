@@ -37,31 +37,31 @@ const Gauges = () => {
     }
   }, [wallet.status]);
 
-  useEffect(() => {
-    (async () => {
-      if (gauges) {
-        let aux = gauges;
-        for (let index = 0; index < gauges.length; index++) {
-          const gaugeToUpdate = gauges[index];
-          const { blockTime, nextVotingDate } = await getLeftTimeToReVote(
-            wallet,
-            gaugeToUpdate.address
-          );
+  // useEffect(() => {
+  //   (async () => {
+  //     if (gauges) {
+  //       let aux = gauges;
+  //       for (let index = 0; index < gauges.length; index++) {
+  //         const gaugeToUpdate = gauges[index];
+  //         const { blockTime, nextVotingDate } = await getLeftTimeToReVote(
+  //           wallet,
+  //           gaugeToUpdate.address
+  //         );
 
-          gaugeToUpdate.blockTime = blockTime;
-          gaugeToUpdate.nextVotingDate = nextVotingDate;
+  //         gaugeToUpdate.blockTime = blockTime;
+  //         gaugeToUpdate.nextVotingDate = nextVotingDate;
 
-          aux = aux.map(g => {
-            if (g.address === gaugeToUpdate.address) g = gaugeToUpdate;
+  //         aux = aux.map(g => {
+  //           if (g.address === gaugeToUpdate.address) g = gaugeToUpdate;
 
-            return g;
-          });
-        }
+  //           return g;
+  //         });
+  //       }
 
-        overrideAllGauges(gauges);
-      }
-    })();
-  }, [gauges]);
+  //       overrideAllGauges(gauges);
+  //     }
+  //   })();
+  // }, [gauges]);
 
   return (
     <Layout>

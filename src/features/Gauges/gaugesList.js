@@ -1,11 +1,13 @@
-import React, { memo, useContext } from "react";
+import React, { memo, useContext, useState, useEffect } from "react";
 import { ListGroup, ListGroupItem, Spinner } from "react-bootstrap";
 import { Check } from "react-bootstrap-icons";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import DateCountdown from "react-date-countdown-timer";
+import { useWallet } from "use-wallet";
 
 import { GaugesContext } from "../../context/gaugesContext";
+import { getLeftTimeToReVote } from "../../utils/EthDataProvider/GaugesDataProvider";
 
 const StyledListGroup = styled(ListGroup)`
   height: auto !important;
@@ -40,14 +42,53 @@ const StyledCheckIcon = styled(Check)`
 `;
 
 const GaugesList = ({ activeIndex, setActiveIndex }) => {
-  const { gauges } = useContext(GaugesContext);
+  const { gauges, overrideAllGauges } = useContext(GaugesContext);
+  const wallet = useWallet();
+  const [loadingNextVotingTime, setLoadingNextVotingTime] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      if (gauges && wallet.status === "connected") {
+        setLoadingNextVotingTime(
+          Array.from({ length: gauges.length }, () => false)
+        );
+
+        let aux = gauges;
+        for (let index = 0; index < gauges.length; index++) {
+          let arr = [...loadingNextVotingTime];
+          arr[index] = true;
+          setLoadingNextVotingTime(arr);
+
+          const gaugeToUpdate = gauges[index];
+          const { blockTime, nextVotingDate } = await getLeftTimeToReVote(
+            wallet,
+            gaugeToUpdate.address
+          );
+
+          arr[index] = false;
+          setLoadingNextVotingTime(arr);
+
+          gaugeToUpdate.blockTime = blockTime;
+          gaugeToUpdate.nextVotingDate = nextVotingDate;
+
+          aux = aux.map(g => {
+            if (g.address === gaugeToUpdate.address) g = gaugeToUpdate;
+
+            return g;
+          });
+        }
+
+        overrideAllGauges(gauges);
+      }
+    })();
+  }, [gauges, wallet.status]);
 
   return (
     <StyledListGroup
       defaultActiveKey="link#1"
       className="d-flex flex-column justify-content-center mt-3 mb-3"
     >
-      {gauges ? (
+      {gauges && loadingNextVotingTime.length > 0 ? (
         gauges.map((g, index) => (
           <StyledListGroupItem
             key={g.name}
@@ -67,18 +108,31 @@ const GaugesList = ({ activeIndex, setActiveIndex }) => {
             </div>
             <div className="d-flex flex-column justify-content-center align-items-center">
               <u>Allocated Weight</u>
-              <span>{g.gaugeWeight}</span>
+              <span>{g.gaugeWeight || 0}</span>
             </div>
-            {g.nextVotingDate && g.blockTime && g.blockTime < g.nextVotingDate && (
-              <div className="d-flex flex-column justify-content-center align-items-center">
-                <u>Time to revote: </u>
-                <DateCountdown
-                  mostSignificantFigure="day"
-                  dateTo={g.nextVotingDate}
-                  dateFrom={g.blockTime}
-                  noAnimate
-                />
+
+            {loadingNextVotingTime[index] === true ? (
+              <div className="container h-100 d-flex flex-row justify-content-center align-items-center">
+                <Spinner animation="grow" variant="warning" />
               </div>
+            ) : (
+              <>
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                  <u>Time to revote: </u>
+                  {g.nextVotingDate &&
+                  g.blockTime &&
+                  g.blockTime < g.nextVotingDate ? (
+                    <DateCountdown
+                      mostSignificantFigure="day"
+                      dateTo={g.nextVotingDate}
+                      dateFrom={g.blockTime}
+                      noAnimate
+                    />
+                  ) : (
+                    <span>You can vote now</span>
+                  )}
+                </div>
+              </>
             )}
           </StyledListGroupItem>
         ))

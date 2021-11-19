@@ -18,7 +18,7 @@ import {
 } from "../../../utils/EthDataProvider/GaugesDataProvider";
 import { GaugesContext } from "../../../context/gaugesContext";
 import StyledSlider from "../../../components/ui/styledSlider";
-import LockedStagesList from "./lockedStagesList";
+import LockedStakesList from "./lockedStakesList";
 
 const LpTokensInput = styled(Form.Control)`
   :focus {
@@ -39,6 +39,7 @@ const LPLock = () => {
   const [inputLPTokens, setInputLPTokens] = useState();
   const [lockTime, setLockTime] = useState();
   const [lockedStakes, setLockedStakes] = useState([]);
+  const [loadingLockedStakes, setLoadingLockedStakes] = useState([]);
   const [showLockedStakes, setShowLockedStakes] = useState(false);
 
   const lockLpTokens = async () => {
@@ -60,6 +61,10 @@ const LPLock = () => {
 
   useEffect(() => {
     if (gauges) {
+      setLoadingLockedStakes(
+        Array.from({ length: gauges.length }, () => false)
+      );
+
       (async () => {
         for (let i = 0; i < gauges.length; i++) {
           const lpBalance = await getLpTokenBalance(
@@ -69,8 +74,16 @@ const LPLock = () => {
 
           setBalances(prev => [...prev, lpBalance]);
 
+          let arr = [...loadingLockedStakes];
+          arr[i] = true;
+          setLoadingLockedStakes(arr);
+
           const stakes = await getLockedStakes(wallet, gauges[i].address);
           console.log(stakes);
+
+          arr[i] = false;
+          setLoadingLockedStakes(arr);
+
           handleLockedStakes(gauges[i], stakes);
         }
       })();
@@ -79,7 +92,7 @@ const LPLock = () => {
 
   return (
     <Card
-      style={{ width: 300, height: 430, maxHeight: 430, overflowY: "auto" }}
+      style={{ width: 300, height: 386, maxHeight: 386, overflowY: "auto" }}
       className="p-2 d-flex flex-column justify-content-center align-items-center"
     >
       <Card.Title>Lock LP Tokens</Card.Title>
@@ -136,19 +149,33 @@ const LPLock = () => {
       </Button>
       <br />
       <Button
+        disabled={
+          !lockedStakes ||
+          lockedStakes.length === 0 ||
+          !lockedStakes[selectedGaugeIdx] ||
+          !lockedStakes[selectedGaugeIdx].stakes ||
+          lockedStakes[selectedGaugeIdx].stakes.length === 0
+        }
         variant="warning"
         className="monospace"
         onClick={() => setShowLockedStakes(true)}
       >
         <strong>
-          {" "}
-          Stakes and Rewards <CashCoin className="ml-2" />
+          {loadingLockedStakes &&
+          loadingLockedStakes[selectedGaugeIdx] === true ? (
+            "Checking Rewards..."
+          ) : (
+            <>
+              Stakes and Rewards <CashCoin className="ml-2" />
+            </>
+          )}
         </strong>
       </Button>
       {lockedStakes &&
       lockedStakes.length > 0 &&
+      lockedStakes[selectedGaugeIdx] !== undefined &&
       lockedStakes[selectedGaugeIdx].stakes !== undefined ? (
-        <LockedStagesList
+        <LockedStakesList
           show={showLockedStakes}
           setShow={setShowLockedStakes}
           lockedStakes={lockedStakes[selectedGaugeIdx]}
