@@ -167,6 +167,12 @@ const Layout = ({ children }) => {
               {t("lock")}
             </StyledNavLink>
             <StyledNavLink
+              href="https://pro.olympusdao.finance/#/bond/iq_eth_sushi?utm_source=everipedia&utm_medium=affiliate&utm_campaign=op-affiliate"
+              target="_blank"
+            >
+              {t("Bonds")}
+            </StyledNavLink>
+            <StyledNavLink
               active={location.pathname === "/raffles" ? "" : undefined}
               as={Link}
               to={`/raffles${LngUrl}`}

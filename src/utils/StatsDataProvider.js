@@ -119,10 +119,26 @@ const getLPs = async () => {
     }
   );
   const data2 = await response2.json();
+
+  const response3 = await fetch(
+    "https://api.thegraph.com/subgraphs/name/sushiswap/exchange",
+    {
+      headers: {
+        accept: "*/*",
+        "accept-language":
+          "en-US,en;q=0.9,es;q=0.8,pt;q=0.7,gl;q=0.6,et;q=0.5,ca;q=0.4",
+        "content-type": "application/json"
+      },
+      body: '{"query":"{\\n  pair(id: \\"0x9d45081706102e7aaddd0973268457527722e274\\") {\\n    reserveUSD\\n  }\\n}","variables":null}',
+      method: "POST"
+    }
+  );
+  const data3 = await response3.json();
   return {
     lp: {
       uniswap: data.data.pairs[0].reserveUSD,
-      quickswap: data2.data.pairs[0].reserveUSD
+      quickswap: data2.data.pairs[0].reserveUSD,
+      sushiswap: data3.data.pair.reserveUSD
     }
   };
 };
