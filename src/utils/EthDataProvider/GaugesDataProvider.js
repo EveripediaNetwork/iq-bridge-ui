@@ -2,24 +2,19 @@ import { ethers } from "ethers";
 import { gaugeControllerAbi } from "./gaugeController.abi";
 import { stakingRewardsMultiGaugeAbi } from "./stakingRewardsMultiGauge.abi";
 import { IUniswapV2PairAbi } from "./IUniswapV2Pair.abi";
+import {
+  gaugeControllerAddr,
+  uniswapLpIqEth,
+  uniswapLpIqFrax
+} from "../../config";
 
-const rpcURL = "https://5a1e-165-227-192-32.eu.ngrok.io";
+const rpcURL = "https://a056-165-227-192-32.eu.ngrok.io";
 
-const GAUGE_CONTROLLER_ADDR = "0x2b308cd243074e2f4a709e12c26039acecd4daa7";
-const REWARDS_DIST_ADDR = "0xc2cd962e53afcdf574b409599a24724efbadb3d4";
-
-// const UNI_GAUGE_FRAX_IQ_ADDR = "0x839055d0fbee415e665dc500dd2af292c0692305";
-const UNISWAP_LP_IQ_FRAX = "0xd6c783b257e662ca949b441a4fcb08a53fc49914";
-// const UNISWAP_LP_IQ_FRAX = "0x839055d0fbee415e665dc500dd2af292c0692305";
-
-// const UNI_GAUGE_ETH_IQ_ADDR = "0x65237882dd5fbb85d865eff3be26ac4e67da87aa";
-const UNISWAP_LP_IQ_ETH = "0xef9f994a74cb6ef21c38b13553caa2e3e15f69d0";
-
-const LPAddresses = [UNISWAP_LP_IQ_FRAX, UNISWAP_LP_IQ_ETH];
+const LPAddresses = [uniswapLpIqFrax, uniswapLpIqEth];
 
 const getGaugesContract = (provider, getSigner) =>
   new ethers.Contract(
-    GAUGE_CONTROLLER_ADDR,
+    gaugeControllerAddr,
     gaugeControllerAbi,
     getSigner ? provider.getSigner() : provider
   );
@@ -38,9 +33,16 @@ const getIUniswapV2PairContract = (gaugeToUse, provider, getSigner = false) =>
     getSigner ? provider.getSigner() : provider
   );
 
+const needsApproval = async (provider, contract, amount, spender) => {
+  const userAddress = await provider.getSigner().getAddress();
+  const allowedTokens = await contract.allowance(userAddress, spender);
+  if (allowedTokens.lt(amount)) {
+    await contract.approve(spender, ethers.constants.MaxUint256);
+  }
+};
+
 const getGauges = async () => {
   const provider = new ethers.providers.JsonRpcProvider(rpcURL);
-  console.log(provider);
   const gaugeController = getGaugesContract(provider, false);
   const gaugesNames = ["IQ/FRAX Uniswap V2", "IQ/ETH Uniswap V2"];
 
@@ -75,7 +77,7 @@ const voteForGauge = async (wallet, gauge_addr, weight) => {
     ).getSigner();
 
     const gaugeControllerContract = new ethers.Contract(
-      GAUGE_CONTROLLER_ADDR,
+      gaugeControllerAddr,
       gaugeControllerAbi,
       signer
     );
@@ -86,7 +88,7 @@ const voteForGauge = async (wallet, gauge_addr, weight) => {
       { gasLimit: 500000 }
     );
 
-    console.log(voteResult);
+    return voteResult;
   }
 };
 
@@ -117,24 +119,6 @@ const getLeftTimeToReVote = async (wallet, gauge_addr) => {
   }
 };
 
-// const getVoteUserSlopes = async wallet => {
-//   if (wallet.status === "connected") {
-//     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
-//     const gaugeControllerContract = getGaugesContract(provider, false);
-
-//     const slope = await gaugeControllerContract.vote_user_slopes(
-//       wallet.account,
-//       UNI_GAUGE_ETH_IQ_ADDR,
-//       { gasLimit: 100000 }
-//     );
-//     console.log(slope);
-//     console.log(new Date(Number(slope.end.toString()) * 1000));
-//     console.log(slope.power.toString());
-//     console.log(slope.slope.toString());
-//     console.log(Number(ethers.utils.formatEther(slope.slope)));
-//   }
-// };
-
 const getUserVotingPower = async wallet => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
@@ -151,7 +135,7 @@ const getUserVotingPower = async wallet => {
       }
     );
 
-    return Number(power.toString());
+    return Number(ethers.BigNumber.from(10000).sub(power).toString());
   }
 };
 
@@ -186,8 +170,6 @@ const stakeLockedLP = async (
   gauge_addr
 ) => {
   if (wallet.status === "connected") {
-    // const provider = new ethers.providers.JsonRpcProvider(rpcURL);
-
     const signer = new ethers.providers.Web3Provider(
       wallet.ethereum
     ).getSigner();
@@ -198,9 +180,12 @@ const stakeLockedLP = async (
       signer
     );
 
-    await (
-      await IUniswapV2PairContract.approve(gauge_addr, howManyLPTokens)
-    ).wait();
+    await needsApproval(
+      new ethers.providers.Web3Provider(wallet.ethereum),
+      IUniswapV2PairContract,
+      howManyLPTokens,
+      gauge_addr
+    );
 
     const uniswapGauge = new ethers.Contract(
       gauge_addr,
@@ -208,19 +193,21 @@ const stakeLockedLP = async (
       signer
     );
 
-    console.log(howMuchTimeInSeconds);
-
-    // const gasEstimation = await uniswapGauge.estimateGas.stakeLocked(
-    //   parsedAmount,
-    //   howMuchTimeInSeconds
-    // );
+    const gasEstimation = await uniswapGauge.estimateGas.stakeLocked(
+      howManyLPTokens,
+      howMuchTimeInSeconds
+    );
 
     const result = await uniswapGauge.stakeLocked(
       howManyLPTokens,
       howMuchTimeInSeconds,
-      { gasLimit: 500000 }
+      { gasLimit: gasEstimation }
     );
-    console.log(await result.wait());
+
+    if (result) {
+      await result.wait();
+      return result.hash;
+    }
   }
 };
 
@@ -261,8 +248,7 @@ const getReward = async (wallet, gauge_addr) => {
       signer
     );
 
-    const result = await uniswapGauge.getReward();
-    console.log(result);
+    return await uniswapGauge.getReward();
   }
 };
 

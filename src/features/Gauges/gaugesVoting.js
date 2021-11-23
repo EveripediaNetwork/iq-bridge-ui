@@ -11,6 +11,9 @@ import StyledSlider from "../../components/ui/styledSlider";
 const GaugesList = lazy(() => import("./gaugesList"));
 
 const StyledCard = styled(Card)`
+  border: 0.5px solid whitesmoke !important;
+  width: 300px;
+  height: auto;
   padding: 10px;
   margin: 5px;
   display: flex;
@@ -43,14 +46,13 @@ const GaugesVoting = ({ votingPower }) => {
   }, [gauges, activeIndex]);
 
   return (
-    <StyledCard style={{ width: 300, height: "auto" }}>
+    <StyledCard>
       <Card.Title>Voting</Card.Title>
       <Card.Body className="p-0 w-100 d-flex flex-column justify-content-center">
         <GaugesList
           activeIndex={activeIndex}
           setActiveIndex={activeIdx => {
             setActiveIndex(activeIdx);
-            // updateActiveIndex(activeIdx);
           }}
         />
         <div className="d-flex flex-column text-center justify-content-center">

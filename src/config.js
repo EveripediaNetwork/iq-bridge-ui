@@ -26,5 +26,8 @@ module.exports = {
     "https://snapshot.org/#/everipediaiq.eth/proposal/",
   snapshotBaseEndpoint:
     process.env.REACT_APP_SNAPSHOT_BASE_ENDPOINT || "https://hub.snapshot.org",
-  jsonRPCNodeLink: process.env.REACT_APP_JSON_RPC_NODE_LINK
+  jsonRPCNodeLink: process.env.REACT_APP_JSON_RPC_NODE_LINK,
+  gaugeControllerAddr: process.env.REACT_APP_GAUGE_CONTROLLER_ADDR,
+  uniswapLpIqFrax: process.env.REACT_APP_UNISWAP_LP_IQ_FRAX,
+  uniswapLpIqEth: process.env.REACT_APP_UNISWAP_LP_IQ_ETH
 };

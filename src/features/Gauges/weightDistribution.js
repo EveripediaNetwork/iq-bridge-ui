@@ -6,6 +6,9 @@ import styled from "styled-components";
 import { GaugesContext } from "../../context/gaugesContext";
 
 const StyledCard = styled(Card)`
+  width: 350px;
+  height: 386px;
+  border: 0.5px solid whitesmoke !important;
   padding: 10px;
   margin: 5px;
   display: flex;
@@ -45,7 +48,7 @@ const WeightDistribution = () => {
   }, [gauges]);
 
   return (
-    <StyledCard style={{ width: 350, height: 386 }}>
+    <StyledCard>
       <Card.Title>Weight distribution</Card.Title>
       <Card.Body className="w-100">
         {" "}

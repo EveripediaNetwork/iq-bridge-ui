@@ -4,64 +4,29 @@ import { useWallet } from "use-wallet";
 import { GaugesContext } from "../../context/gaugesContext";
 import Layout from "../../components/layouts/layout";
 import {
-  getEarnedLpTokens,
   getGauges,
-  getGaugeType,
-  getLeftTimeToReVote,
-  getUserVotingPower,
-  getVoteUserSlopes
+  getUserVotingPower
 } from "../../utils/EthDataProvider/GaugesDataProvider";
-import { getTokensUserBalance } from "../../utils/EthDataProvider/EthDataProvider";
 
 const WeightDistribution = lazy(() => import("./weightDistribution"));
 const GaugesVoting = lazy(() => import("./gaugesVoting"));
 const LPLock = lazy(() => import("./LPLock/lpLock"));
-// const VotingHistory = lazy(() => import("./votingHistory"));
 
 const Gauges = () => {
   const wallet = useWallet();
   const [votingPower, setVotingPower] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(0);
 
-  const { setGauges, gauges, overrideAllGauges } = useContext(GaugesContext);
+  const { setGauges } = useContext(GaugesContext);
 
   useEffect(() => {
     if (wallet.status === "connected") {
       (async () => {
         const gaugesResult = await getGauges();
         setGauges(gaugesResult);
-        setVotingPower(Number((await getTokensUserBalance(wallet)) * 0.01));
-        // await getVoteUserSlopes(wallet);
-        // await getGaugeType(wallet);
+        setVotingPower(await getUserVotingPower(wallet));
       })();
     }
   }, [wallet.status]);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     if (gauges) {
-  //       let aux = gauges;
-  //       for (let index = 0; index < gauges.length; index++) {
-  //         const gaugeToUpdate = gauges[index];
-  //         const { blockTime, nextVotingDate } = await getLeftTimeToReVote(
-  //           wallet,
-  //           gaugeToUpdate.address
-  //         );
-
-  //         gaugeToUpdate.blockTime = blockTime;
-  //         gaugeToUpdate.nextVotingDate = nextVotingDate;
-
-  //         aux = aux.map(g => {
-  //           if (g.address === gaugeToUpdate.address) g = gaugeToUpdate;
-
-  //           return g;
-  //         });
-  //       }
-
-  //       overrideAllGauges(gauges);
-  //     }
-  //   })();
-  // }, [gauges]);
 
   return (
     <Layout>
@@ -69,7 +34,6 @@ const Gauges = () => {
         <WeightDistribution />
         <GaugesVoting votingPower={votingPower} />
         <LPLock />
-        {/* <VotingHistory /> */}
       </div>
     </Layout>
   );

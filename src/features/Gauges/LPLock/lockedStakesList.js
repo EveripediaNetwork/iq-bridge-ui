@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Card } from "react-bootstrap";
-import PropTypes from "prop-types";
-import { JournalText, CashStack } from "react-bootstrap-icons";
-import styled from "styled-components";
+import { Button, Card, Spinner } from "react-bootstrap";
 import { useWallet } from "use-wallet";
+import { JournalText, CashStack } from "react-bootstrap-icons";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import * as Humanize from "humanize-plus";
 
 import GenericDialog from "../../../components/ui/genericDialog";
 import {
@@ -26,17 +27,22 @@ const StyledCard = styled(Card)`
 
 const LockedStakesList = ({ lockedStakes, show, setShow, gaugeIdx }) => {
   const { gauges } = useContext(GaugesContext);
-  const wallet = useWallet();
   const [rewardsAmount, setRewardsAmount] = useState();
+  const [loadingClaim, setLoadingClaim] = useState(false);
+  const wallet = useWallet();
 
   const handleClaim = async () => {
-    await getReward(wallet, gauges[gaugeIdx].address);
+    setLoadingClaim(true);
+    const result = await getReward(wallet, gauges[gaugeIdx].address);
+    setLoadingClaim(false);
   };
 
   useEffect(() => {
     if (gaugeIdx)
-      (async () =>
-        setRewardsAmount(await getEarned(wallet, gauges[gaugeIdx].address)))();
+      (async () => {
+        const result = await getEarned(wallet, gauges[gaugeIdx].address);
+        setRewardsAmount(Number(result));
+      })();
   }, [gaugeIdx]);
 
   return (
@@ -47,16 +53,28 @@ const LockedStakesList = ({ lockedStakes, show, setShow, gaugeIdx }) => {
       onHide={() => setShow(false)}
       body={
         <LockedStagesListContainer className="w-100 d-flex flex-row flex-wrap justify-content-center align-items-center">
-          <div className="d-flex w-100 flex-wrap flex-row justify-content-center align-items-center">
-            <h5 className="m-0">Rewards: {rewardsAmount || 0}</h5>
+          <div className="d-flex w-100 p-3 flex-wrap flex-row justify-content-center align-items-center">
+            <h5 className="m-0">
+              Rewards: {Humanize.intComma(rewardsAmount) || 0} IQ
+            </h5>
             <Button
+              disabled={rewardsAmount === 0}
               onClick={handleClaim}
-              variant="outline-primary"
+              variant="outline-success"
               size="sm"
-              className="ml-3"
+              className="ml-3 d-flex flex-row justify-content-center align-items-center"
             >
-              Claim
-              <CashStack className="ml-2" />
+              {loadingClaim ? (
+                <>
+                  <Spinner animation="grow" className="mr-2" />{" "}
+                  <span>Claiming...</span>
+                </>
+              ) : (
+                <>
+                  <span>Claim</span>
+                  <CashStack style={{ fontSize: 20 }} className="ml-2" />
+                </>
+              )}
             </Button>
           </div>
           <hr />
@@ -83,10 +101,14 @@ const LockedStakesList = ({ lockedStakes, show, setShow, gaugeIdx }) => {
                     Number(l.ending_timestamp.toString()) * 1000
                   ).toDateString()}
                 </span>
-                <Button size="sm" variant="outline-dark">
-                  View on Explorer
-                  <JournalText className="ml-2" />
-                </Button>
+                <strong className="monospace">
+                  <u>Remaining days:</u>
+                </strong>
+                <span className="monospace">
+                  {(new Date(l.ending_timestamp * 1000).getTime() -
+                    new Date(l.start_timestamp * 1000).getTime()) /
+                    (1000 * 3600 * 24)}
+                </span>
               </Card.Body>
             </StyledCard>
           ))}
