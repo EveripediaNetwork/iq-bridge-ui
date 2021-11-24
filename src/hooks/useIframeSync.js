@@ -21,15 +21,13 @@ export const useIframeSync = () => {
             eventData = parsedData;
           }
         } catch (err) {
-          // console.error(`Unable to parse event data: ${JSON.stringify(e)}`);
+          // eslint-disable-next-line no-console
+          console.error(err);
         }
 
         if (eventData) {
-          //   console.log(
-          //     `[IQ] Got message | ${JSON.stringify(eventData, null, 1)}`
-          //   );
-
           if (eventData.eventType === "userInfo") {
+            // eslint-disable-next-line no-console
             console.log(`Got logged in user ${eventData.value.accountName}`);
           }
         }

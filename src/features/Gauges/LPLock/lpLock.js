@@ -9,9 +9,8 @@ import {
   Row,
   Spinner
 } from "react-bootstrap";
-import { Lock } from "react-bootstrap-icons";
 import { useWallet } from "use-wallet";
-import { CashCoin, BoxArrowUpRight } from "react-bootstrap-icons";
+import { CashCoin, BoxArrowUpRight, Lock } from "react-bootstrap-icons";
 import { fadeInRight } from "react-animations";
 import styled, { keyframes } from "styled-components";
 import { useTranslation } from "react-i18next";
@@ -78,6 +77,32 @@ const LPLock = () => {
   const [locking, setLocking] = useState(false);
   const inputRef = useRef();
 
+  const handleLockedStakes = (gauge, stakes) =>
+    setLockedStakes(prev => [...prev, { gaugeName: gauge.name, stakes }]);
+
+  const requestLockedStakes = async () => {
+    setLoadingLockedStakes(Array.from({ length: gauges.length }, () => false));
+
+    for (let i = 0; i < gauges.length; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
+      const lpBalance = await getLpTokenBalance(wallet, gauges[i].lpAddress);
+
+      setBalances(prev => [...prev, lpBalance]);
+
+      const arr = [...loadingLockedStakes];
+      arr[i] = true;
+      setLoadingLockedStakes(arr);
+
+      // eslint-disable-next-line no-await-in-loop
+      const stakes = await getLockedStakes(wallet, gauges[i].address);
+
+      arr[i] = false;
+      setLoadingLockedStakes(arr);
+
+      handleLockedStakes(gauges[i], stakes);
+    }
+  };
+
   const lockLpTokens = async () => {
     setLocking(true);
 
@@ -93,30 +118,6 @@ const LPLock = () => {
 
     setLocking(false);
     await requestLockedStakes();
-  };
-
-  const handleLockedStakes = (gauge, stakes) =>
-    setLockedStakes(prev => [...prev, { gaugeName: gauge.name, stakes }]);
-
-  const requestLockedStakes = async () => {
-    setLoadingLockedStakes(Array.from({ length: gauges.length }, () => false));
-
-    for (let i = 0; i < gauges.length; i++) {
-      const lpBalance = await getLpTokenBalance(wallet, gauges[i].lpAddress);
-
-      setBalances(prev => [...prev, lpBalance]);
-
-      let arr = [...loadingLockedStakes];
-      arr[i] = true;
-      setLoadingLockedStakes(arr);
-
-      const stakes = await getLockedStakes(wallet, gauges[i].address);
-
-      arr[i] = false;
-      setLoadingLockedStakes(arr);
-
-      handleLockedStakes(gauges[i], stakes);
-    }
   };
 
   useEffect(() => {
@@ -139,8 +140,9 @@ const LPLock = () => {
       >
         {gauges
           ? gauges.map((g, index) => (
+              // eslint-disable-next-line react/jsx-indent
               <StyledToggleButton
-                key={index}
+                key={g.name}
                 size="sm"
                 name="amount"
                 variant="outline-primary"

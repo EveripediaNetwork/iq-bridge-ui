@@ -56,12 +56,13 @@ const GaugesList = ({ activeIndex, setActiveIndex }) => {
         );
 
         let aux = gauges;
-        for (let index = 0; index < gauges.length; index++) {
-          let arr = [...loadingNextVotingTime];
+        for (let index = 0; index < gauges.length; index += 1) {
+          const arr = [...loadingNextVotingTime];
           arr[index] = true;
           setLoadingNextVotingTime(arr);
 
           const gaugeToUpdate = gauges[index];
+          // eslint-disable-next-line no-await-in-loop
           const { blockTime, nextVotingDate } = await getLeftTimeToReVote(
             wallet,
             gaugeToUpdate.address
@@ -74,6 +75,7 @@ const GaugesList = ({ activeIndex, setActiveIndex }) => {
           gaugeToUpdate.nextVotingDate = nextVotingDate;
 
           aux = aux.map(g => {
+            // eslint-disable-next-line no-param-reassign
             if (g.address === gaugeToUpdate.address) g = gaugeToUpdate;
 
             return g;

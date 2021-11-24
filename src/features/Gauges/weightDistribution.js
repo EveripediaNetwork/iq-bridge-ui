@@ -38,7 +38,7 @@ const WeightDistribution = () => {
         ]
       };
       const colors = ["rgba(255, 99, 132, 0.2)", "rgba(209, 230, 239, 0.8)"];
-      for (let i = 0; i < gauges.length; i++) {
+      for (let i = 0; i < gauges.length; i += 1) {
         tmp.labels.unshift(gauges[i].name);
         tmp.datasets[0].data.unshift(gauges[i].gaugeWeight);
         tmp.datasets[0].backgroundColor.unshift(colors[i]);

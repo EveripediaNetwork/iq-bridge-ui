@@ -151,6 +151,7 @@ const Stats = ({ wallet, lockedAlready }) => {
           const result = await CoinGeckoClient.coins.fetch("everipedia", {});
           setRewardsInDollars(Number(rewards) * result.data.tickers[7].last);
         } catch (err) {
+          // eslint-disable-next-line no-console
           console.error(err);
         }
 
@@ -171,6 +172,7 @@ const Stats = ({ wallet, lockedAlready }) => {
           const result = await CoinGeckoClient.coins.fetch("everipedia", {});
           setRewardsInDollars(Number(rewards) * result.data.tickers[7].last);
         } catch (err) {
+          // eslint-disable-next-line no-console
           console.error(err);
         }
 

@@ -49,10 +49,12 @@ const getGauges = async () => {
   let numberOfGauges = await gaugeController.n_gauges({ gasLimit: 500000 });
   numberOfGauges = Number(numberOfGauges.toString());
 
-  let gauges = [];
-  for (let i = 0; i < numberOfGauges; i++) {
+  const gauges = [];
+  for (let i = 0; i < numberOfGauges; i += 1) {
+    // eslint-disable-next-line no-await-in-loop
     const address = await gaugeController.gauges(i, { gasLimit: 500000 });
 
+    // eslint-disable-next-line no-await-in-loop
     let gaugeWeight = await gaugeController.get_gauge_weight(address, {
       gasLimit: 400000
     });
@@ -70,7 +72,7 @@ const getGauges = async () => {
   return gauges;
 };
 
-const voteForGauge = async (wallet, gauge_addr, weight) => {
+const voteForGauge = async (wallet, gaugeAddr, weight) => {
   if (wallet.status === "connected") {
     const signer = new ethers.providers.Web3Provider(
       wallet.ethereum
@@ -83,16 +85,18 @@ const voteForGauge = async (wallet, gauge_addr, weight) => {
     );
 
     const voteResult = await gaugeControllerContract.vote_for_gauge_weights(
-      gauge_addr,
+      gaugeAddr,
       weight,
       { gasLimit: 500000 }
     );
 
     return voteResult;
   }
+
+  return undefined;
 };
 
-const getLeftTimeToReVote = async (wallet, gauge_addr) => {
+const getLeftTimeToReVote = async (wallet, gaugeAddr) => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
 
@@ -100,12 +104,12 @@ const getLeftTimeToReVote = async (wallet, gauge_addr) => {
 
     const gasEstimation = await gaugeController.estimateGas.last_user_vote(
       wallet.account,
-      gauge_addr
+      gaugeAddr
     );
 
     const lastUserVote = await gaugeController.last_user_vote(
       wallet.account,
-      gauge_addr,
+      gaugeAddr,
       { gasLimit: gasEstimation }
     );
     const block = await provider.getBlock("latest");
@@ -117,6 +121,8 @@ const getLeftTimeToReVote = async (wallet, gauge_addr) => {
 
     return { blockTime, nextVotingDate: votedTimePlusDelay };
   }
+
+  return undefined;
 };
 
 const getUserVotingPower = async wallet => {
@@ -137,16 +143,18 @@ const getUserVotingPower = async wallet => {
 
     return Number(ethers.BigNumber.from(10000).sub(power).toString());
   }
+
+  return undefined;
 };
 
 // stakingRewardsMultiGauge
 
-const getLpTokenBalance = async (wallet, gauge_addr) => {
+const getLpTokenBalance = async (wallet, gaugeAddr) => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
 
     const IUniswapV2PairContract = getIUniswapV2PairContract(
-      gauge_addr,
+      gaugeAddr,
       provider,
       true
     );
@@ -160,14 +168,16 @@ const getLpTokenBalance = async (wallet, gauge_addr) => {
 
     return Number(ethers.utils.formatEther(result));
   }
+
+  return undefined;
 };
 
 const stakeLockedLP = async (
   wallet,
   howManyLPTokens,
   howMuchTimeInSeconds,
-  lp_gauge_addr,
-  gauge_addr
+  lpGaugeAddr,
+  gaugeAddr
 ) => {
   if (wallet.status === "connected") {
     const signer = new ethers.providers.Web3Provider(
@@ -175,7 +185,7 @@ const stakeLockedLP = async (
     ).getSigner();
 
     const IUniswapV2PairContract = new ethers.Contract(
-      lp_gauge_addr,
+      lpGaugeAddr,
       IUniswapV2PairAbi,
       signer
     );
@@ -184,11 +194,11 @@ const stakeLockedLP = async (
       new ethers.providers.Web3Provider(wallet.ethereum),
       IUniswapV2PairContract,
       howManyLPTokens,
-      gauge_addr
+      gaugeAddr
     );
 
     const uniswapGauge = new ethers.Contract(
-      gauge_addr,
+      gaugeAddr,
       stakingRewardsMultiGaugeAbi,
       signer
     );
@@ -209,13 +219,15 @@ const stakeLockedLP = async (
       return result.hash;
     }
   }
+
+  return undefined;
 };
 
-const getLockedStakes = async (wallet, gauge_addr) => {
+const getLockedStakes = async (wallet, gaugeAddr) => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
     const uniswapGauge = new ethers.Contract(
-      gauge_addr,
+      gaugeAddr,
       stakingRewardsMultiGaugeAbi,
       provider
     );
@@ -223,12 +235,13 @@ const getLockedStakes = async (wallet, gauge_addr) => {
     const result = await uniswapGauge.lockedStakesOf(wallet.account);
     return result;
   }
+  return undefined;
 };
 
-const getEarned = async (wallet, gauge_addr) => {
+const getEarned = async (wallet, gaugeAddr) => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
-    const uniswapGauge = getUniswapGaugeContract(gauge_addr, provider, false);
+    const uniswapGauge = getUniswapGaugeContract(gaugeAddr, provider, false);
 
     const earnedResult = await uniswapGauge.earned(wallet.account);
     return ethers.utils.formatEther(earnedResult[0].toString());
@@ -236,20 +249,24 @@ const getEarned = async (wallet, gauge_addr) => {
   return 0;
 };
 
-const getReward = async (wallet, gauge_addr) => {
+const getReward = async (wallet, gaugeAddr) => {
   if (wallet.status === "connected") {
     const signer = new ethers.providers.Web3Provider(
       wallet.ethereum
     ).getSigner();
 
     const uniswapGauge = new ethers.Contract(
-      gauge_addr,
+      gaugeAddr,
       stakingRewardsMultiGaugeAbi,
       signer
     );
 
-    return await uniswapGauge.getReward();
+    const reward = await uniswapGauge.getReward();
+
+    return reward;
   }
+
+  return false;
 };
 
 export {

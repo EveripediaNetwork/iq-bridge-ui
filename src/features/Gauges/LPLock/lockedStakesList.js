@@ -80,8 +80,11 @@ const LockedStakesList = ({ lockedStakes, show, setShow, gaugeIdx }) => {
             </Button>
           </div>
           <hr />
-          {lockedStakes.stakes.map((l, index) => (
-            <StyledCard key={index} className="shadow-sm w-100 m-1 p-0">
+          {lockedStakes.stakes.map(l => (
+            <StyledCard
+              key={l.start_timestamp.toString()}
+              className="shadow-sm w-100 m-1 p-0"
+            >
               <Card.Body className="d-flex p-1 flex-column justify-content-center align-items-center">
                 <strong className="monospace">
                   <u>{t("liquidity")}</u>
@@ -121,7 +124,7 @@ const LockedStakesList = ({ lockedStakes, show, setShow, gaugeIdx }) => {
 };
 
 LockedStakesList.propTypes = {
-  lockedStakes: PropTypes.object.isRequired,
+  lockedStakes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   show: PropTypes.bool.isRequired,
   setShow: PropTypes.func.isRequired,
   gaugeIdx: PropTypes.number.isRequired
