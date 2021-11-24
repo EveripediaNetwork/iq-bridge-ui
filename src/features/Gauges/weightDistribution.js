@@ -1,6 +1,7 @@
 import React, { memo, useContext, useState, useEffect } from "react";
 import { Card, Spinner } from "react-bootstrap";
 import { Doughnut } from "react-chartjs-2";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
 import { GaugesContext } from "../../context/gaugesContext";
@@ -18,6 +19,7 @@ const StyledCard = styled(Card)`
 `;
 
 const WeightDistribution = () => {
+  const { t } = useTranslation();
   const { gauges } = useContext(GaugesContext);
   const [data, setData] = useState();
 
@@ -49,7 +51,7 @@ const WeightDistribution = () => {
 
   return (
     <StyledCard>
-      <Card.Title>Weight distribution</Card.Title>
+      <Card.Title>{t("weight_distribution")}</Card.Title>
       <Card.Body className="w-100">
         {" "}
         {data !== undefined ? (

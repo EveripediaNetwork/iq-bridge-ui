@@ -14,6 +14,7 @@ import { useWallet } from "use-wallet";
 import { CashCoin, BoxArrowUpRight } from "react-bootstrap-icons";
 import { fadeInRight } from "react-animations";
 import styled, { keyframes } from "styled-components";
+import { useTranslation } from "react-i18next";
 import InputSpinner from "react-bootstrap-input-spinner";
 
 import {
@@ -64,6 +65,7 @@ const ViewInExplorerBtn = styled(Button)`
 
 const LPLock = () => {
   const wallet = useWallet();
+  const { t } = useTranslation();
   const { gauges } = useContext(GaugesContext);
   const [selectedGaugeIdx, setSelectedGaugeIdx] = useState(0);
   const [balances, setBalances] = useState([]);
@@ -123,7 +125,7 @@ const LPLock = () => {
 
   return (
     <StyledCard className="p-2 d-flex flex-column justify-content-center align-items-center">
-      <Card.Title>Lock LP Tokens</Card.Title>
+      <Card.Title>{t("lock_lp_tokens")}</Card.Title>
       <ToggleButtonGroup
         name="group"
         className="mb-3 p-0 mt-2 d-flex flex-row flex-nowrap justify-content-center container w-100"
@@ -145,7 +147,9 @@ const LPLock = () => {
             ))
           : null}
       </ToggleButtonGroup>
-      <span>Max available: {balances[selectedGaugeIdx] || 0} LP</span>
+      <span>
+        {t("max_available")} {balances[selectedGaugeIdx] || 0} LP
+      </span>
       <LpTokensInput
         disabled={balances.length === 0 || balances[selectedGaugeIdx] === 0}
         placeholder="0.0"
@@ -154,7 +158,7 @@ const LPLock = () => {
       />
       <div className="d-flex flex-column justify-content-center align-items-center p-3 w-100">
         <h6 className="text-center">
-          Lock duration <br /> (min 1 day - max 3 years)
+          {t("lock_duration")} <br /> {t("min_1_day_max_1095_days")}
         </h6>
         <StyledRow className="d-flex flex-row justify-content-center mt-2 shadow-sm rounded p-3">
           <Col
@@ -225,7 +229,7 @@ const LPLock = () => {
           {locking ? (
             <>
               <Spinner animation="grow" className="mr-2" />{" "}
-              <span>Locking...</span>
+              <span>{t("locking")}</span>
             </>
           ) : (
             <Lock style={{ fontSize: 23 }} />
@@ -247,7 +251,7 @@ const LPLock = () => {
               rel="noopener noreferrer"
               href={`${ethBasedExplorerUrl}tx/${lasTxHash}`}
             >
-              View Details
+              {t("view_details")}
               <BoxArrowUpRight className="ml-2" />
             </a>
           </ViewInExplorerBtn>
@@ -269,10 +273,10 @@ const LPLock = () => {
         <strong>
           {loadingLockedStakes &&
           loadingLockedStakes[selectedGaugeIdx] === true ? (
-            "Checking Rewards..."
+            t("checking_rewards")
           ) : (
             <>
-              Stakes and Rewards <CashCoin className="ml-2" />
+              {t("stakes_and_rewards")} <CashCoin className="ml-2" />
             </>
           )}
         </strong>

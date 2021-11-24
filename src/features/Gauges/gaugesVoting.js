@@ -1,6 +1,7 @@
 import React, { memo, useContext, useState, lazy, useEffect } from "react";
 import { Card, Button } from "react-bootstrap";
 import { useWallet } from "use-wallet";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -23,6 +24,7 @@ const StyledCard = styled(Card)`
 `;
 
 const GaugesVoting = ({ votingPower }) => {
+  const { t } = useTranslation();
   const { gauges } = useContext(GaugesContext);
   const [activeIndex, setActiveIndex] = useState(0);
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
@@ -47,7 +49,7 @@ const GaugesVoting = ({ votingPower }) => {
 
   return (
     <StyledCard>
-      <Card.Title>Voting</Card.Title>
+      <Card.Title>{t("voting")}</Card.Title>
       <Card.Body className="p-0 w-100 d-flex flex-column justify-content-center">
         <GaugesList
           activeIndex={activeIndex}
@@ -56,7 +58,7 @@ const GaugesVoting = ({ votingPower }) => {
           }}
         />
         <div className="d-flex flex-column text-center justify-content-center">
-          <h5>Power to allocate</h5>
+          <h5>{t("power_to_allocate")}</h5>
           <div className="d-flex flex-column justify-content-between pl-3 pr-3">
             <StyledSlider
               disabled={votingPower === 0}
@@ -70,7 +72,7 @@ const GaugesVoting = ({ votingPower }) => {
                   {weight} of {votingPower}
                 </>
               ) : (
-                "You have no HiIQ"
+                t("You have no HiIQ")
               )}
             </span>
           </div>
@@ -83,7 +85,7 @@ const GaugesVoting = ({ votingPower }) => {
             className="text-uppercase"
             size="sm"
           >
-            <strong>Submit Vote</strong>
+            <strong>{t("submit_vote")}</strong>
           </Button>
         </div>
       </Card.Body>

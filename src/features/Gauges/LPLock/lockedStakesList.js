@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Card, Spinner } from "react-bootstrap";
 import { useWallet } from "use-wallet";
-import { JournalText, CashStack } from "react-bootstrap-icons";
+import { CashStack } from "react-bootstrap-icons";
+import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import * as Humanize from "humanize-plus";
@@ -27,13 +28,14 @@ const StyledCard = styled(Card)`
 
 const LockedStakesList = ({ lockedStakes, show, setShow, gaugeIdx }) => {
   const { gauges } = useContext(GaugesContext);
+  const { t } = useTranslation();
   const [rewardsAmount, setRewardsAmount] = useState();
   const [loadingClaim, setLoadingClaim] = useState(false);
   const wallet = useWallet();
 
   const handleClaim = async () => {
     setLoadingClaim(true);
-    const result = await getReward(wallet, gauges[gaugeIdx].address);
+    await getReward(wallet, gauges[gaugeIdx].address);
     setLoadingClaim(false);
   };
 
@@ -55,7 +57,7 @@ const LockedStakesList = ({ lockedStakes, show, setShow, gaugeIdx }) => {
         <LockedStagesListContainer className="w-100 d-flex flex-row flex-wrap justify-content-center align-items-center">
           <div className="d-flex w-100 p-3 flex-wrap flex-row justify-content-center align-items-center">
             <h5 className="m-0">
-              Rewards: {Humanize.intComma(rewardsAmount) || 0} IQ
+              {t("rewards")}: {Humanize.intComma(rewardsAmount) || 0} IQ
             </h5>
             <Button
               disabled={rewardsAmount === 0}
@@ -67,11 +69,11 @@ const LockedStakesList = ({ lockedStakes, show, setShow, gaugeIdx }) => {
               {loadingClaim ? (
                 <>
                   <Spinner animation="grow" className="mr-2" />{" "}
-                  <span>Claiming...</span>
+                  <span>{t("claiming")}</span>
                 </>
               ) : (
                 <>
-                  <span>Claim</span>
+                  <span>{t("claim")}</span>
                   <CashStack style={{ fontSize: 20 }} className="ml-2" />
                 </>
               )}
@@ -82,11 +84,11 @@ const LockedStakesList = ({ lockedStakes, show, setShow, gaugeIdx }) => {
             <StyledCard key={index} className="shadow-sm w-100 m-1 p-0">
               <Card.Body className="d-flex p-1 flex-column justify-content-center align-items-center">
                 <strong className="monospace">
-                  <u>Liquidity:</u>
+                  <u>{t("liquidity")}</u>
                 </strong>
                 <span className="monospace">{l.liquidity.toString()}</span>
                 <strong className="monospace">
-                  <u>Staked on:</u>
+                  <u>{t("staked_on")}</u>
                 </strong>
                 <span className="monospace">
                   {new Date(
@@ -94,7 +96,7 @@ const LockedStakesList = ({ lockedStakes, show, setShow, gaugeIdx }) => {
                   ).toDateString()}
                 </span>
                 <strong className="monospace">
-                  <u>Stake ending on:</u>
+                  <u>{t("stake_ending_on")}</u>
                 </strong>
                 <span className="monospace">
                   {new Date(
@@ -102,7 +104,7 @@ const LockedStakesList = ({ lockedStakes, show, setShow, gaugeIdx }) => {
                   ).toDateString()}
                 </span>
                 <strong className="monospace">
-                  <u>Remaining days:</u>
+                  <u>{t("remaining_days")}</u>
                 </strong>
                 <span className="monospace">
                   {(new Date(l.ending_timestamp * 1000).getTime() -

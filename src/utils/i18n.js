@@ -92,6 +92,31 @@ export const resources = {
       circulating_supply: "Ciculating supply",
       // error
       error: "Error",
+      // gauges
+      // ## weightDistribution
+      weight_distribution: "Weight distribution",
+      // ## gaugesList
+      allocated_weight: "Allocated Weight",
+      time_to_revote: "Time to revote",
+      you_can_vote_now: "You can vote now",
+      // ## gaugesVoting
+      power_to_allocate: "Power to allocate",
+      you_have_no_hiiq: "You have no HiIQ",
+      submit_vote: "Submit Vote",
+      // ## lpLock
+      lock_lp_tokens: "Lock LP Tokens",
+      max_available: "Max available: ",
+      lock_duration: "Lock duration",
+      min_1_day_max_1095_days: "(min 1 day - max 1095 days)",
+      locking: "Locking...",
+      view_details: "View Details",
+      checking_rewards: "Checking Rewards...",
+      stakes_and_rewards: "Stakes and Rewards",
+      claiming: "Claiming...",
+      liquidity: "Liquidity:",
+      staked_on: "Staked on:",
+      stake_ending_on: "Stake ending on:",
+      remaining_days: "Remaining days:",
       // ---------------------------------------------------------------
 
       // |||||||||||||||||||| COMMON ||||||||||||||||||||
@@ -253,6 +278,31 @@ export const resources = {
       circulating_supply: "유통 공급량",
       // error
       error: "오류",
+      // gauges
+      // ## weightDistribution
+      weight_distribution: "Weight distribution",
+      // ## gaugesList
+      allocated_weight: "Allocated Weight",
+      time_to_revote: "Time to revote",
+      you_can_vote_now: "You can vote now",
+      // ## gaugesVoting
+      power_to_allocate: "Power to allocate",
+      you_have_no_hiiq: "You have no HiIQ",
+      submit_vote: "Submit Vote",
+      // ## lpLock
+      lock_lp_tokens: "Lock LP Tokens",
+      max_available: "Max available: ",
+      lock_duration: "Lock duration",
+      min_1_day_max_1095_days: "(min 1 day - max 1095 days)",
+      locking: "Locking...",
+      view_details: "View Details",
+      checking_rewards: "Checking Rewards...",
+      stakes_and_rewards: "Stakes and Rewards",
+      claiming: "Claiming...",
+      liquidity: "Liquidity:",
+      staked_on: "Staked on:",
+      stake_ending_on: "Stake ending on:",
+      remaining_days: "Remaining days:",
       // ---------------------------------------------------------------
 
       // |||||||||||||||||||| COMMON ||||||||||||||||||||
@@ -411,6 +461,31 @@ export const resources = {
       circulating_supply: "流通供应",
       // error
       error: "错误",
+      // gauges
+      // ## weightDistribution
+      weight_distribution: "Weight distribution",
+      // ## gaugesList
+      allocated_weight: "Allocated Weight",
+      time_to_revote: "Time to revote",
+      you_can_vote_now: "You can vote now",
+      // ## gaugesVoting
+      power_to_allocate: "Power to allocate",
+      you_have_no_hiiq: "You have no HiIQ",
+      submit_vote: "Submit Vote",
+      // ## lpLock
+      lock_lp_tokens: "Lock LP Tokens",
+      max_available: "Max available: ",
+      lock_duration: "Lock duration",
+      min_1_day_max_1095_days: "(min 1 day - max 1095 days)",
+      locking: "Locking...",
+      view_details: "View Details",
+      checking_rewards: "Checking Rewards...",
+      stakes_and_rewards: "Stakes and Rewards",
+      claiming: "Claiming...",
+      liquidity: "Liquidity:",
+      staked_on: "Staked on:",
+      stake_ending_on: "Stake ending on:",
+      remaining_days: "Remaining days:",
       // ---------------------------------------------------------------
 
       // |||||||||||||||||||| COMMON ||||||||||||||||||||
