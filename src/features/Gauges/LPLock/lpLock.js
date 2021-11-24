@@ -120,8 +120,12 @@ const LPLock = () => {
   };
 
   useEffect(() => {
-    if (gauges) requestLockedStakes();
-  }, [gauges]);
+    if (gauges && wallet.status === "connected") requestLockedStakes();
+    else {
+      setBalances([]);
+      setLockedStakes([]);
+    }
+  }, [gauges, wallet.status]);
 
   return (
     <StyledCard className="p-2 d-flex flex-column justify-content-center align-items-center">
@@ -151,7 +155,11 @@ const LPLock = () => {
         {t("max_available")} {balances[selectedGaugeIdx] || 0} LP
       </span>
       <LpTokensInput
-        disabled={balances.length === 0 || balances[selectedGaugeIdx] === 0}
+        disabled={
+          balances.length === 0 ||
+          balances[selectedGaugeIdx] === 0 ||
+          wallet.status === "disconnected"
+        }
         placeholder="0.0"
         className="mb-2 w-75"
         onChange={event => setInputLPTokens(Number(event.target.value))}
@@ -170,7 +178,9 @@ const LPLock = () => {
           >
             <StyledSlider
               disabled={
-                balances.length === 0 || balances[selectedGaugeIdx] === 0
+                balances.length === 0 ||
+                balances[selectedGaugeIdx] === 0 ||
+                wallet.status === "disconnected"
               }
               value={lockTime}
               onChange={num => {
@@ -195,7 +205,9 @@ const LPLock = () => {
               value={lockTime}
               precision={0}
               disabled={
-                balances.length === 0 || balances[selectedGaugeIdx] === 0
+                balances.length === 0 ||
+                balances[selectedGaugeIdx] === 0 ||
+                wallet.status === "disconnected"
               }
               max={1095}
               min={1}

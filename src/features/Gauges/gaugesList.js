@@ -90,7 +90,7 @@ const GaugesList = ({ activeIndex, setActiveIndex }) => {
       defaultActiveKey="link#1"
       className="d-flex flex-column justify-content-center mt-3 mb-3"
     >
-      {gauges && loadingNextVotingTime.length > 0 ? (
+      {gauges ? (
         gauges.map((g, index) => (
           <StyledListGroupItem
             key={g.name}
@@ -113,27 +113,30 @@ const GaugesList = ({ activeIndex, setActiveIndex }) => {
               <span>{g.gaugeWeight || 0}</span>
             </div>
 
-            {loadingNextVotingTime[index] === true ? (
+            {loadingNextVotingTime.length > 0 &&
+            loadingNextVotingTime[index] === true ? (
               <div className="container h-100 d-flex flex-row justify-content-center align-items-center">
                 <Spinner animation="grow" variant="warning" />
               </div>
             ) : (
               <>
-                <div className="d-flex flex-column justify-content-center align-items-center">
-                  <u>{t("time_to_revote")}: </u>
-                  {g.nextVotingDate &&
-                  g.blockTime &&
-                  g.blockTime < g.nextVotingDate ? (
-                    <DateCountdown
-                      mostSignificantFigure="day"
-                      dateTo={g.nextVotingDate}
-                      dateFrom={g.blockTime}
-                      noAnimate
-                    />
-                  ) : (
-                    <span>{t("you_can_vote_now")}</span>
-                  )}
-                </div>
+                {wallet.status === "connected" && (
+                  <div className="d-flex flex-column justify-content-center align-items-center">
+                    <u>{t("time_to_revote")}: </u>
+                    {g.nextVotingDate &&
+                    g.blockTime &&
+                    g.blockTime < g.nextVotingDate ? (
+                      <DateCountdown
+                        mostSignificantFigure="day"
+                        dateTo={g.nextVotingDate}
+                        dateFrom={g.blockTime}
+                        noAnimate
+                      />
+                    ) : (
+                      <span>{t("you_can_vote_now")}</span>
+                    )}
+                  </div>
+                )}
               </>
             )}
           </StyledListGroupItem>

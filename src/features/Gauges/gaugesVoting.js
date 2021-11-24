@@ -2,11 +2,13 @@ import React, { memo, useContext, useState, lazy, useEffect } from "react";
 import { Card, Button } from "react-bootstrap";
 import { useWallet } from "use-wallet";
 import { useTranslation } from "react-i18next";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 
 import { GaugesContext } from "../../context/gaugesContext";
-import { voteForGauge } from "../../utils/EthDataProvider/GaugesDataProvider";
+import {
+  getUserVotingPower,
+  voteForGauge
+} from "../../utils/EthDataProvider/GaugesDataProvider";
 import StyledSlider from "../../components/ui/styledSlider";
 
 const GaugesList = lazy(() => import("./gaugesList"));
@@ -23,9 +25,10 @@ const StyledCard = styled(Card)`
   align-items: center;
 `;
 
-const GaugesVoting = ({ votingPower }) => {
+const GaugesVoting = () => {
   const { t } = useTranslation();
   const { gauges } = useContext(GaugesContext);
+  const [votingPower, setVotingPower] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
   const [weight, setWeight] = useState(0);
@@ -46,6 +49,14 @@ const GaugesVoting = ({ votingPower }) => {
         gauges[activeIndex].blockTime < gauges[activeIndex].nextVotingDate
       );
   }, [gauges, activeIndex]);
+
+  useEffect(() => {
+    if (wallet.status === "connected") {
+      (async () => {
+        setVotingPower(await getUserVotingPower(wallet));
+      })();
+    } else setVotingPower(0);
+  }, [wallet.status]);
 
   return (
     <StyledCard>
@@ -91,14 +102,6 @@ const GaugesVoting = ({ votingPower }) => {
       </Card.Body>
     </StyledCard>
   );
-};
-
-GaugesVoting.propTypes = {
-  votingPower: PropTypes.number
-};
-
-GaugesVoting.defaultProps = {
-  votingPower: 0
 };
 
 export default memo(GaugesVoting);
