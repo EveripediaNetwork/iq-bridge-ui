@@ -75,6 +75,7 @@ const LPLock = () => {
   const [showLockedStakes, setShowLockedStakes] = useState(false);
   const [lasTxHash, setLastTxHash] = useState();
   const [locking, setLocking] = useState(false);
+  const lpInputRef = useRef();
   const inputRef = useRef();
 
   const handleLockedStakes = (gauge, stakes) =>
@@ -101,6 +102,13 @@ const LPLock = () => {
 
       handleLockedStakes(gauges[i], stakes);
     }
+  };
+
+  const handleOnLpInputChange = async event => {
+    const value = Number(event.target.value);
+
+    if (value < balances[selectedGaugeIdx]) setInputLPTokens(value);
+    else lpInputRef.current.value = "";
   };
 
   const lockLpTokens = async () => {
@@ -157,14 +165,16 @@ const LPLock = () => {
         {t("max_available")} {balances[selectedGaugeIdx] || 0} LP
       </span>
       <LpTokensInput
+        ref={lpInputRef}
         disabled={
           balances.length === 0 ||
           balances[selectedGaugeIdx] === 0 ||
           wallet.status === "disconnected"
         }
+        max={balances[selectedGaugeIdx]}
         placeholder="0.0"
         className="mb-2 w-75"
-        onChange={event => setInputLPTokens(Number(event.target.value))}
+        onChange={handleOnLpInputChange}
       />
       <div className="d-flex flex-column justify-content-center align-items-center p-3 w-100">
         <h6 className="text-center">

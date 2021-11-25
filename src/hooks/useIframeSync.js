@@ -22,7 +22,7 @@ export const useIframeSync = () => {
           }
         } catch (err) {
           // eslint-disable-next-line no-console
-          console.error(err);
+          // console.error(err);
         }
 
         if (eventData) {

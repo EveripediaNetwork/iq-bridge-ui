@@ -50,26 +50,21 @@ const GaugesList = ({ activeIndex, setActiveIndex }) => {
 
   useEffect(() => {
     (async () => {
-      if (gauges && wallet.status === "connected") {
+      if (gauges)
         setLoadingNextVotingTime(
-          Array.from({ length: gauges.length }, () => false)
+          Array.from({ length: gauges.length }, () => true)
         );
 
+      if (gauges && wallet.status === "connected") {
         let aux = gauges;
+        const arr = [...loadingNextVotingTime];
         for (let index = 0; index < gauges.length; index += 1) {
-          const arr = [...loadingNextVotingTime];
-          arr[index] = true;
-          setLoadingNextVotingTime(arr);
-
           const gaugeToUpdate = gauges[index];
           // eslint-disable-next-line no-await-in-loop
           const { blockTime, nextVotingDate } = await getLeftTimeToReVote(
             wallet,
             gaugeToUpdate.address
           );
-
-          arr[index] = false;
-          setLoadingNextVotingTime(arr);
 
           gaugeToUpdate.blockTime = blockTime;
           gaugeToUpdate.nextVotingDate = nextVotingDate;
@@ -80,9 +75,20 @@ const GaugesList = ({ activeIndex, setActiveIndex }) => {
 
             return g;
           });
+
+          arr[index] = false;
         }
+        setLoadingNextVotingTime(arr);
 
         overrideAllGauges(gauges);
+
+        return;
+      }
+
+      if (gauges && wallet.status === "disconnected") {
+        setLoadingNextVotingTime(
+          Array.from({ length: gauges.length }, () => false)
+        );
       }
     })();
   }, [gauges, wallet.status]);
@@ -115,8 +121,7 @@ const GaugesList = ({ activeIndex, setActiveIndex }) => {
               <span>{g.gaugeWeight || 0}</span>
             </div>
 
-            {loadingNextVotingTime.length > 0 &&
-            loadingNextVotingTime[index] === true ? (
+            {loadingNextVotingTime[index] === true ? (
               <div className="container h-100 d-flex flex-row justify-content-center align-items-center">
                 <Spinner animation="grow" variant="warning" />
               </div>
