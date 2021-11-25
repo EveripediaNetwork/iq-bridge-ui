@@ -82,6 +82,8 @@ const LPLock = () => {
     setLockedStakes(prev => [...prev, { gaugeName: gauge.name, stakes }]);
 
   const requestLockedStakes = async () => {
+    setBalances([]);
+    setLockedStakes([]);
     setLoadingLockedStakes(Array.from({ length: gauges.length }, () => false));
 
     for (let i = 0; i < gauges.length; i += 1) {
@@ -124,8 +126,8 @@ const LPLock = () => {
 
     setLastTxHash(hash);
 
-    setLocking(false);
     await requestLockedStakes();
+    setLocking(false);
   };
 
   useEffect(() => {
