@@ -84,13 +84,18 @@ const voteForGauge = async (wallet, gaugeAddr, weight) => {
       signer
     );
 
-    const voteResult = await gaugeControllerContract.vote_for_gauge_weights(
+    const result = await gaugeControllerContract.vote_for_gauge_weights(
       gaugeAddr,
       weight,
       { gasLimit: 500000 }
     );
 
-    return voteResult;
+    console.log(result);
+
+    if (result) {
+      await result.wait();
+      return result.hash;
+    }
   }
 
   return undefined;
@@ -112,6 +117,7 @@ const getLeftTimeToReVote = async (wallet, gaugeAddr) => {
       gaugeAddr,
       { gasLimit: gasEstimation }
     );
+
     const block = await provider.getBlock("latest");
 
     const blockTime = new Date(block.timestamp * 1000);
@@ -158,12 +164,12 @@ const getLpTokenBalance = async (wallet, gaugeAddr) => {
       provider,
       true
     );
-    const gasEstimation = await IUniswapV2PairContract.estimateGas.balanceOf(
-      wallet.account
-    );
+    // const gasEstimation = await IUniswapV2PairContract.estimateGas.balanceOf(
+    //   wallet.account
+    // );
 
     const result = await IUniswapV2PairContract.balanceOf(wallet.account, {
-      gasLimit: gasEstimation
+      gasLimit: 500000
     });
 
     return Number(ethers.utils.formatEther(result));
@@ -203,15 +209,15 @@ const stakeLockedLP = async (
       signer
     );
 
-    const gasEstimation = await uniswapGauge.estimateGas.stakeLocked(
-      howManyLPTokens,
-      howMuchTimeInSeconds
-    );
+    // const gasEstimation = await uniswapGauge.estimateGas.stakeLocked(
+    //   howManyLPTokens,
+    //   howMuchTimeInSeconds
+    // );
 
     const result = await uniswapGauge.stakeLocked(
       howManyLPTokens,
       howMuchTimeInSeconds,
-      { gasLimit: gasEstimation }
+      { gasLimit: 500000 }
     );
 
     if (result) {

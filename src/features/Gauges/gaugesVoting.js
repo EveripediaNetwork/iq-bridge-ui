@@ -31,11 +31,14 @@ const GaugesVoting = () => {
   const [votingPower, setVotingPower] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
+  const [voting, setVoting] = useState(false);
   const [weight, setWeight] = useState(0);
   const wallet = useWallet();
 
   const onSubmitVoteButtonClick = async () => {
+    setVoting(true);
     await voteForGauge(wallet, gauges[activeIndex].address, weight);
+    setVoting(false);
   };
 
   useEffect(() => {
@@ -88,15 +91,15 @@ const GaugesVoting = () => {
             </span>
           </div>
         </div>
-        <div className="container text-center mt-3">
+        <div className="text-center mt-3 d-flex flex-row justify-content-center align-items-center">
           <Button
-            disabled={votingPower === 0 || submitButtonDisabled}
+            disabled={votingPower === 0 || submitButtonDisabled || voting}
             onClick={onSubmitVoteButtonClick}
             variant="primary"
             className="text-uppercase"
             size="sm"
           >
-            <strong>{t("submit_vote")}</strong>
+            <strong>{voting ? "Loading..." : t("submit_vote")}</strong>
           </Button>
         </div>
       </Card.Body>

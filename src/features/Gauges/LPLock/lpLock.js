@@ -10,9 +10,8 @@ import {
   Spinner
 } from "react-bootstrap";
 import { useWallet } from "use-wallet";
-import { CashCoin, BoxArrowUpRight, Lock } from "react-bootstrap-icons";
-import { fadeInRight } from "react-animations";
-import styled, { keyframes } from "styled-components";
+import { CashCoin, Lock } from "react-bootstrap-icons";
+import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import InputSpinner from "react-bootstrap-input-spinner";
 
@@ -22,9 +21,9 @@ import {
   stakeLockedLP
 } from "../../../utils/EthDataProvider/GaugesDataProvider";
 import { GaugesContext } from "../../../context/gaugesContext";
-import { ethBasedExplorerUrl } from "../../../config";
 import StyledSlider from "../../../components/ui/styledSlider";
 import LockedStakesList from "./lockedStakesList";
+import ViewInExplorerBtn from "../../../components/ui/viewInExplorerBtn";
 
 const StyledCard = styled(Card)`
   border: 0.5px solid whitesmoke !important;
@@ -54,12 +53,6 @@ const StyledInputSpinner = styled(InputSpinner)`
 
 const StyledRow = styled(Row)`
   border: 1px dashed lightgray;
-`;
-
-const fadeInRightAnimation = keyframes`${fadeInRight}`;
-
-const ViewInExplorerBtn = styled(Button)`
-  animation: 1s ${fadeInRightAnimation};
 `;
 
 const LPLock = () => {
@@ -137,6 +130,8 @@ const LPLock = () => {
       setLockedStakes([]);
     }
   }, [gauges, wallet.status]);
+
+  console.log(gauges);
 
   return (
     <StyledCard className="p-2 d-flex flex-column justify-content-center align-items-center">
@@ -262,25 +257,7 @@ const LPLock = () => {
           )}
         </Button>
         {lasTxHash !== undefined ? (
-          <ViewInExplorerBtn
-            size="sm"
-            variant="link"
-            className="ml-2 shadow-sm"
-            onClick={() => {
-              setTimeout(() => {
-                setLastTxHash(undefined);
-              }, 10000);
-            }}
-          >
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href={`${ethBasedExplorerUrl}tx/${lasTxHash}`}
-            >
-              {t("view_details")}
-              <BoxArrowUpRight className="ml-2" />
-            </a>
-          </ViewInExplorerBtn>
+          <ViewInExplorerBtn hide={setLastTxHash} txHash={lasTxHash} />
         ) : null}
       </div>
       <br />
