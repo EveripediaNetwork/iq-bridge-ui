@@ -14,7 +14,7 @@ const StyledCard = styled(Card)`
   height: 386px;
   border: 0.5px solid whitesmoke !important;
   padding: 10px;
-  margin: 5px;
+  margin: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -58,8 +58,6 @@ const WeightDistribution = () => {
       setLoading(false);
     }
   }, [gauges]);
-
-  console.log(data);
 
   return (
     <>

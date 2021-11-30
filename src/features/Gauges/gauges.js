@@ -20,7 +20,7 @@ const Gauges = () => {
 
   return (
     <Layout>
-      <div className="d-flex flex-row flex-wrap justify-content-center h-75 align-items-center">
+      <div className="d-flex flex-row flex-wrap justify-content-center m-auto h-100 align-items-center">
         <WeightDistribution />
         <GaugesVoting />
         <LPLock />

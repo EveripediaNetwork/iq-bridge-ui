@@ -42,56 +42,70 @@ const StyledCheckIcon = styled(Check)`
   height: 30px;
 `;
 
-const GaugesList = ({ activeIndex, setActiveIndex }) => {
+const GaugesList = ({
+  activeIndex,
+  setActiveIndex,
+  reloadNextVotingTime,
+  setReloadNextVotingTime
+}) => {
   const { t } = useTranslation();
   const { gauges, overrideAllGauges } = useContext(GaugesContext);
   const wallet = useWallet();
   const [loadingNextVotingTime, setLoadingNextVotingTime] = useState([]);
 
+  const getNextVotingTime = async () => {
+    if (gauges)
+      setLoadingNextVotingTime(
+        Array.from({ length: gauges.length }, () => true)
+      );
+
+    if (gauges && wallet.status === "connected") {
+      let aux = gauges;
+      const arr = [...loadingNextVotingTime];
+      for (let index = 0; index < gauges.length; index += 1) {
+        const gaugeToUpdate = gauges[index];
+        // eslint-disable-next-line no-await-in-loop
+        const { blockTime, nextVotingDate } = await getLeftTimeToReVote(
+          wallet,
+          gaugeToUpdate.address
+        );
+
+        gaugeToUpdate.blockTime = blockTime;
+        gaugeToUpdate.nextVotingDate = nextVotingDate;
+
+        aux = aux.map(g => {
+          // eslint-disable-next-line no-param-reassign
+          if (g.address === gaugeToUpdate.address) g = gaugeToUpdate;
+
+          return g;
+        });
+
+        arr[index] = false;
+      }
+      setLoadingNextVotingTime(arr);
+
+      overrideAllGauges(gauges);
+
+      return;
+    }
+
+    if (gauges && wallet.status === "disconnected") {
+      setLoadingNextVotingTime(
+        Array.from({ length: gauges.length }, () => false)
+      );
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      if (gauges)
-        setLoadingNextVotingTime(
-          Array.from({ length: gauges.length }, () => true)
-        );
-
-      if (gauges && wallet.status === "connected") {
-        let aux = gauges;
-        const arr = [...loadingNextVotingTime];
-        for (let index = 0; index < gauges.length; index += 1) {
-          const gaugeToUpdate = gauges[index];
-          // eslint-disable-next-line no-await-in-loop
-          const { blockTime, nextVotingDate } = await getLeftTimeToReVote(
-            wallet,
-            gaugeToUpdate.address
-          );
-
-          gaugeToUpdate.blockTime = blockTime;
-          gaugeToUpdate.nextVotingDate = nextVotingDate;
-
-          aux = aux.map(g => {
-            // eslint-disable-next-line no-param-reassign
-            if (g.address === gaugeToUpdate.address) g = gaugeToUpdate;
-
-            return g;
-          });
-
-          arr[index] = false;
-        }
-        setLoadingNextVotingTime(arr);
-
-        overrideAllGauges(gauges);
-
-        return;
-      }
-
-      if (gauges && wallet.status === "disconnected") {
-        setLoadingNextVotingTime(
-          Array.from({ length: gauges.length }, () => false)
-        );
-      }
-    })();
+    getNextVotingTime();
   }, [gauges, wallet.status]);
+
+  useEffect(() => {
+    if (!reloadNextVotingTime) return;
+
+    getNextVotingTime();
+    setReloadNextVotingTime();
+  }, [reloadNextVotingTime]);
 
   return (
     <StyledListGroup
@@ -135,8 +149,9 @@ const GaugesList = ({ activeIndex, setActiveIndex }) => {
                     g.blockTime < g.nextVotingDate ? (
                       <DateCountdown
                         mostSignificantFigure="day"
-                        dateTo={g.nextVotingDate}
+                        numberOfFigures={3}
                         dateFrom={g.blockTime}
+                        dateTo={g.nextVotingDate}
                         noAnimate
                       />
                     ) : (
@@ -157,9 +172,15 @@ const GaugesList = ({ activeIndex, setActiveIndex }) => {
   );
 };
 
+GaugesList.defaultProps = {
+  reloadNextVotingTime: undefined
+};
+
 GaugesList.propTypes = {
   activeIndex: PropTypes.number.isRequired,
-  setActiveIndex: PropTypes.func.isRequired
+  setActiveIndex: PropTypes.func.isRequired,
+  reloadNextVotingTime: PropTypes.bool,
+  setReloadNextVotingTime: PropTypes.func.isRequired
 };
 
 export default memo(GaugesList);

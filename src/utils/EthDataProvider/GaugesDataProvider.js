@@ -90,8 +90,6 @@ const voteForGauge = async (wallet, gaugeAddr, weight) => {
       { gasLimit: 500000 }
     );
 
-    console.log(result);
-
     if (result) {
       await result.wait();
       return result.hash;
@@ -250,6 +248,7 @@ const getEarned = async (wallet, gaugeAddr) => {
     const uniswapGauge = getUniswapGaugeContract(gaugeAddr, provider, false);
 
     const earnedResult = await uniswapGauge.earned(wallet.account);
+
     return ethers.utils.formatEther(earnedResult[0].toString());
   }
   return 0;

@@ -24,6 +24,7 @@ import { GaugesContext } from "../../../context/gaugesContext";
 import StyledSlider from "../../../components/ui/styledSlider";
 import LockedStakesList from "./lockedStakesList";
 import ViewInExplorerBtn from "../../../components/ui/viewInExplorerBtn";
+import GenericOverlay from "../../../components/ui/genericOverlay";
 
 const StyledCard = styled(Card)`
   border: 0.5px solid whitesmoke !important;
@@ -31,7 +32,7 @@ const StyledCard = styled(Card)`
   height: 440px;
   max-height: 440px;
   overflow-y: auto;
-  margin: 5;
+  margin: 10px;
 `;
 
 const LpTokensInput = styled(Form.Control)`
@@ -55,6 +56,13 @@ const StyledRow = styled(Row)`
   border: 1px dashed lightgray;
 `;
 
+const StyledFlexRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
 const LPLock = () => {
   const wallet = useWallet();
   const { t } = useTranslation();
@@ -67,9 +75,12 @@ const LPLock = () => {
   const [loadingLockedStakes, setLoadingLockedStakes] = useState([]);
   const [showLockedStakes, setShowLockedStakes] = useState(false);
   const [lasTxHash, setLastTxHash] = useState();
+  const [showlpLockingTitleOverlay, setShowLpLockingTitleOverlay] =
+    useState(false);
   const [locking, setLocking] = useState(false);
   const lpInputRef = useRef();
   const inputRef = useRef();
+  const lpLockingTitleOverlay = useRef(null);
 
   const handleLockedStakes = (gauge, stakes) =>
     setLockedStakes(prev => [...prev, { gaugeName: gauge.name, stakes }]);
@@ -131,11 +142,17 @@ const LPLock = () => {
     }
   }, [gauges, wallet.status]);
 
-  console.log(gauges);
-
   return (
     <StyledCard className="p-2 d-flex flex-column justify-content-center align-items-center">
-      <Card.Title>{t("lock_lp_tokens")}</Card.Title>
+      <StyledFlexRow>
+        <Card.Title className="m-0">{t("lock_lp_tokens")}</Card.Title>
+        <GenericOverlay
+          show={showlpLockingTitleOverlay}
+          setShow={setShowLpLockingTitleOverlay}
+          target={lpLockingTitleOverlay}
+          tooltipText="You can lock your LP tokens and get rewards. They can be locked for a maximum of 3 years."
+        />
+      </StyledFlexRow>
       <ToggleButtonGroup
         name="group"
         className="mb-3 p-0 mt-2 d-flex flex-row flex-nowrap justify-content-center container w-100"
