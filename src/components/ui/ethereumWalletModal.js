@@ -91,7 +91,7 @@ const EthereumWalletModal = ({ show, setShow }) => {
               <StyledWalletCard
                 className="p-2 shadow-sm mx-auto"
                 key="frame"
-                action
+                action="true"
                 onClick={() => handleWalletButtonClick("frame")}
               >
                 <div className="d-flex flex-row justify-content-center">

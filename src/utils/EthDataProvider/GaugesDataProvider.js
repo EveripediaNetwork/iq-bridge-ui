@@ -56,7 +56,7 @@ const getGauges = async () => {
 
     // eslint-disable-next-line no-await-in-loop
     let gaugeWeight = await gaugeController.get_gauge_weight(address, {
-      gasLimit: 400000
+      gasLimit: 500000
     });
 
     gaugeWeight = Number(ethers.utils.formatEther(gaugeWeight)).toFixed(2);
@@ -84,10 +84,16 @@ const voteForGauge = async (wallet, gaugeAddr, weight) => {
       signer
     );
 
+    const gasEstimation =
+      await gaugeControllerContract.estimateGas.vote_for_gauge_weights(
+        gaugeAddr,
+        weight
+      );
+
     const result = await gaugeControllerContract.vote_for_gauge_weights(
       gaugeAddr,
       weight,
-      { gasLimit: 500000 }
+      { gasLimit: gasEstimation }
     );
 
     if (result) {
@@ -162,12 +168,13 @@ const getLpTokenBalance = async (wallet, gaugeAddr) => {
       provider,
       true
     );
-    // const gasEstimation = await IUniswapV2PairContract.estimateGas.balanceOf(
-    //   wallet.account
-    // );
+
+    const gasEstimation = await IUniswapV2PairContract.estimateGas.balanceOf(
+      wallet.account
+    );
 
     const result = await IUniswapV2PairContract.balanceOf(wallet.account, {
-      gasLimit: 500000
+      gasLimit: gasEstimation
     });
 
     return Number(ethers.utils.formatEther(result));
@@ -207,15 +214,15 @@ const stakeLockedLP = async (
       signer
     );
 
-    // const gasEstimation = await uniswapGauge.estimateGas.stakeLocked(
-    //   howManyLPTokens,
-    //   howMuchTimeInSeconds
-    // );
+    const gasEstimation = await uniswapGauge.estimateGas.stakeLocked(
+      howManyLPTokens,
+      howMuchTimeInSeconds
+    );
 
     const result = await uniswapGauge.stakeLocked(
       howManyLPTokens,
       howMuchTimeInSeconds,
-      { gasLimit: 500000 }
+      { gasLimit: gasEstimation }
     );
 
     if (result) {
@@ -246,7 +253,6 @@ const getEarned = async (wallet, gaugeAddr) => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.JsonRpcProvider(rpcURL);
     const uniswapGauge = getUniswapGaugeContract(gaugeAddr, provider, false);
-
     const earnedResult = await uniswapGauge.earned(wallet.account);
 
     return ethers.utils.formatEther(earnedResult[0].toString());

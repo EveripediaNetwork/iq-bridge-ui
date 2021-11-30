@@ -5,7 +5,6 @@ import { CashStack } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import * as Humanize from "humanize-plus";
 
 import GenericDialog from "../../../components/ui/genericDialog";
 import {
@@ -57,7 +56,7 @@ const LockedStakesList = ({ lockedStakes, show, setShow, gaugeIdx }) => {
         <LockedStagesListContainer className="w-100 d-flex flex-row flex-wrap justify-content-center align-items-center">
           <div className="d-flex w-100 p-3 flex-wrap flex-row justify-content-center align-items-center">
             <h5 className="m-0">
-              {t("rewards")}: {Humanize.intComma(rewardsAmount) || 0} IQ
+              {t("rewards")}: {(rewardsAmount && rewardsAmount.toFixed(2)) || 0}
             </h5>
             <Button
               disabled={rewardsAmount === 0}
