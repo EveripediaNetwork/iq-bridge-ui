@@ -36,8 +36,8 @@ const colorsArray = [
 ];
 
 const StyledContainer = styled.div`
-  max-width: 450;
   overflow-x: auto;
+  margin: auto;
 `;
 
 const StyledCard = styled(Card)`
@@ -68,9 +68,6 @@ const StatsCharts = () => {
   const configureTopHoldersChart = data => {
     setAddresses(Object.keys(data));
     setVolumeChartData({
-      labels: Object.keys(data).map(
-        d => `${d.substring(1, 5)}...${d.substring(d.length - 1, d.length - 5)}`
-      ),
       datasets: [
         {
           label: "Volume",
@@ -124,8 +121,12 @@ const StatsCharts = () => {
 
   return (
     <StyledContainer>
-      <StyledCard className="p-2 mb-2">
-        <Bar data={lockBreakdownChartData} options={options} />
+      <StyledCard style={{ height: 200 }} className="pl-2 pr-2 mb-2">
+        <Bar
+          style={{ height: 200 }}
+          data={lockBreakdownChartData}
+          options={options}
+        />
       </StyledCard>
       <StyledCard className="p-2 mb-2 text-center">
         <h5>Top 10 stakers</h5>
