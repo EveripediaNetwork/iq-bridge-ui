@@ -60,7 +60,10 @@ const RewardsCalculatorDialog = ({
 
       const aprAcrossLockPeriod = userRewardsPlusInitialLock / inputIQ;
 
-      setAprDividedByLockPeriod((aprAcrossLockPeriod / years) * 100);
+      let percentage = 100;
+      if (years < 1) percentage = (years * 100) / 1;
+
+      setAprDividedByLockPeriod((aprAcrossLockPeriod / years) * percentage);
     }
   }, [inputIQ, years]);
 
