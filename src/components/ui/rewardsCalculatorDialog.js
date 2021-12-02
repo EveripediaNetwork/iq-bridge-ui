@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import { Form } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
@@ -19,6 +19,10 @@ const StyledFormControl = styled(Form.Control)`
     box-shadow: none !important;
   }
   border-radius: 5px !important;
+`;
+
+const StyledButton = styled(Button)`
+  border: 1px dashed lightblue !important;
 `;
 
 const RewardsCalculatorDialog = ({
@@ -73,8 +77,9 @@ const RewardsCalculatorDialog = ({
     else setInputIQ(value);
   };
 
-  const handleYearsInput = e => {
-    const value = Number(e.target.value);
+  const handleYearsInput = value => {
+    yearsRef.current.value = value;
+
     if (value < 0 || value > 4) yearsRef.current.value = "";
     else setYears(value);
   };
@@ -109,23 +114,55 @@ const RewardsCalculatorDialog = ({
             min="0"
             max="4"
             ref={yearsRef}
-            onChange={handleYearsInput}
+            onChange={event => handleYearsInput(Number(event.target.value))}
             placeholder={`${t("years")} (4 years max)`}
           />
-          {inputIQ && years && aprDividedByLockPeriod ? (
-            <StyledDivContainer className="shadow-sm">
-              <p className="mb-0">
-                {" "}
-                {t("you_will_get")}:{" "}
-                <strong>{Number(expectedIQ).toFixed(2)} IQ</strong>
-              </p>
-              <p className="mb-0">
-                {" "}
-                {t("expected_apr")}:{" "}
-                <strong>{Number(aprDividedByLockPeriod).toFixed(2)} %</strong>
-              </p>
-            </StyledDivContainer>
-          ) : null}
+          <div className="d-flex flex-row justify-content-center p-2">
+            <StyledButton
+              onClick={() => handleYearsInput(0.0833334)}
+              size="sm"
+              variant="light"
+              className="m-1 shadow-sm"
+            >
+              1 month
+            </StyledButton>
+            <StyledButton
+              onClick={() => handleYearsInput(0.25)}
+              size="sm"
+              variant="light"
+              className="m-1 shadow-sm"
+            >
+              3 months
+            </StyledButton>
+            <StyledButton
+              onClick={() => handleYearsInput(0.500001)}
+              size="sm"
+              variant="light"
+              className="m-1 shadow-sm"
+            >
+              6 months
+            </StyledButton>
+          </div>
+
+          <StyledDivContainer className="shadow-sm">
+            <p className="mb-0">
+              {" "}
+              {t("you_will_get")}:{" "}
+              <strong>
+                {expectedIQ ? Number(expectedIQ).toFixed(2) : 0} IQ
+              </strong>
+            </p>
+            <p className="mb-0">
+              {" "}
+              {t("expected_apr")}:{" "}
+              <strong>
+                {aprDividedByLockPeriod
+                  ? Number(aprDividedByLockPeriod).toFixed(2)
+                  : 0}{" "}
+                %
+              </strong>
+            </p>
+          </StyledDivContainer>
         </Form>
       }
     />
