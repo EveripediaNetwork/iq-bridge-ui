@@ -49,6 +49,10 @@ const getGauges = async () => {
   let numberOfGauges = await gaugeController.n_gauges({ gasLimit: 500000 });
   numberOfGauges = Number(numberOfGauges.toString());
 
+  const totalWeight = await gaugeController.get_total_weight({
+    gasLimit: 500000
+  });
+
   const gauges = [];
   for (let i = 0; i < numberOfGauges; i += 1) {
     // eslint-disable-next-line no-await-in-loop
@@ -59,7 +63,12 @@ const getGauges = async () => {
       gasLimit: 500000
     });
 
-    gaugeWeight = Number(ethers.utils.formatEther(gaugeWeight)).toFixed(2);
+    // gaugeWeight = Number(ethers.utils.formatEther(gaugeWeight)).toFixed(2);
+    gaugeWeight = Number(
+      (Number(ethers.utils.formatEther(gaugeWeight)) /
+        Number(ethers.utils.formatEther(totalWeight))) *
+        10000
+    ).toFixed(2);
 
     gauges.unshift({
       address,

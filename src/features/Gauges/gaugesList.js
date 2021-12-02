@@ -132,7 +132,7 @@ const GaugesList = ({
             </div>
             <div className="d-flex flex-column justify-content-center align-items-center">
               <u>{t("allocated_weight")}</u>
-              <span>{g.gaugeWeight || 0}</span>
+              <span>{g.gaugeWeight || 0}%</span>
             </div>
 
             {loadingNextVotingTime[index] === true ? (
