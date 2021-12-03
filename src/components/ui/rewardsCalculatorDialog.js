@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { Form, Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import * as Humanize from "humanize-plus";
 import styled from "styled-components";
 
 import GenericDialog from "./genericDialog";
@@ -97,7 +98,9 @@ const RewardsCalculatorDialog = ({
               <p className="mb-0 text-center text-uppercase">
                 {" "}
                 {t("supply")} <br />
-                <strong>{Number(hiIQSupply).toFixed(0)} hiiq</strong>
+                <strong>
+                  {Humanize.intComma(Number(hiIQSupply).toFixed(0))} hiiq
+                </strong>
               </p>
             </div>
           ) : null}
