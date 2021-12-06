@@ -81,6 +81,7 @@ const Stats = ({ wallet, lockedAlready }) => {
     await checkpointResult.wait();
 
     setIsCallingCheckpoint(false);
+    if (checkpointResult) setUserIsInitialzed(true);
   };
 
   const getOverlay = (showOverlay, overlayTarget, tooltipText) => (
@@ -338,43 +339,48 @@ const Stats = ({ wallet, lockedAlready }) => {
                         </Button>
                       ) : null}
 
-                      {(lockedAlready &&
-                        earnedRewards !== undefined &&
-                        earnedRewards === 0 &&
-                        wallet.status === "connected") ||
-                      (userIsInitialized !== undefined &&
-                        userIsInitialized === false) ? (
-                        // eslint-disable-next-line react/jsx-indent
-                        <div className="d-flex flex-row justify-content-center align-items-center">
-                          <Button
-                            onClick={handleCallCheckpoint}
-                            size="sm"
-                            className="shadow-sm"
-                            variant="warning"
-                          >
-                            {isCallingCheckpoint
-                              ? `${t("loading")}...`
-                              : t("checkpoint")}
-                          </Button>
-                          <Button
-                            variant="light"
-                            size="sm"
-                            className="ml-2"
-                            ref={checkpointOverlayTarget}
-                            onClick={event => {
-                              event.preventDefault();
-                              setShowCheckpointOverlay(!showCheckpointOverlay);
-                            }}
-                          >
-                            <QuestionCircle />
-                          </Button>
-                          {getOverlay(
-                            showCheckpointOverlay,
-                            checkpointOverlayTarget,
-                            t("needed_to_keep_track")
-                          )}
-                        </div>
-                      ) : null}
+                      {
+                        // (lockedAlready &&
+                        //   earnedRewards !== undefined &&
+                        //   earnedRewards === 0 &&
+                        //   wallet.status === "connected") ||
+                        lockedAlready &&
+                        userIsInitialized !== undefined &&
+                        userIsInitialized === false ? (
+                          // eslint-disable-next-line react/jsx-indent
+                          <div className="d-flex flex-row justify-content-center align-items-center">
+                            <Button
+                              onClick={handleCallCheckpoint}
+                              size="sm"
+                              className="shadow-sm"
+                              variant="warning"
+                            >
+                              {isCallingCheckpoint
+                                ? `${t("loading")}...`
+                                : t("checkpoint")}
+                            </Button>
+                            <Button
+                              variant="light"
+                              size="sm"
+                              className="ml-2"
+                              ref={checkpointOverlayTarget}
+                              onClick={event => {
+                                event.preventDefault();
+                                setShowCheckpointOverlay(
+                                  !showCheckpointOverlay
+                                );
+                              }}
+                            >
+                              <QuestionCircle />
+                            </Button>
+                            {getOverlay(
+                              showCheckpointOverlay,
+                              checkpointOverlayTarget,
+                              t("needed_to_keep_track")
+                            )}
+                          </div>
+                        ) : null
+                      }
                     </div>
                   </div>
                 </div>
