@@ -29,6 +29,24 @@ import StatsCharts from "../../components/ui/statsCharts";
 import RewardsCalculatorDialog from "../../components/ui/rewardsCalculatorDialog";
 import EthereumWalletModal from "../../components/ui/ethereumWalletModal";
 
+const PriceSpan = styled.span`
+  font-size: 12px;
+  color: #aeabab;
+`;
+
+const StyledCard = styled(Card)`
+  max-width: 100%;
+`;
+
+const StyledStatsContainer = styled.div`
+  width: auto;
+  margin: auto;
+  @media (max-width: 576px) {
+    width: 100%;
+    max-width: 100%;
+  }
+`;
+
 const Stats = ({ wallet, lockedAlready }) => {
   const { t } = useTranslation();
   const [stats, setStats] = useState();
@@ -47,11 +65,6 @@ const Stats = ({ wallet, lockedAlready }) => {
   const target = useRef(null);
   const checkpointOverlayTarget = useRef(null);
   const countDownComponentRef = useRef(null);
-
-  const PriceSpan = styled.span`
-    font-size: 12px;
-    color: #aeabab;
-  `;
 
   const handleClaim = async () => {
     setLoadingClaim(true);
@@ -210,12 +223,9 @@ const Stats = ({ wallet, lockedAlready }) => {
   }, [wallet, lockedAlready]);
 
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center">
+    <StyledStatsContainer className="d-flex flex-column justify-content-center align-items-center">
       <CardTitle title="Stats" aria-label="lock" icon="📈" />
-      <Card
-        style={{ width: 500, minHeight: 450 }}
-        className="shadow-sm m-auto p-1"
-      >
+      <StyledCard className="shadow-sm m-auto p-1">
         <Card.Body className="p-3 d-flex flex-column justify-content-center">
           <div className="container d-flex flex-row justify-content-center align-items-center">
             <h3 className="text-center font-weight-normal mb-0">
@@ -409,9 +419,9 @@ const Stats = ({ wallet, lockedAlready }) => {
             rewardsAcrossLockPeriod={stats.rewardsAcrossLockPeriod}
           />
         ) : null}
-      </Card>
+      </StyledCard>
       <EthereumWalletModal show={ethModalShow} setShow={setEthModalShow} />
-    </div>
+    </StyledStatsContainer>
   );
 };
 
