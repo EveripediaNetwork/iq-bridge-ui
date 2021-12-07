@@ -36,11 +36,18 @@ const PriceSpan = styled.span`
 
 const StyledCard = styled(Card)`
   max-width: 100%;
+
+  @media (min-width: 576px) {
+    &.card {
+      min-width: 563px;
+    }
+  }
 `;
 
 const StyledStatsContainer = styled.div`
   width: auto;
   margin: auto;
+
   @media (max-width: 576px) {
     width: 100%;
     max-width: 100%;
