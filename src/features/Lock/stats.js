@@ -35,7 +35,16 @@ const PriceSpan = styled.span`
 `;
 
 const StyledCard = styled(Card)`
-  max-width: none;
+  max-width: 100%;
+`;
+
+const StyledStatsContainer = styled.div`
+  width: auto;
+  margin: auto;
+  @media (max-width: 576px) {
+    width: 100%;
+    max-width: 100%;
+  }
 `;
 
 const Stats = ({ wallet, lockedAlready }) => {
@@ -214,7 +223,7 @@ const Stats = ({ wallet, lockedAlready }) => {
   }, [wallet, lockedAlready]);
 
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center">
+    <StyledStatsContainer className="d-flex flex-column justify-content-center align-items-center">
       <CardTitle title="Stats" aria-label="lock" icon="📈" />
       <StyledCard className="shadow-sm m-auto p-1">
         <Card.Body className="p-3 d-flex flex-column justify-content-center">
@@ -412,7 +421,7 @@ const Stats = ({ wallet, lockedAlready }) => {
         ) : null}
       </StyledCard>
       <EthereumWalletModal show={ethModalShow} setShow={setEthModalShow} />
-    </div>
+    </StyledStatsContainer>
   );
 };
 

@@ -38,11 +38,13 @@ const colorsArray = [
 const StyledContainer = styled.div`
   overflow-x: auto;
   margin: auto;
+  width: 100%;
 `;
 
 const StyledCard = styled(Card)`
   border-radius: 5px !important;
   border: 0.5px dashed lightgray !important;
+  max-width: 100%;
 `;
 
 const StatsCharts = () => {
@@ -121,7 +123,7 @@ const StatsCharts = () => {
 
   return (
     <StyledContainer>
-      <StyledCard style={{ height: 200 }} className="pl-2 pr-2 mb-2">
+      <StyledCard className="mb-2">
         <Bar
           style={{ height: 200 }}
           data={lockBreakdownChartData}
