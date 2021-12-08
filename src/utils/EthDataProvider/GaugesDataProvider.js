@@ -8,7 +8,7 @@ import {
   uniswapLpIqFrax
 } from "../../config";
 
-const rpcURL = "https://a056-165-227-192-32.eu.ngrok.io";
+const rpcURL = process.env.REACT_APP_WALLET_CONNECT_RPC_URL;
 
 const LPAddresses = [uniswapLpIqFrax, uniswapLpIqEth];
 
