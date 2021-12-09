@@ -104,14 +104,14 @@ const LPLock = () => {
       const stakes = await getLockedStakes(wallet, gauges[i].address);
 
       arr[i] = false;
-      setLoadingLockedStakes(arr);
+      // setLoadingLockedStakes(arr);
 
-      handleLockedStakes(gauges[i], stakes);
+      // handleLockedStakes(gauges[i], stakes);
     }
   };
 
   const handleOnLpInputChange = async event => {
-    const value = Number(event.target.value);
+    const value = event.target.value;
 
     if (value < balances[selectedGaugeIdx]) setInputLPTokens(value);
     else lpInputRef.current.value = "";

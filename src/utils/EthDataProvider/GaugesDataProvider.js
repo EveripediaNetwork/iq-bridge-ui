@@ -170,7 +170,8 @@ const getUserVotingPower = async wallet => {
 
 const getLpTokenBalance = async (wallet, gaugeAddr) => {
   if (wallet.status === "connected") {
-    const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+    // const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
 
     const IUniswapV2PairContract = getIUniswapV2PairContract(
       gaugeAddr,
@@ -183,7 +184,7 @@ const getLpTokenBalance = async (wallet, gaugeAddr) => {
     );
 
     const result = await IUniswapV2PairContract.balanceOf(wallet.account, {
-      gasLimit: gasEstimation
+      gasLimit: 500000
     });
 
     return Number(ethers.utils.formatEther(result));
@@ -223,15 +224,15 @@ const stakeLockedLP = async (
       signer
     );
 
-    const gasEstimation = await uniswapGauge.estimateGas.stakeLocked(
-      howManyLPTokens,
-      howMuchTimeInSeconds
-    );
+    // const gasEstimation = await uniswapGauge.estimateGas.stakeLocked(
+    //   howManyLPTokens,
+    //   howMuchTimeInSeconds
+    // );
 
     const result = await uniswapGauge.stakeLocked(
-      howManyLPTokens,
+      ethers.utils.parseEther(howManyLPTokens),
       howMuchTimeInSeconds,
-      { gasLimit: gasEstimation }
+      { gasLimit: 1000000 }
     );
 
     if (result) {
@@ -245,15 +246,25 @@ const stakeLockedLP = async (
 
 const getLockedStakes = async (wallet, gaugeAddr) => {
   if (wallet.status === "connected") {
-    const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+    // const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
     const uniswapGauge = new ethers.Contract(
       gaugeAddr,
       stakingRewardsMultiGaugeAbi,
       provider
     );
 
-    const result = await uniswapGauge.lockedStakesOf(wallet.account);
-    return result;
+    console.log(gaugeAddr);
+
+    try {
+      const result = await uniswapGauge.lockedStakesOf(wallet.account, {
+        gasLimit: 700000
+      });
+
+      return result;
+    } catch (error) {
+      return [];
+    }
   }
   return undefined;
 };
