@@ -37,7 +37,7 @@ const needsApproval = async (provider, contract, amount, spender) => {
   const userAddress = await provider.getSigner().getAddress();
   const allowedTokens = await contract.allowance(userAddress, spender);
   if (allowedTokens.lt(amount)) {
-    await contract.approve(spender, ethers.constants.MaxUint256);
+    await (await contract.approve(spender, ethers.constants.MaxUint256)).wait();
   }
 };
 
@@ -116,7 +116,7 @@ const voteForGauge = async (wallet, gaugeAddr, weight) => {
 
 const getLeftTimeToReVote = async (wallet, gaugeAddr) => {
   if (wallet.status === "connected") {
-    const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
 
     const gaugeController = getGaugesContract(provider, false);
 
@@ -146,7 +146,7 @@ const getLeftTimeToReVote = async (wallet, gaugeAddr) => {
 
 const getUserVotingPower = async wallet => {
   if (wallet.status === "connected") {
-    const provider = new ethers.providers.JsonRpcProvider(rpcURL);
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
 
     const gaugeControllerContract = getGaugesContract(provider, false);
 
@@ -184,7 +184,7 @@ const getLpTokenBalance = async (wallet, gaugeAddr) => {
     );
 
     const result = await IUniswapV2PairContract.balanceOf(wallet.account, {
-      gasLimit: 500000
+      gasLimit: gasEstimation
     });
 
     return Number(ethers.utils.formatEther(result));
@@ -201,9 +201,8 @@ const stakeLockedLP = async (
   gaugeAddr
 ) => {
   if (wallet.status === "connected") {
-    const signer = new ethers.providers.Web3Provider(
-      wallet.ethereum
-    ).getSigner();
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+    const signer = provider.getSigner();
 
     const IUniswapV2PairContract = new ethers.Contract(
       lpGaugeAddr,
@@ -212,7 +211,7 @@ const stakeLockedLP = async (
     );
 
     await needsApproval(
-      new ethers.providers.Web3Provider(wallet.ethereum),
+      provider,
       IUniswapV2PairContract,
       howManyLPTokens,
       gaugeAddr
@@ -224,15 +223,15 @@ const stakeLockedLP = async (
       signer
     );
 
-    // const gasEstimation = await uniswapGauge.estimateGas.stakeLocked(
-    //   howManyLPTokens,
-    //   howMuchTimeInSeconds
-    // );
+    const gasEstimation = await uniswapGauge.estimateGas.stakeLocked(
+      howManyLPTokens,
+      howMuchTimeInSeconds
+    );
 
     const result = await uniswapGauge.stakeLocked(
-      ethers.utils.parseEther(howManyLPTokens),
+      howManyLPTokens,
       howMuchTimeInSeconds,
-      { gasLimit: 1000000 }
+      { gasLimit: gasEstimation }
     );
 
     if (result) {
@@ -254,19 +253,13 @@ const getLockedStakes = async (wallet, gaugeAddr) => {
       provider
     );
 
-    console.log(gaugeAddr);
+    const result = await uniswapGauge.lockedStakesOf(wallet.account, {
+      gasLimit: 700000
+    });
 
-    try {
-      const result = await uniswapGauge.lockedStakesOf(wallet.account, {
-        gasLimit: 700000
-      });
-
-      return result;
-    } catch (error) {
-      return [];
-    }
+    return result;
   }
-  return undefined;
+  return [];
 };
 
 const getEarned = async (wallet, gaugeAddr) => {

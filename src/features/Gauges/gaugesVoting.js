@@ -139,7 +139,7 @@ const GaugesVoting = () => {
             <Button
               disabled={
                 votingPower === 0 ||
-                !submitButtonDisabled ||
+                submitButtonDisabled === undefined ||
                 (submitButtonDisabled !== undefined &&
                   submitButtonDisabled === true) ||
                 voting

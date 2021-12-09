@@ -256,12 +256,12 @@ const Voting = () => {
                     )}
                     {selectedProposal && (
                       <Button
-                        disabled={
-                          !selectedProposal ||
-                          !wallet.account ||
-                          !onVotingTimeWindow ||
-                          !selectedChoice
-                        }
+                        // disabled={
+                        //   !selectedProposal ||
+                        //   !wallet.account ||
+                        //   !onVotingTimeWindow ||
+                        //   !selectedChoice
+                        // }
                         onClick={handleVote}
                         variant={onVotingTimeWindow ? "primary" : "danger"}
                         className="text-capitalize"
