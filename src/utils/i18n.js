@@ -103,6 +103,9 @@ export const resources = {
       power_to_allocate: "Power to allocate",
       you_have_no_hiiq: "You have no HiIQ",
       submit_vote: "Submit Vote",
+      to_be_allowed_to_vote:
+        "To be allowed to vote, you need to have some HiIQ first. You can get HiIQ by locking your IQ tokens.",
+      lock_iq: "Lock IQ",
       // ## lpLock
       lock_lp_tokens: "Lock LP Tokens",
       max_available: "Max available: ",
@@ -288,6 +291,9 @@ export const resources = {
       power_to_allocate: "Power to allocate",
       you_have_no_hiiq: "You have no HiIQ",
       submit_vote: "Submit Vote",
+      to_be_allowed_to_vote:
+        "To be allowed to vote, you need to have some HiIQ first. You can get HiIQ by locking your IQ tokens.",
+      lock_iq: "Lock IQ",
       // ## lpLock
       lock_lp_tokens: "Lock LP Tokens",
       max_available: "Max available: ",
@@ -470,6 +476,9 @@ export const resources = {
       power_to_allocate: "Power to allocate",
       you_have_no_hiiq: "You have no HiIQ",
       submit_vote: "Submit Vote",
+      to_be_allowed_to_vote:
+        "To be allowed to vote, you need to have some HiIQ first. You can get HiIQ by locking your IQ tokens.",
+      lock_iq: "Lock IQ",
       // ## lpLock
       lock_lp_tokens: "Lock LP Tokens",
       max_available: "Max available: ",
