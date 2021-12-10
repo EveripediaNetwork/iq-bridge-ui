@@ -234,6 +234,29 @@ const Stats = () => {
                   <Value>{showData(data.hiiq?.holders)}</Value>
                 </DataRow>
 
+                <DataTitle>{t("liquidity")}</DataTitle>
+                <DataRow>
+                  <Icon>
+                    <img alt="uni" src="/tokens/7083.png" />
+                  </Icon>
+                  <Title>LP {t("liquidity")} Uniswap v2</Title>
+                  <Value>${showData(data.lp?.uniswap)}</Value>
+                </DataRow>
+                <DataRow>
+                  <Icon>
+                    <img alt="Sushiswap" src="/tokens/7083.png" />
+                  </Icon>
+                  <Title>LP {t("liquidity")} SushiSwap</Title>
+                  <Value>${showData(data.lp?.sushiswap)}</Value>
+                </DataRow>
+                <DataRow>
+                  <Icon>
+                    <img alt="Quickswap" src="/tokens/8206.png" />
+                  </Icon>
+                  <Title>LP {t("liquidity")} QuickSwap</Title>
+                  <Value>${showData(data.lp?.quickswap)}</Value>
+                </DataRow>
+
                 <DataTitle>{t("apps")}</DataTitle>
                 <DataRow>
                   <Icon>
@@ -262,22 +285,6 @@ const Stats = () => {
                   </Icon>
                   <Title>{t("everipedia_page_views")}</Title>
                   <Value>{showData(data.ep?.views)}</Value>
-                </DataRow>
-
-                <DataTitle>{t("liquidity")}</DataTitle>
-                <DataRow>
-                  <Icon>
-                    <img alt="uni" src="/tokens/7083.png" />
-                  </Icon>
-                  <Title>LP {t("liquidity")} Uniswap v2</Title>
-                  <Value>${showData(data.lp?.uniswap)}</Value>
-                </DataRow>
-                <DataRow>
-                  <Icon>
-                    <img alt="Quickswap" src="/tokens/8206.png" />
-                  </Icon>
-                  <Title>LP {t("liquidity")} QuickSwap</Title>
-                  <Value>${showData(data.lp?.quickswap)}</Value>
                 </DataRow>
 
                 <DataTitle>{t("social")}</DataTitle>

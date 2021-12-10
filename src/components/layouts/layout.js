@@ -174,6 +174,19 @@ const Layout = ({ children }) => {
               Gauges
             </StyledNavLink>
             <StyledNavLink
+              href="https://pro.olympusdao.finance/#/bond/iq_eth_sushi?utm_source=everipedia&utm_medium=affiliate&utm_campaign=op-affiliate"
+              target="_blank"
+            >
+              {t("Bonds")}
+            </StyledNavLink>
+            <StyledNavLink
+              active={location.pathname === "/raffles" ? "" : undefined}
+              as={Link}
+              to={`/raffles${LngUrl}`}
+            >
+              {t("Raffles")}
+            </StyledNavLink>
+            <StyledNavLink
               active={location.pathname === "/voting" ? "" : undefined}
               as={Link}
               to={`/voting${LngUrl}`}

@@ -21,13 +21,38 @@ import {
   earned,
   getStats,
   getYield,
-  defaultStats
+  defaultStats,
+  checkIfUserIsInitialized
 } from "../../utils/EthDataProvider/EthDataProvider";
 import CardTitle from "../../components/ui/cardTitle";
-import { CoinGeckoClient } from "../../utils/coingecko";
 import StatsCharts from "../../components/ui/statsCharts";
 import RewardsCalculatorDialog from "../../components/ui/rewardsCalculatorDialog";
 import EthereumWalletModal from "../../components/ui/ethereumWalletModal";
+
+const PriceSpan = styled.span`
+  font-size: 12px;
+  color: #aeabab;
+`;
+
+const StyledCard = styled(Card)`
+  max-width: 100%;
+
+  @media (min-width: 576px) {
+    &.card {
+      min-width: 563px;
+    }
+  }
+`;
+
+const StyledStatsContainer = styled.div`
+  width: auto;
+  margin: auto;
+
+  @media (max-width: 576px) {
+    width: 100%;
+    max-width: 100%;
+  }
+`;
 
 const Stats = ({ wallet, lockedAlready }) => {
   const { t } = useTranslation();
@@ -43,14 +68,10 @@ const Stats = ({ wallet, lockedAlready }) => {
   const [countdown, setCountdown] = useState(Date.now() + 25000);
   const [isCallingCheckpoint, setIsCallingCheckpoint] = useState(false);
   const [openRewardsCalculator, setOpenRewardsCalculator] = useState(false);
+  const [userIsInitialized, setUserIsInitialzed] = useState(undefined);
   const target = useRef(null);
   const checkpointOverlayTarget = useRef(null);
   const countDownComponentRef = useRef(null);
-
-  const PriceSpan = styled.span`
-    font-size: 12px;
-    color: #aeabab;
-  `;
 
   const handleClaim = async () => {
     setLoadingClaim(true);
@@ -148,8 +169,12 @@ const Stats = ({ wallet, lockedAlready }) => {
       setTimeout(async () => {
         const rewards = await earned(wallet);
         try {
-          const result = await CoinGeckoClient.coins.fetch("everipedia", {});
-          setRewardsInDollars(Number(rewards) * result.data.tickers[7].last);
+          const a = await fetch(
+            "https://api.coingecko.com/api/v3/simple/price?ids=everipedia&vs_currencies=usd"
+          );
+          const price = (await a.json()).everipedia.usd;
+
+          setRewardsInDollars(Number(rewards) * price);
         } catch (err) {
           // eslint-disable-next-line no-console
           console.error(err);
@@ -166,11 +191,17 @@ const Stats = ({ wallet, lockedAlready }) => {
   useEffect(() => {
     (async () => {
       if (wallet && wallet.status === "connected") {
+        setUserIsInitialzed(await checkIfUserIsInitialized(wallet));
+
         const rewards = await earned(wallet);
 
         try {
-          const result = await CoinGeckoClient.coins.fetch("everipedia", {});
-          setRewardsInDollars(Number(rewards) * result.data.tickers[7].last);
+          const a = await fetch(
+            "https://api.coingecko.com/api/v3/simple/price?ids=everipedia&vs_currencies=usd"
+          );
+          const price = (await a.json()).everipedia.usd;
+
+          setRewardsInDollars(Number(rewards) * price);
         } catch (err) {
           // eslint-disable-next-line no-console
           console.error(err);
@@ -201,12 +232,9 @@ const Stats = ({ wallet, lockedAlready }) => {
   }, [wallet, lockedAlready]);
 
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center">
+    <StyledStatsContainer className="d-flex flex-column justify-content-center align-items-center">
       <CardTitle title="Stats" aria-label="lock" icon="📈" />
-      <Card
-        style={{ width: 500, minHeight: 450 }}
-        className="shadow-sm m-auto p-1"
-      >
+      <StyledCard className="shadow-sm m-auto p-1">
         <Card.Body className="p-3 d-flex flex-column justify-content-center">
           <div className="container d-flex flex-row justify-content-center align-items-center">
             <h3 className="text-center font-weight-normal mb-0">
@@ -329,10 +357,13 @@ const Stats = ({ wallet, lockedAlready }) => {
                         </Button>
                       ) : null}
 
-                      {lockedAlready &&
-                      earnedRewards !== undefined &&
-                      earnedRewards === 0 &&
-                      wallet.status === "connected" ? (
+                      {(lockedAlready &&
+                        earnedRewards !== undefined &&
+                        earnedRewards === 0 &&
+                        wallet.status === "connected") ||
+                      (userIsInitialized !== undefined &&
+                        userIsInitialized === false) ? (
+                        // eslint-disable-next-line react/jsx-indent
                         <div className="d-flex flex-row justify-content-center align-items-center">
                           <Button
                             onClick={handleCallCheckpoint}
@@ -397,9 +428,9 @@ const Stats = ({ wallet, lockedAlready }) => {
             rewardsAcrossLockPeriod={stats.rewardsAcrossLockPeriod}
           />
         ) : null}
-      </Card>
+      </StyledCard>
       <EthereumWalletModal show={ethModalShow} setShow={setEthModalShow} />
-    </div>
+    </StyledStatsContainer>
   );
 };
 

@@ -89,7 +89,7 @@ export const resources = {
       liquidity: "liquidity",
       social: "Social",
       twitter_follower: "Twitter followers",
-      circulating_supply: "Ciculating supply",
+      circulating_supply: "Circulating supply",
       // error
       error: "Error",
       // gauges

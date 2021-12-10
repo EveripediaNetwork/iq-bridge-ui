@@ -23,6 +23,7 @@ import {
   walletLinkUrl
 } from "./config";
 import { GaugesProvider } from "./context/gaugesContext";
+import { isMetamaskMobileAndIframe } from "./utils/metamaskMobileDetector";
 
 const InitPage = lazy(() => import("./features/init"));
 const HomePage = lazy(() => import("./features/home"));
@@ -32,14 +33,18 @@ const LockPage = lazy(() => import("./features/Lock/lock"));
 const VotingPage = lazy(() => import("./features/Voting/voting"));
 const GaugesPage = lazy(() => import("./features/Gauges/gauges"));
 const StatsPage = lazy(() => import("./features/Stats/stats"));
+const RafflesPage = lazy(() => import("./features/Raffles/raffles"));
 
 function App() {
+  isMetamaskMobileAndIframe();
   return (
     <ErrorBoundary fallback={<Error />}>
       <Suspense fallback={<Loading />}>
         <UseWalletProvider
           chainId={ethChainId} // 5 GOERLI
           connectors={{
+            frame: {},
+            injected: {},
             fortmatic: { apiKey: fortmaticApiKey },
             portis: { dAppId: portisId },
             walletconnect: { rpcUrl: walletConnectRpcUrl },
@@ -78,6 +83,7 @@ const Routes = () => {
         <Route exact path="/gauges" component={GaugesPage} />
       </GaugesProvider>
       <Route exact path="/stats" component={StatsPage} />
+      <Route exact path="/raffles" component={RafflesPage} />
     </Switch>
   );
 };

@@ -37,8 +37,22 @@ const getHiIQRewardsContract = (provider, getSigner) =>
 
 const addGasLimitBuffer = value =>
   value
-    .mul(ethers.BigNumber.from(10000 + 2000))
+    .mul(ethers.BigNumber.from(10000 + 2500))
     .div(ethers.BigNumber.from(10000));
+
+const checkIfUserIsInitialized = async wallet => {
+  if (wallet.status === "connected") {
+    const provider = new ethers.providers.Web3Provider(wallet.ethereum);
+
+    const hiIQRewards = getHiIQRewardsContract(provider, true);
+
+    const result = await hiIQRewards.userIsInitialized(wallet.account);
+
+    return result;
+  }
+
+  return undefined;
+};
 
 const callCheckpoint = async wallet => {
   if (wallet.status === "connected") {
@@ -378,6 +392,7 @@ const increaseUnlockTime = async (wallet, unlockTime, handleConfirmation) => {
 };
 
 export {
+  checkIfUserIsInitialized,
   callCheckpoint,
   earned,
   getYield,
