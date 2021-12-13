@@ -286,7 +286,7 @@ const Lock = () => {
         <CardDivContainer className="d-flex flex-row flex-wrap-reverse align-items-center">
           <Stats
             wallet={wallet}
-            lockedAlready={currentHiIQ && currentHiIQ !== 0}
+            lockedAlready={currentHiIQ !== undefined && currentHiIQ !== 0}
           />
           <FormProvider {...methods}>
             <Col className="mb-3">
@@ -402,7 +402,9 @@ const Lock = () => {
                       wallet={wallet}
                       updateParentLockValue={lv => handleSetLockValue(lv)}
                       radioValue={radioValue}
-                      filledAmount={Number(filledAmount).toFixed(2)}
+                      filledAmount={
+                        filledAmount ? Number(filledAmount).toFixed(2) : 0
+                      }
                       currentHIIQ={currentHiIQ}
                       maximumLockableTime={maximumLockableTime}
                     />
