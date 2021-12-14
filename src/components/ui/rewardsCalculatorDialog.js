@@ -122,14 +122,6 @@ const RewardsCalculatorDialog = ({
           />
           <div className="d-flex flex-row justify-content-center p-2">
             <StyledButton
-              onClick={() => handleYearsInput(0.0833334)}
-              size="sm"
-              variant="light"
-              className="m-1 shadow-sm"
-            >
-              1 month
-            </StyledButton>
-            <StyledButton
               onClick={() => handleYearsInput(0.25)}
               size="sm"
               variant="light"
@@ -138,12 +130,20 @@ const RewardsCalculatorDialog = ({
               3 months
             </StyledButton>
             <StyledButton
-              onClick={() => handleYearsInput(0.500001)}
+              onClick={() => handleYearsInput(1)}
               size="sm"
               variant="light"
               className="m-1 shadow-sm"
             >
-              6 months
+              1 year
+            </StyledButton>
+            <StyledButton
+              onClick={() => handleYearsInput(4)}
+              size="sm"
+              variant="light"
+              className="m-1 shadow-sm"
+            >
+              4 years
             </StyledButton>
           </div>
 
