@@ -325,11 +325,17 @@ const getMaximumLockableTime = async (wallet, lockEnd) => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
     const block = await provider.getBlock("latest");
+    console.log(new Date(block.timestamp * 1000));
     const max = new Date((block.timestamp + 4 * 365 * 86400) * 1000);
+    max.setHours(0);
+    max.setMinutes(0);
+    max.setSeconds(0);
+    console.log(max);
 
     const diffTime = Math.abs(max - lockEnd);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
+    console.log(diffDays);
     return diffDays - 1;
   }
   return false;
