@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import { Form } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import * as Humanize from "humanize-plus";
 import styled from "styled-components";
 
 import GenericDialog from "./genericDialog";
@@ -19,6 +20,10 @@ const StyledFormControl = styled(Form.Control)`
     box-shadow: none !important;
   }
   border-radius: 5px !important;
+`;
+
+const StyledButton = styled(Button)`
+  border: 1px dashed lightblue !important;
 `;
 
 const RewardsCalculatorDialog = ({
@@ -60,7 +65,10 @@ const RewardsCalculatorDialog = ({
 
       const aprAcrossLockPeriod = userRewardsPlusInitialLock / inputIQ;
 
-      setAprDividedByLockPeriod((aprAcrossLockPeriod / years) * 100);
+      let percentage = 100;
+      if (years < 1) percentage = years * 100;
+
+      setAprDividedByLockPeriod((aprAcrossLockPeriod / years) * percentage);
     }
   }, [inputIQ, years]);
 
@@ -70,8 +78,9 @@ const RewardsCalculatorDialog = ({
     else setInputIQ(value);
   };
 
-  const handleYearsInput = e => {
-    const value = Number(e.target.value);
+  const handleYearsInput = value => {
+    yearsRef.current.value = value;
+
     if (value < 0 || value > 4) yearsRef.current.value = "";
     else setYears(value);
   };
@@ -89,7 +98,9 @@ const RewardsCalculatorDialog = ({
               <p className="mb-0 text-center text-uppercase">
                 {" "}
                 {t("supply")} <br />
-                <strong>{Number(hiIQSupply).toFixed(0)} hiiq</strong>
+                <strong>
+                  {Humanize.intComma(Number(hiIQSupply).toFixed(0))} hiiq
+                </strong>
               </p>
             </div>
           ) : null}
@@ -106,23 +117,55 @@ const RewardsCalculatorDialog = ({
             min="0"
             max="4"
             ref={yearsRef}
-            onChange={handleYearsInput}
+            onChange={event => handleYearsInput(Number(event.target.value))}
             placeholder={`${t("years")} (4 years max)`}
           />
-          {inputIQ && years && aprDividedByLockPeriod ? (
-            <StyledDivContainer className="shadow-sm">
-              <p className="mb-0">
-                {" "}
-                {t("you_will_get")}:{" "}
-                <strong>{Number(expectedIQ).toFixed(2)} IQ</strong>
-              </p>
-              <p className="mb-0">
-                {" "}
-                {t("expected_apr")}:{" "}
-                <strong>{Number(aprDividedByLockPeriod).toFixed(2)} %</strong>
-              </p>
-            </StyledDivContainer>
-          ) : null}
+          <div className="d-flex flex-row justify-content-center p-2">
+            <StyledButton
+              onClick={() => handleYearsInput(0.25)}
+              size="sm"
+              variant="light"
+              className="m-1 shadow-sm"
+            >
+              3 months
+            </StyledButton>
+            <StyledButton
+              onClick={() => handleYearsInput(1)}
+              size="sm"
+              variant="light"
+              className="m-1 shadow-sm"
+            >
+              1 year
+            </StyledButton>
+            <StyledButton
+              onClick={() => handleYearsInput(4)}
+              size="sm"
+              variant="light"
+              className="m-1 shadow-sm"
+            >
+              4 years
+            </StyledButton>
+          </div>
+
+          <StyledDivContainer className="shadow-sm">
+            <p className="mb-0">
+              {" "}
+              {t("you_will_get")}:{" "}
+              <strong>
+                {expectedIQ ? Number(expectedIQ).toFixed(2) : 0} IQ
+              </strong>
+            </p>
+            <p className="mb-0">
+              {" "}
+              {t("expected_apr")}:{" "}
+              <strong>
+                {aprDividedByLockPeriod
+                  ? Number(aprDividedByLockPeriod).toFixed(2)
+                  : 0}{" "}
+                %
+              </strong>
+            </p>
+          </StyledDivContainer>
         </Form>
       }
     />
