@@ -167,7 +167,7 @@ const Layout = ({ children }) => {
               {t("lock")}
             </StyledNavLink>
             <StyledNavLink
-              href="https://pro.olympusdao.finance/#/bond/iq_eth_sushi?utm_source=everipedia&utm_medium=affiliate&utm_campaign=op-affiliate"
+              href="https://pro.olympusdao.finance/#/partners/Everipedia?utm_source=everipedia&utm_medium=affiliate&utm_campaign=op-affiliate"
               target="_blank"
             >
               {t("Bonds")}
