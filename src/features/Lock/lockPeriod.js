@@ -135,7 +135,7 @@ const LockPeriod = ({
               }}
               onChange={handleOnSliderChange}
               value={lockValue}
-              max={remaining || 209}
+              max={remaining || 208}
               step={1}
             />
           </Col>
@@ -156,7 +156,7 @@ const LockPeriod = ({
                 (radioValue === 1 && (!filledAmount || filledAmount === 0)) ||
                 remaining === 0
               }
-              max={remaining || 209}
+              max={remaining || 208}
               min={0}
               step={1}
               value={lockValue || 0}
