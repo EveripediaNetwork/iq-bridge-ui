@@ -314,8 +314,10 @@ const getLockedEnd = async wallet => {
 
     const result = await hiIQ.locked__end(wallet.account);
 
+    const date = new Date(Number(result.toString()) * 1000);
+    const userTimezoneOffset = date.getTimezoneOffset() * 60000;
     // eslint-disable-next-line no-underscore-dangle
-    return new Date(parseInt(result._hex, 16) * 1000);
+    return new Date(date.getTime() - userTimezoneOffset);
   }
 
   return false;
@@ -326,6 +328,9 @@ const getMaximumLockableTime = async (wallet, lockEnd) => {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
     const block = await provider.getBlock("latest");
     const max = new Date((block.timestamp + 4 * 365 * 86400) * 1000);
+    max.setHours(0);
+    max.setMinutes(0);
+    max.setSeconds(0);
 
     const diffTime = Math.abs(max - lockEnd);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
