@@ -100,7 +100,7 @@ const getYield = async wallet => {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
     const hiIQRewards = getHiIQRewardsContract(provider, true);
 
-    const yieldResult = await hiIQRewards.getYield();
+    const yieldResult = await hiIQRewards.getYield({ gasLimit: 500000 });
     return yieldResult;
   }
 
