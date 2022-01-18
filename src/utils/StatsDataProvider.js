@@ -137,7 +137,7 @@ const getLPs = async () => {
   return {
     lp: {
       uniswap: data.data.pairs[0].reserveUSD,
-      quickswap: data2.data.pairs[0].reserveUSD,
+      quickswap: data2.data.pairs[0].reserve0*2,
       sushiswap: data3.data.pair.reserveUSD
     }
   };
