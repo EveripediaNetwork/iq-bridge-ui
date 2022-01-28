@@ -374,9 +374,22 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
   return false;
 };
 
+const avoidMaxTimeUnlockTime = unlockTime => {
+  let timeParsed = Math.ceil(unlockTime / 1000.0);
+  const today = new Date().getTime() / 1000;
+  const diff = timeParsed - today;
+
+  // if somehow its longer than 4 years round to 4 years and give 30 min. for minting the tx
+  if (Math.floor(diff / (3600 * 24)) > 4) {
+    timeParsed = Math.ceil(today + 86400 * 4 * 365 - 60 * 30);
+  }
+
+  return timeParsed;
+};
+
 const increaseUnlockTime = async (wallet, unlockTime, handleConfirmation) => {
   if (wallet.status === "connected") {
-    const timeParsed = Math.floor(unlockTime / 1000.0);
+    const timeParsed = avoidMaxTimeUnlockTime(unlockTime);
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
 
     const hiIQ = getHiIQContract(provider);
