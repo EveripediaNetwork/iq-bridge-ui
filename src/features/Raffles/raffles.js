@@ -56,6 +56,68 @@ const Raffles = () => {
               className="brain"
               icon="🎫"
             />
+
+            <Card className="mx-auto shadow-sm">
+              <Card.Body>
+                <DataTitle className="d-flex flex-row justify-content-between">
+                  <a href="https://opensea.io/collection/supernormalbyzipcy" target="_blank">Zipcy&apos;s SuperNormal</a>
+                  <span className="font-weight-bold">15</span>
+                </DataTitle>
+                <DataRow>
+                  <Title>0x23fd433bec56f7c62d7f087cd26bc8d1a6d8da78</Title>
+                  <Value>3</Value>
+                </DataRow>
+                <DataRow>
+                  <Title>0xe3fc8281bc7d1b78e67c2197b979849ed769edfa</Title>
+                  <Value>2</Value>
+                </DataRow>
+                <DataRow>
+                  <Title>0xecac3e374e3dd1beef5734d8840673f7e7adab3a</Title>
+                  <Value>2</Value>
+                </DataRow>
+                <DataRow>
+                  <Title>0x88e863d4572d2dae27db81e98837a9dbeb0e7a12</Title>
+                  <Value>1</Value>
+                </DataRow>
+                <DataRow>
+                  <Title>0x8d02feba0aa652388ac04fe8052ed9d827d4eab2</Title>
+                  <Value>1</Value>
+                </DataRow>
+                <DataRow>
+                  <Title>0x9996f0625a29ac20e06bac3e95e753b5bab2a6f6</Title>
+                  <Value>1</Value>
+                </DataRow>
+                <DataRow>
+                  <Title>0x2b5321c1afddfb6680aafff4df96a209e18dea1c</Title>
+                  <Value>1</Value>
+                </DataRow>
+                <DataRow>
+                  <Title>0x594b7efdda12093e98945c89243b71ff79409e4a</Title>
+                  <Value>1</Value>
+                </DataRow>
+                <DataRow>
+                  <Title>0xbc293ac23c1dae43b015172761c57589716712e6</Title>
+                  <Value>1</Value>
+                </DataRow>
+                <DataRow>
+                  <Title>0xb55794c3bef4651b6cbc78b64a2ef6c5c67837c3</Title>
+                  <Value>1</Value>
+                </DataRow>
+                <DataRow>
+                  <Title>0x6d6bb0505447b1f419a52df925d4d56d685050cf</Title>
+                  <Value>1</Value>
+                </DataRow>
+                <DataTitle className="d-flex flex-row justify-content-between">
+                  <a href="https://ipfs.everipedia.org/ipfs/Qmb7Kc2r7oH6ff5VdvV97ynuv9uVNXPVppjiMvkGF98F6v"
+                     target="_blank">Snapshot</a>
+                </DataTitle>
+                <DataTitle className="d-flex flex-row justify-content-between">
+                  <a href="https://polygonscan.com/address/0xb7185e8332fc2ff1a02664312288e11c39c0dbd0#events"
+                     target="_blank">Onchain results</a>
+                </DataTitle>
+              </Card.Body>
+            </Card>
+            <br/>
             <Card className="mx-auto shadow-sm">
               <Card.Body>
                 <DataTitle className="d-flex flex-row justify-content-between">
