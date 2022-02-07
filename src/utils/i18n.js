@@ -23,6 +23,7 @@ export const resources = {
         "page for a comprehensive, global look at IQ holders, market capitalization, and more.",
       other_feats: "Other features such as ",
       new_feats_soon: " for new staking features coming soon!",
+      add_token: "Add token to metamask",
       // EOS → pIQ
       swap: "Swap",
       login_info_eos: "Login on EOS Wallet to bridge your tokens",
@@ -184,6 +185,7 @@ export const resources = {
         "IQ토큰 보유자수, 시가 총액, 글로벌한 IQ홀더들 정보와 다른 통계를 보시려면 해당 페이지를 참조하십시오.",
       other_feats: "다른 기능 ",
       new_feats_soon: " 새로운 스테이킹 기능이 곧 제공될 예정입니다!",
+      add_token: "Add token to metamask",
       // EOS → pIQ
       swap: "스왑",
       login_info_eos: "이오스 지갑에 로그인하여 토큰을 브리지합니다.",
@@ -343,6 +345,7 @@ export const resources = {
       stats_desc: "统计页面，全面了解，全球IQ持有者，市值以及更多信息。",
       other_feats: "其他功能，例如 ",
       new_feats_soon: " 新质押功能很快即将上线！",
+      add_token: "Add token to metamask",
       // EOS → pIQ
       swap: "交换",
       login_info_eos: "登录 EOS 钱包以桥接您的代币",

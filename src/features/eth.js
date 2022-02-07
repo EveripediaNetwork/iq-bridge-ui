@@ -1,10 +1,11 @@
-import React, { useState, memo, useContext } from "react";
+import React, { useState, memo, useContext, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import styled from "styled-components";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { ArrowDownShort } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 import { useWallet } from "use-wallet";
+import detectEthereumProvider from "@metamask/detect-provider";
 
 import Layout from "../components/layouts/layout";
 import SwapContainer from "../components/ui/swapContainer";
@@ -13,6 +14,7 @@ import InfoAlert from "../components/ui/infoAlert";
 import { convertPTokensTx } from "../utils/EthDataProvider/EthDataProvider";
 import { TransactionContext } from "../context/transactionContext";
 import useTitle from "../hooks/useTitle";
+import { iqAddress } from "../config";
 
 const IconWrapper = styled(Button)`
   margin: 15px;
@@ -31,6 +33,7 @@ const Eth = () => {
   const methods = useForm({ mode: "onChange" });
   const wallet = useWallet();
   const { setHashes, setTxDone } = useContext(TransactionContext);
+  const [detectedProvider, setDetectedProvider] = useState();
 
   const [token1, setToken1] = useState({
     icon: `${window.location.origin}/tokens/iq.png`,
@@ -48,6 +51,39 @@ const Eth = () => {
 
     setTxDone(true);
   };
+
+  const handleAddIQERC20TokenToMetamask = async () => {
+    detectedProvider.sendAsync(
+      {
+        method: "metamask_watchAsset",
+        params: {
+          type: "ERC20",
+          options: {
+            address: iqAddress,
+            symbol: "IQ",
+            decimals: 18,
+            image:
+              "https://pbs.twimg.com/profile_images/1414736076158033921/nResATsF_400x400.png"
+          }
+        },
+        id: Math.round(Math.random() * 100000)
+      },
+      (err, added) => {
+        console.log("provider returned", err, added);
+        if (err || "error" in added) {
+          console.log(err);
+        }
+      }
+    );
+  };
+
+  useEffect(() => {
+    const getDetectedProvider = async () => {
+      const provider = await detectEthereumProvider();
+      setDetectedProvider(provider);
+    };
+    getDetectedProvider();
+  }, []);
 
   return (
     <Layout>
@@ -93,6 +129,15 @@ const Eth = () => {
             </Row>
           )}
         </FormProvider>
+        <div className="text-center">
+          <Button
+            variant="outline-primary"
+            className="btn-sm"
+            onClick={handleAddIQERC20TokenToMetamask}
+          >
+            {t("add_token")}
+          </Button>
+        </div>
       </Container>
     </Layout>
   );

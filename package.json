@@ -5,6 +5,7 @@
   "dependencies": {
     "@everipedia/ual-mykey": "0.3.0",
     "@everipedia/ual-scatter": "0.3.0",
+    "@metamask/detect-provider": "^1.2.0",
     "@metamask/jazzicon": "^2.0.0",
     "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
