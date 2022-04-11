@@ -279,13 +279,6 @@ const Stats = () => {
                   <Title>{t("everipedia_onchain_edits")}</Title>
                   <Value>{showData(data.ep?.edits)}</Value>
                 </DataRow>
-                <DataRow>
-                  <Icon>
-                    <img alt="IQ" src="/tokens/2930.png" />
-                  </Icon>
-                  <Title>{t("everipedia_page_views")}</Title>
-                  <Value>{showData(data.ep?.views)}</Value>
-                </DataRow>
 
                 <DataTitle>{t("social")}</DataTitle>
                 <DataRow>
