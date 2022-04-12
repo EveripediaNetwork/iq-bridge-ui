@@ -65,14 +65,12 @@ const Stats = ({ wallet, lockedAlready }) => {
   const [isLoadingClaim, setLoadingClaim] = useState(false);
   const [ethModalShow, setEthModalShow] = useState(false);
   const [isLoadingStats, setIsLoadingStats] = useState();
-  const [show, setShow] = useState(false);
   const [showCheckpointOverlay, setShowCheckpointOverlay] = useState(false);
   const [animateText, setAnimateText] = useState(false);
   const [countdown, setCountdown] = useState(Date.now() + 25000);
   const [isCallingCheckpoint, setIsCallingCheckpoint] = useState(false);
   const [openRewardsCalculator, setOpenRewardsCalculator] = useState(false);
   const [userIsInitialized, setUserIsInitialzed] = useState(undefined);
-  const target = useRef(null);
   const checkpointOverlayTarget = useRef(null);
   const countDownComponentRef = useRef(null);
 
@@ -273,22 +271,6 @@ const Stats = ({ wallet, lockedAlready }) => {
                   <div className="m-0 text-center">
                     <div className="d-flex flex-row justify-content-center align-items-center">
                       <strong className="mr-3">APR</strong>
-                      <Button
-                        variant="light"
-                        size="sm"
-                        ref={target}
-                        onClick={event => {
-                          event.preventDefault();
-                          setShow(!show);
-                        }}
-                      >
-                        <QuestionCircle />
-                      </Button>
-                      {getOverlay(
-                        show,
-                        target,
-                        t("calculation_based_on_4_years")
-                      )}
                     </div>
                     <span className="text-info">
                       {Number(stats.apr).toFixed(2)}%
