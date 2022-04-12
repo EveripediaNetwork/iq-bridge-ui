@@ -55,7 +55,7 @@ const RewardsCalculatorDialog = ({
       const poolRatio =
         rewardsBasedOnLockPeriod / (hiIQSupply + rewardsBasedOnLockPeriod);
 
-      const userRewards = rewardsAcrossLockPeriod * 1 * poolRatio;
+      const userRewards = rewardsAcrossLockPeriod * years * poolRatio;
 
       setExpectedIQ(userRewards);
 
