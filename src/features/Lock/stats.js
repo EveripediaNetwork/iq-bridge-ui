@@ -54,6 +54,9 @@ const StyledStatsContainer = styled.div`
   }
 `;
 
+const epCoingeckoUrl =
+  "https://api.coingecko.com/api/v3/simple/price?ids=everipedia&vs_currencies=usd";
+
 const Stats = ({ wallet, lockedAlready }) => {
   const { t } = useTranslation();
   const [stats, setStats] = useState();
@@ -123,24 +126,20 @@ const Stats = ({ wallet, lockedAlready }) => {
     hiIQSupply,
     rewardsAcrossLockPeriod
   ) => {
-    const yearsLock = 4; // assuming a 4 year lock
+    const yearsLock = 1; // assuming a 1 year lock
 
-    const amountLocked = lockedByUser > 0 ? lockedByUser : 100000;
+    const amountLocked = lockedByUser > 0 ? lockedByUser : 1000000;
 
     const rewardsBasedOnLockPeriod = amountLocked * (1 + 0.75 * yearsLock);
     const poolRatio =
       rewardsBasedOnLockPeriod / (hiIQSupply + rewardsBasedOnLockPeriod);
 
-    const userRewardsAtTheEndOfLockPeriod =
-      rewardsAcrossLockPeriod * yearsLock * poolRatio;
-    const userRewardsPlusInitialLock =
-      userRewardsAtTheEndOfLockPeriod + amountLocked;
+    const userRewards = rewardsAcrossLockPeriod * yearsLock * poolRatio;
 
-    const aprAcrossLockPeriod = userRewardsPlusInitialLock / amountLocked;
-    const aprDividedByLockPeriod = (aprAcrossLockPeriod / yearsLock) * 100;
+    const aprAcrossLockPeriod = (userRewards / amountLocked) * 100;
 
     return {
-      apr: Number(aprDividedByLockPeriod).toFixed(2),
+      apr: aprAcrossLockPeriod,
       tvl,
       lockedByUser,
       hiIQSupply,
@@ -170,9 +169,7 @@ const Stats = ({ wallet, lockedAlready }) => {
       setTimeout(async () => {
         const rewards = await earned(wallet);
         try {
-          const a = await fetch(
-            "https://api.coingecko.com/api/v3/simple/price?ids=everipedia&vs_currencies=usd"
-          );
+          const a = await fetch(epCoingeckoUrl);
           const price = (await a.json()).everipedia.usd;
 
           setRewardsInDollars(Number(rewards) * price);
@@ -196,9 +193,7 @@ const Stats = ({ wallet, lockedAlready }) => {
         const rewards = await earned(wallet);
 
         try {
-          const a = await fetch(
-            "https://api.coingecko.com/api/v3/simple/price?ids=everipedia&vs_currencies=usd"
-          );
+          const a = await fetch(epCoingeckoUrl);
           const price = (await a.json()).everipedia.usd;
 
           setRewardsInDollars(Number(rewards) * price);

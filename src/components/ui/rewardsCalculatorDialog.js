@@ -35,7 +35,7 @@ const RewardsCalculatorDialog = ({
   const { t } = useTranslation();
   const [inputIQ, setInputIQ] = useState();
   const [years, setYears] = useState();
-  const [aprDividedByLockPeriod, setAprDividedByLockPeriod] = useState();
+  const [apr, setApr] = useState();
   const [expectedIQ, setExpectedIQ] = useState();
   const lockedIQRef = useRef(null);
   const yearsRef = useRef(null);
@@ -43,7 +43,7 @@ const RewardsCalculatorDialog = ({
   const handleOnHide = () => {
     setYears();
     setInputIQ();
-    setAprDividedByLockPeriod();
+    setApr();
     setExpectedIQ();
     setOpenRewardsCalculator(false);
   };
@@ -55,20 +55,13 @@ const RewardsCalculatorDialog = ({
       const poolRatio =
         rewardsBasedOnLockPeriod / (hiIQSupply + rewardsBasedOnLockPeriod);
 
-      const userRewardsAtTheEndOfLockPeriod =
-        rewardsAcrossLockPeriod * years * poolRatio;
+      const userRewards = rewardsAcrossLockPeriod * 1 * poolRatio;
 
-      const userRewardsPlusInitialLock =
-        userRewardsAtTheEndOfLockPeriod + inputIQ;
+      setExpectedIQ(userRewards);
 
-      setExpectedIQ(userRewardsPlusInitialLock);
+      const aprAcrossLockPeriod = (userRewards / inputIQ) * 100;
 
-      const aprAcrossLockPeriod = userRewardsPlusInitialLock / inputIQ;
-
-      let percentage = 100;
-      if (years < 1) percentage = years * 100;
-
-      setAprDividedByLockPeriod((aprAcrossLockPeriod / years) * percentage);
+      setApr(aprAcrossLockPeriod);
     }
   }, [inputIQ, years]);
 
@@ -158,12 +151,7 @@ const RewardsCalculatorDialog = ({
             <p className="mb-0">
               {" "}
               {t("expected_apr")}:{" "}
-              <strong>
-                {aprDividedByLockPeriod
-                  ? Number(aprDividedByLockPeriod).toFixed(2)
-                  : 0}{" "}
-                %
-              </strong>
+              <strong>{apr ? Number(apr).toFixed(2) : 0} %</strong>
             </p>
           </StyledDivContainer>
         </Form>
