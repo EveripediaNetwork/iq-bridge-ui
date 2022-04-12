@@ -26,6 +26,10 @@ const StyledButton = styled(Button)`
   border: 1px dashed lightblue !important;
 `;
 
+const DetailLine = styled.p`
+  font-size: 15px;
+`;
+
 const RewardsCalculatorDialog = ({
   openRewardsCalculator,
   setOpenRewardsCalculator,
@@ -141,18 +145,21 @@ const RewardsCalculatorDialog = ({
           </div>
 
           <StyledDivContainer className="shadow-sm">
-            <p className="mb-0">
+            <DetailLine className="mb-0">
               {" "}
               {t("you_will_get")}:{" "}
               <strong>
-                {expectedIQ ? Number(expectedIQ).toFixed(2) : 0} IQ
+                {expectedIQ
+                  ? Humanize.intComma(Number(expectedIQ).toFixed(2))
+                  : 0}{" "}
+                IQ
               </strong>
-            </p>
-            <p className="mb-0">
+            </DetailLine>
+            <DetailLine className="mb-0 ">
               {" "}
-              {t("expected_apr")}:{" "}
+              {t("percentage_yield")}:{" "}
               <strong>{apr ? Number(apr).toFixed(2) : 0} %</strong>
-            </p>
+            </DetailLine>
           </StyledDivContainer>
         </Form>
       }

@@ -120,7 +120,7 @@ export const resources = {
       // rewardsCalculatorDialog
       supply: "Supply",
       you_will_get: "You will get",
-      expected_apr: "Expected APR",
+      percentage_yield: "Yield across lock period",
       rewards_calculator: "Rewards Calculator",
       years: "Years",
       stats: "Stats",
@@ -280,7 +280,7 @@ export const resources = {
       // rewardsCalculatorDialog
       supply: "공급",
       you_will_get: "얻게 됩니다",
-      expected_apr: "예상 APR",
+      percentage_yield: "% yield across lock period",
       rewards_calculator: "보상 계산기",
       years: "년",
       stats: "통계",
@@ -438,7 +438,7 @@ export const resources = {
       // rewardsCalculatorDialog
       supply: "供应",
       you_will_get: "您将获得",
-      expected_apr: "预计APR",
+      percentage_yield: "% yield across lock period",
       rewards_calculator: "奖励计算器",
       years: "年",
       stats: "统计数据",
