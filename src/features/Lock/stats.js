@@ -288,11 +288,12 @@ const Stats = ({ wallet, lockedAlready }) => {
                     <br />
                     <span>
                       <span className="text-info">
-                        ≈ {Humanize.intComma(stats.yieldWithA4YearLock)}
+                        {Humanize.intComma(stats.yieldWithA4YearLock)}
                         <strong className="text-info">%</strong>
                       </span>
                     </span>
                   </p>
+                  <hr />
                   <div className="m-0 text-center">
                     <div className="d-flex flex-row justify-content-center text-center align-items-center">
                       <span className="mr-2 font-weight-bold">APR</span>
