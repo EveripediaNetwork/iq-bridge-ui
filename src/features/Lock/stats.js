@@ -138,7 +138,16 @@ const Stats = ({ wallet, lockedAlready }) => {
 
     const aprAcrossLockPeriod = (userRewards / amountLocked) * 100;
 
+    // calculate a 4 year lock with 1M IQ
+    let yieldWithA4YearLock = 1 * (1 + 0.75 * 4);
+    yieldWithA4YearLock /= hiIQSupply + yieldWithA4YearLock;
+
+    yieldWithA4YearLock *= 4 * yieldWithA4YearLock;
+    yieldWithA4YearLock = (yieldWithA4YearLock / 1) * 100;
+    //
+
     return {
+      yieldWithA4YearLock,
       apr: aprAcrossLockPeriod,
       tvl,
       lockedByUser,
@@ -270,6 +279,17 @@ const Stats = ({ wallet, lockedAlready }) => {
                       <Calculator />
                     </Button>
                   </div>
+                  <p className="m-0 text-center">
+                    {" "}
+                    <strong>{t("with_4year_lock")}</strong>
+                    <br />
+                    <span>
+                      <span className="text-info">
+                        ≈ {Humanize.intComma(stats.yieldWithA4YearLock)}
+                        <strong className="text-info">%</strong>
+                      </span>
+                    </span>
+                  </p>
                   <div className="m-0 text-center">
                     <div className="d-flex flex-row justify-content-center text-center align-items-center">
                       <span className="mr-2 font-weight-bold">APR</span>
