@@ -26,6 +26,10 @@ const StyledButton = styled(Button)`
   border: 1px dashed lightblue !important;
 `;
 
+const DetailLine = styled.p`
+  font-size: 15px;
+`;
+
 const RewardsCalculatorDialog = ({
   openRewardsCalculator,
   setOpenRewardsCalculator,
@@ -35,7 +39,7 @@ const RewardsCalculatorDialog = ({
   const { t } = useTranslation();
   const [inputIQ, setInputIQ] = useState();
   const [years, setYears] = useState();
-  const [aprDividedByLockPeriod, setAprDividedByLockPeriod] = useState();
+  const [apr, setApr] = useState();
   const [expectedIQ, setExpectedIQ] = useState();
   const lockedIQRef = useRef(null);
   const yearsRef = useRef(null);
@@ -43,7 +47,7 @@ const RewardsCalculatorDialog = ({
   const handleOnHide = () => {
     setYears();
     setInputIQ();
-    setAprDividedByLockPeriod();
+    setApr();
     setExpectedIQ();
     setOpenRewardsCalculator(false);
   };
@@ -55,20 +59,13 @@ const RewardsCalculatorDialog = ({
       const poolRatio =
         rewardsBasedOnLockPeriod / (hiIQSupply + rewardsBasedOnLockPeriod);
 
-      const userRewardsAtTheEndOfLockPeriod =
-        rewardsAcrossLockPeriod * years * poolRatio;
+      const userRewards = rewardsAcrossLockPeriod * years * poolRatio;
 
-      const userRewardsPlusInitialLock =
-        userRewardsAtTheEndOfLockPeriod + inputIQ;
+      setExpectedIQ(userRewards);
 
-      setExpectedIQ(userRewardsPlusInitialLock);
+      const aprAcrossLockPeriod = (userRewards / inputIQ) * 100;
 
-      const aprAcrossLockPeriod = userRewardsPlusInitialLock / inputIQ;
-
-      let percentage = 100;
-      if (years < 1) percentage = years * 100;
-
-      setAprDividedByLockPeriod((aprAcrossLockPeriod / years) * percentage);
+      setApr(aprAcrossLockPeriod);
     }
   }, [inputIQ, years]);
 
@@ -148,23 +145,21 @@ const RewardsCalculatorDialog = ({
           </div>
 
           <StyledDivContainer className="shadow-sm">
-            <p className="mb-0">
+            <DetailLine className="mb-0">
               {" "}
               {t("you_will_get")}:{" "}
               <strong>
-                {expectedIQ ? Number(expectedIQ).toFixed(2) : 0} IQ
-              </strong>
-            </p>
-            <p className="mb-0">
-              {" "}
-              {t("expected_apr")}:{" "}
-              <strong>
-                {aprDividedByLockPeriod
-                  ? Number(aprDividedByLockPeriod).toFixed(2)
+                {expectedIQ
+                  ? Humanize.intComma(Number(expectedIQ).toFixed(2))
                   : 0}{" "}
-                %
+                IQ
               </strong>
-            </p>
+            </DetailLine>
+            <DetailLine className="mb-0 ">
+              {" "}
+              {t("percentage_yield")}:{" "}
+              <strong>{apr ? Number(apr).toFixed(2) : 0} %</strong>
+            </DetailLine>
           </StyledDivContainer>
         </Form>
       }

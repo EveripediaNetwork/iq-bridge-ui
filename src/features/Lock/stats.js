@@ -54,6 +54,9 @@ const StyledStatsContainer = styled.div`
   }
 `;
 
+const epCoingeckoUrl =
+  "https://api.coingecko.com/api/v3/simple/price?ids=everipedia&vs_currencies=usd";
+
 const Stats = ({ wallet, lockedAlready }) => {
   const { t } = useTranslation();
   const [stats, setStats] = useState();
@@ -69,9 +72,9 @@ const Stats = ({ wallet, lockedAlready }) => {
   const [isCallingCheckpoint, setIsCallingCheckpoint] = useState(false);
   const [openRewardsCalculator, setOpenRewardsCalculator] = useState(false);
   const [userIsInitialized, setUserIsInitialzed] = useState(undefined);
-  const target = useRef(null);
   const checkpointOverlayTarget = useRef(null);
   const countDownComponentRef = useRef(null);
+  const target = useRef(null);
 
   const handleClaim = async () => {
     setLoadingClaim(true);
@@ -123,24 +126,32 @@ const Stats = ({ wallet, lockedAlready }) => {
     hiIQSupply,
     rewardsAcrossLockPeriod
   ) => {
-    const yearsLock = 4; // assuming a 4 year lock
+    const yearsLock = 1; // assuming a 1 year lock
 
-    const amountLocked = lockedByUser > 0 ? lockedByUser : 100000;
+    const amountLocked = lockedByUser > 0 ? lockedByUser : 1000000;
 
     const rewardsBasedOnLockPeriod = amountLocked * (1 + 0.75 * yearsLock);
     const poolRatio =
       rewardsBasedOnLockPeriod / (hiIQSupply + rewardsBasedOnLockPeriod);
 
-    const userRewardsAtTheEndOfLockPeriod =
-      rewardsAcrossLockPeriod * yearsLock * poolRatio;
-    const userRewardsPlusInitialLock =
-      userRewardsAtTheEndOfLockPeriod + amountLocked;
+    const userRewards = rewardsAcrossLockPeriod * yearsLock * poolRatio;
 
-    const aprAcrossLockPeriod = userRewardsPlusInitialLock / amountLocked;
-    const aprDividedByLockPeriod = (aprAcrossLockPeriod / yearsLock) * 100;
+    const aprAcrossLockPeriod = (userRewards / amountLocked) * 100;
+
+    // calculate a 4 year lock with 1M IQ
+    let yieldWithA4YearLock = 1 * (1 + 0.75 * 4);
+    // eslint-disable-next-line operator-assignment
+    yieldWithA4YearLock =
+      yieldWithA4YearLock / (hiIQSupply + yieldWithA4YearLock);
+
+    // eslint-disable-next-line operator-assignment
+    yieldWithA4YearLock = rewardsAcrossLockPeriod * 4 * yieldWithA4YearLock;
+    yieldWithA4YearLock = (yieldWithA4YearLock / 1) * 100;
+    //
 
     return {
-      apr: Number(aprDividedByLockPeriod).toFixed(2),
+      yieldWithA4YearLock,
+      apr: aprAcrossLockPeriod,
       tvl,
       lockedByUser,
       hiIQSupply,
@@ -170,9 +181,7 @@ const Stats = ({ wallet, lockedAlready }) => {
       setTimeout(async () => {
         const rewards = await earned(wallet);
         try {
-          const a = await fetch(
-            "https://api.coingecko.com/api/v3/simple/price?ids=everipedia&vs_currencies=usd"
-          );
+          const a = await fetch(epCoingeckoUrl);
           const price = (await a.json()).everipedia.usd;
 
           setRewardsInDollars(Number(rewards) * price);
@@ -196,9 +205,7 @@ const Stats = ({ wallet, lockedAlready }) => {
         const rewards = await earned(wallet);
 
         try {
-          const a = await fetch(
-            "https://api.coingecko.com/api/v3/simple/price?ids=everipedia&vs_currencies=usd"
-          );
+          const a = await fetch(epCoingeckoUrl);
           const price = (await a.json()).everipedia.usd;
 
           setRewardsInDollars(Number(rewards) * price);
@@ -275,25 +282,36 @@ const Stats = ({ wallet, lockedAlready }) => {
                       <Calculator />
                     </Button>
                   </div>
+                  <p className="m-0 text-center">
+                    {" "}
+                    <strong>{t("with_4year_lock")}</strong>
+                    <br />
+                    <span>
+                      <span className="text-info">
+                        ≈ {Humanize.intComma(stats.yieldWithA4YearLock)}
+                        <strong className="text-info">%</strong>
+                      </span>
+                    </span>
+                  </p>
                   <div className="m-0 text-center">
-                    <div className="d-flex flex-row justify-content-center align-items-center">
-                      <strong className="mr-3">APR</strong>
-                      <Button
-                        variant="light"
-                        size="sm"
-                        ref={target}
-                        onClick={event => {
-                          event.preventDefault();
-                          setShow(!show);
-                        }}
-                      >
-                        <QuestionCircle />
-                      </Button>
-                      {getOverlay(
-                        show,
-                        target,
-                        t("calculation_based_on_4_years")
-                      )}
+                    <div className="d-flex flex-row justify-content-center text-center align-items-center">
+                      <span className="mr-2 font-weight-bold">APR</span>
+                      {wallet && wallet.status === "disconnected" ? (
+                        <>
+                          <Button
+                            variant="light"
+                            size="sm"
+                            ref={target}
+                            onClick={event => {
+                              event.preventDefault();
+                              setShow(!show);
+                            }}
+                          >
+                            <QuestionCircle />
+                          </Button>
+                          {getOverlay(show, target, t("with_1m_lock"))}
+                        </>
+                      ) : null}
                     </div>
                     <span className="text-info">
                       {Number(stats.apr).toFixed(2)}%
