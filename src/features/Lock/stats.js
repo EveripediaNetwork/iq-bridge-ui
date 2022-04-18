@@ -65,6 +65,7 @@ const Stats = ({ wallet, lockedAlready }) => {
   const [isLoadingClaim, setLoadingClaim] = useState(false);
   const [ethModalShow, setEthModalShow] = useState(false);
   const [isLoadingStats, setIsLoadingStats] = useState();
+  const [show, setShow] = useState(false);
   const [showCheckpointOverlay, setShowCheckpointOverlay] = useState(false);
   const [animateText, setAnimateText] = useState(false);
   const [countdown, setCountdown] = useState(Date.now() + 25000);
@@ -73,6 +74,7 @@ const Stats = ({ wallet, lockedAlready }) => {
   const [userIsInitialized, setUserIsInitialzed] = useState(undefined);
   const checkpointOverlayTarget = useRef(null);
   const countDownComponentRef = useRef(null);
+  const target = useRef(null);
 
   const handleClaim = async () => {
     setLoadingClaim(true);
@@ -269,8 +271,24 @@ const Stats = ({ wallet, lockedAlready }) => {
                     </Button>
                   </div>
                   <div className="m-0 text-center">
-                    <div className="d-flex flex-row justify-content-center align-items-center">
-                      <strong className="mr-3">APR</strong>
+                    <div className="d-flex flex-row justify-content-center text-center align-items-center">
+                      <span className="mr-2 font-weight-bold">APR</span>
+                      {wallet && wallet.status === "disconnected" ? (
+                        <>
+                          <Button
+                            variant="light"
+                            size="sm"
+                            ref={target}
+                            onClick={event => {
+                              event.preventDefault();
+                              setShow(!show);
+                            }}
+                          >
+                            <QuestionCircle />
+                          </Button>
+                          {getOverlay(show, target, t("with_1m_lock"))}
+                        </>
+                      ) : null}
                     </div>
                     <span className="text-info">
                       {Number(stats.apr).toFixed(2)}%
