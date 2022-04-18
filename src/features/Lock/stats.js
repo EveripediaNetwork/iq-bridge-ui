@@ -140,9 +140,12 @@ const Stats = ({ wallet, lockedAlready }) => {
 
     // calculate a 4 year lock with 1M IQ
     let yieldWithA4YearLock = 1 * (1 + 0.75 * 4);
-    yieldWithA4YearLock /= hiIQSupply + yieldWithA4YearLock;
+    // eslint-disable-next-line operator-assignment
+    yieldWithA4YearLock =
+      yieldWithA4YearLock / (hiIQSupply + yieldWithA4YearLock);
 
-    yieldWithA4YearLock *= 4 * yieldWithA4YearLock;
+    // eslint-disable-next-line operator-assignment
+    yieldWithA4YearLock = rewardsAcrossLockPeriod * 4 * yieldWithA4YearLock;
     yieldWithA4YearLock = (yieldWithA4YearLock / 1) * 100;
     //
 
