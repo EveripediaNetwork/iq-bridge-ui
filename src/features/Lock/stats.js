@@ -138,7 +138,7 @@ const Stats = ({ wallet, lockedAlready }) => {
 
     const aprAcrossLockPeriod = (userRewards / amountLocked) * 100;
 
-    // calculate a 4 year lock with 1M IQ
+    // calculate a 4 year lock yield
     let yieldWithA4YearLock = 1 * (1 + 0.75 * 4);
     // eslint-disable-next-line operator-assignment
     yieldWithA4YearLock =
@@ -288,7 +288,7 @@ const Stats = ({ wallet, lockedAlready }) => {
                     <br />
                     <span>
                       <span className="text-info">
-                        {Humanize.intComma(stats.yieldWithA4YearLock)}
+                        {Humanize.toFixed(stats.yieldWithA4YearLock, 2)}
                         <strong className="text-info">%</strong>
                       </span>
                     </span>
