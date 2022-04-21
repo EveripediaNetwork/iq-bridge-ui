@@ -479,7 +479,7 @@ const Lock = () => {
                 <InfoSwapCard
                   timeLockedDescription={t("time_locked")}
                   balanceDescription={t("new_hiiq_balance")}
-                  tokensLocked={Number(currentHiIQ)}
+                  tokensLocked={Number(lockedIQ)}
                   timeLocked={Number(lockValue)}
                 />
               ) : null}
