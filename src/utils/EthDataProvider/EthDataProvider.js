@@ -8,6 +8,7 @@ import {
   hiIQRewardsAddress,
   jsonRPCNodeLink
 } from "../../config";
+import { getGMTDate } from "../date";
 import { erc20Abi } from "./erc20.abi";
 import { hiIQAbi } from "./hiIQ.abi";
 import { HiIQRewardsAbi } from "./hiIQRewards.abi";
@@ -253,7 +254,7 @@ const reverseIQtoEOSTx = async (amount, wallet, eosAccount) => {
 
 const lockTokensTx = async (amount, time, wallet, handleConfirmation) => {
   const amountParsed = ethers.utils.parseEther(amount).toString();
-  const d = new Date();
+  const d = getGMTDate();
   d.setDate(d.getDate() + time);
 
   const timeParsed = Math.floor(d.getTime() / 1000.0);
@@ -314,10 +315,8 @@ const getLockedEnd = async wallet => {
 
     const result = await hiIQ.locked__end(wallet.account);
 
-    const date = new Date(Number(result.toString()) * 1000);
-    const userTimezoneOffset = date.getTimezoneOffset() * 60000;
-    // eslint-disable-next-line no-underscore-dangle
-    return new Date(date.getTime() - userTimezoneOffset);
+    const date = getGMTDate(Number(result.toString()) * 1000);
+    return date;
   }
 
   return false;
@@ -327,7 +326,7 @@ const getMaximumLockableTime = async (wallet, lockEnd) => {
   if (wallet.status === "connected") {
     const provider = new ethers.providers.Web3Provider(wallet.ethereum);
     const block = await provider.getBlock("latest");
-    const max = new Date((block.timestamp + 4 * 365 * 86400) * 1000);
+    const max = getGMTDate((block.timestamp + 4 * 365 * 86400) * 1000);
     max.setHours(0);
     max.setMinutes(0);
     max.setSeconds(0);
@@ -375,14 +374,13 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
 };
 
 const avoidMaxTimeUnlockTime = unlockTime => {
-  let timeParsed = Math.ceil(unlockTime / 1000.0);
-  const today = new Date().getTime() / 1000;
+  let timeParsed = unlockTime / 1000.0;
+  const today = getGMTDate().getTime() / 1000;
   const diff = timeParsed - today;
 
   // if somehow its longer than 4 years round to 4 years and give 30 min. for minting the tx
-  if (Math.floor(diff / (3600 * 24)) > 4) {
+  if (Math.floor(diff / (3600 * 24)) / 365 > 4)
     timeParsed = Math.ceil(today + 86400 * 4 * 365 - 60 * 30);
-  }
 
   return timeParsed;
 };

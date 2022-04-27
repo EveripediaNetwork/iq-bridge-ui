@@ -43,6 +43,7 @@ import { TransactionContext } from "../../context/transactionContext";
 
 import { ethBasedExplorerUrl, hiIQAddress } from "../../config";
 import useTitle from "../../hooks/useTitle";
+import { getGMTDate } from "../../utils/date";
 
 const Stats = lazy(() => import("./stats"));
 const HeaderText = styled.div`
@@ -177,7 +178,7 @@ const Lock = () => {
   };
 
   const handleSetLockValue = lv => {
-    const temp = lockEnd || new Date();
+    const temp = lockEnd || getGMTDate();
     if (lv === 0) {
       setLockValue(0);
       temp.setDate(temp.getDate() - 7);
@@ -249,8 +250,8 @@ const Lock = () => {
         );
 
         setMaximumLockableTime(maximumLockableTimeResult);
-        setLockedTimeDiff(calculateDatesDiff(result, new Date()));
-        setExpired(new Date().getTime() > result.getTime());
+        setLockedTimeDiff(calculateDatesDiff(result, getGMTDate()));
+        setExpired(getGMTDate().getTime() > result.getTime());
       })();
   }, [currentHiIQ]);
 
@@ -271,7 +272,7 @@ const Lock = () => {
   useEffect(() => {
     if (filledAmount && lockEnd && currentHiIQ && currentHiIQ > 0) {
       const days = Number(
-        (lockEnd.getTime() - new Date().getTime()) / (1000 * 3600 * 24)
+        (lockEnd.getTime() - getGMTDate().getTime()) / (1000 * 3600 * 24)
       ).toFixed();
       setDiffDays(days);
     }
