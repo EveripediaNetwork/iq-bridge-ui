@@ -314,8 +314,6 @@ const getLockedEnd = async wallet => {
 
     const result = await hiIQ.locked__end(wallet.account);
 
-    console.log(result.toString());
-
     const date = new Date(Number(result.toString()) * 1000);
     return date;
   }
