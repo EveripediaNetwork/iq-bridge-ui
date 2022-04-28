@@ -60,6 +60,47 @@ const Raffles = () => {
             <Card className="mx-auto shadow-sm">
               <Card.Body>
                 <DataTitle className="d-flex flex-row justify-content-between">
+                  <a href="https://opensea.io/collection/shinsekaicorp" target="_blank">Shinsekai</a>
+                  <span className="font-weight-bold">6</span>
+                </DataTitle>
+                <DataRow>
+                  <Title>0xd8ff659b400d546bb7c6f2dcb2193d36de91ce7b</Title>
+                  <Value>1</Value>
+                </DataRow>
+                <DataRow>
+                  <Title>0xfcf7c8fb47855e04a1bee503d1091b65359c6009</Title>
+                  <Value>1</Value>
+                </DataRow>
+                <DataRow>
+                  <Title>0x23fd433bec56f7c62d7f087cd26bc8d1a6d8da78</Title>
+                  <Value>1</Value>
+                </DataRow>
+                <DataRow>
+                  <Title>0xf0f17b61f2f66cfeea93f6ac7f3f229b31adc335</Title>
+                  <Value>1</Value>
+                </DataRow>
+                <DataRow>
+                  <Title>0xdaa319496831b0babba5dd147849a51dcbd29114</Title>
+                  <Value>1</Value>
+                </DataRow>
+                <DataRow>
+                  <Title>0xb55794c3bef4651b6cbc78b64a2ef6c5c67837c3</Title>
+                  <Value>1</Value>
+                </DataRow>
+                <DataTitle className="d-flex flex-row justify-content-between">
+                  <a href="https://ipfs.everipedia.org/ipfs/QmWSQoDRfSdicRGVvuYS5yvvYQnNVuJcFY1m86FBPdvYXq"
+                     target="_blank">Snapshot</a>
+                </DataTitle>
+                <DataTitle className="d-flex flex-row justify-content-between">
+                  <a href="https://polygonscan.com/address/0xb7185e8332fc2ff1a02664312288e11c39c0dbd0#events"
+                     target="_blank">Onchain results</a>
+                </DataTitle>
+              </Card.Body>
+            </Card>
+            <br/>
+            <Card className="mx-auto shadow-sm">
+              <Card.Body>
+                <DataTitle className="d-flex flex-row justify-content-between">
                   <a href="https://opensea.io/collection/supernormalbyzipcy" target="_blank">Zipcy&apos;s SuperNormal</a>
                   <span className="font-weight-bold">15</span>
                 </DataTitle>
