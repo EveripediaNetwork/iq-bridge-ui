@@ -43,7 +43,6 @@ import { TransactionContext } from "../../context/transactionContext";
 
 import { ethBasedExplorerUrl, hiIQAddress } from "../../config";
 import useTitle from "../../hooks/useTitle";
-import { getGMTDate } from "../../utils/date";
 
 const Stats = lazy(() => import("./stats"));
 const HeaderText = styled.div`
@@ -178,19 +177,19 @@ const Lock = () => {
   };
 
   const handleSetLockValue = lv => {
-    const temp = lockEnd || getGMTDate();
+    const temp = lockEnd || new Date();
     if (lv === 0) {
       setLockValue(0);
-      temp.setDate(temp.getDate() - 7);
+      temp.setDate(temp.getUTCDate() - 7);
       setLockEnd(temp);
       return;
     }
 
-    if (!lockValue) temp.setDate(temp.getDate() + lv);
+    if (!lockValue) temp.setDate(temp.getUTCDate() + lv);
     else {
-      if (lv < lockValue) temp.setDate(temp.getDate() - (lockValue - lv));
+      if (lv < lockValue) temp.setDate(temp.getUTCDate() - (lockValue - lv));
 
-      if (lv > lockValue) temp.setDate(temp.getDate() + (lv - lockValue));
+      if (lv > lockValue) temp.setDate(temp.getUTCDate() + (lv - lockValue));
     }
 
     setLockEnd(temp);
@@ -250,8 +249,8 @@ const Lock = () => {
         );
 
         setMaximumLockableTime(maximumLockableTimeResult);
-        setLockedTimeDiff(calculateDatesDiff(result, getGMTDate()));
-        setExpired(getGMTDate().getTime() > result.getTime());
+        setLockedTimeDiff(calculateDatesDiff(result, new Date()));
+        setExpired(new Date().getTime() > result.getTime());
       })();
   }, [currentHiIQ]);
 
@@ -272,7 +271,7 @@ const Lock = () => {
   useEffect(() => {
     if (filledAmount && lockEnd && currentHiIQ && currentHiIQ > 0) {
       const days = Number(
-        (lockEnd.getTime() - getGMTDate().getTime()) / (1000 * 3600 * 24)
+        (lockEnd.getTime() - new Date().getTime()) / (1000 * 3600 * 24)
       ).toFixed();
       setDiffDays(days);
     }
