@@ -180,16 +180,16 @@ const Lock = () => {
     const temp = lockEnd || new Date();
     if (lv === 0) {
       setLockValue(0);
-      temp.setDate(temp.getDate() - 7);
+      temp.setDate(temp.getUTCDate() - 7);
       setLockEnd(temp);
       return;
     }
 
-    if (!lockValue) temp.setDate(temp.getDate() + lv);
+    if (!lockValue) temp.setDate(temp.getUTCDate() + lv);
     else {
-      if (lv < lockValue) temp.setDate(temp.getDate() - (lockValue - lv));
+      if (lv < lockValue) temp.setDate(temp.getUTCDate() - (lockValue - lv));
 
-      if (lv > lockValue) temp.setDate(temp.getDate() + (lv - lockValue));
+      if (lv > lockValue) temp.setDate(temp.getUTCDate() + (lv - lockValue));
     }
 
     setLockEnd(temp);

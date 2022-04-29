@@ -315,9 +315,7 @@ const getLockedEnd = async wallet => {
     const result = await hiIQ.locked__end(wallet.account);
 
     const date = new Date(Number(result.toString()) * 1000);
-    const userTimezoneOffset = date.getTimezoneOffset() * 60000;
-    // eslint-disable-next-line no-underscore-dangle
-    return new Date(date.getTime() - userTimezoneOffset);
+    return date;
   }
 
   return false;
@@ -375,14 +373,13 @@ const increaseAmount = async (amount, wallet, handleConfirmation) => {
 };
 
 const avoidMaxTimeUnlockTime = unlockTime => {
-  let timeParsed = Math.ceil(unlockTime / 1000.0);
+  let timeParsed = unlockTime / 1000.0;
   const today = new Date().getTime() / 1000;
   const diff = timeParsed - today;
 
   // if somehow its longer than 4 years round to 4 years and give 30 min. for minting the tx
-  if (Math.floor(diff / (3600 * 24)) > 4) {
+  if (Math.floor(diff / (3600 * 24)) / 365 > 4)
     timeParsed = Math.ceil(today + 86400 * 4 * 365 - 60 * 30);
-  }
 
   return timeParsed;
 };
