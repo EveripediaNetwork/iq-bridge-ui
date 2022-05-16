@@ -32,6 +32,7 @@ const LockPage = lazy(() => import("./features/Lock/lock"));
 const VotingPage = lazy(() => import("./features/Voting/voting"));
 const StatsPage = lazy(() => import("./features/Stats/stats"));
 const RafflesPage = lazy(() => import("./features/Raffles/raffles"));
+const TreasuryPage = lazy(() => import("./features/Treasury/treasury"));
 
 function App() {
   isMetamaskMobileAndIframe();
@@ -79,6 +80,7 @@ const Routes = () => {
       <Route exact path="/voting" component={VotingPage} />
       <Route exact path="/stats" component={StatsPage} />
       <Route exact path="/raffles" component={RafflesPage} />
+      <Route exact path="/treasury" component={TreasuryPage} />
     </Switch>
   );
 };

@@ -180,6 +180,13 @@ const Layout = ({ children }) => {
               {t("Raffles")}
             </StyledNavLink>
             <StyledNavLink
+              active={location.pathname === "/treasury" ? "" : undefined}
+              as={Link}
+              to={`/treasury${LngUrl}`}
+            >
+              {t("Treasury")}
+            </StyledNavLink>
+            <StyledNavLink
               active={location.pathname === "/voting" ? "" : undefined}
               as={Link}
               to={`/voting${LngUrl}`}
