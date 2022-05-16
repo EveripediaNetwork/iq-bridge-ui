@@ -53,7 +53,7 @@ const Treasury = () => {
                     href="https://opensea.io/assets/0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d/9665"
                     target="_blank"
                   >
-                    BrainApe
+                    BAYC #9665
                   </a>
                 </DataTitle>
               </Card.Body>
