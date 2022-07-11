@@ -71,7 +71,7 @@ const getVolume = async () => {
 
 const getHiIQ = async () => {
   const response = await fetch(
-    "https://ethplorer.io/service/service.php?data=0x1bf5457ecaa14ff63cc89efd560e251e814e16ba"
+    "https://ethplorer.io/service/service.php?data=0x1bf5457ecaa14ff63cc89efd560e251e814e16ba&page=pageSize%3D600%26pageTab%3Dholders%26tab%3Dtab-holders&showTx=all"
   );
   const data = await response.json();
 
