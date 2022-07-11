@@ -45,7 +45,7 @@ const getTokenHolders = async () => {
 
 const getVolume = async () => {
   const response = await fetch(
-    "https://ethplorer.io/service/service.php?data=0x579cea1889991f68acc35ff5c3dd0621ff29b0c9&page=pageSize=500"
+    "https://ethplorer.io/service/service.php?data=0x579cea1889991f68acc35ff5c3dd0621ff29b0c9&page=pageSize=900"
   );
   const data = await response.json();
   const ethVolume = data.token.totalSupply;
