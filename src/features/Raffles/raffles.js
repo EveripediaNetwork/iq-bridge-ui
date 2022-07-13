@@ -170,7 +170,7 @@ const Raffles = () => {
 
                 <DataTitle className="d-flex flex-row justify-content-between">
                   <a
-                    href="https://ipfs.everipedia.org/ipfs/QmWSQoDRfSdicRGVvuYS5yvvYQnNVuJcFY1m86FBPdvYXq"
+                    href="https://ipfs.everipedia.org/ipfs/QmQk8ASaDWygP5gqT4868oEoAg5trMKKYkwZgHouBDrooV"
                     target="_blank"
                     rel="noreferrer"
                   >
